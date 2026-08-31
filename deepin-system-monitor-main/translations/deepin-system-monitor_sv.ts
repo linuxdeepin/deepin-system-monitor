@@ -1,18 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv">
 <context>
     <name>App.About</name>
     <message>
         <location filename="../main.cpp" line="101"/>
         <location filename="../main.cpp" line="105"/>
         <source>System Monitor</source>
-        <translation>System Monitor</translation>
+        <translation>Systemövervakning</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="91"/>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>System Monitor är ett verktyg för att övervaka systembelastning i realtid, visa och kontrollera processer och tjänster som körs på ditt system.</translation>
+        <translation>Systemövervakaren visar systembelastning i realtid samt låter dig visa och styra processer och tjänster som körs på systemet.</translation>
     </message>
 </context>
 <context>
@@ -40,12 +38,12 @@
     <message>
         <location filename="../gui/block_dev_item_widget.cpp" line="154"/>
         <source>Read</source>
-        <translation>Läs</translation>
+        <translation>Läsning</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_item_widget.cpp" line="158"/>
         <source>Write</source>
-        <translation>Skriv</translation>
+        <translation>Skrivning</translation>
     </message>
 </context>
 <context>
@@ -75,27 +73,27 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
         <source>Frequency</source>
-        <translation></translation>
+        <translation>Frekvens</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation>Frequency</translation>
+        <translation>Frekvens</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Average frequency</source>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
         <source>Up time</source>
-        <translation>Uptime</translation>
+        <translation>Drifttid</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
         <source>Sockets</source>
-        <translation>Sockets</translation>
+        <translation>Socklar</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
@@ -110,32 +108,32 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
         <source>L1i cache</source>
-        <translation>L1i cache</translation>
+        <translation>L1i-cache</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
         <source>L1d cache</source>
-        <translation>L1d cache</translation>
+        <translation>L1d-cache</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
         <source>L2 cache</source>
-        <translation>L2 cache</translation>
+        <translation>L2-cache</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
         <source>L3 cache</source>
-        <translation>L3 cache</translation>
+        <translation>L3-cache</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
         <source>Load average</source>
-        <translation>Laddningsgenomsnitt</translation>
+        <translation>Genomsnittlig belastning</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
         <source>File descriptors</source>
-        <translation>Filbeskrivningar</translation>
+        <translation>Filbeskrivare</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
@@ -155,7 +153,7 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
         <source>OS type</source>
-        <translation>Operativsystemstyp</translation>
+        <translation>Operativsystemtyp</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="146"/>
@@ -168,7 +166,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="310"/>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -209,12 +207,12 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="165"/>
         <source>active</source>
-        <translation>aktiverad</translation>
+        <translation>aktiv</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="167"/>
         <source>reloading</source>
-        <translation>laddar om</translation>
+        <translation>läser in på nytt</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="169"/>
@@ -234,7 +232,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="174"/>
         <source>deactivating</source>
-        <translation>deaktiverar</translation>
+        <translation>inaktiverar</translation>
     </message>
 </context>
 <context>
@@ -242,12 +240,12 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="146"/>
         <source>stub</source>
-        <translation>stub</translation>
+        <translation>platshållare</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="149"/>
         <source>not-found</source>
-        <translation>hittad</translation>
+        <translation>hittades inte</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="151"/>
@@ -262,7 +260,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="153"/>
         <source>merged</source>
-        <translation>sammanfogad</translation>
+        <translation>sammanslagen</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="154"/>
@@ -272,7 +270,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="147"/>
         <source>loaded</source>
-        <translation>laddad</translation>
+        <translation>inläst</translation>
     </message>
 </context>
 <context>
@@ -280,17 +278,17 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="297"/>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>Ej tillämpligt</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="295"/>
         <source>Auto</source>
-        <translation>Automatisk</translation>
+        <translation>Automatiskt</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="296"/>
         <source>Manual</source>
-        <translation>Manuell</translation>
+        <translation>Manuellt</translation>
     </message>
 </context>
 <context>
@@ -313,7 +311,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="277"/>
         <source>transient</source>
-        <translation>tillfällig</translation>
+        <translation>övergående</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="278"/>
@@ -323,7 +321,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="280"/>
         <source>enabled-runtime</source>
-        <translation>aktiverad i realtid</translation>
+        <translation>aktiverad under körning</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="281"/>
@@ -341,27 +339,27 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="217"/>
         <source>dead</source>
-        <translation>död</translation>
+        <translation>avslutad</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="219"/>
         <source>start-pre</source>
-        <translation>start-för</translation>
+        <translation>startförberedelse</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="221"/>
         <source>start</source>
-        <translation>start</translation>
+        <translation>startar</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="223"/>
         <source>start-post</source>
-        <translation>start-efter</translation>
+        <translation>start efter</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="225"/>
         <source>running</source>
-        <translation>kör</translation>
+        <translation>körs</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="227"/>
@@ -371,42 +369,42 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="229"/>
         <source>reload</source>
-        <translation>ladda om</translation>
+        <translation>läser in på nytt</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="231"/>
         <source>stop</source>
-        <translation>stoppa</translation>
+        <translation>stoppar</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="233"/>
         <source>stop-watchdog</source>
-        <translation>stoppa watchdog</translation>
+        <translation>stoppar övervakare</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="235"/>
         <source>stop-sigterm</source>
-        <translation>stoppa sigterm</translation>
+        <translation>stoppar med SIGTERM</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="237"/>
         <source>stop-sigkill</source>
-        <translation>stoppa sigkill</translation>
+        <translation>stoppar med SIGKILL</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="239"/>
         <source>stop-post</source>
-        <translation>stoppa efter</translation>
+        <translation>stopp efter</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="241"/>
         <source>final-sigterm</source>
-        <translation>slutlig sigterm</translation>
+        <translation>slutlig SIGTERM</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="243"/>
         <source>final-sigkill</source>
-        <translation>slutlig sigkill</translation>
+        <translation>slutlig SIGKILL</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="245"/>
@@ -416,7 +414,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="247"/>
         <source>auto-restart</source>
-        <translation>automatisk omstart</translation>
+        <translation>startar om automatiskt</translation>
     </message>
 </context>
 <context>
@@ -430,12 +428,12 @@
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>Din CPU-användning är högre än %1%!</translation>
+        <translation>Din CPU-användning är högre än %1 %!</translation>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="51"/>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>Din minneanvändning är högre än %1%!</translation>
+        <translation>Din minnesanvändning är högre än %1 %!</translation>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
@@ -448,62 +446,62 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="67"/>
         <source>Used</source>
-        <translation>Använd</translation>
+        <translation>Använt</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="69"/>
         <source>Available</source>
-        <translation>Tillgänglig</translation>
+        <translation>Tillgängligt</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="73"/>
         <source>Shared</source>
-        <translation>Delad</translation>
+        <translation>Delat</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="75"/>
         <source>Cached</source>
-        <translation>Cache</translation>
+        <translation>Cachelagrat</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="79"/>
         <source>Buffers</source>
-        <translation>Buffer</translation>
+        <translation>Buffertar</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="81"/>
         <source>Cached swap</source>
-        <translation>Cache swap</translation>
+        <translation>Cachelagrat växlingsutrymme</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="85"/>
         <source>Active</source>
-        <translation>Aktiv</translation>
+        <translation>Aktivt</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="87"/>
         <source>Inactive</source>
-        <translation>Inaktiv</translation>
+        <translation>Inaktivt</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="91"/>
         <source>Dirty</source>
-        <translation>Fet</translation>
+        <translation>Smutsigt</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="93"/>
         <source>Mapped</source>
-        <translation>Kartlagd</translation>
+        <translation>Mappat</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="97"/>
         <source>Total swap</source>
-        <translation>Totalt swap</translation>
+        <translation>Totalt växlingsutrymme</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="99"/>
         <source>Free swap</source>
-        <translation>Ledigt swap</translation>
+        <translation>Ledigt växlingsutrymme</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="103"/>
@@ -521,7 +519,7 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="72"/>
         <source>Read speed</source>
-        <translation>Läs hastighet</translation>
+        <translation>Läshastighet</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="76"/>
@@ -536,7 +534,7 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="82"/>
         <source>Sectors read</source>
-        <translation>Sektorer lästa</translation>
+        <translation>Lästa sektorer</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
@@ -546,27 +544,27 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
         <source>Sectors read/s</source>
-        <translation>Sektorer lästa/s</translation>
+        <translation>Lästa sektorer/s</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
         <source>Reads merged/s</source>
-        <translation>Sammanslagna läsningar/s</translation>
+        <translation>Sammanfogade läsningar/s</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
         <source>Sectors written</source>
-        <translation>Sektorer skrivna</translation>
+        <translation>Skrivna sektorer</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
         <source>Writes completed </source>
-        <translation>Skrivningar slutförda </translation>
+        <translation>Slutförda skrivningar</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
         <source>Writes merged</source>
-        <translation>Sammanslagna skrivningar</translation>
+        <translation>Sammanfogade skrivningar</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
@@ -576,12 +574,12 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="106"/>
         <source>Sectors written/s</source>
-        <translation>Sektorer skrivna/s</translation>
+        <translation>Skrivna sektorer/s</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="108"/>
         <source>Writes merged/s</source>
-        <translation>Sammanslagna skrivningar/s</translation>
+        <translation>Sammanfogade skrivningar/s</translation>
     </message>
 </context>
 <context>
@@ -603,7 +601,7 @@
     <message>
         <location filename="../common/common.cpp" line="38"/>
         <source>Display shortcuts</source>
-        <translation>Visa genombrott</translation>
+        <translation>Visa kortkommandon</translation>
     </message>
 </context>
 <context>
@@ -612,21 +610,27 @@
         <location filename="../gui/process_table_view.cpp" line="173"/>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Avsluta denna process kan orsaka förlust av data.
-Är du säker på att du vill fortsätta?</translation>
-    </message>
-    <message>
-        <location filename="../gui/process_table_view.cpp" line="180"/>
-        <source>End</source>
-        <comment>button</comment>
-        <translation>Avsluta</translation>
+        <translation>Avslutning av denna process kan orsaka dataförlust.
+Är du säker du vill fortsätta?</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="530"/>
         <location filename="../gui/process_table_view.cpp" line="172"/>
         <location filename="../gui/process_table_view.cpp" line="379"/>
         <source>End process</source>
-        <translation type="unfinished">Avsluta process</translation>
+        <translation>Avsluta process</translation>
+    </message>
+    <message>
+        <location filename="../gui/process_table_view.cpp" line="380"/>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Att tvångsavsluta processen kan orsaka dataförlust.</translation>
+    </message>
+    <message>
+        <location filename="../gui/process_page_widget.cpp" line="531"/>
+        <source>Force ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Att tvångsavsluta programmet kan orsaka dataförlust.</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="539"/>
@@ -634,28 +638,20 @@ Are you sure you want to continue?</source>
         <location filename="../gui/process_table_view.cpp" line="387"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="540"/>
         <location filename="../gui/process_table_view.cpp" line="388"/>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>Tvinga avslut</translation>
+        <translation>Tvångsavsluta</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="380"/>
-        <source>Force ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation>Tvinga avslutande denna process kan orsaka förlust av data.
-Är du säker på att du vill fortsätta?</translation>
-    </message>
-    <message>
-        <location filename="../gui/process_page_widget.cpp" line="531"/>
-        <source>Force ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation>Tvinga avslutande denna applikation kan orsaka förlust av data.
-Är du säker på att du vill fortsätta?</translation>
+        <location filename="../gui/process_table_view.cpp" line="180"/>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Avsluta</translation>
     </message>
 </context>
 <context>
@@ -693,12 +689,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Netmask:</source>
-        <translation>Undernettsmask:</translation>
+        <translation>Nätmask:</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Broadcast:</source>
-        <translation>Ursägtsförberedelse:</translation>
+        <translation>Sändningsadress:</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
@@ -714,18 +710,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>NetInfoModel</name>
     <message>
-        <location filename="../gui/netif_summary_view_widget.h" line="267"/>
-        <location filename="../gui/netif_summary_view_widget.h" line="269"/>
-        <source>IPv4</source>
-        <translation>IPv4</translation>
-    </message>
-    <message>
-        <location filename="../gui/netif_summary_view_widget.h" line="282"/>
-        <location filename="../gui/netif_summary_view_widget.h" line="284"/>
-        <source>IPv6</source>
-        <translation>IPv6</translation>
-    </message>
-    <message>
         <location filename="../gui/netif_summary_view_widget.h" line="293"/>
         <source>Connection type</source>
         <translation>Anslutningstyp</translation>
@@ -738,7 +722,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="307"/>
         <source>Link quality</source>
-        <translation>Länk kvalitet</translation>
+        <translation>Länkkvalitet</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="312"/>
@@ -748,7 +732,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="317"/>
         <source>Noise level</source>
-        <translation>Störningsnivå</translation>
+        <translation>Brusnivå</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="323"/>
@@ -763,62 +747,74 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="333"/>
         <source>RX packets</source>
-        <translation>RX paket</translation>
+        <translation>RX-paket</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="338"/>
         <source>RX bytes</source>
-        <translation>RX bytes</translation>
+        <translation>RX-byte</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="343"/>
         <source>RX errors</source>
-        <translation>RX fel</translation>
+        <translation>RX-fel</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="348"/>
         <source>RX dropped</source>
-        <translation>RX förlorade</translation>
+        <translation>RX-tappade</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation>RX överflöd</translation>
+        <translation>RX-överkörningar</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation>RX frame</translation>
+        <translation>RX-ram</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
         <source>TX packets</source>
-        <translation>TX paket</translation>
+        <translation>TX-paket</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="368"/>
         <source>TX bytes</source>
-        <translation>TX bytes</translation>
+        <translation>TX-byte</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="373"/>
         <source>TX errors</source>
-        <translation>TX fel</translation>
-    </message>
-    <message>
-        <location filename="../gui/netif_summary_view_widget.h" line="378"/>
-        <source>TX dropped</source>
-        <translation>TX förlorade</translation>
+        <translation>TX-fel</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation>TX överflöd</translation>
+        <translation>TX-överkörningar</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
         <source>TX carrier</source>
-        <translation>TX bärbåge</translation>
+        <translation>TX-bärare</translation>
+    </message>
+    <message>
+        <location filename="../gui/netif_summary_view_widget.h" line="267"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="269"/>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <location filename="../gui/netif_summary_view_widget.h" line="282"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="284"/>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+    <message>
+        <location filename="../gui/netif_summary_view_widget.h" line="378"/>
+        <source>TX dropped</source>
+        <translation>TX-tappade</translation>
     </message>
 </context>
 <context>
@@ -826,17 +822,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="143"/>
         <source>Command line</source>
-        <translation type="unfinished">Kommandorad</translation>
+        <translation>Kommandorad</translation>
     </message>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="148"/>
         <source>Start time</source>
-        <translation type="unfinished">Starttid</translation>
+        <translation>Starttid</translation>
     </message>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="138"/>
         <source>Name</source>
-        <translation type="unfinished">Namn</translation>
+        <translation>Namn</translation>
     </message>
 </context>
 <context>
@@ -844,7 +840,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/xwin_kill_preview_background_widget.cpp" line="152"/>
         <source>Click the application you want to end</source>
-        <translation type="unfinished">Klicka på programmet som du vill avsluta</translation>
+        <translation>Klicka på programmet som du vill avsluta</translation>
     </message>
 </context>
 <context>
@@ -855,13 +851,13 @@ Are you sure you want to continue?</source>
         <location filename="../gui/mem_stat_view_widget.cpp" line="107"/>
         <location filename="../memory_monitor.cpp" line="177"/>
         <source>Memory</source>
-        <translation type="unfinished">Minne</translation>
+        <translation>Minne</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="95"/>
         <location filename="../gui/netif_item_view_widget.cpp" line="121"/>
         <source>Receive</source>
-        <translation>Mottagning</translation>
+        <translation>Ta emot</translation>
     </message>
 </context>
 <context>
@@ -873,23 +869,23 @@ Are you sure you want to continue?</source>
         <location filename="../gui/cpu_detail_widget.cpp" line="371"/>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="182"/>
         <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <location filename="../compact_disk_monitor.cpp" line="153"/>
         <source>Disk read</source>
-        <translation type="unfinished">Diskläsning</translation>
+        <translation>Diskläsning</translation>
     </message>
     <message>
         <location filename="../compact_disk_monitor.cpp" line="154"/>
         <source>Disk write</source>
-        <translation type="unfinished">Diskskrivning</translation>
+        <translation>Diskskrivning</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="191"/>
         <location filename="../memory_monitor.cpp" line="203"/>
         <source>Memory</source>
-        <translation type="unfinished">Minne</translation>
+        <translation>Minne</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="203"/>
@@ -898,50 +894,44 @@ Are you sure you want to continue?</source>
         <location filename="../memory_monitor.cpp" line="214"/>
         <location filename="../memory_monitor.cpp" line="221"/>
         <source>Swap</source>
-        <translation type="unfinished">Swap</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="204"/>
         <location filename="../memory_monitor.cpp" line="215"/>
         <source>Not enabled</source>
-        <translation type="unfinished">Ej aktiverad</translation>
+        <translation>Ej aktiverad</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="158"/>
         <location filename="../network_monitor.cpp" line="216"/>
         <source>Download</source>
-        <translation type="unfinished">Nedladdning</translation>
+        <translation>Nedladdning</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="163"/>
         <location filename="../network_monitor.cpp" line="221"/>
         <source>Upload</source>
-        <translation type="unfinished">Uppladdning</translation>
+        <translation>Uppladdning</translation>
     </message>
     <message>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="184"/>
         <location filename="../gui/netif_detail_view_widget.cpp" line="28"/>
         <location filename="../network_monitor.cpp" line="198"/>
         <source>Network</source>
-        <translation type="unfinished">Nätverk</translation>
+        <translation>Nätverk</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="160"/>
         <location filename="../network_monitor.cpp" line="218"/>
         <source>Total Received</source>
-        <translation>Total mottagen</translation>
+        <translation>Totalt mottaget</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="165"/>
         <location filename="../network_monitor.cpp" line="223"/>
         <source>Total Sent</source>
-        <translation>Total skickad</translation>
-    </message>
-    <message>
-        <location filename="../gui/block_dev_detail_view_widget.cpp" line="21"/>
-        <location filename="../gui/detail_view_stacked_widget.cpp" line="185"/>
-        <source>Disks</source>
-        <translation>Diskar</translation>
+        <translation>Totalt skickat</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="104"/>
@@ -949,13 +939,19 @@ Are you sure you want to continue?</source>
         <source>Send</source>
         <translation>Skicka</translation>
     </message>
+    <message>
+        <location filename="../gui/block_dev_detail_view_widget.cpp" line="21"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="185"/>
+        <source>Disks</source>
+        <translation>Diskar</translation>
+    </message>
 </context>
 <context>
     <name>Process.Loading</name>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="67"/>
         <source>Loading</source>
-        <translation>Laddning</translation>
+        <translation>Läser in</translation>
     </message>
 </context>
 <context>
@@ -964,7 +960,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/process_table_view.cpp" line="633"/>
         <location filename="../process/process.cpp" line="55"/>
         <source>Very high</source>
-        <translation>Väldigt hög</translation>
+        <translation>Mycket hög</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="641"/>
@@ -988,7 +984,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/process_table_view.cpp" line="665"/>
         <location filename="../process/process.cpp" line="59"/>
         <source>Very low</source>
-        <translation>Väldigt låg</translation>
+        <translation>Mycket låg</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="673"/>
@@ -1004,13 +1000,13 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../process/process_db.cpp" line="199"/>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation>PID: %1, Fel: [%2] %3</translation>
+        <translation>PID: %1, fel: [%2] %3</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="156"/>
         <location filename="../process/process_db.cpp" line="196"/>
         <source>Failed to change process priority</source>
-        <translation>Misslyckades med att ändra processprioritet</translation>
+        <translation>Det gick inte att ändra processprioriteten</translation>
     </message>
 </context>
 <context>
@@ -1018,17 +1014,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="61"/>
         <source>Applications</source>
-        <translation type="unfinished">Program</translation>
+        <translation>Program</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="63"/>
         <source>My processes</source>
-        <translation type="unfinished">Mina processer</translation>
+        <translation>Mina processer</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="65"/>
         <source>All processes</source>
-        <translation type="unfinished">Alla processer</translation>
+        <translation>Alla processer</translation>
     </message>
 </context>
 <context>
@@ -1036,32 +1032,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../process/process_db.cpp" line="267"/>
         <source>Failed to pause process</source>
-        <translation>Misslyckades med att pausa process</translation>
+        <translation>Det gick inte att pausa processen</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="270"/>
         <source>Failed to resume process</source>
-        <translation>Misslyckades med att återuppta process</translation>
+        <translation>Det gick inte att återuppta processen</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="273"/>
         <source>Failed to kill process</source>
-        <translation>Misslyckades med att avsluta process</translation>
+        <translation>Det gick inte att döda processen</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="276"/>
         <source>Unknown error</source>
-        <translation>Okänd fel</translation>
+        <translation>Okänt fel</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="337"/>
         <source>Failed in sending signal to process</source>
-        <translation>Misslyckades med att skicka signal till process</translation>
+        <translation>Det gick inte att skicka signal till processen</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="264"/>
         <source>Failed to end process</source>
-        <translation>Misslyckades med att avsluta process</translation>
+        <translation>Det gick inte att avsluta processen</translation>
     </message>
 </context>
 <context>
@@ -1077,7 +1073,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/process_table_model.cpp" line="269"/>
         <source>No response</source>
-        <translation type="unfinished">Inget svar</translation>
+        <translation>Inget svar</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.cpp" line="275"/>
@@ -1089,7 +1085,7 @@ Are you sure you want to continue?</source>
         <location filename="../process/process_name.cpp" line="99"/>
         <location filename="../process/process_name.cpp" line="104"/>
         <source>Tray</source>
-        <translation>Skärm</translation>
+        <translation>Systemfält</translation>
     </message>
 </context>
 <context>
@@ -1097,31 +1093,31 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_table_view.cpp" line="680"/>
         <source>View command location</source>
-        <translation>Visa kommandoläge</translation>
+        <translation>Visa kommandots plats</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="83"/>
         <location filename="../gui/process_table_view.cpp" line="684"/>
         <source>Properties</source>
-        <translation type="unfinished">Egenskaper</translation>
+        <translation>Egenskaper</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="66"/>
         <location filename="../gui/process_table_view.cpp" line="608"/>
         <source>End process</source>
-        <translation type="unfinished">Avsluta process</translation>
+        <translation>Avsluta process</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="78"/>
         <location filename="../gui/process_table_view.cpp" line="620"/>
         <source>Resume process</source>
-        <translation>Återuppta process</translation>
+        <translation>Återställ process</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="89"/>
         <location filename="../gui/process_table_view.cpp" line="691"/>
         <source>Kill process</source>
-        <translation>Avsluta process</translation>
+        <translation>Döda process</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="627"/>
@@ -1146,7 +1142,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/process_table_view.cpp" line="1085"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="1087"/>
@@ -1160,52 +1156,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/process_table_model.h" line="16"/>
         <source>Name</source>
-        <translation type="unfinished">Namn</translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="18"/>
         <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="22"/>
         <source>Memory</source>
-        <translation type="unfinished">Minne</translation>
-    </message>
-    <message>
-        <location filename="../model/process_table_model.h" line="23"/>
-        <source>Shared memory</source>
-        <translation>Delad minne</translation>
-    </message>
-    <message>
-        <location filename="../model/process_table_model.h" line="24"/>
-        <source>Virtual memory</source>
-        <translation>Virtuellt minne</translation>
+        <translation>Minne</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="32"/>
         <source>Disk write</source>
-        <translation type="unfinished">Diskskrivning</translation>
+        <translation>Diskskrivning</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="30"/>
         <source>Disk read</source>
-        <translation type="unfinished">Diskläsning</translation>
+        <translation>Diskläsning</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="28"/>
         <source>Download</source>
-        <translation type="unfinished">Nedladdning</translation>
+        <translation>Nedladdning</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="26"/>
         <source>Upload</source>
-        <translation type="unfinished">Uppladdning</translation>
+        <translation>Uppladdning</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="34"/>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="20"/>
@@ -1222,9 +1208,24 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>Prioritet</translation>
     </message>
+    <message>
+        <location filename="../model/process_table_model.h" line="23"/>
+        <source>Shared memory</source>
+        <translation>Delat minne</translation>
+    </message>
+    <message>
+        <location filename="../model/process_table_model.h" line="24"/>
+        <source>Virtual memory</source>
+        <translation>Virtuellt minne</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
+    <message>
+        <location filename="../system/cpu_set.cpp" line="426"/>
+        <source>Not support</source>
+        <translation>Stöds inte</translation>
+    </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="10"/>
         <source>Settings</source>
@@ -1238,32 +1239,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Visa varningar när användningen överskrider gränserna</translation>
+        <translation>Visa varningar när användningen överskrider tröskelvärdena</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation>CPU-varningsgräns (%)</translation>
+        <translation>Varningströskel för CPU (%)</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation>Minne-varningsgräns (%)</translation>
+        <translation>Varningströskel för minne (%)</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation>Interval för varning (min)</translation>
+        <translation>Varningsintervall (min)</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
         <source>Notifications</source>
-        <translation>Meddelanden</translation>
-    </message>
-    <message>
-        <location filename="../system/cpu_set.cpp" line="426"/>
-        <source>Not support</source>
-        <translation>Ej stöd</translation>
+        <translation>Aviseringar</translation>
     </message>
 </context>
 <context>
@@ -1271,16 +1267,23 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../service/service_manager.cpp" line="342"/>
         <source>Failed to set service startup type</source>
-        <translation>Misslyckades med att ange tjänstens starttyp</translation>
+        <translation>Det gick inte att ange tjänstens starttyp</translation>
     </message>
     <message>
         <location filename="../service/service_manager.cpp" line="408"/>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Fel: Misslyckades med att ange tjänstens starttyp på grund av att underliggande underprocess kraschade.</translation>
+        <translation>Fel: Det gick inte att ange tjänstens starttyp eftersom underprocessen kraschade.</translation>
     </message>
 </context>
 <context>
     <name>Service.Instance.Name.Dialog</name>
+    <message>
+        <location filename="../gui/system_service_table_view.cpp" line="157"/>
+        <location filename="../gui/system_service_table_view.cpp" line="224"/>
+        <location filename="../gui/system_service_table_view.cpp" line="292"/>
+        <source>Service instance name</source>
+        <translation>Namn på tjänstinstans</translation>
+    </message>
     <message>
         <location filename="../gui/service_name_sub_input_dialog.cpp" line="38"/>
         <source>OK</source>
@@ -1289,14 +1292,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/service_name_sub_input_dialog.cpp" line="39"/>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
-    </message>
-    <message>
-        <location filename="../gui/system_service_table_view.cpp" line="157"/>
-        <location filename="../gui/system_service_table_view.cpp" line="224"/>
-        <location filename="../gui/system_service_table_view.cpp" line="292"/>
-        <source>Service instance name</source>
-        <translation>Tjänstens instansnamn</translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -1328,12 +1324,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="558"/>
         <source>Auto</source>
-        <translation>Automatisk</translation>
+        <translation>Automatiskt</translation>
     </message>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="559"/>
         <source>Manual</source>
-        <translation>Manuell</translation>
+        <translation>Manuellt</translation>
     </message>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="557"/>
@@ -1346,22 +1342,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="16"/>
         <source>Name</source>
-        <translation type="unfinished">Namn</translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="18"/>
         <source>Load</source>
-        <translation>Ladda</translation>
-    </message>
-    <message>
-        <location filename="../model/system_service_table_model.h" line="21"/>
-        <source>Start State</source>
-        <translation>Startläge</translation>
-    </message>
-    <message>
-        <location filename="../model/system_service_table_model.h" line="25"/>
-        <source>Start Tactic</source>
-        <translation>Startstrategi</translation>
+        <translation>Läs in</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="23"/>
@@ -1376,12 +1362,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="32"/>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="27"/>
         <source>Startup Type</source>
         <translation>Starttyp</translation>
+    </message>
+    <message>
+        <location filename="../model/system_service_table_model.h" line="21"/>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../model/system_service_table_model.h" line="25"/>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1389,18 +1385,18 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="132"/>
         <source>Settings</source>
-        <translation>Inställningar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="165"/>
         <source>(Modifiable)</source>
-        <translation>(Ändrabart)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="278"/>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="387"/>
         <source>Range: %1-%2</source>
-        <translation>Intervallet: %1-%2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1409,22 +1405,22 @@ Are you sure you want to continue?</source>
         <location filename="../common/common.cpp" line="59"/>
         <location filename="../gui/main_window.cpp" line="129"/>
         <source>Force end application</source>
-        <translation>Tvinga avsluta program</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="147"/>
         <source>Expand</source>
-        <translation>Utöka</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="150"/>
         <source>Compact</source>
-        <translation>Kompakt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="142"/>
         <source>View</source>
-        <translation>Visa</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1433,7 +1429,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/common.cpp" line="44"/>
         <location filename="../gui/toolbar.cpp" line="95"/>
         <source>Search</source>
-        <translation type="unfinished">Sök</translation>
+        <translation>Sök</translation>
     </message>
 </context>
 <context>
@@ -1444,7 +1440,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/main_window.cpp" line="235"/>
         <location filename="../gui/toolbar.cpp" line="45"/>
         <source>Processes</source>
-        <translation>Processer</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../common/common.cpp" line="98"/>
@@ -1453,13 +1449,13 @@ Are you sure you want to continue?</source>
         <location filename="../gui/main_window.cpp" line="245"/>
         <location filename="../gui/toolbar.cpp" line="53"/>
         <source>Services</source>
-        <translation>Tjänster</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="245"/>
         <location filename="../gui/toolbar.cpp" line="60"/>
         <source>Users</source>
-        <translation>Användare</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1467,7 +1463,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="102"/>
         <source>Edit account information</source>
-        <translation>Redigera kontoinformation</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1475,12 +1471,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Administrator</source>
-        <translation>Administratör</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Standard User</source>
-        <translation>Standardanvändare</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
