@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv">
 <context>
     <name>Plugin.DisplayName</name>
     <message>
@@ -34,7 +32,7 @@
     <message>
         <location filename="../gui/systemmonitortipswidget.cpp" line="179"/>
         <source>MEM</source>
-        <translation>MIN</translation>
+        <translation>MINNE</translation>
     </message>
 </context>
 </TS>
