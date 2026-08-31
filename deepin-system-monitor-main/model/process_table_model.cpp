@@ -57,8 +57,9 @@ ProcessTableModel::ProcessTableModel(QObject *parent, const QString &username)
 
 char ProcessTableModel::getProcessState(pid_t pid) const
 {
-    if (m_procIdList.contains(pid)) {
-        return ProcessDB::instance()->processSet()->getProcessById(pid).state();
+    int row = m_procIdList.indexOf(pid);
+    if (row >= 0) {
+        return m_processList[row].state();
     }
 
     return 0;
@@ -66,8 +67,9 @@ char ProcessTableModel::getProcessState(pid_t pid) const
 
 Process ProcessTableModel::getProcess(pid_t pid) const
 {
-    if (m_procIdList.contains(pid)) {
-        return ProcessDB::instance()->processSet()->getProcessById(pid);
+    int row = m_procIdList.indexOf(pid);
+    if (row >= 0) {
+        return m_processList[row];
     }
 
     return Process();
@@ -77,9 +79,9 @@ Process ProcessTableModel::getProcess(pid_t pid) const
 void ProcessTableModel::updateProcessList()
 {
     if (m_userModeName.isNull()) {
-        QTimer::singleShot(0, this, SLOT(updateProcessListDelay()));
+        updateProcessListDelay();
     } else {
-        QTimer::singleShot(0, this, SLOT(updateProcessListWithUserSpecified()));
+        updateProcessListWithUserSpecified();
     }
 }
 
@@ -88,21 +90,18 @@ void ProcessTableModel::updateProcessListWithUserSpecified()
 
     ProcessSet *processSet = ProcessDB::instance()->processSet();
     const QList<pid_t> &newpidlst = processSet->getPIDList();
-    beginRemoveRows({}, 0, m_procIdList.size());
-    endRemoveRows();
+    beginResetModel();
     m_procIdList.clear();
     m_processList.clear();
-    int raw;
     for (const auto &pid : newpidlst) {
         Process changedProc = processSet->getProcessById(pid);
         if (changedProc.userName() == m_userModeName) {
-            raw = m_procIdList.size();
-            beginInsertRows({}, raw, raw);
             m_procIdList << pid;
+            changedProc.detach();
             m_processList << changedProc;
-            endInsertRows();
         }
     }
+    endResetModel();
 
     Q_EMIT modelUpdated();
 }
@@ -118,6 +117,7 @@ void ProcessTableModel::updateProcessListDelay()
         if (row >= 0) {
             // update
             m_processList[row] = processSet->getProcessById(pid);
+            m_processList[row].detach();
             Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
         } else {
             // insert
@@ -125,6 +125,7 @@ void ProcessTableModel::updateProcessListDelay()
             beginInsertRows({}, row, row);
             m_procIdList << pid;
             m_processList << processSet->getProcessById(pid);
+            m_processList.last().detach();
             endInsertRows();
         }
     }
@@ -375,7 +376,7 @@ ProcessPriority ProcessTableModel::getProcessPriority(pid_t pid) const
 {
     int row = m_procIdList.indexOf(pid);
     if (row >= 0) {
-        int prio = ProcessDB::instance()->processSet()->getProcessById(pid).priority();
+        int prio = m_processList[row].priority();
         return getProcessPriorityStub(prio);
     }
 
@@ -385,7 +386,7 @@ ProcessPriority ProcessTableModel::getProcessPriority(pid_t pid) const
 int ProcessTableModel::getProcessPriorityValue(pid_t pid) const
 {
     int row = m_procIdList.indexOf(pid);
-    return row >= 0 ? ProcessDB::instance()->processSet()->getProcessById(pid).priority() : kNormalPriority;
+    return row >= 0 ? m_processList[row].priority() : kNormalPriority;
 }
 
 // remove process entry from model with specified pid
