@@ -32,12 +32,12 @@
 			<translation>تعيين نوع بدء تشغيل الخدمة</translation>
 		</message>
 		<message>
-			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!message" line="0" />
+			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!message" line="0"/>
 			<source>Logging out other users is required to change process priority</source>
 			<translation>يلزم تسجيل خروج المستخدمين الآخرين لتغيير أولوية العملية</translation>
 		</message>
 		<message>
-			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!description" line="0" />
+			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!description" line="0"/>
 			<source>Logout other users</source>
 			<translation>تسجيل خروج المستخدمين الآخرين</translation>
 		</message>
