@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ar">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ar">
 <context>
     <name>App.About</name>
     <message>
@@ -75,7 +73,7 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
         <source>Frequency</source>
-        <translation></translation>
+        <translation>التردد</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
@@ -85,7 +83,7 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Average frequency</source>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
