@@ -1,3 +1,31 @@
+deepin-system-monitor (6.5.47) unstable; urgency=medium
+
+  * [skip CI] Translate desktop.ts in pt_BR
+  * [skip CI] Translate deepin-system-monitor.ts in pt_BR
+  * [skip CI] Translate desktop.ts in pt_BR
+  * [skip CI] Translate deepin-system-monitor-plugin_en.ts in pt_BR
+  * [skip CI] Translate deepin-system-monitor.ts in pt_BR
+  * [skip CI] Translate deepin-system-monitor-plugin-popup_en.ts in pt_BR
+  * [skip CI] Translate deepin-system-monitor.ts in pt_BR
+  * chore: Sync by https://github.com/linuxdeepin/.github/commit/a300f8523d4876677112edab6a0772f7ad112976
+  * fix: update Arabic (ar) translations
+  * fix: complete AT-SPI accessible names for interactive widgets
+  * [skip CI] Translate deepin-system-monitor.ts in pt
+  * [skip CI] Translate policy.ts in sv
+  * [skip CI] Translate policy.ts in sv
+  * [skip CI] Translate desktop.ts in sv
+  * [skip CI] Translate deepin-system-monitor.ts in sv
+  * [skip CI] Translate deepin-system-monitor-plugin-popup_en.ts in sv
+  * [skip CI] Translate deepin-system-monitor.ts in sv
+  * [skip CI] Translate deepin-system-monitor-plugin_en.ts in sv
+  * [skip CI] Translate policy.ts in sv
+  * [skip CI] Translate deepin-system-monitor.ts in ar
+  * fix: update Arabic (ar) translations
+  * [skip CI] Translate policy.ts in ar
+  * [skip CI] Translate deepin-system-monitor.ts in ar
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Mon, 07 Sep 2026 13:22:22 +0800
+
 deepin-system-monitor (6.5.46) unstable; urgency=medium
 
   * chore: update version to 6.5.46
