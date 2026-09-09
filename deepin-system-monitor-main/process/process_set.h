@@ -17,6 +17,10 @@ using namespace common::alloc;
 
 // class Settings;
 namespace core {
+namespace wm {
+class WMWindowList;
+}
+
 namespace process {
 
 enum FilterType { kFilterApps,
@@ -52,8 +56,10 @@ public:
 
 private:
     void scanProcess();
-    void mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps);
-    void mergeSubProcCpu(pid_t ppid, qreal &cpu);
+    void mergeSubProcResources(pid_t ppid, qreal &cpu,
+                               qreal &recvBps, qreal &sendBps) const;
+    QMap<pid_t, QList<pid_t>> collapseWineContainerGroups(
+            core::wm::WMWindowList *windowList, uid_t euid);
 
     class Iterator
     {
@@ -77,7 +83,8 @@ private:
     QMap<pid_t, std::shared_ptr<RecentProcStage>> m_recentProcStage {};
 
     QMap<pid_t, pid_t> m_pidCtoPMapping {}; // child to parent pid mapping
-    QMultiMap<pid_t, pid_t> m_pidPtoCMapping {}; // parent to child pid mapping
+    // Resource aggregation tree; Wine members can have a virtual parent here.
+    QMultiMap<pid_t, pid_t> m_pidPtoCMapping {};
     QList<pid_t> m_prePid;
     QList<pid_t> m_curPid;
     QList<pid_t> m_pidMyApps;

@@ -56,6 +56,8 @@ public:
     Process &operator=(const Process &rhs);
     ~Process();
 
+    void detach();
+
     bool isValid() const;
 
     pid_t pid() const;
