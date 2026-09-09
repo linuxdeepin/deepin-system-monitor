@@ -10,6 +10,7 @@
 // #include "settings.h"
 
 #include <QDebug>
+#include <QSet>
 
 #include <errno.h>
 
@@ -41,29 +42,130 @@ ProcessSet::ProcessSet(const ProcessSet &other)
     // m_settings = Settings::instance();
 }
 
-void ProcessSet::mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps)
+void ProcessSet::mergeSubProcResources(pid_t ppid, qreal &cpu,
+                                        qreal &recvBps, qreal &sendBps) const
 {
-    auto it = m_pidPtoCMapping.find(ppid);
-    while (it != m_pidPtoCMapping.end() && it.key() == ppid) {
-        mergeSubProcNetIO(it.value(), recvBps, sendBps);
-        ++it;
-    }
+    QList<pid_t> pending {ppid};
+    QSet<pid_t> visited;
+    while (!pending.isEmpty()) {
+        const pid_t pid = pending.takeLast();
+        if (visited.contains(pid))
+            continue;
+        visited.insert(pid);
 
-    const Process &proc = m_set[ppid];
-    recvBps += proc.recvBps();
-    sendBps += proc.sentBps();
+        const auto proc = m_set.constFind(pid);
+        if (proc == m_set.cend())
+            continue;
+        cpu += proc->cpu();
+        recvBps += proc->recvBps();
+        sendBps += proc->sentBps();
+
+        auto child = m_pidPtoCMapping.constFind(pid);
+        while (child != m_pidPtoCMapping.cend() && child.key() == pid) {
+            pending.append(child.value());
+            ++child;
+        }
+    }
 }
 
-void ProcessSet::mergeSubProcCpu(pid_t ppid, qreal &cpu)
+QMap<pid_t, QList<pid_t>> ProcessSet::collapseWineContainerGroups(WMWindowList *windowList,
+                                                                  uid_t euid)
 {
-    auto it = m_pidPtoCMapping.find(ppid);
-    while (it != m_pidPtoCMapping.end() && it.key() == ppid) {
-        mergeSubProcCpu(it.value(), cpu);
-        ++it;
+    using WineIdentity = QPair<QString, QString>;
+
+    const auto wineIdentity = [](const Process &proc, WineIdentity &identity) {
+        const QHash<QString, QString> environ = proc.environ();
+        const QString prefix = environ.value("WINEPREFIX").trimmed();
+        const QString package = environ.value("DEB_PACKAGE_NAME").trimmed();
+        if (prefix.isEmpty() || package.isEmpty())
+            return false;
+
+        identity = qMakePair(prefix, package);
+        return true;
+    };
+    const auto isWineContainerProcess = [](const Process &proc) {
+        const QString name = proc.name();
+        if (name == QStringLiteral("wineserver")
+                || name.startsWith(QStringLiteral("deepin-wine"))
+                || name.endsWith(QStringLiteral(".exe"), Qt::CaseInsensitive))
+            return true;
+
+        const QByteArrayList cmdline = proc.cmdline();
+        return !cmdline.isEmpty()
+                && QString::fromLocal8Bit(cmdline.first())
+                           .contains(".exe", Qt::CaseInsensitive);
+    };
+
+    QMap<WineIdentity, QList<pid_t>> membersByContainer;
+    for (auto it = m_set.cbegin(); it != m_set.cend(); ++it) {
+        if (it.value().uid() != euid)
+            continue;
+
+        WineIdentity identity;
+        if (wineIdentity(it.value(), identity) && isWineContainerProcess(it.value()))
+            membersByContainer[identity].append(it.key());
     }
 
-    const Process &proc = m_set[ppid];
-    cpu += proc.cpu();
+    QMap<pid_t, QList<pid_t>> groups;
+    for (auto it = membersByContainer.cbegin(); it != membersByContainer.cend(); ++it) {
+        // Appended in PID order while traversing m_set.
+        const QList<pid_t> &members = it.value();
+
+        QSet<pid_t> memberPids;
+        QList<pid_t> appCandidates;
+        int rootCount = 0;
+        for (pid_t pid : members) {
+            memberPids.insert(pid);
+            if (m_set.constFind(pid)->appType() == kFilterApps)
+                appCandidates.append(pid);
+        }
+        for (pid_t pid : members) {
+            if (!memberPids.contains(m_set.constFind(pid)->ppid()))
+                ++rootCount;
+        }
+
+        if (appCandidates.isEmpty() || (rootCount < 2 && appCandidates.size() < 2))
+            continue;
+
+        pid_t representativePid = -1;
+        int representativeScore = -1;
+        for (pid_t pid : appCandidates) {
+            int score = 0;
+            if (windowList->isGuiApp(pid))
+                score = 3;
+            else if (windowList->isDesktopEntryApp(pid))
+                score = 2;
+            else if (windowList->isTrayApp(pid))
+                score = 1;
+
+            if (score > representativeScore
+                    || (score == representativeScore
+                        && (representativePid < 0 || pid < representativePid))) {
+                representativePid = pid;
+                representativeScore = score;
+            }
+        }
+
+        groups.insert(representativePid, members);
+        // Reparent only the aggregation tree. Keep the real PPIDs for process
+        // details and ancestor checks. Native descendants stay on their branches.
+        for (pid_t pid : members) {
+            m_pidPtoCMapping.remove(m_set.constFind(pid)->ppid(), pid);
+            if (pid != representativePid)
+                m_pidPtoCMapping.insert(representativePid, pid);
+        }
+        for (pid_t pid : appCandidates) {
+            if (pid == representativePid)
+                continue;
+
+            Process &demoted = m_set.find(pid).value();
+            demoted.detach();
+            demoted.setAppType(kFilterCurrentUser);
+            windowList->removeDesktopEntryApp(pid);
+        }
+    }
+
+    return groups;
 }
 
 void ProcessSet::refresh()
@@ -103,7 +205,6 @@ void ProcessSet::scanProcess()
     if(m_prePid != m_curPid) {
         for (const pid_t &pid : m_prePid) {
             if(!m_curPid.contains(pid)){
-                m_prePid.removeAt(pid);  //remove disappear process pid
                 if(m_simpleSet.contains(pid))
                     m_simpleSet.remove(pid);
                 //for each pid,only one process reflected.So "removeOne()"func replied.
@@ -146,27 +247,42 @@ void ProcessSet::scanProcess()
         }
     }
 
-    std::function<bool(pid_t ppid)> anyRootIsGuiProc;
-    // find if any ancestor processes is gui application
-    anyRootIsGuiProc = [&](pid_t ppid) -> bool {
-        bool b;
-        b = wmwindowList->isGuiApp(ppid);
-        if (!b && m_pidCtoPMapping.contains(ppid))
-        {
-            b = anyRootIsGuiProc(m_pidCtoPMapping[ppid]);
+    const QMap<pid_t, QList<pid_t>> wineGroups =
+            collapseWineContainerGroups(wmwindowList, ProcessDB::instance()->processEuid());
+    for (auto it = wineGroups.cbegin(); it != wineGroups.cend(); ++it) {
+        if (!m_pidMyApps.contains(it.key()))
+            m_pidMyApps.append(it.key());
+    }
+
+    // Follow real parent links iteratively; a racy scan can contain cycles.
+    const auto anyRootIsGuiProc = [&](pid_t ppid) -> bool {
+        QSet<pid_t> visited;
+        while (!visited.contains(ppid)) {
+            visited.insert(ppid);
+            if (wmwindowList->isGuiApp(ppid))
+                return true;
+            const auto parent = m_pidCtoPMapping.constFind(ppid);
+            if (parent == m_pidCtoPMapping.cend())
+                break;
+            ppid = parent.value();
         }
-        return b;
+        return false;
     };
 
     for (const pid_t &pid : m_pidMyApps) {
+        auto proc = m_set.find(pid);
+        if (proc == m_set.end() || proc->appType() != kFilterApps)
+            continue;
+
         qreal recvBps = 0;
         qreal sendBps = 0;
-        mergeSubProcNetIO(pid, recvBps, sendBps);
-        m_set[pid].setNetIoBps(recvBps, sendBps);
-
         qreal ptotalCpu = 0.;
-        mergeSubProcCpu(pid, ptotalCpu);
-        m_set[pid].setCpu(ptotalCpu);
+        mergeSubProcResources(pid, ptotalCpu, recvBps, sendBps);
+        proc->setNetIoBps(recvBps, sendBps);
+        proc->setCpu(ptotalCpu);
+
+        if (wineGroups.contains(pid))
+            continue;
 
         if (!wmwindowList->isGuiApp(pid))
         {
