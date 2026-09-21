@@ -1374,7 +1374,7 @@ Czy na pewno chcesz kontynuować?</translation>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>Status uruchomienia</translation>
+        <translation>Stan uruchomienia</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
