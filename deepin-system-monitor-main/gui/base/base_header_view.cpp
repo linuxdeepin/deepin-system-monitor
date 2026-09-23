@@ -36,6 +36,21 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
 {
     DHeaderView::paintEvent(event);
 
+    // draw horizontal separator line at the bottom of the header
+    {
+        QPainter painter(viewport());
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        auto *dAppHelper = DApplicationHelper::instance();
+        auto palette = dAppHelper->applicationPalette();
+        QColor separatorColor = palette.color(DPalette::Active, DPalette::FrameBorder);
+
+        QRect rect = viewport()->rect();
+        int lineY = rect.bottom();
+        painter.setPen(QPen(separatorColor, 1));
+        painter.drawLine(rect.x(), lineY, rect.right(), lineY);
+    }
+
     // draw focus
     if (hasFocus() && m_focusReason == Qt::TabFocusReason) {
         QPainter painter(viewport());

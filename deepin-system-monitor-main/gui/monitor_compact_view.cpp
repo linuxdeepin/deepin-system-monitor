@@ -16,6 +16,9 @@
 #include <DStyle>
 
 #include <QVBoxLayout>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPaintEvent>
 
 // constructor
 MonitorCompactView::MonitorCompactView(QWidget *parent)
@@ -70,4 +73,29 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
 void MonitorCompactView::setDetailButtonVisible(bool visible)
 {
     m_cpuMonitor->setDetailButtonVisible(visible);
+}
+
+// paint event handler - draw rounded rect background
+void MonitorCompactView::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setClipping(true);
+
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+
+    auto *style = dynamic_cast<DStyle *>(DApplication::style());
+    QStyleOptionFrame option;
+    option.initFrom(this);
+    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
+
+    QRectF rect = this->rect();
+    QPainterPath path;
+    path.addRoundedRect(rect, radius, radius);
+
+    QBrush bgBrush(palette.color(DPalette::Active, DPalette::Window));
+    painter.fillPath(path, bgBrush);
 }

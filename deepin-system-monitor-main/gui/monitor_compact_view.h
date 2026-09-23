@@ -11,6 +11,10 @@
 DWIDGET_USE_NAMESPACE
 
 class CompactCpuMonitor;
+
+QT_BEGIN_NAMESPACE
+class QPaintEvent;
+QT_END_NAMESPACE
 class CompactMemoryMonitor;
 class CompactNetworkMonitor;
 class CompactDiskMonitor;
@@ -38,6 +42,13 @@ public:
      * @param visible
      */
     void setDetailButtonVisible(bool visible);
+
+protected:
+    /**
+     * @brief paintEvent Paint event handler, draws rounded rect background
+     * @param event Paint event object
+     */
+    void paintEvent(QPaintEvent *event) override;
 
 signals:
     void signalDetailInfoClicked();

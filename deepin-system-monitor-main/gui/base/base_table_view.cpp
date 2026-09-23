@@ -244,6 +244,23 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     // delegate to base draw method
     QTreeView::drawRow(painter, opt, index);
 
+    // draw column separator lines
+    auto *hdr = header();
+    int colCount = hdr->count();
+    QColor separatorColor = palette.color(DPalette::Active, DPalette::FrameBorder);
+    painter->setPen(QPen(separatorColor, 1));
+    for (int i = 0; i < colCount - 1; ++i) {
+        int logicalIndex = hdr->logicalIndex(i);
+        if (logicalIndex < 0)
+            continue;
+        int colRight = hdr->sectionPosition(logicalIndex)
+                       + hdr->sectionSize(logicalIndex)
+                       - hdr->offset();
+        if (colRight > 0 && colRight < viewport()->width()) {
+            painter->drawLine(colRight, options.rect.y(), colRight, options.rect.bottom());
+        }
+    }
+
     // draw focus
     if (hasFocus() && m_focusReason == Qt::TabFocusReason && currentIndex().row() == index.row()) {
         QStyleOptionFocusRect o;
