@@ -43,7 +43,9 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
 
         auto *dAppHelper = DApplicationHelper::instance();
         auto palette = dAppHelper->applicationPalette();
-        QColor separatorColor = palette.color(DPalette::Active, DPalette::FrameBorder);
+        QWidget *wnd = DApplication::activeWindow();
+        DPalette::ColorGroup cg = wnd ? DPalette::Active : DPalette::Inactive;
+        QColor separatorColor = palette.color(cg, DPalette::FrameBorder);
 
         QRect rect = viewport()->rect();
         int lineY = rect.bottom();

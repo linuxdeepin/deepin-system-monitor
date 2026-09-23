@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "monitor_expand_view.h"
+#include "monitor_view_util.h"
 
 #include "cpu_monitor.h"
 #include "memory_monitor.h"
@@ -71,24 +72,8 @@ void MonitorExpandView::setDetailButtonVisible(bool visible)
 // paint event handler - draw rounded rect background
 void MonitorExpandView::paintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event)
+    DFrame::paintEvent(event);
 
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setClipping(true);
-
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-
-    auto *style = dynamic_cast<DStyle *>(DApplication::style());
-    QStyleOptionFrame option;
-    option.initFrom(this);
-    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
-
-    QRectF rect = this->rect();
-    QPainterPath path;
-    path.addRoundedRect(rect, radius, radius);
-
-    QBrush bgBrush(palette.color(DPalette::Active, DPalette::Window));
-    painter.fillPath(path, bgBrush);
+    MonitorViewUtil::paintRoundedBackground(this, painter);
 }

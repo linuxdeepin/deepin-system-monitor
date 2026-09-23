@@ -213,6 +213,7 @@ set(HPP_GUI
     gui/system_service_page_widget.h
     gui/monitor_expand_view.h
     gui/monitor_compact_view.h
+    gui/monitor_view_util.h
     gui/priority_slider.h
     gui/kill_process_confirm_dialog.h
     gui/process_attribute_dialog.h

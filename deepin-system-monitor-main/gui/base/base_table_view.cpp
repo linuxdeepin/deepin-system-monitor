@@ -247,11 +247,14 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     // draw column separator lines
     auto *hdr = header();
     int colCount = hdr->count();
-    QColor separatorColor = palette.color(DPalette::Active, DPalette::FrameBorder);
+    auto dPalette = DApplicationHelper::instance()->applicationPalette();
+    QColor separatorColor = dPalette.color(cg, DPalette::FrameBorder);
     painter->setPen(QPen(separatorColor, 1));
     for (int i = 0; i < colCount - 1; ++i) {
         int logicalIndex = hdr->logicalIndex(i);
         if (logicalIndex < 0)
+            continue;
+        if (hdr->isSectionHidden(logicalIndex))
             continue;
         int colRight = hdr->sectionPosition(logicalIndex)
                        + hdr->sectionSize(logicalIndex)
