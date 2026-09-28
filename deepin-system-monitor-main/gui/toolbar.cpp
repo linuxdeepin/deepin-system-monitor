@@ -37,7 +37,7 @@ Toolbar::Toolbar(QWidget *parent)
 
     // tab button group
     m_switchFuncTabBtnGrp = new CustomButtonBox(this);
-    m_switchFuncTabBtnGrp->setMinimumWidth(240);
+    m_switchFuncTabBtnGrp->setMinimumWidth(200);
     // process tab button instance
     m_procBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Processes"), m_switchFuncTabBtnGrp);
@@ -80,7 +80,7 @@ Toolbar::Toolbar(QWidget *parent)
     searchEdit = new DSearchEdit(this);
     // set the search edit text max length
     searchEdit->lineEdit()->setMaxLength(MAX_TEXT_LEN);
-    searchEdit->setMinimumWidth(200);
+    searchEdit->setMinimumWidth(170);
     searchEdit->setMaximumWidth(360);
     searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
 
