@@ -122,6 +122,7 @@ QString BaseDetailViewWidget::title()
 void BaseDetailViewWidget::setDetail(const QString &text)
 {
     m_detailText = text;
+    setToolTip(text);
     update();
 }
 
@@ -181,8 +182,15 @@ void BaseDetailViewWidget::paintEvent(QPaintEvent *event)
     if (!m_detailText.isEmpty()) {
         painter.setFont(m_contentFont);
         painter.setPen(palette.color(DPalette::TextTips));
-        QRect detailRect(m_arrowButton->width() + titleRect.right() + 12, titleRect.y(), painter.fontMetrics().width(m_detailText), titleRect.height());
-        painter.drawText(detailRect, Qt::AlignLeft | Qt::AlignVCenter, m_detailText);
+        int detailX = m_arrowButton->width() + titleRect.right() + 12;
+        // 计算右侧控件的左边界，避免详细信息文字与切换/隐藏详情按钮重叠遮挡
+        int rightBoundary = m_switchButton->isVisible() ? m_switchButton->x() : m_detailButton->x();
+        int maxDetailWidth = rightBoundary - detailX - 6;
+        if (maxDetailWidth > 0) {
+            QString elidedText = painter.fontMetrics().elidedText(m_detailText, Qt::ElideRight, maxDetailWidth);
+            QRect detailRect(detailX, titleRect.y(), painter.fontMetrics().width(elidedText), titleRect.height());
+            painter.drawText(detailRect, Qt::AlignLeft | Qt::AlignVCenter, elidedText);
+        }
     }
 }
 

@@ -23,6 +23,14 @@
 
 /***************************************STUB begin*********************************************/
 
+static QString g_serviceName;
+
+bool stub_setServiceEnable(const QString &serviceName, bool, QString &errorString)
+{
+    g_serviceName = serviceName;
+    errorString = "stop after capturing service name";
+    return false;
+}
 
 /***************************************STUB end**********************************************/
 
@@ -75,8 +83,8 @@ TEST_F(UT_ServiceManager, test_updateServiceList_01)
 
 TEST_F(UT_ServiceManager, test_normalizeServiceID_01)
 {
-    m_tester->normalizeServiceId("id","param");
-    EXPECT_EQ(m_tester->normalizeServiceId("id").isEmpty(),false);
+    EXPECT_EQ(m_tester->normalizeServiceId("ssh"), QString("ssh.service"));
+    EXPECT_EQ(m_tester->normalizeServiceId("ssh.service"), QString("ssh.service"));
 }
 
 TEST_F(UT_ServiceManager, test_startService_01)
@@ -96,7 +104,16 @@ TEST_F(UT_ServiceManager, test_restartService_01)
 
 TEST_F(UT_ServiceManager, test_setServiceStartupMode_01)
 {
-    //m_tester->setServiceStartupMode("",false);
+    Stub stub;
+    stub.set(ADDR(ServiceManager, setServiceEnable), stub_setServiceEnable);
+
+    g_serviceName.clear();
+    m_tester->setServiceStartupMode("ssh", true);
+    EXPECT_EQ(g_serviceName, QString("ssh.service"));
+
+    g_serviceName.clear();
+    m_tester->setServiceStartupMode("ssh.service", false);
+    EXPECT_EQ(g_serviceName, QString("ssh.service"));
 }
 
 TEST_F(UT_ServiceManager, test_updateServiceEntry_01)
