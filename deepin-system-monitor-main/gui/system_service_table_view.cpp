@@ -411,10 +411,6 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     palette.setColor(DPalette::Text, labelColor);
     m_noMatchingResultLabel->setPalette(palette);
     m_noMatchingResultLabel->setVisible(false);
-
-    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
-    header()->setPalette(palette);
-
     // header view instance
     auto *hdr = header();
     // header section movable
@@ -565,10 +561,6 @@ void SystemServiceTableView::initConnections()
             palette.setColor(DPalette::Text, labelColor);
             m_noMatchingResultLabel->setPalette(palette);
         }
-
-        palette.setColor(DPalette::Button, palette.color(DPalette::Base));
-        header()->setPalette(palette);
-
         auto pa = DApplicationHelper::instance()->applicationPalette();
         // set spinner color
         QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
