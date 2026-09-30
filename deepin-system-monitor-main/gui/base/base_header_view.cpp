@@ -53,6 +53,12 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
         o.rect = style->visualRect(layoutDirection(), rect, focusRect);
         style->drawPrimitive(DStyle::PE_FrameFocusRect, &o, &painter);
     }
+    QPainter painter(viewport());
+    QPainterPath innerPath,outPath;
+    innerPath.addRoundedRect(viewport()->rect(),8,8);
+    outPath.addRect(viewport()->rect());
+    outPath=outPath.subtracted(innerPath);
+    painter.fillPath(outPath,DApplicationHelper::instance()->applicationPalette().color(DPalette::Active,DPalette::AlternateBase));
 }
 
 void BaseHeaderView::focusInEvent(QFocusEvent *event)

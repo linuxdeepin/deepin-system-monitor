@@ -89,9 +89,6 @@ void ProcessTableView::onThemeTypeChanged()
     auto palette = DApplicationHelper::instance()->applicationPalette();
     palette.setColor(DPalette::Text, palette.color(DPalette::PlaceholderText));
     m_notFoundLabel->setPalette(palette);
-
-    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
-    header()->setPalette(palette);
 }
 
 QString ProcessTableView::getProcessName(int pid)
