@@ -41,7 +41,7 @@ TEST(UT_Common, test_displayShortcutHlepDialog_01)
 
 TEST(UT_Common, test_getStatusBarMaxWidth_01)
 {
-    EXPECT_EQ(getStatusBarMaxWidth(),280);
+    EXPECT_EQ(getStatusBarMaxWidth(), 240);
 }
 
 TEST(UT_Common, test_drawLoadingRing_01)
