@@ -81,14 +81,6 @@ System Monitor can be used to end processes.
 > ![notes](../common/notes.svg) Notes: Press **Esc** on the keyboard to terminate the operation above and return to the System Monitor interface.
 
 
-#### Suspend/Resume Process
-
-1. On the System Monitor interface, right-click the process you want to suspend.
-2. Select **Suspend process**. The process will be tagged with **(Suspend)** and turned red in the list. 
-3. Right-click it again and select **Resume process** to resume it.
-
-![1|pause](fig/suspend.png)
-
 #### Change Process Priority 
 
 1. On the System Monitor interface, right-click a process.
@@ -133,13 +125,11 @@ In the list of system services, force-ending of application is prohibited.
 You can also right-click a system process and select **Restart**. 
 
 
-
-
 ### User Management
 
 On the "Users" tab, you can view the names and types of logged-in user accounts. After selecting an account, you can:
 - Right-click and select **Edit account information** to modify the account info in the Accounts window of Control Center.
-- View all processes under the account on the right, and right-click a process to end or suspend it, change its priority, etc.
+- View all processes under the account on the right, and right-click a process to end it, change its priority, etc.
 
 ![user](fig/user.png)
 
