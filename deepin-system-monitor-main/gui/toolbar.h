@@ -15,6 +15,7 @@ DWIDGET_USE_NAMESPACE
 
 class MainWindow;
 class QTimer;
+class QResizeEvent;
 class QAction;
 
 /**
@@ -109,6 +110,9 @@ Q_SIGNALS:
      * @brief User Procss tab button triggered signal
      */
     void accountProcTabButtonClicked();
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     // Button group
