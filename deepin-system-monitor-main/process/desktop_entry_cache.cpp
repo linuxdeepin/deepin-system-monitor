@@ -48,15 +48,17 @@ void DesktopEntryCache::updateCache()
 {
     m_cache.clear();
 
+    // Always scan the default desktop entry path first (lowest priority)
+    auto defaultFileInfoList = QDir(DESKTOP_ENTRY_PATH).entryInfoList(QDir::Files);
+    for (auto &fileInfo : defaultFileInfoList) {
+        entryWithDesktopFile(fileInfo.filePath());
+    }
+
+    // Also scan XDG_DATA_DIRS if set (higher priority, overrides defaults)
     QString xdgDataDirPath(getenv("XDG_DATA_DIRS"));
-    if (xdgDataDirPath.isEmpty()) {
-        auto fileInfoList = QDir(DESKTOP_ENTRY_PATH).entryInfoList(QDir::Files);
-        for (auto &fileInfo : fileInfoList) {
-            entryWithDesktopFile(fileInfo.filePath());
-        }
-    } else {
+    if (!xdgDataDirPath.isEmpty()) {
         QStringList xdgDataDirPaths = xdgDataDirPath.split(":", QString::SkipEmptyParts);
-        for (auto path : xdgDataDirPaths) {
+        for (auto &path : xdgDataDirPaths) {
             auto fileInfoList = QDir(path.trimmed() + "/applications").entryInfoList(QDir::Files);
             for (auto &fileInfo : fileInfoList) {
                 entryWithDesktopFile(fileInfo.filePath());
