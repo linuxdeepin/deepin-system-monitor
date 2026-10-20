@@ -108,6 +108,11 @@ Process::~Process()
 {
 }
 
+void Process::detach()
+{
+    d = new ProcessPrivate(*d);
+}
+
 time_t Process::startTime() const
 {
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
