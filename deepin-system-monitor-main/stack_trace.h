@@ -16,9 +16,11 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #include <QStandardPaths>
-#include <QProcess>
+
+#include "helper.hpp"
 
 namespace util {
 
@@ -87,8 +89,42 @@ static inline void printStacktrace(int signum)
     // raise origin signal
     raise(signum);
 
-    QString cmd = R"(sleep 0.1 && dbus-send --session --print-reply --dest=com.deepin.SessionManager /com/deepin/StartManager com.deepin.StartManager.Launch string:"/usr/share/applications/deepin-system-monitor.desktop";)";
-    QProcess::startDetached("bash", { "-c", cmd });
+    bool isOldVersion = common::systemInfo().isOldVersion();
+    pid_t pid = fork();
+    if (pid == 0) {
+        // 先睡眠 1 秒，等待旧应用退出。注意睡眠时间不足则会启动失败
+        struct timespec time;
+        time.tv_sec = 1;
+        time.tv_nsec = 0;
+        nanosleep(&time, nullptr);
+
+        // 通过命令行调用 D-Bus 重新启动系统监视器
+        // 使用 execlp 而非 Qt D-Bus API，避免 fork 后复用父进程总线连接导致死锁
+        if (isOldVersion) {
+            // 旧系统：请求 com.deepin.SessionManager 启动应用
+            execlp("/usr/bin/dbus-send", "dbus-send",
+                   "--session",
+                   "--print-reply",
+                   "--dest=com.deepin.SessionManager",
+                   "/com/deepin/StartManager",
+                   "com.deepin.StartManager.Launch",
+                   "string:/usr/share/applications/deepin-system-monitor.desktop",
+                   (char *)nullptr);
+        } else {
+            // 新系统：请求 org.desktopspec.ApplicationManager1 启动应用
+            execlp("/usr/bin/gdbus", "gdbus",
+                   "call",
+                   "--session",
+                   "--dest", "org.desktopspec.ApplicationManager1",
+                   "--object-path", "/org/desktopspec/ApplicationManager1/deepin_2dsystem_2dmonitor",
+                   "--method", "org.desktopspec.ApplicationManager1.Application.Launch",
+                   "",
+                   "@as []",
+                   "@a{sv} {}",
+                   (char *)nullptr);
+        }
+        _exit(1);
+    }
 }
 
 /**
