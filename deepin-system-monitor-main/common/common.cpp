@@ -131,6 +131,11 @@ void displayShortcutHelpDialog(const QRect &rect)
     QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
     shortcutString << param1 << param2;
 
+    // check if a shortcut viewer process is already running
+    if (QProcess::execute("pgrep", {"-x", "deepin-shortcut-viewer"}) == 0) {
+        return;
+    }
+
     // detach this process
     shortcutViewProcess.startDetached("deepin-shortcut-viewer", shortcutString);
 }
@@ -209,8 +214,6 @@ void WaylandSearchCentered()
 
     if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
         WaylandCentered = true;
-        if (!common::systemInfo().isOldVersion())
-            qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     } else {
         WaylandCentered = false;
     }
