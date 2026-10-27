@@ -17,6 +17,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QFile>
+#include <QStandardItemModel>
 #include <DApplication>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
@@ -333,4 +334,24 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_flags_01)
 
     // Act & Assert
     EXPECT_EQ(m_tester->model()->flags(index), Qt::NoItemFlags);
+}
+
+// 合成越界列索引（外部模型索引）：switch 落空走 break 分支后返回无效 QVariant
+TEST_F(UT_BlockDevSummaryViewWidget, test_data_outOfRangeColumn)
+{
+    // Arrange: data() 仅校验 isValid，不校验索引归属，可用外部模型构造越界列索引
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+    QStandardItemModel fakeModel;
+    for (int row = 0; row < 7; ++row) {
+        for (int col = 0; col < 3; ++col) {
+            fakeModel.setItem(row, col, new QStandardItem());
+        }
+    }
+
+    // Act & Assert: column==2 时 DisplayRole/UserRole 均落入 break 分支返回无效
+    for (int row = 0; row < 7; ++row) {
+        QModelIndex idx = fakeModel.index(row, 2);
+        EXPECT_FALSE(m_tester->model()->data(idx, Qt::DisplayRole).isValid()) << row;
+        EXPECT_FALSE(m_tester->model()->data(idx, Qt::UserRole).isValid()) << row;
+    }
 }
