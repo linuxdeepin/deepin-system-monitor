@@ -14,6 +14,7 @@
 
 #include <netlink/socket.h>
 #include <netlink/cache.h>
+#include <netlink/object.h>
 
 #include <memory>
 
@@ -42,8 +43,13 @@ public:
         if (!d->m_next)
             return tPtr; // nullptr
 
+        // Increment reference count so the wrapper owns its own reference.
+        // The destructor (hold=true) will call rtnl_link_put/rtnl_addr_put
+        // to release this reference, preventing use-after-free if the
+        // returned object outlives the cache.
+        nl_object_get(d->m_next);
         O *o = reinterpret_cast<O *>(d->m_next);
-        tPtr.reset(new T(o));
+        tPtr.reset(new T(o, true));
 
         advance();
 
