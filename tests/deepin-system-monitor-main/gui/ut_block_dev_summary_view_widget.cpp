@@ -1,11 +1,10 @@
-// Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
-//
+// Copyright (C) 2019-2026 UnionTech Software Technology Co., Ltd.
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //Self
 #include "block_dev_summary_view_widget.h"
 #include "system/block_device.h"
+#include "system/block_device_info_db.h"
 #include "common/common.h"
 
 //gtest
@@ -17,6 +16,7 @@
 #include <QSignalSpy>
 #include <QDebug>
 #include <QApplication>
+#include <QFile>
 #include <DApplication>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
@@ -24,57 +24,37 @@
 #include <DGuiApplicationHelper>
 #endif
 
+#include <memory>
+
 using namespace core::system;
 using namespace common::format;
+
 /***************************************STUB begin*********************************************/
-bool stub_data_isValid_true()
+static void stub_readDeviceInfo_noop()
 {
-    return true;
 }
 
-int stub_data_index_row_0()
+QList<BlockDevice> stub_deviceList_twoDevices()
 {
-    return 0;
+    // 两台"虚拟"设备：名称合法但不存在于 /proc/diskstats，速率等保持初始值 0
+    QList<BlockDevice> listDB;
+    {
+        Stub stub;
+        stub.set(ADDR(BlockDevice, readDeviceInfo), stub_readDeviceInfo_noop);
+        BlockDevice dev1;
+        dev1.setDeviceName(QByteArray("ut-sm-disk-a"));
+        listDB.append(dev1);
+
+        BlockDevice dev2;
+        dev2.setDeviceName(QByteArray("ut-sm-disk-b"));
+        listDB.append(dev2);
+    }
+    return listDB;
 }
 
-int stub_data_index_row_1()
+QList<BlockDevice> stub_deviceList_empty()
 {
-    return 1;
-}
-
-int stub_data_index_row_2()
-{
-    return 2;
-}
-
-int stub_data_index_row_3()
-{
-    return 3;
-}
-
-int stub_data_index_row_4()
-{
-    return 4;
-}
-
-int stub_data_index_row_5()
-{
-    return 5;
-}
-
-int stub_data_index_row_6()
-{
-    return 6;
-}
-
-int stub_data_index_column_0()
-{
-    return 0;
-}
-
-int stub_data_index_column_1()
-{
-    return 1;
+    return QList<BlockDevice>();
 }
 /***************************************STUB end**********************************************/
 
@@ -86,6 +66,8 @@ public:
 public:
     virtual void SetUp()
     {
+        // 全程对 BlockDeviceInfoDB::deviceList 打桩，隔离真实 /proc/diskstats 读取
+        m_deviceListStub.set(ADDR(BlockDeviceInfoDB, deviceList), stub_deviceList_twoDevices);
         m_tester = new BlockDevSummaryViewWidget();
     }
 
@@ -99,35 +81,85 @@ public:
 
 protected:
     BlockDevSummaryViewWidget *m_tester;
+    Stub m_deviceListStub;
 };
 
+// Arrange-Act-Assert：构造后模型挂接与基础尺寸应就绪
 TEST_F(UT_BlockDevSummaryViewWidget, initTest)
 {
-
+    // Act: SetUp 已构造
+    // Assert
+    ASSERT_NE(m_tester, nullptr);
+    ASSERT_NE(m_tester->model(), nullptr);
+    EXPECT_EQ(m_tester->model()->rowCount(), 7);
+    EXPECT_EQ(m_tester->model()->columnCount(), 2);
 }
 
-
+// fontChanged 应更新 m_font、控件字体并固定高度 260
 TEST_F(UT_BlockDevSummaryViewWidget, test_fontChanged_01)
 {
+    // Arrange
     QFont font;
     font.setBold(true);
+
+    // Act
     m_tester->fontChanged(font);
 
-    EXPECT_EQ(m_tester->m_font.bold(), font.bold());
+    // Assert
+    EXPECT_EQ(m_tester->m_font, font);
+    EXPECT_EQ(m_tester->font().bold(), font.bold());
     EXPECT_EQ(m_tester->height(), 260);
 }
 
+// chageSummaryInfo 应设置内部模型当前设备名（非空名称走 setCurrentName 分支）
 TEST_F(UT_BlockDevSummaryViewWidget, test_chageSummaryInfo_01)
 {
-    QString deviceName = "";
+    // Arrange
+    const QString deviceName = "ut-sm-disk-a";
+
+    // Act
     m_tester->chageSummaryInfo(deviceName);
+
+    // Assert: 有效索引下可取到数据（设备名非空），说明当前设备名已生效
+    QModelIndex index = m_tester->model()->index(0, 0);
+    EXPECT_TRUE(m_tester->model()->data(index, Qt::DisplayRole).isValid());
 }
 
+// chageSummaryInfo 空名称触发 updateModel 的"自动选中首台设备"分支，数据恢复有效
+TEST_F(UT_BlockDevSummaryViewWidget, test_chageSummaryInfo_02)
+{
+    // Arrange
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+    QModelIndex index = m_tester->model()->index(0, 0);
+
+    // Act
+    m_tester->chageSummaryInfo(QString(""));
+
+    // Assert: updateModel 在 currDeciveName 为空时自动选中首台设备
+    EXPECT_TRUE(m_tester->model()->data(index, Qt::DisplayRole).isValid());
+    EXPECT_TRUE(m_tester->model()->data(index, Qt::UserRole).isValid());
+}
+
+// paintEvent：grab 渲染不崩溃且产出非空位图
 TEST_F(UT_BlockDevSummaryViewWidget, test_paintEvent_01)
 {
+    // Act & Assert
     EXPECT_FALSE(m_tester->grab().isNull());
 }
 
+// paintEvent：设置字体后渲染仍正常（覆盖字体相关绘制路径）
+TEST_F(UT_BlockDevSummaryViewWidget, test_paintEvent_02)
+{
+    // Arrange
+    QFont font;
+    font.setPointSizeF(12.0);
+    m_tester->fontChanged(font);
+
+    // Act & Assert
+    EXPECT_FALSE(m_tester->grab().isNull());
+}
+
+// 模型固定 7 行 2 列
 TEST_F(UT_BlockDevSummaryViewWidget, test_rowCount_01)
 {
     EXPECT_EQ(m_tester->model()->rowCount(), 7);
@@ -138,536 +170,167 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_columnCount_01)
     EXPECT_EQ(m_tester->model()->columnCount(), 2);
 }
 
-TEST_F(UT_BlockDevSummaryViewWidget, test_data_01)
+// DisplayRole：7x2 全矩阵标题文本与源码一致（经真实模型调用，非测试副本）
+TEST_F(UT_BlockDevSummaryViewWidget, test_data_displayRole_matrix)
 {
-    QModelIndex index =  m_tester->model()->index(0, 0);
+    // Arrange
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+    struct Cell { int row; int col; const char *text; };
+    const Cell cells[] = {
+        {0, 0, "Read speed"},         {0, 1, "Write speed"},
+        {1, 0, "Capacity"},           {1, 1, "Sectors read"},
+        {2, 0, "Reads/s"},            {2, 1, "Sectors read/s"},
+        {3, 0, "Reads merged/s"},     {3, 1, "Sectors written"},
+        {4, 0, "Writes completed "},  {4, 1, "Writes merged"},
+        {5, 0, "Writes/s"},           {5, 1, "Sectors written/s"},
+        {6, 0, "Writes merged/s"},    {6, 1, ""},
+    };
 
-    m_tester->model()->data(index, Qt::DisplayRole);
+    // Act & Assert
+    for (const Cell &c : cells) {
+        QModelIndex index = m_tester->model()->index(c.row, c.col);
+        QVariant value = m_tester->model()->data(index, Qt::DisplayRole);
+        QString expected = QApplication::translate("DeailTableModelBlock", c.text);
+        EXPECT_EQ(value.toString(), expected)
+                << "cell(" << c.row << "," << c.col << ")";
+    }
 }
 
+// DisplayRole：越界行应返回无效 QVariant
+TEST_F(UT_BlockDevSummaryViewWidget, test_data_displayRole_outOfRange)
+{
+    // Arrange
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+
+    // Act
+    QVariant value = m_tester->model()->data(m_tester->model()->index(7, 0), Qt::DisplayRole);
+
+    // Assert
+    EXPECT_FALSE(value.isValid());
+}
+
+// UserRole：formatUnit 单元格（速度/容量）在零值设备下可稳定求值
+TEST_F(UT_BlockDevSummaryViewWidget, test_data_userRole_unitCells)
+{
+    // Arrange
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+    struct Cell { int row; int col; };
+    const Cell cells[] = { {0, 0}, {0, 1}, {1, 0} };
+
+    // Act & Assert: 速率/容量均为 0，格式化结果一致且非空
+    for (const Cell &c : cells) {
+        QModelIndex index = m_tester->model()->index(c.row, c.col);
+        QVariant value = m_tester->model()->data(index, Qt::UserRole);
+        EXPECT_TRUE(value.isValid()) << "cell(" << c.row << "," << c.col << ")";
+        EXPECT_EQ(value.toString(), formatUnit_memory_disk(static_cast<quint64>(0), B, 1))
+                << "cell(" << c.row << "," << c.col << ")";
+    }
+}
+
+// UserRole：计数值单元格在零值设备下均为 0
+TEST_F(UT_BlockDevSummaryViewWidget, test_data_userRole_countCells)
+{
+    // Arrange
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+    struct Cell { int row; int col; bool isReal; };
+    const Cell cells[] = {
+        {1, 1, false}, {2, 0, true}, {2, 1, true}, {3, 0, true},
+        {3, 1, false}, {4, 0, false}, {4, 1, false}, {5, 0, true},
+        {5, 1, true}, {6, 0, true},
+    };
+
+    // Act & Assert
+    for (const Cell &c : cells) {
+        QModelIndex index = m_tester->model()->index(c.row, c.col);
+        QVariant value = m_tester->model()->data(index, Qt::UserRole);
+        EXPECT_TRUE(value.isValid()) << "cell(" << c.row << "," << c.col << ")";
+        if (c.isReal) {
+            EXPECT_DOUBLE_EQ(value.toDouble(), 0.0) << "cell(" << c.row << "," << c.col << ")";
+        } else {
+            EXPECT_EQ(value.toULongLong(), 0ULL) << "cell(" << c.row << "," << c.col << ")";
+        }
+    }
+}
+
+// UserRole：row6 col1 返回空字符串分支
+TEST_F(UT_BlockDevSummaryViewWidget, test_data_userRole_row6col1)
+{
+    // Arrange
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+
+    // Act
+    QVariant value = m_tester->model()->data(m_tester->model()->index(6, 1), Qt::UserRole);
+
+    // Assert
+    EXPECT_TRUE(value.isValid());
+    EXPECT_EQ(value.toString(), QString(""));
+}
+
+// 前景色分支返回调色板文本色
+TEST_F(UT_BlockDevSummaryViewWidget, test_data_foregroundRole)
+{
+    // Arrange
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+
+    // Act
+    QVariant value = m_tester->model()->data(m_tester->model()->index(0, 0),
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                                             Qt::TextColorRole);
+#else
+                                             Qt::ForegroundRole);
+#endif
+
+    // Assert
+    EXPECT_TRUE(value.canConvert<QColor>());
+}
+
+// 未处理角色返回无效 QVariant
+TEST_F(UT_BlockDevSummaryViewWidget, test_data_unhandledRole)
+{
+    // Arrange
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+
+    // Act
+    QVariant value = m_tester->model()->data(m_tester->model()->index(0, 0), Qt::ToolTipRole);
+
+    // Assert
+    EXPECT_FALSE(value.isValid());
+}
+
+// 无效索引返回无效 QVariant（isValid 分支）
+TEST_F(UT_BlockDevSummaryViewWidget, test_data_invalidIndex)
+{
+    // Arrange
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+    QModelIndex invalidIndex;
+
+    // Act & Assert
+    EXPECT_FALSE(m_tester->model()->data(invalidIndex, Qt::DisplayRole).isValid());
+    EXPECT_FALSE(m_tester->model()->data(invalidIndex, Qt::UserRole).isValid());
+}
+
+// 设备列表为空时模型仍可用（updateModel 空表分支，不崩溃）
+TEST_F(UT_BlockDevSummaryViewWidget, test_updateModel_emptyDeviceList)
+{
+    // Arrange
+    Stub stub;
+    stub.set(ADDR(BlockDeviceInfoDB, deviceList), stub_deviceList_empty);
+
+    // Act: 触发 updateModel —— 空 id 列表时 currDeciveName 保持原值
+    m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
+
+    // Assert: 模型尺寸恒定，数据可安全访问
+    EXPECT_EQ(m_tester->model()->rowCount(), 7);
+    EXPECT_EQ(m_tester->model()->columnCount(), 2);
+    EXPECT_FALSE(m_tester->grab().isNull());
+}
+
+// flags：有效索引恒为 NoItemFlags（只读表格）
 TEST_F(UT_BlockDevSummaryViewWidget, test_flags_01)
 {
-    QModelIndex index =  m_tester->model()->index(0, 0);
+    // Arrange
+    QModelIndex index = m_tester->model()->index(0, 0);
+
+    // Act & Assert
     EXPECT_EQ(m_tester->model()->flags(index), Qt::NoItemFlags);
-}
-
-
-////////////////////////////////////CLASS 2........////////////////////////////////////////
-class DeailTableModelBlock : public QAbstractTableModel
-{
-public:
-    explicit DeailTableModelBlock(QObject *parent = nullptr);
-    virtual ~DeailTableModelBlock();
-protected:
-    int rowCount(const QModelIndex &) const
-    {
-        return 7;
-    }
-
-    int columnCount(const QModelIndex &) const
-    {
-        return 2;
-    }
-
-    QVariant data(const QModelIndex &index, int role) const
-    {
-
-        if (!index.isValid() || currDeciveName.isEmpty())
-            return QVariant();
-        int row = index.row();
-        int column = index.column();
-        if (role == Qt::DisplayRole) {
-            switch (row) {
-            case 0:
-                if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Model");
-                else if (column == 1)
-                    return QApplication::translate("DeailTableModelBlock", "Read speed");
-                break;
-            case 1:
-                if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Write speed");
-                else if (column == 1)
-                    return QApplication::translate("DeailTableModelBlock", "Capacity");
-                break;
-            case 2:
-                if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Sectors read");
-                else if (column == 1)
-                    return QApplication::translate("DeailTableModelBlock", "Reads/s");
-                break;
-            case 3:
-                if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Sectors read/s");
-                else if (column == 1)
-                    return QApplication::translate("DeailTableModelBlock", "Reads merged/s");
-                break;
-            case 4:
-                if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Sectors written");
-                else if (column == 1)
-                    return QApplication::translate("DeailTableModelBlock", "Writes completed ");
-                break;
-            case 5:
-                if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Writes merged");
-                else if (column == 1)
-                    return QApplication::translate("DeailTableModelBlock", "Writes/s");
-                break;
-            case 6:
-                if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Sectors written/s");
-                else if (column == 1)
-                    return QApplication::translate("DeailTableModelBlock", "Writes merged/s");
-                break;
-
-            }
-        } else if (role == Qt::UserRole) {
-            switch (row) {
-            case 0:
-                if (column == 0)
-                    return m_blockInfo.model();
-                else if (column == 1)
-                    return formatUnit_memory_disk(m_blockInfo.readSpeed(), B, 1);
-                break;
-            case 1:
-                if (column == 0)
-                    return formatUnit_memory_disk(m_blockInfo.writeSpeed(), B, 1);
-                else if (column == 1)
-                    return formatUnit_memory_disk(m_blockInfo.capacity(), B, 1);
-                break;
-            case  2:
-                if (column == 0)
-                    return m_blockInfo.blocksRead();
-                else if (column == 1)
-                    return m_blockInfo.readRequestIssuedPerSecond();
-                break;
-            case  3:
-                if (column == 0)
-                    return m_blockInfo.sectorsReadPerSecond();
-                else if (column == 1)
-                    return m_blockInfo.readRequestMergedPerSecond();
-                break;
-            case  4:
-                if (column == 0)
-                    return m_blockInfo.blocksWritten();
-                else if (column == 1)
-                    return m_blockInfo.writeComplete();
-                break;
-            case  5:
-                if (column == 0)
-                    return m_blockInfo.writeMerged();
-                else if (column == 1)
-                    return m_blockInfo.writeRequestIssuedPerSecond();
-                break;
-            case  6:
-                if (column == 0)
-                    return m_blockInfo.sectorsWrittenPerSecond();
-                else if (column == 1)
-                    return m_blockInfo.writeRequestMergedPerSecond();
-                break;
-            }
-        } else if (role == Qt::ForegroundRole) {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            const auto &palette = DApplicationHelper::instance()->applicationPalette();
-#else
-            const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
-#endif
-            return palette.color(DPalette::Text);
-        }
-        return QVariant();
-    }
-
-    Qt::ItemFlags flags(const QModelIndex &) const
-    {
-        return Qt::NoItemFlags;
-    }
-
-public slots:
-    void updateModel();
-
-public:
-    void setCurrentName(const QString &str)
-    {
-        currDeciveName = str;
-        if (!str.isEmpty())
-            m_blockInfo = m_mapInfo.find(currDeciveName).value();
-        updateModel();
-    }
-
-private:
-    QString currDeciveName;
-    BlockDevice m_blockInfo;
-    QMap<QString, BlockDevice> m_mapInfo;
-};
-
-
-class UT_DeailTableModelBlock : public ::testing::Test
-{
-public:
-    UT_DeailTableModelBlock() : m_tester2(nullptr) {}
-
-public:
-    virtual void SetUp()
-    {
-        m_tester2 = new DeailTableModelBlock();
-    }
-
-    virtual void TearDown()
-    {
-        if (m_tester2) {
-            delete m_tester2;
-            m_tester2 = nullptr;
-        }
-    }
-
-protected:
-    DeailTableModelBlock *m_tester2;
-};
-
-TEST_F(UT_DeailTableModelBlock, initTest)
-{
-
-}
-
-TEST_F(UT_DeailTableModelBlock, test_rowCount_01)
-{
-    QModelIndex index;
-    EXPECT_EQ(m_tester2->rowCount(index), 7);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_columnCount_01)
-{
-    QModelIndex index;
-    EXPECT_EQ(m_tester2->columnCount(index), 2);
-}
-
-
-TEST_F(UT_DeailTableModelBlock, test_data_01)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_0);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-
-TEST_F(UT_DeailTableModelBlock, test_data_02)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_0);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_03)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_1);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-
-TEST_F(UT_DeailTableModelBlock, test_data_04)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_1);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_05)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_2);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_06)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_2);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_07)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_3);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_08)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_3);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_09)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_4);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_10)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_4);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_11)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_5);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_12)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_5);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_13)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_6);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_14)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_6);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::DisplayRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_15)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_0);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-
-TEST_F(UT_DeailTableModelBlock, test_data_16)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_0);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_17)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_1);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-
-TEST_F(UT_DeailTableModelBlock, test_data_18)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_1);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_19)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_2);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_20)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_2);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_21)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_3);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_22)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_3);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_23)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_4);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_24)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_4);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_25)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_5);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_26)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_5);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_27)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_6);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_0);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_28)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_6);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::UserRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_data_29)
-{
-    Stub stub;
-    stub.set(ADDR(QModelIndex, isValid), stub_data_isValid_true);
-    stub.set(ADDR(QModelIndex, row), stub_data_index_row_6);
-    stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
-    QModelIndex index;
-    m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::ForegroundRole);
-}
-
-TEST_F(UT_DeailTableModelBlock, test_flags_01)
-{
-    QModelIndex index;
-    EXPECT_EQ(m_tester2->flags(index), Qt::NoItemFlags);
 }
