@@ -379,8 +379,6 @@ void ProcessSet::scanProcess()
         }
     }
 
-    m_recentProcStage.clear();
-
     // Group processes by AM instance for linglong apps
     groupProcessesByAMInstance();
 
@@ -441,7 +439,7 @@ void ProcessSet::Iterator::advance()
 
 std::weak_ptr<RecentProcStage> ProcessSet::getRecentProcStage(pid_t pid) const
 {
-    return m_recentProcStage[pid];
+    return m_recentProcStage.value(pid);
 }
 
 const Process ProcessSet::getProcessById(pid_t pid) const
