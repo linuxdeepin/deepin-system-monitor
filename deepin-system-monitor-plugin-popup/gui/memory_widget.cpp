@@ -1,5 +1,5 @@
 // Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -127,6 +127,7 @@ void MemoryWidget::changeTheme(DApplicationHelper::ColorType themeType)
 
     textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
+    m_baseColor = palette.color(DPalette::Base);
 }
 
 void MemoryWidget::paintEvent(QPaintEvent *e)
@@ -141,16 +142,16 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     path.addRoundedRect(rect(), 8, 8);
     painter.setClipPath(path);
     if (m_isHover) {
-        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, m_hoverTrans)));
+        painter.fillRect(rect(), QBrush(QColor(m_baseColor.red(), m_baseColor.green(), m_baseColor.blue(), m_hoverTrans)));
     } else {
-        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, 0)));
+        painter.fillRect(rect(), QBrush(QColor(m_baseColor.red(), m_baseColor.green(), m_baseColor.blue(), 0)));
     }
 
     //标题栏背景
     QRect titleRect(rect().x(), rect().y(), m_width, 36);
-    painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
+    painter.fillRect(titleRect, QBrush(QColor(m_baseColor.red(), m_baseColor.green(), m_baseColor.blue(), m_titleTrans)));
     QRect contentRect(rect().x(), rect().y()+36, m_width, 117);
-    painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
+    painter.fillRect(contentRect, QBrush(QColor(m_baseColor.red(), m_baseColor.green(), m_baseColor.blue(), m_contentTrans)));
 
     //标题
     QString strMemory = DApplication::translate("Memory.Widget", "Memory");

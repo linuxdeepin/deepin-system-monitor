@@ -1,5 +1,5 @@
 // Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -168,6 +168,8 @@ void DiskWidget::changeTheme(DApplicationHelper::ColorType themeType)
 
     textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
+    m_baseColor = palette.color(DPalette::Base);
+    m_separatorColor = QColor(textColor.red(), textColor.green(), textColor.blue(), 20);
 }
 
 void DiskWidget::getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue)
@@ -201,17 +203,17 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     path.addRoundedRect(rect(), 8, 8);
     painter.setClipPath(path);
     if (m_isHover) {
-        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, m_hoverTrans)));
+        painter.fillRect(rect(), QBrush(QColor(m_baseColor.red(), m_baseColor.green(), m_baseColor.blue(), m_hoverTrans)));
     } else {
-        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, 0)));
+        painter.fillRect(rect(), QBrush(QColor(m_baseColor.red(), m_baseColor.green(), m_baseColor.blue(), 0)));
     }
 
     //标题栏背景
     QRect titleRect(rect().x(), rect().y(), m_width, 36);
-    painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
+    painter.fillRect(titleRect, QBrush(QColor(m_baseColor.red(), m_baseColor.green(), m_baseColor.blue(), m_titleTrans)));
 
     QRect contentRect(rect().x(), rect().y()+36, m_width, 118);
-    painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
+    painter.fillRect(contentRect, QBrush(QColor(m_baseColor.red(), m_baseColor.green(), m_baseColor.blue(), m_contentTrans)));
 
     //标题
     QString disksTitle = DApplication::translate("Disk.Widget", "Disk");
@@ -231,13 +233,13 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     int sepHeight = 38;
     painter.setFont(m_contentFont);
     QRect separatorRect1(contentRect.x()+10, contentRect.y()+10, 1, sepHeight);
-    painter.fillRect(separatorRect1, QBrush(QColor(0, 0, 0,20)));
+    painter.fillRect(separatorRect1, QBrush(m_separatorColor));
     QRect separatorRect2(contentRect.x()+10+87*1, contentRect.y()+10, 1, sepHeight);
-    painter.fillRect(separatorRect2, QBrush(QColor(0, 0, 0,20)));
+    painter.fillRect(separatorRect2, QBrush(m_separatorColor));
     QRect separatorRect3(contentRect.x()+10+87*2, contentRect.y()+10, 1, sepHeight);
-    painter.fillRect(separatorRect3, QBrush(QColor(0, 0, 0,20)));
+    painter.fillRect(separatorRect3, QBrush(m_separatorColor));
     QRect separatorRect4(contentRect.x()+10+87*3, contentRect.y()+10, 1, sepHeight);
-    painter.fillRect(separatorRect4, QBrush(QColor(0, 0, 0,20)));
+    painter.fillRect(separatorRect4, QBrush(m_separatorColor));
 
     int bulletSize = 6;
     int padleft = 36;
