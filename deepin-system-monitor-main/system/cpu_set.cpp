@@ -373,6 +373,7 @@ CPUSet::CPUSet()
 
 CPUSet::CPUSet(const CPUSet &other)
     : d(other.d)
+    , mIsEmptyModelName(other.mIsEmptyModelName)
 {
     qCDebug(app) << "CPUSet copy constructor";
 }
@@ -384,6 +385,7 @@ CPUSet &CPUSet::operator=(const CPUSet &rhs)
         return *this;
 
     d = rhs.d;
+    mIsEmptyModelName = rhs.mIsEmptyModelName;
     return *this;
 }
 
