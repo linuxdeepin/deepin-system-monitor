@@ -53,8 +53,14 @@ void MemStatViewWidget::onModelUpdate()
                            .arg(formatUnit_memory_disk(m_memInfo->memTotal() << 10, B, 1));
     parent()->setProperty("detail", memoryDetail);
 
-    m_memChartWidget->addData1((m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1.0 / m_memInfo->memTotal());
-    m_swapChartWidget->addData1((m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1.0 / m_memInfo->swapTotal());
+    qreal memRatio = (m_memInfo->memTotal() > 0)
+                     ? (m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1.0 / m_memInfo->memTotal()
+                     : 0.0;
+    qreal swapRatio = (m_memInfo->swapTotal() > 0)
+                      ? (m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1.0 / m_memInfo->swapTotal()
+                      : 0.0;
+    m_memChartWidget->addData1(memRatio);
+    m_swapChartWidget->addData1(swapRatio);
     updateWidgetGeometry();
 }
 

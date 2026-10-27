@@ -203,6 +203,13 @@ void BlockStatViewWidget::onUpdateData()
 
     int deviceCount = m_listDevice.size();
     int curItemSize = m_listBlockItemWidget.size();
+
+    // Remove and delete excess widgets when device count decreases
+    while (m_listBlockItemWidget.size() > deviceCount) {
+        BlockDevItemWidget *item = m_listBlockItemWidget.takeLast();
+        delete item;
+    }
+
     for (int i = 0 ; i < deviceCount - curItemSize; i++) {
         // qCDebug(app) << "Creating new BlockDevItemWidget";
         BlockDevItemWidget *item = new BlockDevItemWidget(m_centralWidget);
