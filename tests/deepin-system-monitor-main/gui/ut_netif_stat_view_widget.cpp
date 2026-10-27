@@ -167,6 +167,27 @@ TEST_F(UT_NetifStatViewWidget, test_onModelUpdate_03_resetCurrentMacWhenGone)
     EXPECT_FALSE(item->m_isActive);
 }
 
+TEST_F(UT_NetifStatViewWidget, test_onModelUpdate_05_resetCurrentMacMultiNet)
+{
+    // 当前激活 MAC 从 DB 消失且 DB 有多块网卡 -> 第一个 item 置为激活并发出信号
+    injectInfoDB(makeInfoDB(2));
+
+    m_tester->m_initStatus = true;
+    m_tester->m_currentMac = "gone";
+    insertItem("mac1");
+    insertItem("mac2");
+
+    QSignalSpy spy(m_tester, &NetifStatViewWidget::netifItemClicked);
+    m_tester->onModelUpdate();
+
+    EXPECT_EQ(m_tester->m_currentMac, QByteArray("mac1"));
+    EXPECT_EQ(spy.count(), 1);
+    ASSERT_GT(spy.count(), 0);
+    EXPECT_EQ(spy.at(0).at(0).toString(), QString("mac1"));
+    // netCount > 1 的重置分支：begin 项 updateActiveStatus(true)
+    EXPECT_TRUE(m_tester->m_mapItemView.value(QByteArray("mac1"))->m_isActive);
+}
+
 TEST_F(UT_NetifStatViewWidget, test_onModelUpdate_04_emptyDB)
 {
     // 空数据源：不创建条目、不触发初始化
