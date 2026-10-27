@@ -200,6 +200,10 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
     }
 
     auto *conn = m_conn.xcb_connection();
+    if (!conn) {
+        qCWarning(app) << "No X connection available, cannot get window icon for pid:" << pid;
+        return {};
+    }
     auto cookie = xcb_get_property(conn, false, winId, m_conn.atom(WMAtom::_NET_WM_ICON), XCB_ATOM_ANY, 0, UINT32_MAX);
     XGetPropertyReply reply(xcb_get_property_reply(conn, cookie, nullptr));
 
