@@ -22,6 +22,7 @@ import json
 import xml.etree.ElementTree as ET
 import glob
 import os
+import shutil
 import subprocess
 import re
 import sys
@@ -47,10 +48,39 @@ def parse_gtest_xml(xml_dir):
 
 
 def parse_lcov_summary(coverage_info):
-    """Parse lcov --summary output and return coverage dict."""
+    """Parse lcov --summary output and return coverage dict.
+
+    当环境未安装 lcov 二进制时，直接解析 tracefile（与 lcov 报告同格式的
+    SF/DA/LF/LH/FNF/FNH 记录），避免硬依赖 lcov。
+    """
     result = {}
     if not os.path.exists(coverage_info):
         print(f"Warning: coverage info file not found: {coverage_info}", file=sys.stderr)
+        return result
+
+    if shutil.which("lcov") is None:
+        lf = lh = fnf = fnh = 0
+        with open(coverage_info, encoding="utf-8", errors="replace") as f:
+            for line in f:
+                tag, _, rest = line.strip().partition(":")
+                if tag == "LF":
+                    lf += int(rest)
+                elif tag == "LH":
+                    lh += int(rest)
+                elif tag == "FNF":
+                    fnf += int(rest)
+                elif tag == "FNH":
+                    fnh += int(rest)
+        if lf:
+            result["line_coverage"] = {
+                "total": lf, "passed": lh, "failed": lf - lh,
+                "coverage": f"{lh * 100.0 / lf:.2f}%"
+            }
+        if fnf:
+            result["function_coverage"] = {
+                "total": fnf, "passed": fnh, "failed": fnf - fnh,
+                "coverage": f"{fnh * 100.0 / fnf:.2f}%"
+            }
         return result
 
     lcov_out = subprocess.run(
