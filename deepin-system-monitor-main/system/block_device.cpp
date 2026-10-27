@@ -101,7 +101,7 @@ void BlockDevice::readDeviceInfo()
             d->blk_wrtn = deviceInfo[9].toULongLong();
             d->bytes_wrtn = deviceInfo[9].toULongLong() * SECTOR_SIZE;
             if (deviceInfo[7].toULongLong() != 0)
-                d->p_wrqm = deviceInfo[8].toULongLong() / deviceInfo[7].toULongLong() * 100;
+                d->p_wrqm = deviceInfo[8].toDouble() / deviceInfo[7].toDouble() * 100;
             d->read_iss = deviceInfo[3].toULongLong();
             d->write_com = deviceInfo[7].toULongLong();
             d->read_merged = deviceInfo[4].toULongLong();
