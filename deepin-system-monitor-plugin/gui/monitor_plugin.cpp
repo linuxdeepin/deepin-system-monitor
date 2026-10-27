@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -295,17 +295,14 @@ void MonitorPlugin::loadPlugin()
     m_dataTipsLabel->setObjectName("systemmonitorpluginlabel");
 
     m_refershTimer->setInterval(1000);
+    udpateInfo();
     //    m_refershTimer->start();
 
     connect(m_dataTipsLabel.get(), &SystemMonitorTipsWidget::visibleChanged, this, [=](bool visible) {
         if (!visible) {
             m_refershTimer->stop();
         } else {
-            udpateInfo();
-            m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "..."
-                                                                    << "..."
-                                                                    << "..."
-                                                                    << "...");
+            udpateTipsInfo();
             m_refershTimer->start();
         }
     });
