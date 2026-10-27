@@ -233,7 +233,7 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QPixmap iconPixmap;
-        core::process::ProcessIconCache::instance()->iconPixmapCache.find(cacheKey, iconPixmap);
+        QPixmapCache::find(cacheKey, iconPixmap);
         if (!iconPixmap.isNull()) {
             // qCDebug(app) << "BaseItemDelegate paint: Drawing icon from cache for process" << procName;
             painter->drawPixmap(iconRect, iconPixmap);
@@ -242,12 +242,12 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             // Use DPR to generate correctly sized pixmap for high DPI scaling
             QPixmap iconPix = icon.pixmap(iconRect.size() * dpr);
             iconPix.setDevicePixelRatio(dpr);
-            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(cacheKey, iconPix);
+            QPixmapCache::insert(cacheKey, iconPix);
             painter->drawPixmap(iconRect, iconPix);
         }
 #else
         QPixmap iconPixmap;
-        if (core::process::ProcessIconCache::instance()->iconPixmapCache.find(cacheKey, &iconPixmap)) {
+        if (QPixmapCache::find(cacheKey, &iconPixmap)) {
             // qCDebug(app) << "BaseItemDelegate paint: Drawing icon from cache for process" << procName;
             painter->drawPixmap(iconRect, iconPixmap);
         } else {
@@ -255,7 +255,7 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             // Use DPR to generate correctly sized pixmap for high DPI scaling
             QPixmap iconPix = icon.pixmap(iconRect.size() * dpr);
             iconPix.setDevicePixelRatio(dpr);
-            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(cacheKey, iconPix);
+            QPixmapCache::insert(cacheKey, iconPix);
             painter->drawPixmap(iconRect, iconPix);
         }
 #endif

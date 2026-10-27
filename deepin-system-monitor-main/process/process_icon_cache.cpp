@@ -24,7 +24,7 @@ ProcessIconCache::ProcessIconCache(QObject *parent)
     qCDebug(app) << "ProcessIconCache object created";
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [=]() {
         qCDebug(app) << "Icon theme changed, clearing pixmap cache";
-        iconPixmapCache.clear();
+        QPixmapCache::clear();
     });
 }
 

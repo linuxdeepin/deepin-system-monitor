@@ -272,7 +272,7 @@ AMProcessGroupInfo AMIconManager::identifyProcess(int pidfd)
     if (args.at(1).canConvert<QDBusObjectPath>()) {
         QDBusObjectPath instancePath = args.at(1).value<QDBusObjectPath>();
         result.instancePath = instancePath.path();
-    } else if (args.at(1).canConvert<QString>()) {
+    } else if (args.at(1).userType() == QMetaType::QString) {
         result.instancePath = args.at(1).toString();
     } else {
         qCWarning(app) << "Failed to convert instance path, typeName:" << args.at(1).typeName();
@@ -302,7 +302,6 @@ QString AMIconManager::resolveLinglongAppId(const QString &appId)
 
     QString desktopPath = QString("/var/lib/linglong/entries/apps/share/applications/%1.desktop").arg(appId);
     if (!QFile::exists(desktopPath)) {
-        m_linglongAppIdCache[appId] = QString();
         return QString();
     }
     DDesktopEntry entry(desktopPath);
@@ -394,6 +393,8 @@ void AMIconManager::clearCache()
     m_pidToIconCache.clear();
     m_appIdToIconCache.clear();
     m_pidToGroupCache.clear();
+    m_appIdToNameCache.clear();
+    m_linglongAppIdCache.clear();
 }
 
 } // namespace process
