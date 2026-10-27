@@ -116,6 +116,9 @@ bool wireless::read_wireless_info() {
     // 将信号强度转换为质量值（0-100）
     m_link_quality = strength;
     m_signal_level = strength;
+    // NetworkManager DBus AP interface does not provide noise level;
+    // explicitly set to 0 to document the known absence of this data
+    m_noise_level = 0;
     m_bwireless = true;
     return true;
   }

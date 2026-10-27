@@ -43,17 +43,19 @@ static const char kProcNetTcp[] =
         "   0: 0100007F:1F90 00000000:0000 0A 00000000:00000000 00:00000000:00000000 00000000  1000        0 33892 1 0000000000000000 100 0 0 10 0\n";
 
 // IPv6 socket with an IPv4-mapped address (::ffff:127.0.0.1:80 <-> ::ffff:10.0.0.2:1024).
-// NOTE: the mapped-detection requires s6_addr32[2] == 0xFFFF0000, i.e. hex
-// words FFFF0000...; real-kernel lines print 0000FFFF..., which the current
-// implementation does NOT convert (see defects.json candidate).
+// Real kernel /proc/net/tcp6: each __be32 word printed as host-order u32;
+// on LE the ::ffff: prefix (net bytes 00 00 FF FF) prints as FFFF0000,
+// sscanf reads it back correctly — no byte-swap needed.
 static const char kProcNetTcp6Mapped[] =
         "  sl  local_address                         remote_address                        st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode\n"
         "   0: 0000000000000000FFFF00000100007F:0050 0000000000000000FFFF00000200000A:0400 01 00000000:00000000 00:00000000:00000000 00000000  1000        0 33893 1 0000000000000000 100 0 0 10 0\n";
 
 // Pure IPv6 socket: 2001:db8::1:80 <-> 2001:db8::2:443.
+// Real kernel /proc/net/tcp6: each __be32 word printed as host-order u32;
+// on LE 2001:0db8 (net bytes 20 01 0D B8) prints as B80D0120.
 static const char kProcNetTcp6Pure[] =
         "  sl  local_address                         remote_address                        st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode\n"
-        "   0: 20010DB8000000000000000000000001:0050 20010DB8000000000000000000000002:01BB 01 00000000:00000000 00:00000000:00000000 00000000  1000        0 33894 1 0000000000000000 100 0 0 10 0\n";
+        "   0: B80D0120000000000000000001000000:0050 B80D0120000000000000000002000000:01BB 01 00000000:00000000 00:00000000:00000000 00000000  1000        0 33894 1 0000000000000000 100 0 0 10 0\n";
 
 static const char kProcNetUdp[] =
         "  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode ref pointer drops\n"
@@ -200,9 +202,9 @@ TEST_F(UT_SysInfo, Read_file_nr_MalformedContent_ReturnsZero)
 // ---------------------------------------------------------------------------
 // read_uptime: valid "seconds.microseconds" line.
 // Branch: fopen ok -> fgets ok -> sscanf "%ld.%ld" == 2 -> assign + return.
-// NOTE: the implementation multiplies the microsecond field by 1000000
-// instead of 1000 (uptime "12345.67" -> tv_usec = 67000000). The current
-// behaviour is asserted; the defect is recorded in defects.json.
+// /proc/uptime gives centiseconds; the implementation multiplies by 10000
+// (uptime "12345.67" -> tv_usec = 670000). Fixed per DM-SYS-001.
+// Assert (DM-SYS-001 fixed: centiseconds * 10000 = microseconds)
 // ---------------------------------------------------------------------------
 TEST_F(UT_SysInfo, Read_uptime_ValidContent_AssignsSecondsAndMicros)
 {
@@ -214,9 +216,9 @@ TEST_F(UT_SysInfo, Read_uptime_ValidContent_AssignsSecondsAndMicros)
     struct timeval up {};
     info.read_uptime(up);
 
-    // Assert (documents current behaviour; usec scaling is defective, see defects)
+    // Assert (DM-SYS-001 fixed: centiseconds * 10000 = microseconds)
     EXPECT_EQ(12345, up.tv_sec);
-    EXPECT_EQ(67000000, up.tv_usec);
+    EXPECT_EQ(670000, up.tv_usec);
 }
 
 // ---------------------------------------------------------------------------
@@ -618,8 +620,9 @@ TEST_F(UT_SysInfo, ReadSockStat_AllFilesPresent_ReturnsTrue)
     EXPECT_EQ(6, statMap.size());
     EXPECT_TRUE(statMap.contains(sockHash("127.0.0.1:8080-0.0.0.0:0")));
     EXPECT_TRUE(statMap.contains(sockHash("0.0.0.0:53-0.0.0.0:0")));
-    // IPv6 formatting must match inet_ntop's compressed form
-    EXPECT_TRUE(statMap.contains(sockHash("b80d:120::100:0:80-b80d:120::200:0:443")));
+    // IPv6 formatting: real-kernel fixture + original sscanf (no byte-swap)
+    // renders correctly via inet_ntop
+    EXPECT_TRUE(statMap.contains(sockHash("2001:db8::1:80-2001:db8::2:443")));
     // all-zero IPv6 renders as "::"; pattern becomes ":::53-:::0"
     EXPECT_TRUE(statMap.contains(sockHash(":::83-:::0")));  // port hex 0053 -> 83
 }
@@ -685,9 +688,9 @@ TEST_F(UT_SysInfo, ReadSockStat_PureIPv6_KeepsFamilyAndCompressedKey)
 
     // Assert
     ASSERT_FALSE(statMap.isEmpty());
-    // The implementation parses %08x words and renders via inet_ntop, which
-    // byte-swaps each word on little-endian (defect candidate, see defects.json).
-    auto stat = statMap.value(sockHash("b80d:120::100:0:80-b80d:120::200:0:443"));
+    // Real-kernel fixture (LE u32 format) + original sscanf: inet_ntop
+    // renders the correct address (2001:db8::1), no byte-swap needed.
+    auto stat = statMap.value(sockHash("2001:db8::1:80-2001:db8::2:443"));
     ASSERT_FALSE(stat.isNull());
     EXPECT_EQ(AF_INET6, stat->sa_family);
     EXPECT_EQ(80u, stat->s_port);

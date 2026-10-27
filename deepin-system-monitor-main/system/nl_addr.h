@@ -85,7 +85,14 @@ inline void NLAddr::local()
     if (arrayBuffer.size() == 2) {
         int n = arrayBuffer.last().toInt();
         char mask[32];
-        unsigned int addr = LMOVE(0xffffffff, 32 - n);
+        unsigned int addr;
+        if (n <= 0) {
+            addr = 0;
+        } else if (n >= 32) {
+            addr = 0xffffffff;
+        } else {
+            addr = LMOVE(0xffffffff, 32 - n);
+        }
         sprintf(mask, "%u.%u.%u.%u", RMOVE(addr, 24), RMOVE(addr, 16) & 0xff, RMOVE(addr, 8) & 0xff, addr & 0xff);
         netAddr = arrayBuffer.first();
         netMask = QByteArray(mask);

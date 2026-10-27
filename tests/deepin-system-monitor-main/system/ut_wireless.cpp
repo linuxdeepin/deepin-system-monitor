@@ -194,8 +194,8 @@ TEST_F(UT_wireless, Read_wireless_info_GetAccessPointsFails_ReturnsFalse)
 // Full success path: device + AP found, Ssid/Strength parsed into members.
 // Branches: all guards pass -> m_essid = Ssid; m_link_quality = m_signal_level
 // = Strength; m_bwireless = true -> return true.
-// NOTE: m_noise_level is never assigned by the implementation (recorded as a
-// defect); it stays 0.
+// m_noise_level is explicitly set to 0 in the success path (DM-WIR-004 fixed):
+// NetworkManager DBus AP interface does not provide noise level data.
 // ---------------------------------------------------------------------------
 TEST_F(UT_wireless, Read_wireless_info_ApInfoPresent_MembersUpdated)
 {
@@ -216,7 +216,7 @@ TEST_F(UT_wireless, Read_wireless_info_ApInfoPresent_MembersUpdated)
     EXPECT_EQ(QByteArray("Deepin-WiFi"), w.essid());
     EXPECT_EQ(77u, w.link_quality());
     EXPECT_EQ(77u, w.signal_levle());
-    EXPECT_EQ(0u, w.noise_level());   // never written by implementation
+    EXPECT_EQ(0u, w.noise_level());   // explicitly set to 0 (no NM noise data)
 }
 
 // ---------------------------------------------------------------------------

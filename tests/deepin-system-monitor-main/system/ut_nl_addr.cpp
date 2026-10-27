@@ -6,10 +6,9 @@
 // Exercises the libnl address wrapper against real in-process rtnl_addr
 // objects created with rtnl_addr_alloc + setters (no kernel traffic).
 //
-// Known implementation defect (not exercised here): NLAddr::local() computes
-// the netmask via LMOVE(0xffffffff, 32 - n); for prefix length 0 this
-// performs a 32-bit shift by 32, which is undefined behaviour. Prefix /0 is
-// therefore deliberately not fed to local().
+// NLAddr::local() netmask computation (DM-NLA-003 fixed): the LMOVE shift
+// is now guarded against n <= 0 (shift by 32 UB) and n >= 32, so prefix /0
+// and /32 boundaries are safe. Prefix > 32 (IPv6) is also guarded.
 
 #include <gtest/gtest.h>
 
