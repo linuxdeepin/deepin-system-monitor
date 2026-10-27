@@ -81,6 +81,27 @@ MainWindow::~MainWindow()
     }
 }
 
+void MainWindow::onBackgroundTaskStateChanged(Application::TaskState state)
+{
+    qCDebug(app) << "Background task state changed:" << state;
+    if (state == Application::kTaskStarted) {
+        qCDebug(app) << "Task started, disabling main window";
+        // save last focused widget inside main window
+        m_focusedWidget = focusWidget();
+        // disable main window (and any children widgets inside) if background process ongoing
+        setEnabled(false);
+    } else if (state == Application::kTaskFinished) {
+        qCDebug(app) << "Task finished, re-enabling main window";
+        // reenable main window after background process finished
+        setEnabled(true);
+        // restore focus to last focused widget if any
+        if (m_focusedWidget && m_focusedWidget->isEnabled()) {
+            m_focusedWidget->setFocus();
+        }
+    }
+    gApp->setCurrentTaskState(state);
+}
+
 void MainWindow::raiseWindow()
 {
     qCDebug(app) << "raiseWindow";
@@ -260,25 +281,7 @@ void MainWindow::initConnections()
         m_tbShadow->show();
         PERF_PRINT_END("POINT-05");
     });
-    connect(gApp, &Application::backgroundTaskStateChanged, this, [=](Application::TaskState state) {
-        qCDebug(app) << "Background task state changed:" << state;
-        if (state == Application::kTaskStarted) {
-            qCDebug(app) << "Task started, disabling main window";
-            // save last focused widget inside main window
-            m_focusedWidget = gApp->mainWindow()->focusWidget();
-            // disable main window (and any children widgets inside) if background process ongoing
-            setEnabled(false);
-        } else if (state == Application::kTaskFinished) {
-            qCDebug(app) << "Task finished, re-enabling main window";
-            // reenable main window after background process finished
-            setEnabled(true);
-            // restore focus to last focused widget if any
-            if (m_focusedWidget && m_focusedWidget->isEnabled()) {
-                m_focusedWidget->setFocus();
-            }
-        }
-        gApp->setCurrentTaskState(state);
-    });
+    connect(gApp, &Application::backgroundTaskStateChanged, this, &MainWindow::onBackgroundTaskStateChanged);
 
     // 初始化DBUS
     if (QDBusConnection::sessionBus().isConnected()) {
