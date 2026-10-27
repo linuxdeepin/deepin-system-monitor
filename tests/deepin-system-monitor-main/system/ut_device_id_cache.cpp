@@ -6,9 +6,8 @@
 // The libudev hardware database is stubbed (udev_new / udev_hwdb_new /
 // udev_hwdb_unref), so no real udev context is required.
 //
-// Known implementation defect (not exercised here): DeviceIDCache::deviceName()
-// is declared in device_id_cache.h:24 but has no implementation in
-// device_id_cache.cpp - calling it is a link error. Recorded in defects.json.
+// DM-DIC-005 fixed: the dead deviceName() declaration has been removed from
+// device_id_cache.h. No callers existed in the codebase.
 
 #include <gtest/gtest.h>
 
@@ -156,9 +155,8 @@ TEST_F(UT_DeviceIDCache, Construction_HwdbNull_Tolerated)
 }
 
 // ---------------------------------------------------------------------------
-// deviceName() is declared but not implemented (link-time defect); the test
-// suite therefore compiles a reference comment only. See defects.json entry
-// for device_id_cache.cpp.
+// DM-DIC-005 fixed: deviceName() dead declaration removed from the header.
+// No callers existed; the test suite retains this comment for traceability.
 // ---------------------------------------------------------------------------
 
 } // namespace
