@@ -125,6 +125,15 @@ void stub_xwk_noGrabMouse(QWidget *)
 {
     return;
 }
+
+// 吞掉监控线程启动事件，其余事件回落 QApplication 默认处理
+bool stub_xwk_appEvent_swallow(Application *self, QEvent *event)
+{
+    if (event && (event->type() == kMonitorStartEventType || event->type() == kNetifStartEventType)) {
+        return true;
+    }
+    return self->QApplication::event(event);
+}
 /***************************************STUB end**********************************************/
 
 class UT_XWinKillPreviewWidget : public ::testing::Test
@@ -140,6 +149,18 @@ public:
         static QWidget wid;
         static MainWindow wm;
         gApp->setMainWindow(&wm);
+
+        // 进程级一次性拦截监控线程启动事件：MainWindow 构造/显示会 postEvent
+        // 启动 SystemMonitor/NetifMonitor 工作线程，线程与静态对象在进程退出
+        // 时析构竞态会段错误并丢失 gcda，测试不依赖真实监控数据
+        static bool s_appEventStubbed = false;
+        if (!s_appEventStubbed) {
+            auto *appEventStub = new Stub();
+            typedef bool (*appEventFptr)(Application *, QEvent *);
+            appEventFptr fptr_appEvent = (appEventFptr)&Application::event;
+            appEventStub->set(fptr_appEvent, stub_xwk_appEvent_swallow);
+            s_appEventStubbed = true;
+        }
 
         // 进程级一次性禁用键盘抓取（Stub 对象有意保留，打桩存续至进程结束，
         // 避免跨夹具累积的陈旧 keyboard_grabber 在 Qt releaseKeyboard 中段错误）

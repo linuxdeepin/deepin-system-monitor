@@ -177,11 +177,18 @@ public:
         wm.m_toolbar = &toolbar;
         gApp->setMainWindow(&wm);
 
-        // 拦截 Application::event 中的线程启动分支（见 stub_ppw_appEvent 注释）
-        typedef bool (*appEventFptr)(Application *, QEvent *);
-        appEventFptr fptr_appEvent = (appEventFptr)&Application::event;
-        Stub stubApp;
-        stubApp.set(fptr_appEvent, stub_ppw_appEvent);
+        // 拦截 Application::event 中的线程启动分支（见 stub_ppw_appEvent 注释）。
+        // 进程级一次性打桩（Stub 对象有意保留至进程结束）：事件投递时机晚于
+        // 单个测试体，若用局部 Stub 会在测试间被还原，监控线程仍可能在退出
+        // 阶段启动并与静态对象析构竞态导致段错误、丢失 gcda。
+        static bool s_appEventStubbed = false;
+        if (!s_appEventStubbed) {
+            auto *appEventStub = new Stub();
+            typedef bool (*appEventFptr)(Application *, QEvent *);
+            appEventFptr fptr_appEvent = (appEventFptr)&Application::event;
+            appEventStub->set(fptr_appEvent, stub_ppw_appEvent);
+            s_appEventStubbed = true;
+        }
 
         g_ppw_createWindowKillerCount = 0;
         g_ppw_killProcessCalled = false;
