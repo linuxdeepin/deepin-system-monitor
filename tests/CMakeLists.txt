@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+# SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -331,6 +331,18 @@ set(CPP_PROCESS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/process_db.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/system_service_client.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/linglong_controller.cpp
+)
+# ut-t08: 新增测试所需的被测源文件（仅 APPEND，不改已有行）
+# 两文件为孤儿源（主工程未编译），使用 qCDebug(app) 但未包含 common.h（using namespace DDLog），
+# 经 force-include 补齐类别可见性，不改源码
+list(APPEND CPP_PROCESS
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/tray_apps_cache.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/gui_apps_cache.cpp
+)
+set_source_files_properties(
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/tray_apps_cache.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/gui_apps_cache.cpp
+    PROPERTIES COMPILE_FLAGS "-include ${CMAKE_HOME_DIRECTORY}/deepin-system-monitor-main/common/common.h"
 )
 
 set(HPP_SERVICE

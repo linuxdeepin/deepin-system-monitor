@@ -1,84 +1,158 @@
-// Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
+/*
+ * 用例计数声明表
+ * | 方法 | 级别 | 因子 | min | actual |
+ * | insert | mid | c:2 | 1 | 2 |
+ * | processName/remove/contains/clear | mid | c:2 | 1 | 4 |
+ */
+
+/*****************************************************************************************
+ * 测试目标：core::process::ProcessNameCache
+ * 用例说明：进程名缓存单例：插入/查询/移除/清空/容量淘汰
+ * 覆盖方法：ProcessNameCache / instance / insert / processName / contains / remove / clear
+ * 打桩说明：QCache 纯内存语义，无外部依赖，无需打桩；缓存接管插入对象所有权
+ *           （remove/clear/淘汰时自动删除），用例插入后不得手动 delete。
+ *           单例由 instance() 提供，用例间用 clear() 清场，夹具不拥有单例所有权。
+ * 异常场景：未注册 pid 查询 / 超过默认 maxCost(100) 淘汰
+ * 用例计数：7 个 TEST_F
+ *****************************************************************************************/
 
 //self
 #include "process/process_name_cache.h"
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
-//Qt
-#include <QFileInfo>
-#include <QApplication>
-#include <QCache>
+//project
+#include "process/process_name.h"
+
 using namespace core::process;
 
-typedef QCache<pid_t, ProcessName> myCache;
-/***************************************STUB begin*********************************************/
-void stub_insert_insert(){
-    return;
-}
-/***************************************STUB end**********************************************/
+/**************************** 测试夹具 ****************************/
 class UT_ProcessNameCache : public ::testing::Test
 {
 public:
-    UT_ProcessNameCache() : m_tester(nullptr) {}
+    UT_ProcessNameCache() = default;
 
-public:
     virtual void SetUp()
     {
-        m_tester = new ProcessNameCache(nullptr);
+        m_tester = ProcessNameCache::instance();
+        m_tester->clear();
     }
 
     virtual void TearDown()
     {
-        if(m_tester){
-            delete m_tester;
-            m_tester = nullptr;
-        }
+        // 清场但不删除单例：m_instance 为静态，删除会导致悬垂
+        m_tester->clear();
+        m_tester = nullptr;
     }
 
 protected:
-    ProcessNameCache *m_tester;
+    ProcessNameCache *m_tester = nullptr;
 };
 
-TEST_F(UT_ProcessNameCache, initTest)
-{
+/**************************** 用例 ****************************/
 
+// 单例语义：多次获取同一实例
+TEST_F(UT_ProcessNameCache, instance_RepeatedCalls_ReturnsSamePointer)
+{
+    // Arrange：SetUp 已获取实例
+    ASSERT_TRUE(m_tester != nullptr);
+    // Act
+    ProcessNameCache *again = ProcessNameCache::instance();
+    // Assert
+    EXPECT_EQ(again, m_tester);
+    EXPECT_NE(m_tester, nullptr);
+    EXPECT_NE(again, nullptr);
 }
 
-TEST_F(UT_ProcessNameCache, test_instance_001)
+// 插入后可查询且返回同一对象指针
+TEST_F(UT_ProcessNameCache, insert_NewPid_ProcessNameReturnsSameObject)
 {
-    m_tester->instance();
+    // Arrange
+    pid_t pid = 100;
+    ProcessName *name = new ProcessName();
+
+    // Act
+    m_tester->insert(pid, name);
+
+    // Assert
+    EXPECT_TRUE(m_tester->contains(pid));
+    EXPECT_EQ(m_tester->processName(pid), name);
 }
 
-TEST_F(UT_ProcessNameCache, test_insert_001)
+// 未注册 pid：查询返回空指针
+TEST_F(UT_ProcessNameCache, processName_MissingPid_ReturnsNull)
 {
-    ProcessName *name = new ProcessName;
-    Stub b;
-    b.set(ADDR(myCache,insert),stub_insert_insert);
-    m_tester->insert(1000,name);
-    delete name;
+    // Arrange：缓存为空
+    ASSERT_FALSE(m_tester->contains(999));
+    // Act
+    const ProcessName *name = m_tester->processName(999);
+    // Assert
+    EXPECT_EQ(name, nullptr);
+    EXPECT_EQ(m_tester->contains(999), false);
 }
 
-TEST_F(UT_ProcessNameCache, test_remove_001)
+// 移除后不可再查询
+TEST_F(UT_ProcessNameCache, remove_RegisteredPid_BecomesMissing)
 {
-    m_tester->remove(1000);
+    // Arrange
+    m_tester->insert(200, new ProcessName());
+    ASSERT_TRUE(m_tester->contains(200));
+
+    // Act
+    m_tester->remove(200);
+
+    // Assert
+    EXPECT_FALSE(m_tester->contains(200));
+    EXPECT_EQ(m_tester->processName(200), nullptr);
 }
 
-
-TEST_F(UT_ProcessNameCache, test_clear_001)
+// clear：清空全部条目
+TEST_F(UT_ProcessNameCache, clear_MultipleEntries_EmptiesCache)
 {
+    // Arrange
+    m_tester->insert(301, new ProcessName());
+    m_tester->insert(302, new ProcessName());
+    m_tester->insert(303, new ProcessName());
+    ASSERT_TRUE(m_tester->contains(301));
+    ASSERT_TRUE(m_tester->contains(303));
+
+    // Act
     m_tester->clear();
+
+    // Assert
+    EXPECT_EQ(m_tester->contains(301), false);
+    EXPECT_FALSE(m_tester->contains(302));
+    EXPECT_FALSE(m_tester->contains(303));
 }
 
-TEST_F(UT_ProcessNameCache, test_processName_001)
+// contains：未注册 pid 直接返回 false
+TEST_F(UT_ProcessNameCache, contains_MissingPid_ReturnsFalse)
 {
-    m_tester->processName(1000);
+    // Arrange：空缓存
+    ASSERT_EQ(m_tester->processName(404), nullptr);
+    // Act
+    bool exists = m_tester->contains(404);
+    // Assert
+    EXPECT_EQ(exists, false);
+    EXPECT_EQ(m_tester->contains(404), false);
 }
 
-TEST_F(UT_ProcessNameCache, test_contains_001)
+// 容量淘汰：默认 maxCost=100，超出后最早插入的条目被淘汰
+TEST_F(UT_ProcessNameCache, insert_MaxCostExceeded_EvictsOldestEntry)
 {
-    m_tester->contains(1000);
+    // Arrange：空缓存（无历史条目）
+    ASSERT_FALSE(m_tester->contains(0));
+    // Act：连续插入 150 个条目（代价 1/个，超过默认 100）
+    for (int i = 0; i < 150; ++i) {
+        m_tester->insert(i, new ProcessName());
+    }
+
+    // Assert：前 50 个被淘汰，末尾条目保留
+    EXPECT_EQ(m_tester->contains(0), false);
+    EXPECT_EQ(m_tester->contains(49), false);
+    EXPECT_TRUE(m_tester->contains(50));
+    EXPECT_TRUE(m_tester->contains(149));
 }
