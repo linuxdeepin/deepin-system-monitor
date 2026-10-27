@@ -995,4 +995,77 @@ TEST_F(UT_ProcessDB, SendSignal_UnknownSignal_NoSignalEmitted)
     EXPECT_EQ(controlSpy.count(), 0);
 }
 
+TEST_F(UT_ProcessDB, SendSignal_StopFailsOtherError_EmitsPauseError)
+{
+    // Arrange: SIGSTOP 直走 pkill 且被 ESRCH 拒绝（fmsg 的 SIGSTOP 分支）
+    stub.set_lamda(VADDR(AMIconManager, getProcessGroupInfo),
+                   [](AMIconManager *, pid_t) -> AMProcessGroupInfo {
+                       __DBG_STUB_INVOKE__
+                       return AMProcessGroupInfo();
+                   });
+    stub.set_lamda(::kill, [](pid_t, int) -> int {
+        __DBG_STUB_INVOKE__
+        errno = ESRCH;
+        return -1;
+    });
+    QSignalSpy pausedSpy(obj.get(), &ProcessDB::processPaused);
+    QSignalSpy controlSpy(obj.get(), &ProcessDB::processControlResultReady);
+    // Act: 暂停不存在的进程
+    obj->sendSignalToProcess(4321, SIGSTOP);
+    // Assert: 发系统错误，标题为暂停失败文案
+    EXPECT_EQ(pausedSpy.count(), 0);
+    ASSERT_EQ(controlSpy.count(), 1);
+    ErrorContext ec = controlSpy.at(0).at(0).value<ErrorContext>();
+    EXPECT_EQ(ec.getSubCode(), ESRCH);
+    EXPECT_EQ(ec.getErrorName(), QStringLiteral("Failed to pause process"));
+}
+
+TEST_F(UT_ProcessDB, SendSignal_ContFailsOtherError_EmitsResumeError)
+{
+    // Arrange: SIGCONT 直走 pkill 且被 ESRCH 拒绝（fmsg 的 SIGCONT 分支）
+    stub.set_lamda(VADDR(AMIconManager, getProcessGroupInfo),
+                   [](AMIconManager *, pid_t) -> AMProcessGroupInfo {
+                       __DBG_STUB_INVOKE__
+                       return AMProcessGroupInfo();
+                   });
+    stub.set_lamda(::kill, [](pid_t, int) -> int {
+        __DBG_STUB_INVOKE__
+        errno = ESRCH;
+        return -1;
+    });
+    QSignalSpy resumedSpy(obj.get(), &ProcessDB::processResumed);
+    QSignalSpy controlSpy(obj.get(), &ProcessDB::processControlResultReady);
+    // Act: 恢复不存在的进程
+    obj->sendSignalToProcess(4321, SIGCONT);
+    // Assert: 发系统错误，标题为恢复失败文案
+    EXPECT_EQ(resumedSpy.count(), 0);
+    ASSERT_EQ(controlSpy.count(), 1);
+    ErrorContext ec = controlSpy.at(0).at(0).value<ErrorContext>();
+    EXPECT_EQ(ec.getSubCode(), ESRCH);
+    EXPECT_EQ(ec.getErrorName(), QStringLiteral("Failed to resume process"));
+}
+
+TEST_F(UT_ProcessDB, SendSignal_UnsupportedSignalFails_EmitsUnknownError)
+{
+    // Arrange: 未分类信号 kill 失败（fmsg 的 default 分支）
+    stub.set_lamda(VADDR(AMIconManager, getProcessGroupInfo),
+                   [](AMIconManager *, pid_t) -> AMProcessGroupInfo {
+                       __DBG_STUB_INVOKE__
+                       return AMProcessGroupInfo();
+                   });
+    stub.set_lamda(::kill, [](pid_t, int) -> int {
+        __DBG_STUB_INVOKE__
+        errno = ESRCH;
+        return -1;
+    });
+    QSignalSpy controlSpy(obj.get(), &ProcessDB::processControlResultReady);
+    // Act: 发送未分类信号且 kill 失败
+    obj->sendSignalToProcess(4321, SIGUSR2);
+    // Assert: 发系统错误，标题为未知错误文案
+    ASSERT_EQ(controlSpy.count(), 1);
+    ErrorContext ec = controlSpy.at(0).at(0).value<ErrorContext>();
+    EXPECT_EQ(ec.getSubCode(), ESRCH);
+    EXPECT_EQ(ec.getErrorName(), QStringLiteral("Unknown error"));
+}
+
 } // namespace
