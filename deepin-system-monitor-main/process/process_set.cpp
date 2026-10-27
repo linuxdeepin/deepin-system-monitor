@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -101,14 +101,16 @@ void ProcessSet::scanProcess()
     }
 
     if(m_prePid != m_curPid) {
-        for (const pid_t &pid : m_prePid) {
-            if(!m_curPid.contains(pid)){
-                m_prePid.removeAt(pid);  //remove disappear process pid
-                if(m_simpleSet.contains(pid))
-                    m_simpleSet.remove(pid);
+        for (auto it = m_prePid.begin(); it != m_prePid.end();) {
+            if(!m_curPid.contains(*it)){
+                if(m_simpleSet.contains(*it))
+                    m_simpleSet.remove(*it);
                 //for each pid,only one process reflected.So "removeOne()"func replied.
-                if(m_pidMyApps.contains(pid))
-                    m_pidMyApps.removeOne(pid);
+                if(m_pidMyApps.contains(*it))
+                    m_pidMyApps.removeOne(*it);
+                it = m_prePid.erase(it);
+            } else {
+                ++it;
             }
         }
 
