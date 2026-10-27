@@ -29,9 +29,6 @@ public:
     void clear();
     void setMaxCost(int cost);
 
-public:
-    QPixmapCache iconPixmapCache;
-
 private:
     explicit ProcessIconCache(QObject *parent = nullptr);
 
