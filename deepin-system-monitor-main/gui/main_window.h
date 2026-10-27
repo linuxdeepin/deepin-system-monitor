@@ -10,6 +10,7 @@
 #include <DShadowLine>
 #include <DStackedWidget>
 #include "dbus/dbusforsystemomonitorpluginservce.h"
+#include "application.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -123,6 +124,9 @@ protected:
      * @param event Show event
      */
     void showEvent(QShowEvent *event) override;
+
+private Q_SLOTS:
+    void onBackgroundTaskStateChanged(Application::TaskState state);
 
 private:
     Settings *m_settings = nullptr;
