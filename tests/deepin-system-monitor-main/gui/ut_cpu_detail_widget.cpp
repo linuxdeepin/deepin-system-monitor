@@ -5,6 +5,7 @@
 
 //Self
 #include "cpu_detail_widget.h"
+#include "cpu_summary_view_widget.h"
 #include "model/cpu_info_model.h"
 
 //gtest
@@ -17,6 +18,11 @@
 #include <QResizeEvent>
 #include <QPainter>
 #include <QGridLayout>
+#include <cmath>
+
+// 本文件在原有 406 行套件基础上增量补强（qt-autotest-generator 重写）：
+// 1) updateStat NaN 防御分支（多核 cpuPercentList / 单核 cpuAllPercent）
+// 2) CPUDetailWidget 构造成员断言与 detailFontChanged 字体同步断言
 
 /***************************************STUB begin*********************************************/
 int stub_setMultiModeLayout_sysconf_cpu1()
@@ -57,6 +63,18 @@ int stub_setMultiModeLayout_sysconf_cpu64()
 int stub_setMultiModeLayout_sysconf_cpu0()
 {
     return 0;
+}
+
+QList<qreal> stub_cpu_nanPercentList(const CPUInfoModel *)
+{
+    QList<qreal> list;
+    list.append(std::nan(""));
+    return list;
+}
+
+qreal stub_cpu_nanAllPercent(const CPUInfoModel *)
+{
+    return std::nan("");
 }
 /***************************************STUB end**********************************************/
 
@@ -150,6 +168,50 @@ TEST_F(UT_CPUDetailGrapTableItem, test_updateStat_03)
     m_tester->updateStat();
 
     EXPECT_EQ(m_tester->m_cpuPercents.size(), 31);
+}
+
+TEST_F(UT_CPUDetailGrapTableItem, test_updateStat_04)
+{
+    // 多核模式：cpuPercentList 返回 NaN → 插入 0（NaN 防御分支）
+    Stub stub;
+    stub.set((QList<qreal> (*)(CPUInfoModel *))&CPUInfoModel::cpuPercentList, stub_cpu_nanPercentList);
+
+    m_tester->m_index = 0;
+    m_tester->m_isMutliCoreMode = true;
+    m_tester->updateStat();
+
+    ASSERT_EQ(m_tester->m_cpuPercents.size(), 1);
+    EXPECT_EQ(m_tester->m_cpuPercents.at(0), 0.0);
+}
+
+TEST_F(UT_CPUDetailGrapTableItem, test_updateStat_05)
+{
+    // 单核模式：cpuAllPercent 返回 NaN → 插入 0（NaN 防御分支）
+    Stub stub;
+    stub.set((qreal (*)(CPUInfoModel *))&CPUInfoModel::cpuAllPercent, stub_cpu_nanAllPercent);
+
+    m_tester->m_isMutliCoreMode = false;
+    m_tester->updateStat();
+
+    ASSERT_EQ(m_tester->m_cpuPercents.size(), 1);
+    EXPECT_EQ(m_tester->m_cpuPercents.at(0), 0.0);
+}
+
+TEST_F(UT_CPUDetailGrapTableItem, test_updateStat_06)
+{
+    // 单核 NaN 插入 0 后达 32 个 → pop_back 回落 31，栈顶为本次插入值
+    Stub stub;
+    stub.set((qreal (*)(CPUInfoModel *))&CPUInfoModel::cpuAllPercent, stub_cpu_nanAllPercent);
+
+    for (int i = 0; i < 31; i++) {
+        m_tester->m_cpuPercents.append(qreal(i + 1));
+    }
+    m_tester->m_isMutliCoreMode = false;
+    m_tester->updateStat();
+
+    ASSERT_EQ(m_tester->m_cpuPercents.size(), 31);
+    EXPECT_EQ(m_tester->m_cpuPercents.at(0), 0.0);
+    EXPECT_EQ(m_tester->m_cpuPercents.at(30), 30.0);
 }
 
 TEST_F(UT_CPUDetailGrapTableItem, test_paintEvent_01)
@@ -395,7 +457,11 @@ protected:
 
 TEST_F(UT_CPUDetailWidget, initTest)
 {
-
+    ASSERT_NE(m_tester3, nullptr);
+    EXPECT_EQ(m_tester3->objectName(), QString("CPUDetailWidget"));
+    EXPECT_NE(m_tester3->m_graphicsTable, nullptr);
+    EXPECT_NE(m_tester3->m_summary, nullptr);
+    EXPECT_EQ(m_tester3->m_summary->objectName(), QString("Summary"));
 }
 
 TEST_F(UT_CPUDetailWidget, test_detailFontChanged_01)
@@ -403,4 +469,17 @@ TEST_F(UT_CPUDetailWidget, test_detailFontChanged_01)
     QFont font;
     font.setBold(true);
     m_tester3->detailFontChanged(font);
+
+    // 字体同步到摘要表（CPUDetailSummaryTable::fontChanged 内部 setFont）
+    EXPECT_TRUE(m_tester3->m_summary->font().bold());
+}
+
+TEST_F(UT_CPUDetailWidget, test_detailFontChanged_02)
+{
+    // fontChanged 内部 setFixedHeight(260)
+    QFont font;
+    font.setBold(false);
+    m_tester3->detailFontChanged(font);
+
+    EXPECT_EQ(m_tester3->m_summary->minimumHeight(), 260);
 }
