@@ -13,6 +13,7 @@
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <string.h>
 
 using namespace DDLog;
 namespace core {
@@ -116,6 +117,25 @@ bool wireless::read_wireless_info() {
     // 将信号强度转换为质量值（0-100）
     m_link_quality = strength;
     m_signal_level = strength;
+
+    // NetworkManager AP DBus does not expose noise level; query the wireless
+    // driver directly via SIOCGIWSTATS.  If the ioctl fails (no real wireless
+    // device, permission denied, etc.) the level stays 0.
+    m_noise_level = 0;
+    int sock = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sock >= 0) {
+        struct iw_statistics stats {};
+        struct iwreq wrq {};
+        wrq.u.data.pointer = &stats;
+        wrq.u.data.length = sizeof(stats);
+        wrq.u.data.flags = 1;
+        strncpy(wrq.ifr_name, m_ifname.constData(), IFNAMSIZ - 1);
+        if (ioctl(sock, SIOCGIWSTATS, &wrq) >= 0) {
+            m_noise_level = stats.qual.noise;
+        }
+        close(sock);
+    }
+
     m_bwireless = true;
     return true;
   }

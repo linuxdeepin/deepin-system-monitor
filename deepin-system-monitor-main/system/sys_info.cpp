@@ -361,7 +361,7 @@ void SysInfo::read_uptime(struct timeval &uptime)
             int nm = sscanf(buf, "%ld.%ld", &up_sec, &up_usec);
             if (nm == 2) {
                 uptime.tv_sec = up_sec;
-                uptime.tv_usec = up_usec * 1000000;
+                uptime.tv_usec = up_usec * 10000;
 
                 return;
             }
