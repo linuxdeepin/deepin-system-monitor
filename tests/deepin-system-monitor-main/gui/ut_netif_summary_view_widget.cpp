@@ -127,6 +127,88 @@ TEST_F(UT_NetInfoModel, test_refreshNetifInfo_01_unknownKey)
     EXPECT_EQ(m_tester->rowCount(QModelIndex()), 0);
 }
 
+// 分支说明(refreshNetifInfo): 多地址时 IPv4/IPv6 行带序号 / 无线网卡追加 ESSID/信号行
+TEST_F(UT_NetInfoModel, test_refreshNetifInfo_04_multiAddr)
+{
+    // 2 个 IPv4 + 2 个 IPv6：首个无序号，后续带序号
+    auto info = std::make_shared<NetifInfo>();
+    info->set_recv_bps(1024);
+    info->set_sent_bps(512);
+    inet_addr4_t a4a, a4b;
+    a4a.family = AF_INET;
+    a4a.addr = QByteArray("192.168.1.10");
+    a4a.mask = QByteArray("255.255.255.0");
+    a4a.bcast = QByteArray("192.168.1.255");
+    a4b.family = AF_INET;
+    a4b.addr = QByteArray("10.0.0.5");
+    a4b.mask = QByteArray("255.0.0.0");
+    a4b.bcast = QByteArray("10.255.255.255");
+    info->updateAddr4Info({std::make_shared<inet_addr4_t>(a4a), std::make_shared<inet_addr4_t>(a4b)});
+    inet_addr6_t a6a, a6b;
+    a6a.family = AF_INET6;
+    a6a.addr = QByteArray("::1");
+    a6a.prefixlen = 128;
+    a6a.scope = 0;
+    a6b.family = AF_INET6;
+    a6b.addr = QByteArray("fe80::2");
+    a6b.prefixlen = 64;
+    a6b.scope = 252;  // link
+    info->updateAddr6Info({std::make_shared<inet_addr6_t>(a6a), std::make_shared<inet_addr6_t>(a6b)});
+    QMap<QByteArray, NetifInfoPtr> map;
+    map.insert("aa", info);
+    injectInfoDB(map);
+
+    m_tester->refreshNetifInfo("aa");
+
+    // 首地址无序号 + 后续地址带序号
+    EXPECT_EQ(m_tester->rowCount(QModelIndex()), 19);  // 17 + IPv4 2 + IPv6 2 - 无序号重复计数
+    int row4b = findRow(m_tester, QApplication::translate("NetInfoModel", "IPv4") + " 2");
+    ASSERT_GE(row4b, 0);
+    EXPECT_EQ(m_tester->data(m_tester->index(row4b, 1), Qt::DisplayRole).toString(),
+              QString("10.0.0.5/255.0.0.0/10.255.255.255"));
+    int row6b = findRow(m_tester, QApplication::translate("NetInfoModel", "IPv6") + " 2");
+    ASSERT_GE(row6b, 0);
+    EXPECT_EQ(m_tester->data(m_tester->index(row6b, 1), Qt::DisplayRole).toString(),
+              QString("fe80::2/64/252"));
+}
+
+TEST_F(UT_NetInfoModel, test_refreshNetifInfo_05_wireless)
+{
+    // 无线网卡：追加 ESSID/Link quality/Signal strength/Noise level 行
+    // isWireless/iw_info 位于私有成员 d（NetifInfoPrivate，-fno-access-control 可写）
+    auto info = std::make_shared<NetifInfo>();
+    info->d->isWireless = true;
+    info->d->iw_info->essid = QByteArray("test-ssid");
+    info->d->iw_info->qual.qual = 70;    // linkQuality
+    // 注意：signalLevel() 返回 uint8_t，负 RSSI 会回绕（疑似源码缺陷，另报），
+    // 此处用 60 验证公式：-100 + 70 * (1 - 60/100.0) = -72 dBm
+    info->d->iw_info->qual.level = 60;   // signalLevel
+    info->d->iw_info->qual.noise = 55;   // noiseLevel
+    QMap<QByteArray, NetifInfoPtr> map;
+    map.insert("wlan", info);
+    injectInfoDB(map);
+
+    m_tester->refreshNetifInfo("wlan");
+
+    int rowEssid = findRow(m_tester, QApplication::translate("NetInfoModel", "ESSID"));
+    ASSERT_GE(rowEssid, 0);
+    EXPECT_EQ(m_tester->data(m_tester->index(rowEssid, 1), Qt::DisplayRole).toString(),
+              QString("test-ssid"));
+    int rowLq = findRow(m_tester, QApplication::translate("NetInfoModel", "Link quality"));
+    ASSERT_GE(rowLq, 0);
+    EXPECT_EQ(m_tester->data(m_tester->index(rowLq, 1), Qt::DisplayRole).toString(),
+              QString("70"));
+    int rowSs = findRow(m_tester, QApplication::translate("NetInfoModel", "Signal strength"));
+    ASSERT_GE(rowSs, 0);
+    // -100 + 70 * (1 - 60/100.0) = -72 dBm
+    EXPECT_EQ(m_tester->data(m_tester->index(rowSs, 1), Qt::DisplayRole).toString(),
+              QString("-72 dBm"));
+    int rowNoise = findRow(m_tester, QApplication::translate("NetInfoModel", "Noise level"));
+    ASSERT_GE(rowNoise, 0);
+    EXPECT_EQ(m_tester->data(m_tester->index(rowNoise, 1), Qt::DisplayRole).toString(),
+              QString("55 dB"));
+}
+
 // 分支说明(refreshNetifInfo): key命中且有IPv4->IPv4行 / 有IPv6->IPv6行 /
 //                           wireless分支(跳过) / 连接类型+MAC+带宽+收发包字节错误行
 TEST_F(UT_NetInfoModel, test_refreshNetifInfo_02_wiredNet)
@@ -185,6 +267,21 @@ TEST_F(UT_NetInfoModel, test_data_01_invalidAndOOB)
 
     EXPECT_FALSE(m_tester->data(QModelIndex(), Qt::DisplayRole).isValid());
     EXPECT_FALSE(m_tester->data(m_tester->index(0, 0), Qt::DisplayRole).isValid());
+}
+
+TEST_F(UT_NetInfoModel, test_data_03_staleIndexAfterReset)
+{
+    // 先取有效索引，再清空数据源刷新：旧索引越界 -> 走 iRow>=count 的空返回分支
+    injectInfoDB(stub_infoDB_one());
+    m_tester->refreshNetifInfo("aa");
+    QModelIndex stale = m_tester->index(0, 0);
+    ASSERT_TRUE(stale.isValid());
+    EXPECT_EQ(m_tester->data(stale, Qt::DisplayRole).toString(),
+              QApplication::translate("NetInfoModel", "IPv4"));
+
+    injectInfoDB(stub_infoDB_empty());
+    m_tester->refreshNetifInfo("aa");
+    EXPECT_FALSE(m_tester->data(stale, Qt::DisplayRole).isValid());
 }
 
 TEST_F(UT_NetInfoModel, test_data_02_displayAndUserRole)
@@ -380,6 +477,47 @@ TEST_F(UT_NetInfoDetailItemDelegate, test_paint_03_firstColumnIpTitle)
     m_tester->paint(&painter, option, model.index(0, 0));
     painter.end();
     SUCCEED();
+}
+
+TEST_F(UT_NetInfoDetailItemDelegate, test_paint_04_ipv6RowDarkTheme)
+{
+    // 深色主题 + IPv6 行第 1 列：Prefixlen/Scope 三行分支 + 最宽 key 计算
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::DarkType);
+    injectInfoDB(stub_infoDB_one());
+
+    NetInfoModel model;
+    model.refreshNetifInfo("aa");
+    int row6 = -1;
+    for (int row = 0; row < model.rowCount(QModelIndex()); ++row) {
+        ShowInfo info = model.data(model.index(row, 0), Qt::UserRole).value<ShowInfo>();
+        if (info.eType == ShowInfo::IPV6) {
+            row6 = row;
+            break;
+        }
+    }
+    ASSERT_GE(row6, 0);
+
+    static QWidget optionWidget;
+    QImage image(300, 60, QImage::Format_ARGB32);
+    image.fill(Qt::white);
+    QPainter painter(&image);
+    QStyleOptionViewItem option;
+    option.widget = &optionWidget;
+    option.rect = QRect(0, 0, 300, 60);
+    option.font = QFont();
+    m_tester->paint(&painter, option, model.index(row6, 1));
+    painter.end();
+
+    // 深色主题 + 偶数行：覆盖另一背景色分支的 setAlphaF 路径
+    QImage image2(300, 60, QImage::Format_ARGB32);
+    image2.fill(Qt::white);
+    QPainter painter2(&image2);
+    m_tester->paint(&painter2, option, model.index(0, 1));
+    painter2.end();
+    SUCCEED();
+
+    // 还原浅色主题，避免影响其他用例
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::LightType);
 }
 
 class UT_NetifSummaryViewWidget : public ::testing::Test
