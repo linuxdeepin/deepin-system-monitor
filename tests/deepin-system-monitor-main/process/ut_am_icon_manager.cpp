@@ -181,6 +181,7 @@
 
 //qt
 #include <QString>
+#include <QDate>
 #include <QDBusInterface>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
@@ -799,6 +800,141 @@ TEST_F(UT_AMIconManager, IdentifyProcess_ValidReply_ParsesGroupInfo)
     EXPECT_TRUE(info.isValid());
     EXPECT_EQ(info.appId, QStringLiteral("com.deepin.testapp"));
     EXPECT_EQ(info.instancePath, QStringLiteral("/org/desktopspec/Instance/com_2edeepin_2etestapp"));
+    // 清理自建接口
+    delete obj->m_amInterface;
+    obj->m_amInterface = nullptr;
+}
+
+TEST_F(UT_AMIconManager, IdentifyProcess_InstancePathQString_ParsesStringPath)
+{
+    // Arrange: 接口有效，回复第二参数为 QString 路径（非 QDBusObjectPath）
+    std::unique_ptr<AMIconManager> obj = makeUnavailableManager();
+    obj->m_amAvailable = true;
+    obj->m_amInterface = new QDBusInterface(
+        QStringLiteral("org.desktopspec.ApplicationManager1"),
+        QStringLiteral("/org/desktopspec/ApplicationManager1"),
+        QStringLiteral("org.desktopspec.ApplicationManager1"),
+        QDBusConnection::sessionBus());
+    stub.set_lamda(VADDR(QDBusInterface, isValid), [](QDBusAbstractInterface *) -> bool {
+        __DBG_STUB_INVOKE__
+        return true;
+    });
+    QDBusMessage req = QDBusMessage::createMethodCall(
+        QStringLiteral("t.svc"), QStringLiteral("/"), QStringLiteral("t.I"), QStringLiteral("Identify"));
+    QList<QVariant> replyArgs;
+    replyArgs << QStringLiteral("com.deepin.testapp")
+              << QStringLiteral("/ut/string/instance/path")
+              << QVariant(QStringList{QStringLiteral("meta")});
+    stubDoCallReply(stub, req.createReply(replyArgs));
+    // Act: 识别
+    AMProcessGroupInfo info = obj->identifyProcess(3);
+    // Assert: 走 QString 转换分支，路径正确
+    EXPECT_TRUE(info.isValid());
+    EXPECT_EQ(info.instancePath, QStringLiteral("/ut/string/instance/path"));
+    EXPECT_EQ(info.appId, QStringLiteral("com.deepin.testapp"));
+    // 清理自建接口
+    delete obj->m_amInterface;
+    obj->m_amInterface = nullptr;
+}
+
+TEST_F(UT_AMIconManager, IdentifyProcess_InstancePathBadType_KeepsPathEmpty)
+{
+    // Arrange: 接口有效，回复第二参数为 QStringList（既非 ObjectPath 亦非 QString）
+    std::unique_ptr<AMIconManager> obj = makeUnavailableManager();
+    obj->m_amAvailable = true;
+    obj->m_amInterface = new QDBusInterface(
+        QStringLiteral("org.desktopspec.ApplicationManager1"),
+        QStringLiteral("/org/desktopspec/ApplicationManager1"),
+        QStringLiteral("org.desktopspec.ApplicationManager1"),
+        QDBusConnection::sessionBus());
+    stub.set_lamda(VADDR(QDBusInterface, isValid), [](QDBusAbstractInterface *) -> bool {
+        __DBG_STUB_INVOKE__
+        return true;
+    });
+    QDBusMessage req = QDBusMessage::createMethodCall(
+        QStringLiteral("t.svc"), QStringLiteral("/"), QStringLiteral("t.I"), QStringLiteral("Identify"));
+    QList<QVariant> replyArgs;
+    replyArgs << QStringLiteral("com.deepin.testapp")
+              << QVariant()  // 无效 QVariant：既非 ObjectPath 亦非 QString
+              << QVariant(QStringList{QStringLiteral("meta")});
+    stubDoCallReply(stub, req.createReply(replyArgs));
+    // Act: 识别
+    AMProcessGroupInfo info = obj->identifyProcess(3);
+    // Assert: 警告分支，instancePath 保持空 → 信息无效
+    EXPECT_FALSE(info.isValid());
+    EXPECT_EQ(info.instancePath, QString());
+    EXPECT_EQ(info.appId, QStringLiteral("com.deepin.testapp"));
+    // 清理自建接口
+    delete obj->m_amInterface;
+    obj->m_amInterface = nullptr;
+}
+
+TEST_F(UT_AMIconManager, IdentifyProcess_EmptyAppId_ReturnsInvalidWithoutIconLookup)
+{
+    // Arrange: 接口有效，回复 appId 为空串（pidfd 路径的真实缺陷面）
+    std::unique_ptr<AMIconManager> obj = makeUnavailableManager();
+    obj->m_amAvailable = true;
+    obj->m_amInterface = new QDBusInterface(
+        QStringLiteral("org.desktopspec.ApplicationManager1"),
+        QStringLiteral("/org/desktopspec/ApplicationManager1"),
+        QStringLiteral("org.desktopspec.ApplicationManager1"),
+        QDBusConnection::sessionBus());
+    stub.set_lamda(VADDR(QDBusInterface, isValid), [](QDBusAbstractInterface *) -> bool {
+        __DBG_STUB_INVOKE__
+        return true;
+    });
+    QDBusMessage req = QDBusMessage::createMethodCall(
+        QStringLiteral("t.svc"), QStringLiteral("/"), QStringLiteral("t.I"), QStringLiteral("Identify"));
+    QList<QVariant> replyArgs;
+    replyArgs << QString()
+              << QVariant::fromValue(QDBusObjectPath(QStringLiteral("/ut/empty/appid")))
+              << QVariant(QStringList{QStringLiteral("meta")});
+    stubDoCallReply(stub, req.createReply(replyArgs));
+    // Act: 识别
+    AMProcessGroupInfo info = obj->identifyProcess(3);
+    // Assert: 空 appId 早退，组信息无效且未补全图标名
+    EXPECT_FALSE(info.isValid());
+    EXPECT_EQ(info.appId, QString());
+    EXPECT_EQ(info.displayName, QString());
+    EXPECT_EQ(info.iconName, QString());
+    EXPECT_TRUE(info.instancePath.contains(QStringLiteral("empty/appid")));
+    // 清理自建接口
+    delete obj->m_amInterface;
+    obj->m_amInterface = nullptr;
+}
+
+TEST_F(UT_AMIconManager, GetProcessGroupInfo_CacheMissPidfd_IdentifiesAndCaches)
+{
+    // Arrange: 接口有效；pid 取当前进程（pidfd_open 对自身必然成功，无需桩）；
+    // doCall 返回三参数有效回复
+    std::unique_ptr<AMIconManager> obj = makeUnavailableManager();
+    obj->m_amAvailable = true;
+    obj->m_amInterface = new QDBusInterface(
+        QStringLiteral("org.desktopspec.ApplicationManager1"),
+        QStringLiteral("/org/desktopspec/ApplicationManager1"),
+        QStringLiteral("org.desktopspec.ApplicationManager1"),
+        QDBusConnection::sessionBus());
+    stub.set_lamda(VADDR(QDBusInterface, isValid), [](QDBusAbstractInterface *) -> bool {
+        __DBG_STUB_INVOKE__
+        return true;
+    });
+    QDBusMessage req = QDBusMessage::createMethodCall(
+        QStringLiteral("t.svc"), QStringLiteral("/"), QStringLiteral("t.I"), QStringLiteral("Identify"));
+    QList<QVariant> replyArgs;
+    replyArgs << QStringLiteral("com.deepin.pidfdapp")
+              << QVariant::fromValue(QDBusObjectPath(QStringLiteral("/org/desktopspec/Instance/pidfdapp")))
+              << QVariant(QStringList{QStringLiteral("meta")});
+    stubDoCallReply(stub, req.createReply(replyArgs));
+    // Act: 首次查询（缓存未命中，走 pidfd 识别路径）
+    AMProcessGroupInfo info = obj->getProcessGroupInfo(::getpid());
+    // Assert: 识别成功且写入组缓存
+    EXPECT_TRUE(info.isValid());
+    EXPECT_EQ(info.appId, QStringLiteral("com.deepin.pidfdapp"));
+    EXPECT_EQ(obj->m_pidToGroupCache.count(::getpid()), 1);
+    // Act: 第二次查询命中缓存
+    AMProcessGroupInfo cached = obj->getProcessGroupInfo(::getpid());
+    // Assert: 缓存返回同源数据
+    EXPECT_EQ(cached.appId, QStringLiteral("com.deepin.pidfdapp"));
     // 清理自建接口
     delete obj->m_amInterface;
     obj->m_amInterface = nullptr;

@@ -555,13 +555,14 @@ TEST_F(UT_ProcessIcon, GetIcon_ShellProcess_ReturnsTerminalIcon)
 
 TEST_F(UT_ProcessIcon, GetIcon_OptPathSubName_ReturnsEntryIcon)
 {
-    // Arrange: cmdline 指向 /opt，桌面项子名命中
+    // Arrange: cmdline 指向 /opt，桌面项子名命中；进程名故意不同于缓存键，
+    // 确保图标来自 entryWithSubName(fname) 分支而非 name 直查分支
     hookAM(stub, false);
     DesktopEntryCache *dec = ProcessDB::instance()->desktopEntryCache();
     dec->m_cache.insert(QStringLiteral("ut-opt-proc"), makeEntry(QStringLiteral("ut-opt-proc"),
                                                                 QStringLiteral("opt-icon")));
     std::unique_ptr<ProcessIcon> obj = std::make_unique<ProcessIcon>();
-    Process proc = makeProc(12345, QStringLiteral("ut-opt-proc"));
+    Process proc = makeProc(12345, QStringLiteral("ut-opt-proc2"));
     const QByteArray optPrefix = QByteArrayLiteral("/opt");
     proc.d->cmdline = QByteArrayList{optPrefix + "/apps/ut.opt.app/files/bin/ut-opt-proc"};
     // Act: 获取图标
