@@ -15,6 +15,7 @@
 //Qt
 #include <QSignalSpy>
 #include <QApplication>
+#include <QStandardItemModel>
 #include <DApplication>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
@@ -268,4 +269,28 @@ TEST_F(UT_MemSummaryViewWidget, test_flags_01)
 
     // Act & Assert
     EXPECT_EQ(m_tester->model()->flags(index), Qt::NoItemFlags);
+}
+
+// 合成越界索引（外部模型索引）：列越界与行越界分别命中 break/default 分支
+TEST_F(UT_MemSummaryViewWidget, test_data_outOfRangeIndex)
+{
+    // Arrange: data() 仅校验 isValid，不校验索引归属，可用外部模型构造越界索引
+    QStandardItemModel fakeModel;
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 3; ++col) {
+            fakeModel.setItem(row, col, new QStandardItem());
+        }
+    }
+
+    // Act & Assert: column==2 命中各 case 的 break 分支
+    for (int row = 0; row < 7; ++row) {
+        QModelIndex idx = fakeModel.index(row, 2);
+        EXPECT_FALSE(m_tester->model()->data(idx, Qt::DisplayRole).isValid()) << row;
+        EXPECT_FALSE(m_tester->model()->data(idx, Qt::UserRole).isValid()) << row;
+    }
+
+    // Act & Assert: row==7 命中 default 分支
+    QModelIndex overRow = fakeModel.index(7, 0);
+    EXPECT_FALSE(m_tester->model()->data(overRow, Qt::DisplayRole).isValid());
+    EXPECT_FALSE(m_tester->model()->data(overRow, Qt::UserRole).isValid());
 }
