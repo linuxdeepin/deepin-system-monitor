@@ -357,9 +357,10 @@ TEST_F(UT_Toolbar, HandleSearchTextChanged_EmptyText_UpdatesCache)
     m_tester->searchTimer->stop();
 }
 
-// 注：源码 isSearchContentEmpty 为空文本返回 false、非空返回 true，
-// 与函数名语义相反（疑似缺陷，详见缺陷清单），用例按真实源码行为断言
-TEST_F(UT_Toolbar, IsSearchContentEmpty_EmptyText_ReturnsFalse)
+// 注：本 PR 修正了 isSearchContentEmpty 的语义反转缺陷：空文本返回 true、非空返回 false，
+// 与函数名语义一致；唯一调用方 ProcessTableView::adjustInfoLabelVisibility 已同步取反，
+// "搜索未找到"提示的显示条件保持不变（表格为空且搜索内容非空）
+TEST_F(UT_Toolbar, IsSearchContentEmpty_EmptyText_ReturnsTrue)
 {
     // Arrange：搜索框为空
     ASSERT_TRUE(m_tester->searchContent().isEmpty());
@@ -367,12 +368,12 @@ TEST_F(UT_Toolbar, IsSearchContentEmpty_EmptyText_ReturnsFalse)
     // Act
     bool result = m_tester->isSearchContentEmpty();
 
-    // Assert：源码语义：空文本 → false
-    EXPECT_FALSE(result);
+    // Assert：修正后语义：空文本 → true
+    EXPECT_TRUE(result);
     EXPECT_EQ(m_tester->searchContent(), QString(""));
 }
 
-TEST_F(UT_Toolbar, IsSearchContentEmpty_NonEmptyText_ReturnsTrue)
+TEST_F(UT_Toolbar, IsSearchContentEmpty_NonEmptyText_ReturnsFalse)
 {
     // Arrange：搜索框有文本
     m_tester->searchEdit->setText("abc");
@@ -380,8 +381,8 @@ TEST_F(UT_Toolbar, IsSearchContentEmpty_NonEmptyText_ReturnsTrue)
     // Act
     bool result = m_tester->isSearchContentEmpty();
 
-    // Assert：源码语义：非空文本 → true
-    EXPECT_TRUE(result);
+    // Assert：修正后语义：非空文本 → false
+    EXPECT_FALSE(result);
     EXPECT_EQ(m_tester->searchContent(), QString("abc"));
 }
 
@@ -406,9 +407,9 @@ TEST_F(UT_Toolbar, SearchContent_WithText_ReturnsText)
     // Act：读取搜索内容
     QString content = m_tester->searchContent();
 
-    // Assert：透传编辑框文本
+    // Assert：透传编辑框文本（修正后非空文本 → isSearchContentEmpty 为 false）
     EXPECT_EQ(content, QString("abc"));
-    EXPECT_TRUE(m_tester->isSearchContentEmpty());
+    EXPECT_FALSE(m_tester->isSearchContentEmpty());
 }
 
 TEST_F(UT_Toolbar, SetProcessButtonChecked_True_ChecksProcBtn)

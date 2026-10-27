@@ -239,10 +239,10 @@ bool Toolbar::isSearchContentEmpty()
     qCDebug(app) << "Checking if search content is empty";
     if (searchEdit->text().isEmpty()) {
         qCDebug(app) << "Search content is empty";
-        return false;
+        return true;
     }
     qCDebug(app) << "Search content is not empty";
-    return true;
+    return false;
 }
 
 void Toolbar::setProcessButtonChecked(bool checked)
