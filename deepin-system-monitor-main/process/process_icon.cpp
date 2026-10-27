@@ -148,6 +148,12 @@ QString ProcessIcon::getFileManagerString()
 
 std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
 {
+    if (!proc || proc->pid() <= 0) {
+        qCDebug(app) << "Invalid process (null or pid<=0), returning default icon";
+        std::shared_ptr<icon_data_t> iconDataPtr;
+        iconDataPtr.reset(defaultIconData(proc ? proc->name() : QString()));
+        return iconDataPtr;
+    }
     qCDebug(app) << "Getting icon for process" << proc->pid() << proc->name();
     std::shared_ptr<icon_data_t> iconDataPtr;
     auto processDB = ProcessDB::instance();
