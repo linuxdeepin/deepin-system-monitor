@@ -16,6 +16,10 @@
 #endif
 
 #include <QTest>
+#include <unistd.h>
+
+// 部分 gcc 版本的 gcov.h 未包 extern "C"，直接声明避免 C++ 名字修饰
+extern "C" void __gcov_dump(void);
 
 int main(int argc, char *argv[])
 {
@@ -28,5 +32,10 @@ int main(int argc, char *argv[])
 #if defined(CMAKE_SAFETYTEST_ARG_ON)
     __sanitizer_set_report_path("asan.log");
 #endif
-    return  c;
+    // 退出析构竞态规避：多夹具（MainWindow/泄漏的页面部件/DTK 单例）共存时，
+    // ~QApplication 的 post-routine 与静态对象析构链会触碰悬空连接导致段错误，
+    // gcov 退出钩子不执行、全部 gcda 丢失。这里显式导出覆盖数据后直接终止进程，
+    // 跳过 Qt/静态析构（测试断言已全部完成，行为等价于正常退出）。
+    __gcov_dump();
+    _exit(c);
 }
