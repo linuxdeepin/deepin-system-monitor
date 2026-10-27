@@ -33,3 +33,7 @@ obj-x86_64-linux-gnu/
 # local-only analysis / lint reports (do not commit)
 /关键流程函数覆盖率分析.md
 /reuse_lint_report.md
+
+# Qt Autotest Generator artifacts
+build-ut/
+tests/.ut/
