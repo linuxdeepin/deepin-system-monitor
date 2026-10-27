@@ -184,6 +184,7 @@ void BlockDeviceInfoDB::readDiskInfo()
         if (!isFind) {
             qCDebug(app) << "Removing device that no longer exists:" << m_deviceList[i].deviceName();
             m_deviceList.removeAt(i);
+            --i;
         }
     }
     qCDebug(app) << "Finished reading disk info";
@@ -277,6 +278,8 @@ void BlockDeviceInfoDB::readDiskInfo()
 void BlockDeviceInfoDB::update()
 {
     qCDebug(app) << "Updating BlockDeviceInfoDB";
+
+    QWriteLocker lock(&m_rwlock);
     readDiskInfo();
 
     // TODO: enum device in /sys/block => phy & virtual
@@ -291,7 +294,6 @@ void BlockDeviceInfoDB::update()
     //    udev_unref(udev);
     //    // TEST end
 
-    //    QWriteLocker lock(&m_rwlock);
     // update device list
 }
 
