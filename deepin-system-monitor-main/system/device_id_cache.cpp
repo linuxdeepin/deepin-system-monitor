@@ -9,6 +9,7 @@
 #include "udev.h"
 
 #include <libudev.h>
+#include <string.h>
 
 using namespace DDLog;
 
@@ -25,6 +26,32 @@ DeviceIDCache::~DeviceIDCache()
 {
     qCDebug(app) << "Destroying DeviceIDCache";
     udev_hwdb_unref(m_hwdb);
+}
+
+QByteArray DeviceIDCache::deviceName(const QByteArray &modalias) const
+{
+    if (m_cache.contains(modalias)) {
+        return m_cache.value(modalias);
+    }
+
+    QByteArray name;
+    if (m_hwdb) {
+        struct udev_list_entry *entry = udev_hwdb_get_properties_list_entry(
+            m_hwdb, modalias.constData(), 0);
+        if (entry) {
+            struct udev_list_entry *e;
+            udev_list_entry_foreach(e, entry) {
+                const char *key = udev_list_entry_get_name(e);
+                if (key && strcmp(key, "ID_MODEL_FROM_DATABASE") == 0) {
+                    name = udev_list_entry_get_value(e);
+                    break;
+                }
+            }
+        }
+    }
+
+    m_cache.insert(modalias, name);
+    return name;
 }
 
 } // namespace system

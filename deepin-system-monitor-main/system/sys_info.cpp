@@ -138,6 +138,10 @@ bool SysInfo::readSockStat(SockStatMap &statMap)
 
             // saddr & daddr
             if (family == AF_INET6) {
+                // Kernel prints s6_addr32[i] via seq_printf("%08X", ...);
+                // sscanf("%08x", ...) reads back the same host-order uint32_t,
+                // perfectly restoring the network byte-order bytes.  No
+                // htonl() needed — adding one would corrupt inet_ntop output.
                 sscanf(s_addr, "%08x%08x%08x%08x",
                        &stat->s_addr.in6.s6_addr32[0],
                        &stat->s_addr.in6.s6_addr32[1],
@@ -361,7 +365,7 @@ void SysInfo::read_uptime(struct timeval &uptime)
             int nm = sscanf(buf, "%ld.%ld", &up_sec, &up_usec);
             if (nm == 2) {
                 uptime.tv_sec = up_sec;
-                uptime.tv_usec = up_usec * 1000000;
+                uptime.tv_usec = up_usec * 10000;
 
                 return;
             }
