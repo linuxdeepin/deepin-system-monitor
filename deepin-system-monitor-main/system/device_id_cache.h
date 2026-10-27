@@ -22,8 +22,6 @@ public:
     explicit DeviceIDCache(const UDev *udev);
     virtual ~DeviceIDCache();
 
-    QByteArray deviceName(const QByteArray &modalias) const;
-
 private:
     struct udev_hwdb *m_hwdb;
     QHash<QByteArray, QByteArray> m_cache; // modalias : product_name
