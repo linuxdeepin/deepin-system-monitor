@@ -43,6 +43,11 @@ public:
     CPUInfoPrivate(const CPUInfoPrivate &other)
         : QSharedData(other)
         , index {other.index}
+        , m_core_id {other.m_core_id}
+        , m_model_name {other.m_model_name}
+        , m_vendor_id {other.m_vendor_id}
+        , m_cpu_freq {other.m_cpu_freq}
+        , m_cache_size {other.m_cache_size}
         , package_id {other.package_id}
         , book_id {other.book_id}
         , drawer_id {other.drawer_id}
