@@ -8,8 +8,6 @@
 
 #include <DApplication>
 
-#include "gui/main_window.h"
-
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
@@ -91,20 +89,5 @@ private:
     //!
     TaskState m_currentTaskStat = TaskState::kTaskFinished;
 };
-
-inline void Application::setMainWindow(MainWindow *mw)
-{
-    m_mainWindow = mw;
-}
-
-inline void Application::raiseWindow()
-{
-    m_mainWindow->raiseWindow();
-}
-
-inline MainWindow *Application::mainWindow()
-{
-    return m_mainWindow;
-}
 
 #endif // APPLICATION_H
