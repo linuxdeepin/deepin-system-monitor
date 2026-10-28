@@ -76,7 +76,7 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
               << "#FB1818"
               << "#8544FF"
               << "#00D7AB"
-              << "#00D7AB"
+              << "#FF6B00"
               << "#FF00FF"
               << "#30BF03"
               << "#7E41F1"
@@ -138,10 +138,16 @@ void CompactCpuMonitor::updateStatus()
         for (int j = 0; j < pointsNumber; j++) {
             addPointList.append(0);
         }
+        // Insert new core rows before the total CPU row (at index cpuPercents.size()-1)
+        // so that cpuPercents[i] still maps to cpulist[i] for all per-core indices,
+        // and the total CPU row remains at the last position.
+        int totalRowIndex = cpuPercents.size() - 1;
         for(int i = cpuPercents.size() - 1; i < cpulist.size(); i++) {
-            cpuPercents.append(addPointList);
-            appendIndex.append(i);
+            cpuPercents.insert(totalRowIndex, addPointList);
+            appendIndex.append(totalRowIndex);
+            totalRowIndex++;
         }
+        numCPU = cpulist.size();
     } else {
         appendIndex.append(-1);
     }
@@ -338,7 +344,13 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     // enum cpu
     for (int i = statrpos; i >= endpos && i >= 0; i--) {
         // set stroke color
-        QColor c = cpuColors[i % cpuColors.size()];
+        QColor c;
+        if (i < cpuColors.size()) {
+            c = cpuColors[i];
+        } else {
+            // Generate distinct colors beyond the hardcoded palette using golden-ratio hue stepping
+            c = QColor::fromHsvF(std::fmod((i - cpuColors.size()) * 0.61803388, 1.0), 0.75, 0.85);
+        }
         painter.setPen(QPen(c, strokeWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
         QPainterPath Painterpath;
