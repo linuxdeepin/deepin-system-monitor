@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -285,6 +285,9 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
             // not authorized, use pkexec instead
             if (errno == EPERM) {
                 pctl(pid, signal);
+            } else if (errno == ESRCH) {
+                // process already exited, treat as success
+                emitSignal(signal);
             } else {
                 ec = errfmt(
                          errno,
