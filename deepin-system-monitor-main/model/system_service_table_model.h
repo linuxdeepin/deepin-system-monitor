@@ -167,10 +167,13 @@ private:
 
 inline void SystemServiceTableModel::reset()
 {
-    beginRemoveRows({}, 0, m_svcList.size() - 1);
-    m_svcList.clear();
-    m_svcMap.clear();
-    endRemoveRows();
+    if (m_svcList.size() > 0) {
+        beginRemoveRows({}, 0, m_svcList.size() - 1);
+        m_svcList.clear();
+        m_svcMap.clear();
+        endRemoveRows();
+    }
+    m_nr = 0;
 }
 
 inline QString SystemServiceTableModel::getUnitFileState(const QModelIndex &index)

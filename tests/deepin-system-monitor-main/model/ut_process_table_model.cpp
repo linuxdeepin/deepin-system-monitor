@@ -675,9 +675,9 @@ TEST_F(ProcessTableModelTest, HeaderData_OtherRole_FallsBackToBaseImplementation
     // branch H4: 其他 role 走基类实现
     // Act + Assert
     EXPECT_EQ(m_tester->headerData(ProcessTableModel::kProcessNameColumn, Qt::Horizontal, Qt::ToolTipRole), QVariant());
-    // 已知行为（已列入 Mode 5 观察项）: headerData 忽略 orientation，Vertical 与 Horizontal 返回相同文本
+    // 缺陷 #4 已修复: headerData 现判断 orientation，Vertical 方向返回空 QVariant
     EXPECT_EQ(m_tester->headerData(ProcessTableModel::kProcessNameColumn, Qt::Vertical, Qt::DisplayRole),
-              m_tester->headerData(ProcessTableModel::kProcessNameColumn, Qt::Horizontal, Qt::DisplayRole));
+              QVariant());
 }
 
 // ============================== rowCount / columnCount ==============================
@@ -693,14 +693,14 @@ TEST_F(ProcessTableModelTest, RowCount_RootParent_ReturnsProcessCount)
     EXPECT_EQ(m_tester->rowCount(QModelIndex()), 2);
 }
 
-TEST_F(ProcessTableModelTest, RowCount_ValidParent_ReturnsSameAsRoot)
+TEST_F(ProcessTableModelTest, RowCount_ValidParent_ReturnsZero)
 {
     // Arrange
     injectRow(m_tester.data(), makeValidProcess(kPidA));
     const QModelIndex parent = m_tester->createIndex(0, 0);
 
-    // Act + Assert: 已知行为: rowCount 忽略 parent 参数，始终返回 m_procIdList.size()
-    EXPECT_EQ(m_tester->rowCount(parent), 1);
+    // 缺陷 #5 已修复: rowCount 现判断 parent，有效 parent 返回 0
+    EXPECT_EQ(m_tester->rowCount(parent), 0);
     EXPECT_EQ(m_tester->rowCount(), 1);
 }
 
@@ -711,14 +711,14 @@ TEST_F(ProcessTableModelTest, ColumnCount_RootParent_ReturnsFixedCount)
     EXPECT_EQ(m_tester->columnCount(), ProcessTableModel::kProcessColumnCount);
 }
 
-TEST_F(ProcessTableModelTest, ColumnCount_ValidParent_ReturnsSameAsRoot)
+TEST_F(ProcessTableModelTest, ColumnCount_ValidParent_ReturnsZero)
 {
     // Arrange
     injectRow(m_tester.data(), makeValidProcess(kPidA));
     const QModelIndex parent = m_tester->createIndex(0, 0);
 
-    // Act + Assert: 已知行为: columnCount 忽略 parent 参数，始终返回 kProcessColumnCount
-    EXPECT_EQ(m_tester->columnCount(parent), ProcessTableModel::kProcessColumnCount);
+    // 缺陷 #5 已修复: columnCount 现判断 parent，有效 parent 返回 0
+    EXPECT_EQ(m_tester->columnCount(parent), 0);
 }
 
 // ============================== updateProcessList (定时器路由) ==============================

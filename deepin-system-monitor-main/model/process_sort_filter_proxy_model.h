@@ -53,7 +53,7 @@ private:
     // Pinyin represented as ascii string converted from chinese hanzi
     QString m_hanwords {};
 
-    int m_fileterType = 0;
+    int m_filterType = 0;
 };
 
 #endif  // PROCESS_SORT_FILTER_PROXY_MODEL_H

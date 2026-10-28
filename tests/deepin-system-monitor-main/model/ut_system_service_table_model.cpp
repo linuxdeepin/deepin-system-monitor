@@ -350,9 +350,9 @@ TEST_F(SystemServiceTableModelTest, HeaderData_OtherRole_FallsBackToBaseImplemen
     // branch SVH4
     // Act + Assert
     EXPECT_EQ(m_tester->headerData(SystemServiceTableModel::kSystemServiceNameColumn, Qt::Horizontal, Qt::ToolTipRole), QVariant());
-    // 已知行为（已列入 Mode 5 观察项）: headerData 忽略 orientation，Vertical 与 Horizontal 返回相同文本
+    // 缺陷 #4 已修复: headerData 现判断 orientation，Vertical 方向返回空 QVariant
     EXPECT_EQ(m_tester->headerData(SystemServiceTableModel::kSystemServiceNameColumn, Qt::Vertical, Qt::DisplayRole),
-              m_tester->headerData(SystemServiceTableModel::kSystemServiceNameColumn, Qt::Horizontal, Qt::DisplayRole));
+              QVariant());
 }
 
 // ============================== updateServiceEntry (UE1~UE3) ==============================
@@ -628,9 +628,8 @@ TEST_F(SystemServiceTableModelTest, Flags_ValidIndex_ReturnsEnabledSelectable)
 
 // ============================== reset ==============================
 
-// 已知缺陷 #2（详见 Mode 5 缺陷清单）: reset() 清空 m_svcList/m_svcMap 但未清零 m_nr，
-// reset 后 rowCount() 返回陈旧值 2（视图会读到空行）。此用例锁定当前实际行为，
-// 修复后应改为 EXPECT_EQ(m_tester->rowCount(), 0)。
+// 缺陷 #1/#2 已修复: reset() 现已清零 m_nr 并对空列表做守卫，
+// reset 后 rowCount() 正确返回 0。
 TEST_F(SystemServiceTableModelTest, Reset_PopulatedModel_ClearsEntries)
 {
     // Arrange: 两条可见行
@@ -641,10 +640,10 @@ TEST_F(SystemServiceTableModelTest, Reset_PopulatedModel_ClearsEntries)
     // Act
     m_tester->reset();
 
-    // Assert: 数据已清空（缺陷注记: rowCount 陈旧）
+    // Assert: 数据已清空，rowCount 正确归零
     EXPECT_TRUE(m_tester->m_svcList.isEmpty());
     EXPECT_TRUE(m_tester->m_svcMap.isEmpty());
-    EXPECT_EQ(m_tester->rowCount(), 2);   // 锁定缺陷现状（m_nr 未清零）
+    EXPECT_EQ(m_tester->rowCount(), 0);
 }
 
 // ============================== getUnitFile* ==============================
