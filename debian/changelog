@@ -1,3 +1,12 @@
+deepin-system-monitor (6.5.49) unstable; urgency=medium
+
+  * docs: add Portuguese (pt_BR) help manual
+  * fix: guard null xcb connection in getWindowIcon
+  * test: rewrite and expand unit tests for system/gui/netif modules
+  * test: 完善单测一键脚本并适配 deepin-reader 风格统计
+
+ -- re2zero <yangwu@uniontech.com>  Wed, 28 Oct 2026 11:11:44 +0800
+
 deepin-system-monitor (6.5.48) unstable; urgency=medium
 
   * fix: remove bash shell layer and relaunch via version-specific D-Bus
