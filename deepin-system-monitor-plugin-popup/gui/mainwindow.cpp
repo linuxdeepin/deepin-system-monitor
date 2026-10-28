@@ -586,9 +586,9 @@ QRect MainWindow::getDisplayScreen()
         QDBusInterface monitor(common::systemInfo().DISPLAY_INTERFACE, monitorPath.path(), common::systemInfo().DISPLAYMONITOR_INTERFACE, QDBusConnection::sessionBus());
         if (monitor.isValid()) {
             int curX = m_displayInter->property("X").toInt();
-            int curY = m_displayInter->property("X").toInt();
-            int curWidth = m_displayInter->property("X").toInt();
-            int curHeight = m_displayInter->property("X").toInt();
+            int curY = m_displayInter->property("Y").toInt();
+            int curWidth = m_displayInter->property("Width").toInt();
+            int curHeight = m_displayInter->property("Height").toInt();
             QRect screenRect(curX, curY, curWidth, curHeight);
             if (screenRect.contains(dockRect))
                 return screenRect;
