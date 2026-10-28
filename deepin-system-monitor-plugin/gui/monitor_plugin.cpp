@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -216,7 +216,7 @@ QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
     QIcon icon = QIcon::fromTheme(iconName);
     if (!icon.isNull()) {
         const qreal ratio = m_itemWidget->devicePixelRatioF();
-        QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : size * ratio;
+        QSize pixmapSize = size * ratio;
         QPixmap pixmap = icon.pixmap(pixmapSize);
         pixmap.setDevicePixelRatio(ratio);
         if (dockPart == DockPart::QuickShow) {
