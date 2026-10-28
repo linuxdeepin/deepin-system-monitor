@@ -168,6 +168,11 @@ set(CPP_DBUS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/dbus_object.cpp
 )
 
+# >>> BEGIN add-uos ut-sm-t22: 补充 dbusalarmnotify 源（主程序 CMakeLists 已编入，测试目标此前缺失）
+list(APPEND HPP_DBUS ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/dbusalarmnotify.h)
+list(APPEND CPP_DBUS ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/dbusalarmnotify.cpp)
+# <<< END
+
 set(HPP_MODEL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/process_table_model.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/process_sort_filter_proxy_model.h
@@ -775,3 +780,7 @@ if(DOTEST)
     add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-server server-ut-build)
     add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-daemon daemon-ut-build)
 endif()
+
+# >>> BEGIN add-uos ut-sm-t22: 测试目标增加仓库根目录头文件路径（dbusalarmnotify.cpp 依赖根目录 helper.hpp）
+target_include_directories(${PROJECT_NAME_TEST} PRIVATE ${CMAKE_HOME_DIRECTORY})
+# <<< END
