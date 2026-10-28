@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -127,9 +127,17 @@ void displayShortcutHelpDialog(const QRect &rect)
     QStringList shortcutString;
     // shortcut help json formatted text param
     QString param1 = "-j=" + QString(doc.toJson().data());
-    // display position param
-    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
-    shortcutString << param1 << param2;
+    shortcutString << param1;
+
+    // Only pass position parameter on first launch; deepin-shortcut-viewer
+    // uses SingleApplication, so subsequent launches forward args to the
+    // existing instance which would call w->move(pos) and cause visible
+    // window jump on ARM/Wayland environments
+    int ret = QProcess::execute("pgrep", QStringList() << "-f" << "deepin-shortcut-viewer");
+    if (ret != 0) {
+        QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
+        shortcutString << param2;
+    }
 
     // detach this process
     shortcutViewProcess.startDetached("deepin-shortcut-viewer", shortcutString);
