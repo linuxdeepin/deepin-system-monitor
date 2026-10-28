@@ -27,9 +27,8 @@ public:
     // Copy assignment
     UnitFileInfoData &operator=(const UnitFileInfoData &rhs)
     {
-        Q_UNUSED(__alignment);
-
         if (this != &rhs) {
+            __alignment = rhs.__alignment;
             m_name = rhs.m_name;
             m_status = rhs.m_status;
         }
@@ -157,7 +156,7 @@ const QDataStream &operator>>(QDataStream &stream, UnitFileInfo &unit)
 // Output list of UnitFileInfo objects to DBus argument
 QDBusArgument &operator<<(QDBusArgument &argument, const UnitFileInfoList &list)
 {
-    argument.beginArray(qMetaTypeId<UnitFileInfoList>());
+    argument.beginArray(qMetaTypeId<UnitFileInfo>());
     foreach (const UnitFileInfo &unit, list) {
         argument << unit;
     }
