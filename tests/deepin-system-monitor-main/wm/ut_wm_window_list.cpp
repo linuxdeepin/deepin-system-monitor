@@ -128,11 +128,19 @@ static QDBusConnection stub_sessionBusInvalid()
     return QDBusConnection(QStringLiteral("invalid"));
 }
 
+typedef QList<WMWId> (*fptr_tray)(const WMWindowList *);
+
 QList<WMWId> stub_getTrayWindows(const WMWindowList *self)
 {
     Q_UNUSED(self);
     const FakeX &w = FakeX::instance();
     return QList<WMWId>(w.trayWindows.constBegin(), w.trayWindows.constEnd());
+}
+
+static QList<WMWId> stub_getTrayWindowsEmpty(const WMWindowList *self)
+{
+    Q_UNUSED(self);
+    return QList<WMWId>();
 }
 
 // 收集测试期 shellList/pathList 注入状态，TearDown 恢复
@@ -196,9 +204,6 @@ public:
         stub.set((fptr_user)&Process::userName, stub_userName);
         typedef QByteArrayList (*fptr_cmd)(const Process *);
         stub.set((fptr_cmd)&Process::cmdline, stub_cmdline);
-
-        typedef QList<WMWId> (*fptr_tray)(const WMWindowList *);
-        stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
     }
 
     xcb_connection_t *conn() const { return FakeX::instance().conn; }
@@ -213,6 +218,7 @@ TEST_F(UT_WMWindowList, UpdateWindowListCache_ClientList_PopulatesGuiAndTrayCach
     // Arrange：client world：0x107(nopid-normal) 0x105(ionly-normal) 0x102(dialog)
     //          0x101(normal) 全部入 guiAppcache；托盘 0x201(pid 3003)
     FakeX::instance().trayWindows = { 0x201 };
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
     WMWindowList wm;
 
     // Act
@@ -234,6 +240,7 @@ TEST_F(UT_WMWindowList, UpdateWindowListCache_ReplyNull_EarlyReturnKeepsCaches)
 {
     // Arrange：先放入一个旧缓存项，再注入 client list reply 失败
     FakeX::instance().trayWindows = { 0x201 };
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
     WMWindowList wm;
     wm.m_guiAppcache[9999] = core::wm::WMWindow(new wm_window_t());
     FakeX::instance().failPropertyReply = 1;
@@ -250,6 +257,8 @@ TEST_F(UT_WMWindowList, GetWindowTitle_SingleTitle_ReturnsTitle)
 {
     // Arrange：client world 建好后 3001 缓存标题为 "Files"
     FakeX::instance().trayWindows = { 0x201 };
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindowsEmpty);
     WMWindowList wm;
     wm.updateWindowListCache();
 
@@ -281,6 +290,7 @@ TEST_F(UT_WMWindowList, GetWindowTitle_DuplicatePid_LastWindowWriteWins)
     w.windows[w.root].childrenBottomUp = { 0x107, 0x105, 0x102, 0x103, 0x101 };
     w.clientListBottomUp = { 0x107, 0x105, 0x102, 0x103, 0x101 };
 
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindowsEmpty);
     WMWindowList wm;
     wm.updateWindowListCache();
 
@@ -296,6 +306,7 @@ TEST_F(UT_WMWindowList, GetWindowTitle_DuplicatePid_LastWindowWriteWins)
 TEST_F(UT_WMWindowList, GetWindowTitle_UnknownPid_ReturnsEmptyString)
 {
     // Arrange：client list 建缓存后查询不存在的 pid
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindowsEmpty);
     WMWindowList wm;
     wm.updateWindowListCache();
 
@@ -402,6 +413,7 @@ TEST_F(UT_WMWindowList, GetWindowIcon_MultipleSizes_ParsesLargest)
 {
     // Arrange：两个图标 2x2 与 4x4，应取后者
     FakeX::instance().trayWindows = { 0x201 };
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
     FakeX::instance().windows[0x101].iconData = {
         2, 2, 1, 2, 3, 4,
         4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
@@ -423,6 +435,7 @@ TEST_F(UT_WMWindowList, GetWindowIcon_DataTooSmall_ReturnsNullImage)
 {
     // Arrange：iconData 为空（len=0 < 2 字节 early-return）
     FakeX::instance().trayWindows = { 0x201 };
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
     WMWindowList wm;
     wm.updateWindowListCache();
     ASSERT_TRUE(wm.getWindowIcon(3001).isNull());
@@ -441,6 +454,7 @@ TEST_F(UT_WMWindowList, GetWindowIcon_InvalidDimensions_BreaksParseLoop)
 {
     // Arrange：宽 2000 超过 maxImageW(1024) 上限
     FakeX::instance().trayWindows = { 0x201 };
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
     FakeX::instance().windows[0x101].iconData = { 2000, 2000, 1, 1, 2, 2 };
     WMWindowList wm;
     wm.updateWindowListCache();
@@ -456,6 +470,7 @@ TEST_F(UT_WMWindowList, GetWindowIcon_InvalidDimensions_BreaksParseLoop)
 TEST_F(UT_WMWindowList, GetWindowIcon_PidNotInCache_QueriesSentinelWindow)
 {
     // Arrange：pid 不在缓存 → winId=UINT32_MAX，属性缺失
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindowsEmpty);
     WMWindowList wm;
     wm.updateWindowListCache();
 
@@ -467,11 +482,43 @@ TEST_F(UT_WMWindowList, GetWindowIcon_PidNotInCache_QueriesSentinelWindow)
     EXPECT_EQ(icon.width(), 0);
 }
 
+TEST_F(UT_WMWindowList, GetWindowIcon_OversizedIcon_ReturnsNullImage)
+{
+    // Arrange：图标尺寸超过 maxImageW/maxImageH（1024）上限
+    FakeX::instance().trayWindows = { 0x201 };
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
+    FakeX::instance().windows[0x101].iconData = { 2000, 2000, 1 };
+    WMWindowList wm;
+    wm.updateWindowListCache();
+
+    // Act
+    const QImage icon = wm.getWindowIcon(3001);
+
+    // Assert：超尺寸图标直接返回空图像，不构造 QImage
+    EXPECT_EQ(icon.isNull(), true);
+    EXPECT_EQ(icon.width(), 0);
+}
+
+TEST_F(UT_WMWindowList, GetWindowInfo_NoPidProperty_PidFallsBackToMinusOne)
+{
+    // Arrange：0x106 窗口无 _NET_WM_PID 属性（hasPidProp=false）
+    WMWindowList wm;
+    wm.updateWindowListCache();
+
+    // Act
+    const pid_t pid = wm.getWindowPid(0x106);
+
+    // Assert：无 pid 属性 → pid 回落 -1；且触发了 icccm 名称回退（证伪仅限该窗口缺失 _NET_WM_NAME）
+    EXPECT_EQ(pid, -1);
+    EXPECT_EQ(FakeX::instance().icccmNameRequests, 1);
+}
+
 TEST_F(UT_WMWindowList, GetAppCount_RootUser_SumsRootOwnedAcrossCaches)
 {
     // Arrange：root 用户且所有应用 uid=0；gui 4 + tray 1 + desktop 2
     FakeX &w = FakeX::instance();
     w.trayWindows = { 0x201 };
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
     w.procUser = QStringLiteral("root");
     w.defaultUid = 0;
     WMWindowList wm;
@@ -494,6 +541,7 @@ TEST_F(UT_WMWindowList, GetAppCount_NonRootUser_SubtractsRootOwnedApps)
     // Arrange：非 root 用户；gui 中仅 3001 为 root，desktop 中仅 5001 为 root
     FakeX &w = FakeX::instance();
     w.trayWindows = { 0x201 };
+    stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
     w.procUser = QStringLiteral("user");
     w.procUid[3001] = 0;
     w.procUid[5001] = 0;
@@ -532,6 +580,7 @@ struct DesktopEntryParam
 {
     const char *desc;
     QList<QString> shellListExtra;
+    QList<QString> scriptListExtra;
     QList<QString> pathListExtra;
     QByteArrayList cmdline;
     bool expectAdded;
@@ -546,6 +595,7 @@ TEST_P(UT_WMWindowListDesktopEntry, AddDesktopEntryApp_PathResolution_Equivalenc
 {
     // Arrange
     common::init::shellList << GetParam().shellListExtra;
+    common::init::scriptList << GetParam().scriptListExtra;
     common::init::pathList << GetParam().pathListExtra;
     WMWindowList wm;
     Process proc(4001);
@@ -563,12 +613,12 @@ TEST_P(UT_WMWindowListDesktopEntry, AddDesktopEntryApp_PathResolution_Equivalenc
 
 INSTANTIATE_TEST_SUITE_P(PathResolution, UT_WMWindowListDesktopEntry, ValuesIn(
     std::vector<DesktopEntryParam> {   // 路径串仅为缓存键（tempPath 占位，不触盘）
-        { "fullpath-normal-binary-added", {}, {}, { "/usr/bin/deepin-editor" }, true },  // tempPath 占位键，不触盘
-        { "fullpath-shell-skipped", { "mysh" }, {}, { "/bin/mysh" }, false },  // tempPath 占位键，不触盘
-        { "fullpath-script-skipped", {}, {}, { "/usr/bin/python3", "script.py" }, false },  // tempPath 占位键，不触盘
-        { "raw-name-resolved-via-pathlist-added", {}, { "/opt/apps" }, { "deepin-app" }, true },  // tempPath 占位键，不触盘
-        { "raw-shell-resolved-via-pathlist-skipped", { "bash" }, { "/opt/shells" }, { "bash" }, false },  // tempPath 占位键，不触盘
-        { "empty-cmdline-added", {}, {}, {}, true },
+        { "fullpath-normal-binary-added", {}, {}, {}, { "/usr/bin/deepin-editor" }, true },  // tempPath 占位键，不触盘
+        { "fullpath-shell-skipped", { "mysh" }, {}, {}, { "/bin/mysh" }, false },  // tempPath 占位键，不触盘
+        { "fullpath-script-skipped", {}, { "/usr/bin/python" }, {}, { "/usr/bin/python3", "script.py" }, false },  // tempPath 占位键，不触盘
+        { "raw-name-resolved-via-pathlist-added", {}, {}, { "/opt/apps" }, { "deepin-app" }, true },  // tempPath 占位键，不触盘
+        { "raw-shell-resolved-via-pathlist-skipped", { "bash" }, {}, { "/opt/shells" }, { "bash" }, false },  // tempPath 占位键，不触盘
+        { "empty-cmdline-added", {}, {}, {}, {}, true },
     }));
 
 TEST_F(UT_WMWindowList, AddDesktopEntryApp_NullPointer_NoopNoCrash)

@@ -474,6 +474,200 @@ TEST_F(UT_WMInfo, GetHoveredByWindowList_NonHiddenStateWindow_IncludedInList)
     EXPECT_EQ(result.front()->wid, static_cast<WMWId>(0x101));
 }
 
+TEST_F(UT_WMInfo, SelectWindow_AllWindowTypeAtoms_ClassifiedWithoutAffectingSelection)
+{
+    // Arrange：NORM 窗口追加 11 类窗口类型 + 未知类型 atom（B15 等价类覆盖）
+    FakeX &w = FakeX::instance();
+    w.windows[0x101].types
+        << w.internAtom("_NET_WM_WINDOW_TYPE_TOOLBAR")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_MENU")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_UTILITY")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_SPLASH")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_DIALOG")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_DROPDOWN_MENU")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_POPUP_MENU")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_TOOLTIP")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_NOTIFICATION")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_COMBO")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_DND")
+        << w.internAtom("_NET_WM_WINDOW_TYPE_FAKE_UNKNOWN");
+    WMInfo info;
+
+    // Act
+    std::list<WMWindowArea> result = info.selectWindow(QPoint(150, 150));
+
+    // Assert：非 dock/desktop 类型不改变选中语义，窗口仍可被选中
+    ASSERT_EQ(result.size(), 1);
+    EXPECT_EQ(result.front()->pid, 2001);
+    EXPECT_EQ(result.front()->wid, static_cast<WMWId>(0x101));
+}
+
+TEST_F(UT_WMInfo, SelectWindow_AllWindowStateAtoms_ClassifiedWithoutAffectingSelection)
+{
+    // Arrange：NORM 窗口追加 11 类状态（不含 HIDDEN）+ 未知状态 atom
+    FakeX &w = FakeX::instance();
+    w.windows[0x101].states
+        << w.internAtom("_NET_WM_STATE_MODAL")
+        << w.internAtom("_NET_WM_STATE_STICKY")
+        << w.internAtom("_NET_WM_STATE_MAXIMIZED_VERT")
+        << w.internAtom("_NET_WM_STATE_MAXIMIZED_HORZ")
+        << w.internAtom("_NET_WM_STATE_SHADED")
+        << w.internAtom("_NET_WM_STATE_SKIP_TASKBAR")
+        << w.internAtom("_NET_WM_STATE_SKIP_PAGER")
+        << w.internAtom("_NET_WM_STATE_FULLSCREEN")
+        << w.internAtom("_NET_WM_STATE_ABOVE")
+        << w.internAtom("_NET_WM_STATE_BELOW")
+        << w.internAtom("_NET_WM_STATE_DEMANDS_ATTENTION")
+        << w.internAtom("_NET_WM_STATE_FAKE_UNKNOWN");
+    WMInfo info;
+
+    // Act
+    std::list<WMWindowArea> result = info.selectWindow(QPoint(150, 150));
+
+    // Assert：非 HIDDEN 状态不触发过滤，窗口仍可被选中
+    ASSERT_EQ(result.size(), 1);
+    EXPECT_EQ(result.front()->pid, 2001);
+    EXPECT_EQ(result.front()->wid, static_cast<WMWId>(0x101));
+}
+
+TEST_F(UT_WMInfo, SelectWindow_UnviewableWindow_SkippedByMapState)
+{
+    // Arrange：可选中窗口被置为 UNVIEWABLE（attributes switch case 覆盖）
+    FakeX &w = FakeX::instance();
+    w.windows[0x101].mapState = XCB_MAP_STATE_UNVIEWABLE;
+    WMInfo info;
+
+    // Act
+    std::list<WMWindowArea> result = info.selectWindow(QPoint(150, 150));
+
+    // Assert：非 VIEWABLE 状态在扫描中被跳过，但坐标换算仍发生
+    EXPECT_EQ(result.empty(), true);
+    EXPECT_EQ(info.getRootWindow(), static_cast<WMWId>(1));
+}
+
+TEST_F(UT_WMInfo, SelectWindow_InputOnlyWindow_SkippedByWindowClass)
+{
+    // Arrange：可选中窗口被置为 INPUT_ONLY 类（class switch case 覆盖）
+    FakeX &w = FakeX::instance();
+    w.windows[0x101].wclass = XCB_WINDOW_CLASS_INPUT_ONLY;
+    WMInfo info;
+
+    // Act
+    std::list<WMWindowArea> result = info.selectWindow(QPoint(150, 150));
+
+    // Assert：非 InputOutput 类在扫描中被跳过，但坐标换算仍发生
+    EXPECT_EQ(result.empty(), true);
+    EXPECT_EQ(info.getRootWindow(), static_cast<WMWId>(1));
+}
+
+TEST_F(UT_WMInfo, SelectWindow_UnknownMapStateAndClass_SkippedByDefaultBranch)
+{
+    // Arrange：非法 map_state 与 _class 取值（switch default 分支覆盖）
+    FakeX &w = FakeX::instance();
+    w.windows[0x101].mapState = 0x7F;
+    w.windows[0x101].wclass = 0x7F;
+    WMInfo info;
+
+    // Act
+    std::list<WMWindowArea> result = info.selectWindow(QPoint(150, 150));
+
+    // Assert：未知 map_state/class 归类后仍按非 VIEWABLE/非 IO 跳过，但坐标换算仍发生
+    EXPECT_EQ(result.empty(), true);
+    EXPECT_EQ(info.getRootWindow(), static_cast<WMWId>(1));
+}
+
+TEST_F(UT_WMInfo, Construction_TreeReplyFailed_RootExtWithoutParentAndChildren)
+{
+    // Arrange：根窗口 query_tree reply 注入失败
+    FakeX &w = FakeX::instance();
+    w.failTreeReply = 1;
+    WMInfo info;
+
+    // Act
+    const WMWId root = info.getRootWindow();
+    std::list<WMWindowArea> result = info.selectWindow(QPoint(150, 150));
+
+    // Assert：根 ext 仍存在（root=0x1），但子树为空 → 无可选中窗口
+    EXPECT_EQ(root, static_cast<WMWId>(0x1));
+    EXPECT_EQ(result.empty(), true);
+}
+
+TEST_F(UT_WMInfo, Construction_AttrReplyFailed_RootExtDefaultsUnknownStateAndClass)
+{
+    // Arrange：根窗口 attributes reply 注入失败
+    FakeX &w = FakeX::instance();
+    w.failAttrReply = 1;
+    WMInfo info;
+
+    // Act：子窗口 attributes 正常，扫描选中语义不受影响
+    std::list<WMWindowArea> result = info.selectWindow(QPoint(150, 150));
+
+    // Assert：根 ext 存在且子树完整，普通窗口仍可选中
+    EXPECT_EQ(info.getRootWindow(), static_cast<WMWId>(0x1));
+    ASSERT_EQ(result.size(), 1);
+    EXPECT_EQ(result.front()->pid, 2001);
+}
+
+TEST_F(UT_WMInfo, Construction_FrameExtentsReplyFailed_ExtentsFallbackEmpty)
+{
+    // Arrange：每个窗口依序读 6 个 property reply（name/desktop/type/state/pid/frame），
+    // 注入第 6 个失败 → 根窗口 frame extents 缺失，走 extents 置空分支
+    FakeX &w = FakeX::instance();
+    w.failPropertyReply = 6;
+    WMInfo info;
+
+    // Act：子窗口回复不受影响，正常选中
+    std::list<WMWindowArea> result = info.selectWindow(QPoint(150, 150));
+
+    // Assert：普通窗口仍可选中且矩形含自身边框余量
+    ASSERT_EQ(result.size(), 1);
+    EXPECT_EQ(result.front()->pid, 2001);
+    EXPECT_EQ(result.front()->rect, QRect(94, 94, 308, 208));
+}
+
+TEST_F(UT_WMInfo, Construction_AtomNameReplyFailed_UnknownTypeKeepsWindowSelectable)
+{
+    // Arrange：首个 atom-name reply 注入失败 → getAtomName 走告警分支并缓存空名
+    FakeX &w = FakeX::instance();
+    w.failAtomNameReply = 1;
+    WMInfo info;
+
+    // Act：0x101 的类型解析降级为 unknown（非 dock/desktop）→ 仍可选中
+    std::list<WMWindowArea> result = info.selectWindow(QPoint(150, 150));
+
+    // Assert
+    ASSERT_EQ(result.size(), 1);
+    EXPECT_EQ(result.front()->pid, 2001);
+    EXPECT_EQ(result.front()->wid, static_cast<WMWId>(0x101));
+}
+
+TEST_F(UT_WMInfo, GetHoveredByWindowList_NestedChild_VisitedViaRecursion)
+{
+    // Arrange：0x101 下挂一层嵌套子窗口 0x109（未映射 → 入选集过滤），验证递归扫描
+    FakeX &w = FakeX::instance();
+    FakeWindow nested;
+    nested.id = 0x109;
+    nested.pid = -1;
+    nested.name = "Nested";
+    nested.wmName = "Nested";
+    nested.hasDesktopProp = true;
+    nested.desktop = 0;
+    nested.types << w.internAtom("_NET_WM_WINDOW_TYPE_NORMAL");
+    nested.mapState = XCB_MAP_STATE_UNMAPPED;
+    nested.parent = 0x101;
+    w.windows.insert(0x109, nested);
+    w.windows[0x101].childrenBottomUp = { 0x109 };
+    WMInfo info;
+    QRect area(0, 0, 1024, 768);
+
+    // Act
+    std::list<WMWindowArea> result = info.getHoveredByWindowList(0xFFFF, area);
+
+    // Assert：递归访问子层后，入选集仍为 [NORM, DOCK]，未映射的 0x109 被过滤
+    EXPECT_EQ(pidList(result), QVector<pid_t>({ 2001, 2002 }));
+    EXPECT_EQ(result.back()->pid, 2002);
+}
+
 TEST_F(UT_WMInfo, IsCursorHoveringDocks_DockRectBoundaries_ContainsExclusiveEdges)
 {
     // Arrange：标准世界 dock 矩形 (0,0,500,40)
