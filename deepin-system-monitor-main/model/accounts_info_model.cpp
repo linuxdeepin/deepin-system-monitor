@@ -48,7 +48,7 @@ AccountsInfoModel::AccountsInfoModel(QObject *parent)
     QDBusConnection::systemBus().connect(LoginService, LoginPath, LoginInterface, "SessionNew",
                                          this, SLOT(onSessionNew(QString, QDBusObjectPath)));
     QDBusConnection::systemBus().connect(LoginService, LoginPath, LoginInterface, "SessionRemoved",
-                                         this, SLOT(onSessionNew(QString, QDBusObjectPath)));
+                                         this, SLOT(onSessionRemoved(QString, QDBusObjectPath)));
 }
 
 AccountsInfoModel::~AccountsInfoModel()
