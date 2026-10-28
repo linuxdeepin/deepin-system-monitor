@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -302,10 +302,10 @@ void MonitorPlugin::loadPlugin()
             m_refershTimer->stop();
         } else {
             udpateInfo();
-            m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "..."
-                                                                    << "..."
-                                                                    << "..."
-                                                                    << "...");
+            m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << m_cpuStr
+                                                                    << m_memStr
+                                                                    << m_downloadStr
+                                                                    << m_uploadStr);
             m_refershTimer->start();
         }
     });
