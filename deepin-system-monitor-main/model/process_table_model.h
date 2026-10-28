@@ -73,6 +73,7 @@ public:
      * @param parent Parent object
      */
     explicit ProcessTableModel(QObject *parent = nullptr, const QString &username = nullptr);
+    ~ProcessTableModel() override;
 
     /**
      * @brief Update process model with the data provided by list

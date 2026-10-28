@@ -8,6 +8,7 @@
 #include "common/common.h"
 
 #include <QDebug>
+#include <QCoreApplication>
 #include <QTimer>
 #include <DApplication>
 #include <DGuiApplicationHelper>
@@ -48,6 +49,29 @@ ProcessTableModel::ProcessTableModel(QObject *parent, const QString &username)
         qCDebug(app) << "theme changed, updating process list";
         updateProcessList();
     });
+}
+
+// destructor
+ProcessTableModel::~ProcessTableModel()
+{
+    qCDebug(app) << "ProcessTableModel destroyed";
+
+    // Disconnect cross-thread queued connections from SystemMonitor and ProcessDB
+    // (both live in SystemMonitorThread). Without explicit disconnect, posted
+    // QMetaCallEvent entries may be delivered after this object is destroyed.
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    if (monitor) {
+        disconnect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessTableModel::updateProcessList);
+    }
+    auto *db = ProcessDB::instance();
+    if (db) {
+        disconnect(db, &ProcessDB::processEnded, this, &ProcessTableModel::removeProcess);
+        disconnect(db, &ProcessDB::processPaused, this, &ProcessTableModel::updateProcessState);
+        disconnect(db, &ProcessDB::processResumed, this, &ProcessTableModel::updateProcessState);
+        disconnect(db, &ProcessDB::processKilled, this, &ProcessTableModel::removeProcess);
+        disconnect(db, &ProcessDB::processPriorityChanged, this, &ProcessTableModel::updateProcessPriority);
+    }
+    QCoreApplication::removePostedEvents(this);
 }
 
 char ProcessTableModel::getProcessState(pid_t pid) const
