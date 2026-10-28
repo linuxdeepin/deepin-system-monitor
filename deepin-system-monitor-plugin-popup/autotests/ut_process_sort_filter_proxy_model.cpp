@@ -66,7 +66,7 @@
  * 4. 所有的 ASSERT 宏的返回值都被检查? [是]
  * 5. 用例覆盖了所有分支? [是] filterAcceptsRow 全部 11 个分支见上方分支声明表
  * 6. 本文件与类定义的头文件一致(用例使用的是头文件中公开的方法)? [是]
- * 7. 所有的属性和方法都被测试到了? [是] 私有成员 m_search/m_hanwords/m_fileterType 直接访问(-fno-access-control)
+ * 7. 所有的属性和方法都被测试到了? [是] 私有成员 m_search/m_hanwords/m_filterType 直接访问(-fno-access-control)
  * 8. 测试代码可读性高,测试方法意义明确? [是]
  * 9. 任何测试不能对其它测试产生依赖? [是] 每用例独立构造 source/proxy
  * 10. 使用的是 Google Test 而不是 QtTest? [是]
@@ -143,7 +143,7 @@ public:
 // ==================== 私有成员访问说明 ====================
 // 测试目标由 tests/CMakeLists.txt 全局追加 -fno-access-control 编译,
 // 测试代码可直接访问 private/protected 成员,无需 addr_pri.h 宏。
-// 注: 工作区源码实际成员名为 m_fileterType(上游原始拼写,保持既有契约)。
+// 注: 成员名已于 PR #653 由上游原始拼写 m_fileterType 统一修正为 m_filterType。
 
 // ==================== 拼音分支打桩 ====================
 // 打桩 QLocale 静态工厂为中文 locale,激活 filterAcceptsRow 的拼音分支
@@ -263,20 +263,20 @@ TEST_F(UT_ProcessSortFilterProxyModel, setSortFilterString_Text_UpdatesSearchReg
 // 用例名称: setFilterType_Types_ReappliesFilter
 // 测试类型: 正常场景
 // 覆盖函数: setFilterType
-// 操作步骤: 依次设置 3 种过滤类型,读取私有 m_fileterType
+// 操作步骤: 依次设置 3 种过滤类型,读取私有 m_filterType
 // 预期结果: 过滤类型成员随调用更新(默认 kNoFilter)
 TEST_F(UT_ProcessSortFilterProxyModel, setFilterType_Types_ReappliesFilter)
 {
     // Arrange: 默认构造的过滤类型为 kNoFilter(2)
-    EXPECT_EQ(m_tester->m_fileterType, kNoFilter);
+    EXPECT_EQ(m_tester->m_filterType, kNoFilter);
     // Act: 执行上述步骤
     // Assert: 逐个设置并验证
     m_tester->setFilterType(kFilterCurrentUser);
-    EXPECT_EQ(m_tester->m_fileterType, kFilterCurrentUser);
+    EXPECT_EQ(m_tester->m_filterType, kFilterCurrentUser);
     m_tester->setFilterType(kFilterApps);
-    EXPECT_EQ(m_tester->m_fileterType, kFilterApps);
+    EXPECT_EQ(m_tester->m_filterType, kFilterApps);
     m_tester->setFilterType(kNoFilter);
-    EXPECT_EQ(m_tester->m_fileterType, kNoFilter);
+    EXPECT_EQ(m_tester->m_filterType, kNoFilter);
 }
 
 // 用例名称: filterAcceptsRow_noFilter_acceptsMatchingText
