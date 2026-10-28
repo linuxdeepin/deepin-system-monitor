@@ -157,6 +157,9 @@ QVariant SystemServiceTableModel::headerData(int section,
                                              int role) const
 {
     // qCDebug(app) << "Getting header data for section:" << section << "role:" << role;
+    if (orientation != Qt::Horizontal) {
+        return {};
+    }
     if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         switch (section) {
         case kSystemServiceNameColumn:
