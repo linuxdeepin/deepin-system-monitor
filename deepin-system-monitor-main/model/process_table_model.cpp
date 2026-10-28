@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "ddlog.h"
@@ -9,6 +9,7 @@
 
 #include <QDebug>
 #include <QTimer>
+#include <QSet>
 #include <DApplication>
 #include <DGuiApplicationHelper>
 #include <DPlatformTheme>
@@ -93,9 +94,13 @@ void ProcessTableModel::updateProcessListWithUserSpecified()
     m_procIdList.clear();
     m_processList.clear();
     int raw;
+    QSet<QString> seenDisplayNames;
     for (const auto &pid : newpidlst) {
         Process changedProc = processSet->getProcessById(pid);
         if (changedProc.userName() == m_userModeName) {
+            if (seenDisplayNames.contains(changedProc.displayName()))
+                continue;
+            seenDisplayNames << changedProc.displayName();
             raw = m_procIdList.size();
             beginInsertRows({}, raw, raw);
             m_procIdList << pid;
