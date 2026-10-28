@@ -15,6 +15,7 @@
 // | paintEvent     | mid   | hover:2+路径:2         | 3   | 3      |
 // | changeFont     | low   | -                      | 1   | 1      |
 // | eventFilter    | low   | enter/leave/透传       | 2   | 2      |
+// | mouseDoubleClickEvent | low | 左键/非左键        | 2   | 2      |
 //
 // 分支清单（源自真实源码，self-check §2c）：
 // - ctor: parent->width()-20 定宽(111 高); downloadSpeeds 预填 pointsNumber+1 个 0;
@@ -24,6 +25,7 @@
 // - changeTheme: B1 LightType → 亮色 trans/图标; B2 DarkType → 暗色 trans/图标; B3 default → 仅刷新颜色
 // - paintEvent: B1 m_isHover → hoverTrans 填充 / 透明填充; B2 downloadPath 路径绘制（有/无数据）
 // - eventFilter: B1 Enter → hover=true 消费; B2 Leave → hover=false 消费; B3 其他透传基类
+// - mouseDoubleClickEvent: B1 LeftButton → sendJumpWidgetMessage("MSG_CPU"); B2 其他走基类
 
 #include <gtest/gtest.h>
 #include <QApplication>
@@ -38,6 +40,9 @@
 static qreal g_cpuPer = 42.5;
 static bool g_cpuReadOk = true;
 
+// sendJumpWidgetMessage 调用计数（避免真实拉起主进程）
+static int g_cpuJumpCalls = 0;
+
 class CpuWidgetTest : public ::testing::Test
 {
 protected:
@@ -49,6 +54,7 @@ protected:
         parent->resize(280, 400);
         g_cpuPer = 42.5;
         g_cpuReadOk = true;
+        g_cpuJumpCalls = 0;
     }
 
     void TearDown() override
@@ -297,5 +303,43 @@ TEST_F(CpuWidgetTest, EventFilter_OtherObject_DelegatesToBase)
     // Assert: 透传基类，默认不消费
     EXPECT_FALSE(consumed);
     EXPECT_EQ(w->width(), 260);
+    delete w;
+}
+
+// ═══════════════════ mouseDoubleClickEvent ═══════════════════
+
+TEST_F(CpuWidgetTest, MouseDoubleClick_LeftButton_JumpMessageSent)
+{
+    // Arrange: 桩定 sendJumpWidgetMessage 并构造左键双击事件（B1 分支）
+    stub.set_lamda(ADDR(DataDealSingleton, sendJumpWidgetMessage), [](DataDealSingleton *, const QString &) {
+        ++g_cpuJumpCalls;
+        return false;
+    });
+    CpuWidget *w = new CpuWidget(parent);
+    QMouseEvent dblClick(QEvent::MouseButtonDblClick, QPointF(10, 10),
+                         Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    // Act: 直接触发双击处理
+    w->mouseDoubleClickEvent(&dblClick);
+    // Assert: 跳转消息恰好发送一次
+    EXPECT_EQ(g_cpuJumpCalls, 1);
+    EXPECT_FALSE(w->grab().isNull());
+    delete w;
+}
+
+TEST_F(CpuWidgetTest, MouseDoubleClick_RightButton_MessageIgnored)
+{
+    // Arrange: 桩定 sendJumpWidgetMessage 并构造右键双击事件（B2 走基类分支）
+    stub.set_lamda(ADDR(DataDealSingleton, sendJumpWidgetMessage), [](DataDealSingleton *, const QString &) {
+        ++g_cpuJumpCalls;
+        return false;
+    });
+    CpuWidget *w = new CpuWidget(parent);
+    QMouseEvent dblClick(QEvent::MouseButtonDblClick, QPointF(10, 10),
+                         Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+    // Act: 直接触发双击处理
+    w->mouseDoubleClickEvent(&dblClick);
+    // Assert: 不发送跳转消息
+    EXPECT_EQ(g_cpuJumpCalls, 0);
+    EXPECT_FALSE(w->grab().isNull());
     delete w;
 }
