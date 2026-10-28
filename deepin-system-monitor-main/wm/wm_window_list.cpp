@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,6 +16,11 @@
 
 #include <xcb/xcb.h>
 
+#ifdef USE_DEEPIN_WAYLAND
+#include "3rdparty/displayjack/wayland_client.h"
+#include <QLibrary>
+#endif
+
 using namespace core::process;
 using namespace common::core;
 using namespace common::init;
@@ -23,6 +28,16 @@ using namespace core::system;
 
 namespace core {
 namespace wm {
+
+#ifdef USE_DEEPIN_WAYLAND
+typedef int (*InitDtkWmDisplayPtr)();
+typedef void (*DestoryDtkWmDisplayPtr)();
+typedef int (*GetAllWindowStatesListPtr)(WindowState **states);
+
+static InitDtkWmDisplayPtr InitDtkWmDisplay = nullptr;
+static DestoryDtkWmDisplayPtr DestoryDtkWmDisplay = nullptr;
+static GetAllWindowStatesListPtr GetAllWindowStatesList = nullptr;
+#endif
 
 struct XReplyDeleter {
     void operator()(void *p)
@@ -40,6 +55,27 @@ const int offsetImagePointerWH = 2;
 WMWindowList::WMWindowList(QObject *parent)
     : QObject(parent)
 {
+#ifdef USE_DEEPIN_WAYLAND
+    if (WaylandCentered) {
+        QLibrary library("libdtkwmjack.so");
+        InitDtkWmDisplay = reinterpret_cast<InitDtkWmDisplayPtr>(library.resolve("InitDtkWmDisplay"));
+        DestoryDtkWmDisplay = reinterpret_cast<DestoryDtkWmDisplayPtr>(library.resolve("DestoryDtkWmDisplay"));
+        GetAllWindowStatesList = reinterpret_cast<GetAllWindowStatesListPtr>(library.resolve("GetAllWindowStatesList"));
+
+        if (InitDtkWmDisplay)
+            InitDtkWmDisplay();
+    }
+#endif
+}
+
+WMWindowList::~WMWindowList()
+{
+#ifdef USE_DEEPIN_WAYLAND
+    if (WaylandCentered) {
+        if (DestoryDtkWmDisplay)
+            DestoryDtkWmDisplay();
+    }
+#endif
 }
 
 void WMWindowList::addDesktopEntryApp(Process *proc)
@@ -290,6 +326,32 @@ QList<WMWId> WMWindowList::getTrayWindows() const
 void WMWindowList::updateWindowListCache()
 {
     m_desktopEntryCache.clear();
+
+#ifdef USE_DEEPIN_WAYLAND
+    if (WaylandCentered) {
+        m_guiAppcache.clear();
+        m_trayAppcache.clear();
+
+        if (GetAllWindowStatesList) {
+            WindowState *pStates = nullptr;
+            int nCount = GetAllWindowStatesList(&pStates);
+            if (nCount > 0 && pStates) {
+                for (int i = 0; i < nCount; i++) {
+                    WindowState *p = &pStates[i];
+                    if (p->pid > 0) {
+                        WMWindow window(new struct wm_window_t());
+                        window->winId = static_cast<WMWId>(p->windowId);
+                        window->pid = p->pid;
+                        window->title = QString::fromUtf8(p->resourceName);
+                        m_guiAppcache[p->pid] = std::move(window);
+                    }
+                }
+                free(pStates);
+            }
+        }
+        return;
+    }
+#endif
 
     auto *conn = m_conn.xcb_connection();
     // get window info
