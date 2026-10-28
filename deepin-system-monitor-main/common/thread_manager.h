@@ -34,7 +34,9 @@ public slots:
 
 public:
     explicit ThreadManager() {}
-    virtual ~ThreadManager() {}
+    virtual ~ThreadManager() { cleanup(); }
+
+    void cleanup();
 
 private:
     QMap<int, BaseThread *> m_threadDB;
