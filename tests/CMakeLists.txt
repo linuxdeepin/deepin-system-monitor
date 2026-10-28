@@ -725,3 +725,7 @@ if(CMAKE_SAFETYTEST STREQUAL "CMAKE_SAFETYTEST_ARG_ON")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=undefined,address -O2")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=undefined,address -O2")
 endif()
+
+# popup 插件 GUI 单测(独立可执行目标 dsm-popup-ut,避免与主程序同名类 ODR 冲突)
+add_subdirectory(${CMAKE_HOME_DIRECTORY}/deepin-system-monitor-plugin-popup/autotests
+                 ${CMAKE_CURRENT_BINARY_DIR}/popup-ut)
