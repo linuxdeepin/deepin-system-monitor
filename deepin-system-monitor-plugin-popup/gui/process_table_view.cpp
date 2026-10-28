@@ -107,8 +107,8 @@ void ProcessTableView::onThemeTypeChanged()
 // event filter
 bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::KeyPress) {
-        //屏蔽鼠标按下的事件
+    if (obj == this && event->type() == QEvent::KeyPress) {
+        //屏蔽键盘按键事件
         return true;
     }
 

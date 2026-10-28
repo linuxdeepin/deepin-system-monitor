@@ -42,7 +42,7 @@ using namespace Utils;
 ProcessWidget::ProcessWidget(QWidget *parent)
     : QWidget(parent)
 {
-    m_width = parent->width() - 20;
+    m_width = parent ? parent->width() - 20 : 300;
     setFixedSize(m_width, m_processWidgetHeight);
     setContentsMargins(0, 0, 0, 0);
 
@@ -55,9 +55,6 @@ ProcessWidget::ProcessWidget(QWidget *parent)
 #endif
     changeTheme(dAppHelper->themeType());
 
-    changeFont(DApplication::font());
-    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
-            this, &ProcessWidget::changeFont);
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &ProcessWidget::changeFont);
@@ -97,6 +94,10 @@ ProcessWidget::~ProcessWidget() {}
 void ProcessWidget::updateStatus(qreal cpuPercent, const QList<qreal> cPercents)
 {
     totalCpuPercent = cpuPercent;
+
+    while (cpuPercents.size() < cPercents.size()) {
+        cpuPercents.append(QList<qreal>());
+    }
 
     for (int i = 0; i < cPercents.size(); i++) {
         QList<qreal> cpuPercent = cpuPercents[i];
@@ -157,8 +158,6 @@ void ProcessWidget::changeTheme(DGuiApplicationHelper::ColorType themeType)
 #else
     ltextColor = palette.color(DPalette::Text);
 #endif
-
-    textColor = palette.color(DPalette::Text);
 
     textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);

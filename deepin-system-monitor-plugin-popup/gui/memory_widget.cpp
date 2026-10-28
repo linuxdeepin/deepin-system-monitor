@@ -35,7 +35,7 @@ using namespace DDLog;
 MemoryWidget::MemoryWidget(QWidget *parent)
     : QWidget(parent)
 {
-    m_width = parent->width() - 20;
+    m_width = parent ? parent->width() - 20 : 300;
     setFixedSize(m_width, 153);
     setContentsMargins(0, 0, 0, 0);
 
