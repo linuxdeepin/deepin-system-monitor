@@ -56,7 +56,7 @@ private:
     // Pinyin represented as ascii string converted from chinese hanzi
     QString m_hanwords {};
 
-    int m_fileterType = 2;  //初始化过滤类型为所有应用
+    int m_filterType = 2;  //初始化过滤类型为所有应用
 };
 
 #endif  // PROCESS_SORT_FILTER_PROXY_MODEL_H
