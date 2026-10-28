@@ -34,7 +34,7 @@ using namespace DDLog;
 CpuWidget::CpuWidget(QWidget *parent)
     : QWidget(parent)
 {
-    m_width = parent->width() - 20;
+    m_width = parent ? parent->width() - 20 : 300;
     setFixedSize(m_width, 111);
     setContentsMargins(0, 0, 0, 0);
 
