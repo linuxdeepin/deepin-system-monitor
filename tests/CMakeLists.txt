@@ -729,3 +729,10 @@ endif()
 # popup 插件 GUI 单测(独立可执行目标 dsm-popup-ut,避免与主程序同名类 ODR 冲突)
 add_subdirectory(${CMAKE_HOME_DIRECTORY}/deepin-system-monitor-plugin-popup/autotests
                  ${CMAKE_CURRENT_BINARY_DIR}/popup-ut)
+
+# ---------------- qt-autotest-generator (V-6438): popup 插件 GUI 单元测试 ----------------
+# popup 模块与主程序存在同名类（ProcessTableView/BaseTableView/ProcessTableModel 等，
+# 均无命名空间），不能并入 deepin-system-monitor-test 目标，故独立成测试二进制。
+if(DOTEST)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-plugin-popup popup-ut-build)
+endif()
