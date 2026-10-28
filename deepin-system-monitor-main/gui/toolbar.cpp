@@ -251,5 +251,8 @@ void Toolbar::setProcessButtonChecked(bool checked)
     if (checked) {
         qCDebug(app) << "Setting process button checked";
         m_procBtn->setChecked(true);
+    } else {
+        qCDebug(app) << "Setting process button unchecked";
+        m_procBtn->setChecked(false);
     }
 }
