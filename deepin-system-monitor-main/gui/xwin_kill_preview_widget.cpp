@@ -37,13 +37,9 @@ using namespace core::wm;
 using namespace common::init;
 using namespace DDLog;
 
-typedef int (*InitDtkWmDisplayPtr)();
-typedef void (*DestoryDtkWmDisplayPtr)();
 typedef int (*GetAllWindowStatesListPtr)(WindowState **states);
 
 // displayjack库接口
-static InitDtkWmDisplayPtr InitDtkWmDisplay = nullptr;
-static DestoryDtkWmDisplayPtr DestoryDtkWmDisplay = nullptr;
 static GetAllWindowStatesListPtr GetAllWindowStatesList = nullptr;
 
 // constructor
@@ -60,12 +56,7 @@ XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent)
         m_connectionThreadObject = new ConnectionThread();
 
         QLibrary library("libdtkwmjack.so");
-        InitDtkWmDisplay = reinterpret_cast<int (*)()>(library.resolve("InitDtkWmDisplay"));
-        DestoryDtkWmDisplay = reinterpret_cast<void (*)()>(library.resolve("DestoryDtkWmDisplay"));
         GetAllWindowStatesList = reinterpret_cast<int (*)(WindowState **)>(library.resolve("GetAllWindowStatesList"));
-
-        if (InitDtkWmDisplay)
-            InitDtkWmDisplay();
     }
 #endif   // USE_DEEPIN_WAYLAND
 
@@ -97,9 +88,6 @@ XWinKillPreviewWidget::~XWinKillPreviewWidget()
         m_connectionThread->quit();
         m_connectionThread->wait();
         m_connectionThreadObject->deleteLater();
-
-        if (DestoryDtkWmDisplay)
-            DestoryDtkWmDisplay();
     }
 #endif   // USE_DEEPIN_WAYLAND
 }
