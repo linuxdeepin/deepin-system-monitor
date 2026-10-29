@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -233,10 +233,25 @@ void ProcessSet::scanProcess()
                     continue;
 
                 if (!isDescendantOf(subPid, mainPid)) {
-                    const Process &subProc = m_set[subPid];
-                    totalCpu += subProc.cpu();
-                    totalRecvBps += subProc.recvBps();
-                    totalSendBps += subProc.sentBps();
+                    // Skip if this subPid's resources are already included
+                    // in another subPid's cpu/IO — i.e., it is a descendant
+                    // of another non-mainPid group member whose totals were
+                    // already merged by mergeSubProcCpu/mergeSubProcNetIO.
+                    bool alreadyMerged = false;
+                    for (const pid_t &otherPid : pids) {
+                        if (otherPid == mainPid || otherPid == subPid)
+                            continue;
+                        if (isDescendantOf(subPid, otherPid)) {
+                            alreadyMerged = true;
+                            break;
+                        }
+                    }
+                    if (!alreadyMerged) {
+                        const Process &subProc = m_set[subPid];
+                        totalCpu += subProc.cpu();
+                        totalRecvBps += subProc.recvBps();
+                        totalSendBps += subProc.sentBps();
+                    }
                 }
                 m_set.remove(subPid);
             }
