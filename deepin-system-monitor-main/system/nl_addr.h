@@ -85,7 +85,11 @@ inline void NLAddr::local()
     if (arrayBuffer.size() == 2) {
         int n = arrayBuffer.last().toInt();
         char mask[32];
-        unsigned int addr = LMOVE(0xffffffff, 32 - n);
+        // Guard against undefined behaviour: shifting by 32 (n==0) or by a
+        // negative amount (n>32, e.g. IPv6 prefixes) is UB on unsigned int.
+        // n<=0: mask all-zero (/0 default route); n>=32: mask all-one (/32
+        // host route); 0<n<32: normal left-shift.
+        unsigned int addr = (n <= 0) ? 0u : (n >= 32) ? 0xffffffffu : LMOVE(0xffffffff, 32 - n);
         sprintf(mask, "%u.%u.%u.%u", RMOVE(addr, 24), RMOVE(addr, 16) & 0xff, RMOVE(addr, 8) & 0xff, addr & 0xff);
         netAddr = arrayBuffer.first();
         netMask = QByteArray(mask);

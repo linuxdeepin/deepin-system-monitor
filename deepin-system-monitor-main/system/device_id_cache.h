@@ -26,7 +26,7 @@ public:
 
 private:
     struct udev_hwdb *m_hwdb;
-    QHash<QByteArray, QByteArray> m_cache; // modalias : product_name
+    mutable QHash<QByteArray, QByteArray> m_cache; // modalias : product_name
 };
 
 } // namespace system
