@@ -56,7 +56,8 @@ protected:
 
     QVariant data(const QModelIndex &index, int role) const
     {
-        if (!index.isValid() || currDeciveName.isEmpty()) {
+        if (!index.isValid() || index.model() != this || currDeciveName.isEmpty()
+                || index.row() >= rowCount(index) || index.column() >= columnCount(index)) {
             qCDebug(app) << "DeailTableModelBlock::data: Invalid index or empty device name";
             return QVariant();
         }
@@ -182,7 +183,12 @@ public:
         currDeciveName = str;
         if (!str.isEmpty()) {
             // qCDebug(app) << "DeailTableModelBlock::setCurrentName: device name is not empty";
-            m_blockInfo = m_mapInfo.find(currDeciveName).value();
+            auto it = m_mapInfo.find(currDeciveName);
+            if (it != m_mapInfo.end()) {
+                m_blockInfo = it.value();
+            } else {
+                qCDebug(app) << "DeailTableModelBlock::setCurrentName: device not found:" << currDeciveName;
+            }
         }
         updateModel();
     }
@@ -216,7 +222,12 @@ void DeailTableModelBlock::updateModel()
         m_blockInfo = infoDB[0];
     } else if (!infoDB.isEmpty()) {
         qCDebug(app) << "DeailTableModelBlock::updateModel: updating info for" << currDeciveName;
-        m_blockInfo = m_mapInfo.find(currDeciveName).value();
+        auto it = m_mapInfo.find(currDeciveName);
+        if (it != m_mapInfo.end()) {
+            m_blockInfo = it.value();
+        } else {
+            qCDebug(app) << "DeailTableModelBlock::updateModel: device not found:" << currDeciveName;
+        }
     }
 
     endResetModel();
