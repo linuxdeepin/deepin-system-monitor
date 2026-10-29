@@ -187,6 +187,65 @@ void ProcessSet::scanProcess()
         }
     }
 
+    // Merge wine application processes that share the same window title
+    // into a single entry to avoid duplicate items in the app list.
+    {
+        QMap<QString, QList<pid_t>> wineGroups;
+        for (const pid_t &pid : m_pidMyApps) {
+            if (!m_set.contains(pid))
+                continue;
+            const Process &proc = m_set[pid];
+            if (proc.name().endsWith(".exe", Qt::CaseInsensitive)) {
+                QString title = wmwindowList->getWindowTitle(pid);
+                if (!title.isEmpty())
+                    wineGroups[title].append(pid);
+            }
+        }
+
+        std::function<bool(pid_t, pid_t)> isDescendantOf;
+        isDescendantOf = [&](pid_t pid, pid_t ancestor) -> bool {
+            auto it = m_pidPtoCMapping.find(ancestor);
+            while (it != m_pidPtoCMapping.end() && it.key() == ancestor) {
+                if (it.value() == pid || isDescendantOf(pid, it.value()))
+                    return true;
+                ++it;
+            }
+            return false;
+        };
+
+        for (auto it = wineGroups.begin(); it != wineGroups.end(); ++it) {
+            QList<pid_t> &pids = it.value();
+            if (pids.size() <= 1)
+                continue;
+
+            pid_t mainPid = pids[0];
+            for (int i = 1; i < pids.size(); ++i) {
+                if (pids[i] < mainPid)
+                    mainPid = pids[i];
+            }
+
+            qreal totalCpu = m_set[mainPid].cpu();
+            qreal totalRecvBps = m_set[mainPid].recvBps();
+            qreal totalSendBps = m_set[mainPid].sentBps();
+
+            for (const pid_t &subPid : pids) {
+                if (subPid == mainPid || !m_set.contains(subPid))
+                    continue;
+
+                if (!isDescendantOf(subPid, mainPid)) {
+                    const Process &subProc = m_set[subPid];
+                    totalCpu += subProc.cpu();
+                    totalRecvBps += subProc.recvBps();
+                    totalSendBps += subProc.sentBps();
+                }
+                m_set.remove(subPid);
+            }
+
+            m_set[mainPid].setCpu(totalCpu);
+            m_set[mainPid].setNetIoBps(totalRecvBps, totalSendBps);
+        }
+    }
+
     m_recentProcStage.clear();
 }
 
