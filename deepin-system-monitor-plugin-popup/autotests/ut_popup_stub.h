@@ -68,6 +68,10 @@ void setMonitorPathsReply(bool enabled, const QList<QDBusObjectPath> &paths);
 
 // ---- 安装与复位 ----
 void installAll();                      // 进程级安装全部桩(幂等,main 中调用一次)
+// DataDealSingleton 数据源桩组单独安装/卸载:数据层单测(ut_datadealsingleton)需要
+// 临时卸载以覆盖真实实现,GUI 用例保持常驻打桩不受影响。
+void installDataDealStubs();            // 安装 readNetInfo/readDiskInfo/sendJumpWidgetMessage 桩(幂等)
+void uninstallDataDealStubs();          // 卸载上述桩,恢复真实实现
 bool startPrivateSessionBus();          // 启动私有 dbus-daemon 并设置总线地址(须在 Application 构造前调用)
 bool startMockService();                // 拉起 Mock 服务进程并等待服务注册完成
 void stopMockService();                 // 结束 Mock 服务进程与私有总线(退出前调用)

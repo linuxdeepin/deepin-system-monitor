@@ -145,6 +145,8 @@ set(POPUP_UT_CPP
     ut_dbus_callmain.cpp
     ut_dbus_dock.cpp
     ut_dbus_adaptor.cpp
+    ut_cpu_set.cpp
+    ut_datadealsingleton.cpp
 )
 
 add_executable(${POPUP_UT_TARGET}
