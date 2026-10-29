@@ -6,6 +6,7 @@
 //self
 #include "dbus/dbusforsystemomonitorpluginservce.h"
 #include "application.h"
+#include "main_window.h"
 //qt
 #include <QList>
 #include <QString>

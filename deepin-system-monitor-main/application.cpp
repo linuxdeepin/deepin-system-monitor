@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "application.h"
+#include "gui/main_window.h"
 
 #include "common/thread_manager.h"
 #include "system/system_monitor_thread.h"
@@ -71,4 +72,19 @@ MonitorStartEvent::~MonitorStartEvent()
 NetifStartEvent::~NetifStartEvent()
 {
     // qCDebug(app) << "NetifStartEvent destructor";
+}
+
+void Application::setMainWindow(MainWindow *mw)
+{
+    m_mainWindow = mw;
+}
+
+void Application::raiseWindow()
+{
+    m_mainWindow->raiseWindow();
+}
+
+MainWindow *Application::mainWindow()
+{
+    return m_mainWindow;
 }
