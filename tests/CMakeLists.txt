@@ -765,8 +765,13 @@ endif()
 # ---------------- qt-autotest-generator (V-6444): system-server / server 单元测试 ----------------
 # 两个服务端模块内部存在同名无命名空间类（MLogger），与主程序及彼此均不能并入
 # deepin-system-monitor-test 目标，各自独立成测试二进制。
+# ---------------- qt-autotest-generator (V-6443): daemon 守护进程单元测试 ----------------
+# daemon 模块为非 GUI 守护服务（deepin-service-manager 插件），独立成测试二进制；
+# 与 popup 同模式按模块隔离，避免并入主测试目标 deepin-system-monitor-test
+# （daemon 源码不在其 APP_CPP 集合内）。
 if(DOTEST)
     add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-plugin plugin-ut-build)
     add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-system-server sys-server-ut-build)
     add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-server server-ut-build)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-daemon daemon-ut-build)
 endif()
