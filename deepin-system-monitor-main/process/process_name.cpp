@@ -97,6 +97,9 @@ QString ProcessName::getDisplayName(Process *proc)
                 if (entry && !entry->displayName.isEmpty()) {
                     qCDebug(app) << "Found display name from desktop file:" << entry->displayName;
                     return QString("%1: %2").arg(QApplication::translate("Process.Table", "Tray")).arg(entry->displayName);
+                } else {
+                    qCDebug(app) << "Falling back to process name for tray app with desktop file";
+                    return QString("%1: %2").arg(QApplication::translate("Process.Table", "Tray")).arg(proc->name());
                 }
 
             } else {
