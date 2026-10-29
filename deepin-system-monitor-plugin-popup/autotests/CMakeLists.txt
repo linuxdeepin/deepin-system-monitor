@@ -138,6 +138,9 @@ set(POPUP_UT_CPP
     ut_process_table_model.cpp
     ut_base_item_delegate.cpp
     ut_base_table_view.cpp
+    # ---- 本批次新增:popup 日志/应用/DBus 单测(logger/application/dbus)----
+    ut_logger.cpp
+    ut_application.cpp
 )
 
 add_executable(${POPUP_UT_TARGET}
