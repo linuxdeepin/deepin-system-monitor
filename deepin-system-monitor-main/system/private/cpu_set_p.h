@@ -63,6 +63,9 @@ public:
         , m_usage(std::make_shared<cpu_usage_t>(*(other.m_usage)))
         , m_info(other.m_info)
     {
+        for (int i = 0; i < kStatCount; ++i) {
+            cpusageTotal[i] = other.cpusageTotal[i];
+        }
         for (auto &stat : other.m_statDB) {
             if (stat) {
                 auto cp = std::make_shared<cpu_stat_t>(*stat);
