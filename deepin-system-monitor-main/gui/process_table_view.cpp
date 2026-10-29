@@ -1083,7 +1083,7 @@ void ProcessTableView::adjustInfoLabelVisibility()
     setUpdatesEnabled(false);
     // show search not found label only when proxy model is empty & search text input is none empty
     m_notFoundLabel->setVisible(m_proxyModel->rowCount() == 0
-                                && gApp->mainWindow()->toolbar()->isSearchContentEmpty());
+                                && !gApp->mainWindow()->toolbar()->isSearchContentEmpty());
     // move label to center of the process table view
     if (m_notFoundLabel->isVisible())
         m_notFoundLabel->move(rect().center() - m_notFoundLabel->rect().center());
