@@ -35,10 +35,11 @@ QAtomicPointer<DataDealSingleton> DataDealSingleton::instance;
 
 DataDealSingleton &DataDealSingleton::getInstance()
 {
-    if (instance.testAndSetOrdered(nullptr, nullptr)) {
+    if (instance.load() == nullptr) {
         QMutexLocker locker(&mutex);
-
-        instance.testAndSetOrdered(nullptr, new DataDealSingleton);
+        if (instance.load() == nullptr) {
+            instance.store(new DataDealSingleton);
+        }
     }
     return *instance;
 }
@@ -57,11 +58,19 @@ bool DataDealSingleton::readMemInfo(QString &memUsage, QString &memTotal, QStrin
     MemInfo *curMemInfo = core::system::DeviceDB::instance()->memInfo();
     memUsage = formatUnit_memory_disk((curMemInfo->memTotal() - curMemInfo->memAvailable()) << 10, B, 1);
     memTotal = formatUnit_memory_disk(curMemInfo->memTotal() << 10, B, 1);
-    memPercent = QString::number((curMemInfo->memTotal() - curMemInfo->memAvailable()) * 1. / curMemInfo->memTotal() * 100, 'f', 1);
+    if (curMemInfo->memTotal() > 0) {
+        memPercent = QString::number((curMemInfo->memTotal() - curMemInfo->memAvailable()) * 1. / curMemInfo->memTotal() * 100, 'f', 1);
+    } else {
+        memPercent = "0.0";
+    }
 
     swapUsage = formatUnit_memory_disk((curMemInfo->swapTotal() - curMemInfo->swapFree()) << 10, B, 1);
     swapTotal = formatUnit_memory_disk(curMemInfo->swapTotal() << 10, B, 1);
-    swapPercent = QString::number((curMemInfo->swapTotal() - curMemInfo->swapFree()) * 1. / curMemInfo->swapTotal() * 100, 'f', 1);
+    if (curMemInfo->swapTotal() > 0) {
+        swapPercent = QString::number((curMemInfo->swapTotal() - curMemInfo->swapFree()) * 1. / curMemInfo->swapTotal() * 100, 'f', 1);
+    } else {
+        swapPercent = "0.0";
+    }
     internalMutex.unlock();
 
     return true;
@@ -97,6 +106,7 @@ bool DataDealSingleton::readDiskInfo(QString &diskRead, QString &diskTotalSize, 
     }
 
     diskTotalSize = formatUnit_memory_disk(totalDiskAva, B, 1);
+    diskAvailable = formatUnit_memory_disk(0, B, 1);
     internalMutex.unlock();
 
     return true;
