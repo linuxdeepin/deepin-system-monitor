@@ -288,7 +288,9 @@ QVariantMap SystemDBusServer::getProcessInfoBatch(const QList<int> &pids)
         QVariantMap processData;
         
         // 使用 DKapture 获取进程信息
-        if (m_dkaptureManager) {
+        Q_ASSERT(m_dkaptureManager);
+        // bare scope preserved from original if-block; invariant guaranteed by isDKaptureAvailable() gate above
+        {
             // 准备要获取的数据类型 - 禁用网络数据监听，前端使用传统方式
             std::vector<DKapture::DataType> dataTypes = {
                 DKapture::PROC_PID_STAT,    // 基本进程信息
@@ -510,10 +512,8 @@ QVariantMap SystemDBusServer::getProcessInfoBatch(const QList<int> &pids)
                 result["error"] = QString("Failed to read DKapture data: %1").arg(bytesRead);
                 qCWarning(app) << "SystemServer: Failed to read DKapture data:" << bytesRead;
             }
-        } else {
-            result["error"] = "DKapture manager not initialized";
-        }
         
+        }
     } catch (const std::exception &e) {
         qCWarning(app) << "SystemServer: Exception in getProcessInfoBatch:" << e.what();
         result["error"] = QString("Exception: %1").arg(e.what());
