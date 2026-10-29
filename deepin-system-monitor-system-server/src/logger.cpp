@@ -60,11 +60,15 @@ void MLogger::appendRules(const QString &rules)
     QString tmpRules = rules;
     tmpRules = tmpRules.replace(";", "\n");
     auto tmplist = tmpRules.split('\n');
-    for (int i = 0; i < tmplist.count(); i++)
-        if (m_rules.contains(tmplist.at(i))) {
+    QStringList existingRules = m_rules.split('\n');
+    for (int i = 0; i < tmplist.count();) {
+        if (existingRules.contains(tmplist.at(i))) {
             tmplist.removeAt(i);
-            i--;
+        } else {
+            existingRules.append(tmplist.at(i));
+            i++;
         }
+    }
     if (tmplist.isEmpty()) {
         qCDebug(app) << "No new rules to append";
         return;
