@@ -43,7 +43,7 @@ inline QString formatUnit(QVariant size, SizeUnit base = B, int prec = 1, bool i
     if (!size.canConvert(QMetaType::Double)) return {};
     qreal v = size.toReal();
 
-    while (v > 1024. && u <= EB) {
+    while (v > 1024. && u < EB) {
         v /= 1024;
         u++;
     }
