@@ -989,10 +989,10 @@ TEST_F(UT_ProcessTableView, SwitchDisplayMode_AppsFilter_SetsFilterType)
     // Act
     view->switchDisplayMode(kFilterApps);
     // Assert
-    EXPECT_EQ(view->m_proxyModel->m_fileterType, static_cast<int>(kFilterApps));
+    EXPECT_EQ(view->m_proxyModel->m_filterType, static_cast<int>(kFilterApps));
     // Act: 再切换一次验证更新
     view->switchDisplayMode(kNoFilter);
-    EXPECT_EQ(view->m_proxyModel->m_fileterType, static_cast<int>(kNoFilter));
+    EXPECT_EQ(view->m_proxyModel->m_filterType, static_cast<int>(kNoFilter));
 }
 
 // changeProcessPriority：无选中时不调用 ProcessDB
