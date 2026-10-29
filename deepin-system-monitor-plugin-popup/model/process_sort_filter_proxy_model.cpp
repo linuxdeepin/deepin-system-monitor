@@ -39,7 +39,7 @@ void ProcessSortFilterProxyModel::setSortFilterString(const QString &search)
 
 void ProcessSortFilterProxyModel::setFilterType(int type)
 {
-    m_fileterType = type;
+    m_filterType = type;
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setFilterRegExp(filterRegExp());
 #else
@@ -58,11 +58,11 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
     bool filter = false;
     const QModelIndex &pid = sourceModel()->index(row, ProcessTableModel::kProcessPIDColumn, parent);
     int apptype = pid.data(Qt::UserRole + 3).toInt();
-    if (m_fileterType == kNoFilter) {
+    if (m_filterType == kNoFilter) {
         filter = true;
-    } else if (m_fileterType == kFilterCurrentUser && (apptype == kFilterApps || apptype == kFilterCurrentUser)) {
+    } else if (m_filterType == kFilterCurrentUser && (apptype == kFilterApps || apptype == kFilterCurrentUser)) {
         filter = true;
-    } else if (m_fileterType == kFilterApps && apptype == kFilterApps) {
+    } else if (m_filterType == kFilterApps && apptype == kFilterApps) {
         filter = true;
     }
 
