@@ -699,7 +699,10 @@ void SystemServiceTableView::initConnections()
     connect(hdr, &QHeaderView::customContextMenuRequested, this,
             &SystemServiceTableView::displayHeaderContextMenu);
 
-    connect(gApp->mainWindow()->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
+    // connect search slot to toolbar's search signal (guard against null mainWindow in standalone construction)
+    if (auto *mainWindow = gApp->mainWindow()) {
+        connect(mainWindow->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
+    }
 
     // call start service handler when start service menu item triggered
     connect(m_startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
