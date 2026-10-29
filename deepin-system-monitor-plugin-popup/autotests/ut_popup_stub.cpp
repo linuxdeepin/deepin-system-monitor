@@ -259,6 +259,28 @@ static bool stub_DataDeal_sendJumpWidgetMessage(void *, const QString &dbusMessa
     return g_jumpMessageResult;
 }
 
+// ---- DataDealSingleton 数据源桩组:独立 Stub 对象,可单独安装/卸载 ----
+static Stub *s_datadeal_stub = nullptr;
+
+void installDataDealStubs()
+{
+    if (s_datadeal_stub != nullptr)
+        return;  // 幂等
+    s_datadeal_stub = new Stub();
+    s_datadeal_stub->set((bool (DataDealSingleton::*)(QString &, QString &, QString &, QString &))ADDR(DataDealSingleton, readNetInfo),
+                         stub_DataDeal_readNetInfo);
+    s_datadeal_stub->set((bool (DataDealSingleton::*)(QString &, QString &, QString &, QString &))ADDR(DataDealSingleton, readDiskInfo),
+                         stub_DataDeal_readDiskInfo);
+    s_datadeal_stub->set((bool (DataDealSingleton::*)(const QString &))ADDR(DataDealSingleton, sendJumpWidgetMessage),
+                         stub_DataDeal_sendJumpWidgetMessage);
+}
+
+void uninstallDataDealStubs()
+{
+    delete s_datadeal_stub;  // Stub 析构恢复打桩前的原始函数入口
+    s_datadeal_stub = nullptr;
+}
+
 
 void installAll()
 {
@@ -281,13 +303,8 @@ void installAll()
                 stub_startDetached);
     // 监控线程启动拦截
     s_stub->set(ADDR(QThread, start), stub_QThread_start);
-    // DataDealSingleton 数据源(读网/读盘/跳转)
-    s_stub->set((bool (DataDealSingleton::*)(QString &, QString &, QString &, QString &))ADDR(DataDealSingleton, readNetInfo),
-                stub_DataDeal_readNetInfo);
-    s_stub->set((bool (DataDealSingleton::*)(QString &, QString &, QString &, QString &))ADDR(DataDealSingleton, readDiskInfo),
-                stub_DataDeal_readDiskInfo);
-    s_stub->set((bool (DataDealSingleton::*)(const QString &))ADDR(DataDealSingleton, sendJumpWidgetMessage),
-                stub_DataDeal_sendJumpWidgetMessage);
+    // DataDealSingleton 数据源(读网/读盘/跳转) — 独立桩组,便于数据层单测临时卸载
+    installDataDealStubs();
 
     fprintf(stderr, "[stub] all installed\n");
     resetKnobs();
