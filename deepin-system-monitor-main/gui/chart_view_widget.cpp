@@ -126,17 +126,17 @@ void ChartViewWidget::addData2(const QVariant &data)
                 setAxisTitle(formatUnit_memory_disk(m_maxData, B, 1, true));
             else
                 setAxisTitle(formatUnit_net(m_maxData, B, 1, true));
-        } else {
-            qCDebug(app) << "Data 2 is zero, setting axis to zero";
-            // when the data hold the zero num,we should set the chart max value as 0
-            if (m_speedAxis) {
-                if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
-                    setAxisTitle(formatUnit_memory_disk(0, B, 1, true));
-                else
-                    setAxisTitle(formatUnit_net(0, B, 1, true));
-            }
         }
 
+    } else {
+        qCDebug(app) << "Data 2 is zero, setting axis to zero";
+        // when the data hold the zero num,we should set the chart max value as 0
+        if (m_speedAxis) {
+            if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
+                setAxisTitle(formatUnit_memory_disk(0, B, 1, true));
+            else
+                setAxisTitle(formatUnit_net(0, B, 1, true));
+        }
     }
 }
 
