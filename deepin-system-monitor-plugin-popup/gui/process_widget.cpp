@@ -1,5 +1,5 @@
 // Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -25,6 +25,7 @@
 #include <QFontMetrics>
 #include <QVBoxLayout>
 #include <QProcess>
+#include <QSvgRenderer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -105,13 +106,13 @@ void ProcessWidget::changeTheme(DApplicationHelper::ColorType themeType)
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_list.png"));
+        m_iconPath = QString(":/icons/deepin/builtin/light/icon_list_light.svg");
         break;
     case DApplicationHelper::DarkType:
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_list.png"));
+        m_iconPath = QString(":/icons/deepin/builtin/dark/icon_list_light.svg");
         break;
     default:
         break;
@@ -176,8 +177,16 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
 
     //图标
     int iconSize = 20;
-    QRect iconRect(titleRect.x()+(titleRect.width()-widthTitleTxt)/2-iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
-    m_icon.paint(&painter, iconRect);
+    QRect iconRect(titleRect.x()+(titleRect.width()-widthTitleTxt)/2-iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.),iconSize, iconSize);
+    qreal ratio = devicePixelRatioF();
+    QPixmap pm(iconSize * ratio, iconSize * ratio);
+    pm.fill(Qt::transparent);
+    QSvgRenderer renderer(m_iconPath);
+    QPainter svgPainter(&pm);
+    renderer.render(&svgPainter);
+    svgPainter.end();
+    pm.setDevicePixelRatio(ratio);
+    painter.drawPixmap(iconRect, pm);
 
     //表头
     painter.setOpacity(0.6);
