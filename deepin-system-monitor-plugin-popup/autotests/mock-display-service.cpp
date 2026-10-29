@@ -16,6 +16,8 @@
 //       - PrimaryRect  (nnnn) ServiceRect
 //   org.deepin.dde.Dock1       @ /org/deepin/dde/daemon/Dock1
 //       - geometry     (iiii) QRect
+//   com.deepin.SystemMonitorMain @ /com/deepin/SystemMonitorMain
+//       - slotJumpDetailWidget/slotJumpProcessWidget(调用记录供 knob 查询)
 //   org.deepin.dde.MockConfig  @ /org/deepin/dde/MockConfig  (knob 控制接口)
 
 #include <QCoreApplication>
@@ -118,8 +120,52 @@ public:
         QDBusConnection::sessionBus().send(msg);
     }
 
+    // 通用属性变化信号:接口名与属性名列表由用例指定(值统一取当前 geometry),
+    // 供 DBusDockInterface::__propertyChanged__ 的 a{sv} read 模式解组用例使用
+    void sendPropertiesChanged(const QString &ifaceName, const QStringList &props)
+    {
+        QDBusMessage msg = QDBusMessage::createSignal(
+            QStringLiteral("/org/deepin/dde/daemon/Dock1"),
+            QStringLiteral("org.freedesktop.DBus.Properties"),
+            QStringLiteral("PropertiesChanged"));
+        QVariantMap changed;
+        for (const QString &prop : props)
+            changed.insert(prop, QVariant::fromValue(m_geometry));
+        msg.setArguments({ ifaceName, changed, QStringList() });
+        QDBusConnection::sessionBus().send(msg);
+    }
+
 private:
     QRect m_geometry;
+};
+
+// SystemMonitorMain mock:popup 源码 DbusCallMainInterface 的跳转调用目标,
+// 记录方法名与消息码,经 MockConfig knob 供测试进程查询
+// (客户端 QDBusInterface 以空接口名调用,验证空接口派发链路)
+class MockSystemMonitorMain : public QObject
+{
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "com.deepin.SystemMonitorMain")
+
+public:
+    explicit MockSystemMonitorMain(QObject *parent = nullptr)
+        : QObject(parent) {}
+
+    QStringList calls() const { return m_calls; }
+    void clearCalls() { m_calls.clear(); }
+
+public slots:
+    Q_SCRIPTABLE void slotJumpDetailWidget(const QString &msgCode)
+    {
+        m_calls.append(QStringLiteral("slotJumpDetailWidget:") + msgCode);
+    }
+    Q_SCRIPTABLE void slotJumpProcessWidget(const QString &msgCode)
+    {
+        m_calls.append(QStringLiteral("slotJumpProcessWidget:") + msgCode);
+    }
+
+private:
+    QStringList m_calls;
 };
 
 // knob 控制:测试进程通过 Properties.Get 之外的独立接口调整 mock 行为
@@ -129,8 +175,9 @@ class MockConfig : public QObject
     Q_CLASSINFO("D-Bus Interface", "org.deepin.dde.MockConfig")
 
 public:
-    explicit MockConfig(MockDisplay1 *display, MockDock1 *dock, QObject *parent = nullptr)
-        : QObject(parent), m_display(display), m_dock(dock) {}
+    explicit MockConfig(MockDisplay1 *display, MockDock1 *dock,
+                        MockSystemMonitorMain *monitorMain, QObject *parent = nullptr)
+        : QObject(parent), m_display(display), m_dock(dock), m_monitorMain(monitorMain) {}
 
 public slots:
     void setMonitorPaths(const QStringList &paths) { m_display->setMonitorPaths(paths); }
@@ -143,10 +190,17 @@ public slots:
         m_dock->setDockGeometry(x, y, width, height);
     }
     void notifyDockGeometryChanged() { m_dock->notifyGeometryChanged(); }
+    void sendDockPropertiesChanged(const QString &ifaceName, const QStringList &props)
+    {
+        m_dock->sendPropertiesChanged(ifaceName, props);
+    }
+    QStringList getJumpCalls() { return m_monitorMain->calls(); }
+    void clearJumpCalls() { m_monitorMain->clearCalls(); }
 
 private:
     MockDisplay1 *m_display = nullptr;
     MockDock1 *m_dock = nullptr;
+    MockSystemMonitorMain *m_monitorMain = nullptr;
 };
 
 }  // namespace
@@ -161,7 +215,8 @@ int main(int argc, char *argv[])
 
     MockDisplay1 display;
     MockDock1 dock;
-    MockConfig config(&display, &dock);
+    MockSystemMonitorMain monitorMain;
+    MockConfig config(&display, &dock, &monitorMain);
 
     auto conn = QDBusConnection::sessionBus();
     if (!conn.isConnected()) {
@@ -170,6 +225,7 @@ int main(int argc, char *argv[])
     }
     if (!conn.registerService(QStringLiteral("org.deepin.dde.Display1"))
         || !conn.registerService(QStringLiteral("org.deepin.dde.Dock1"))
+        || !conn.registerService(QStringLiteral("com.deepin.SystemMonitorMain"))
         || !conn.registerService(QStringLiteral("org.deepin.dde.MockConfig"))) {
         fprintf(stderr, "[mock-service] registerService failed: %s\n",
                 conn.lastError().message().toUtf8().constData());
@@ -179,6 +235,8 @@ int main(int argc, char *argv[])
                         QDBusConnection::ExportAllProperties);
     conn.registerObject(QStringLiteral("/org/deepin/dde/daemon/Dock1"), &dock,
                         QDBusConnection::ExportAllProperties);
+    conn.registerObject(QStringLiteral("/com/deepin/SystemMonitorMain"), &monitorMain,
+                        QDBusConnection::ExportAllSlots);
     conn.registerObject(QStringLiteral("/org/deepin/dde/MockConfig"), &config,
                         QDBusConnection::ExportAllSlots);
 
