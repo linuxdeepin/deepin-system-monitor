@@ -48,6 +48,7 @@
 #include <DHeaderView>
 
 #include <QDebug>
+#include <QCoreApplication>
 #include <QDir>
 #include <QMessageBox>
 #include <QProcess>
@@ -109,6 +110,17 @@ ProcessTableView::ProcessTableView(DWidget *parent, QString userName)
 ProcessTableView::~ProcessTableView()
 {
     qCDebug(app) << "ProcessTableView destroyed";
+
+    // Disconnect cross-thread queued connections from ProcessDB
+    // (ProcessDB lives in SystemMonitorThread). Without explicit disconnect,
+    // posted QMetaCallEvent entries may be delivered after this object is destroyed.
+    auto *db = ProcessDB::instance();
+    if (db) {
+        disconnect(db, &ProcessDB::priorityPromoteResultReady, this, nullptr);
+        disconnect(db, &ProcessDB::processControlResultReady, this, nullptr);
+    }
+    QCoreApplication::removePostedEvents(this);
+
     // backup table view settings
     saveSettings();
 }
