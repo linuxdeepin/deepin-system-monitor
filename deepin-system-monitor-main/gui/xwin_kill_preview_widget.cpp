@@ -125,6 +125,10 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
                 break;
             }
         }
+        if (m_windowStates.isEmpty()) {
+            close();
+            return;
+        }
         for (QVector<ClientManagement::WindowState>::iterator it = m_windowStates.end() - 1;
              it != m_windowStates.begin(); --it) {
             // if the window is created by ourself, then ignore it
