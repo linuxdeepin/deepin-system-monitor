@@ -133,6 +133,10 @@ set(POPUP_UT_CPP
     ut_main_window.cpp
     ut_net_widget.cpp
     ut_disk_widget.cpp
+    ut_cpu_set.cpp
+    ut_datadealsingleton.cpp
+    ut_device_db.cpp
+    ut_utils.cpp
 )
 
 add_executable(${POPUP_UT_TARGET}
