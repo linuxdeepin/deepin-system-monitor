@@ -337,7 +337,7 @@ QVariantMap SystemDBusServer::getProcessInfoBatch(const QList<int> &pids)
                 } else {
                     pidData["pid"] = hdr->pid;
                     pidData["tgid"] = hdr->tgid;
-                    pidData["comm"] = QString::fromUtf8(hdr->comm, TASK_COMM_LEN);
+                    pidData["comm"] = QString::fromUtf8(hdr->comm, qstrnlen(hdr->comm, TASK_COMM_LEN));
                 }
                 
 
