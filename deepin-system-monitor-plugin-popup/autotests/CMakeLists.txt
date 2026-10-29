@@ -133,6 +133,11 @@ set(POPUP_UT_CPP
     ut_main_window.cpp
     ut_net_widget.cpp
     ut_disk_widget.cpp
+    # ---- 本批次新增:popup 基础表格/委托/模型单测 ----
+    ut_process_sort_filter_proxy_model.cpp
+    ut_process_table_model.cpp
+    ut_base_item_delegate.cpp
+    ut_base_table_view.cpp
 )
 
 add_executable(${POPUP_UT_TARGET}
