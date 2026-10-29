@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+"http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+<policyconfig>
+	<vendor>Deepin</vendor>
+	<vendor_url>https://www.deepin.com/</vendor_url>
+	<action id="com.deepin.pkexec.deepin-system-monitor.renice">
+		<description>Renice process</description>
+		<message>Authentication is required to change process priority</message>
+		<icon_name />
+		<defaults>
+			<allow_any>no</allow_any>
+			<allow_inactive>no</allow_inactive>
+			<allow_active>auth_admin_keep</allow_active>
+		</defaults>
+		<annotate key="org.freedesktop.policykit.exec.path">/usr/bin/renice</annotate>
+		<annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+		<description xml:lang="ar">Renice العملية</description>
+		<message xml:lang="ar">المصادقة مطلوبة لتغيير أولوية العملية</message>
+		<description xml:lang="az">Prosesin üstünlüyünü dəyişmək</description>
+		<message xml:lang="az">Prosesin üstünlüyünü dəyişmək üçün doğrulama tələb olunur</message>
+		<description xml:lang="bn">প্রক্রিয়াটি নিন্স করুন</description>
+		<message xml:lang="bn">প্রক্রিয়ার প্রাথমিকতা পরিবর্তন করতে জন্য পরিচয় প্রয়োজন</message>
+		<description xml:lang="bo">བརྒྱུད་རིམ་niceགྲངས་ཐང་བསྒྱུར་དགོས།</description>
+		<message xml:lang="bo">བརྒྱུད་རིམ་གྱི་སྔོན་རིམ་བསྒྱུར་བར་དཔང་དཔྱད་བྱ་དགོས།</message>
+		<description xml:lang="br">Prosesus Renice</description>
+		<message xml:lang="br">Un anaouadur a zo rekis evit cheñch priorelezh ar prosesus</message>
+		<description xml:lang="ca">Reinicia el procés</description>
+		<message xml:lang="ca">Cal autenticació per canviar la prioritat del procés.</message>
+		<description xml:lang="cs">Změnit prioritu procesu</description>
+		<message xml:lang="cs">Pro změnu priority procesu je třeba ověřit se</message>
+		<description xml:lang="da">Renice proces</description>
+		<message xml:lang="da">Der kræves autentifikation for at skifte procesprioritet</message>
+		<description xml:lang="de">Renice-Prozess</description>
+		<message xml:lang="de">Zum Ändern der Prozesspriorität ist eine Authentifizierung erforderlich</message>
+		<description xml:lang="en">Renice process</description>
+		<message xml:lang="en">Authentication is required to change process priority</message>
+		<description xml:lang="es">Reiniciar proceso</description>
+		<message xml:lang="es">Se requiere autenticación para cambiar la prioridad del proceso</message>
+		<description xml:lang="et">Muuda protsessi prioriteeti</description>
+		<message xml:lang="et">Protsessi prioriteedi muutmine vajab autentimist</message>
+		<description xml:lang="fi">Muuta prioriteettia</description>
+		<message xml:lang="fi">Prosessin prioriteetin vaihtaminen edellyttää todennusta</message>
+		<description xml:lang="fr">Processus Renice</description>
+		<message xml:lang="fr">Une authentification est requise pour modifier la priorité du processus</message>
+		<description xml:lang="gl_ES">Proceso de Renice</description>
+		<message xml:lang="gl_ES">A autenticación é necesaria para cambiar a prioridade do proceso</message>
+		<description xml:lang="he">שפר עדיפות ההליך</description>
+		<message xml:lang="he">האם יש צורך-autentikציה כדי לשנות עדיפות ההליך</message>
+		<description xml:lang="hu">Renice folyamat</description>
+		<message xml:lang="hu">Hitelesítés szükséges a folyamat prioritásának megváltoztatásához</message>
+		<description xml:lang="id">Proses renice</description>
+		<message xml:lang="id">Autentikasi diperlukan untuk mengubah prioritas proses</message>
+		<description xml:lang="it">Modifica proprità del Processo</description>
+		<message xml:lang="it">Autenticazione richiesta per variare la priorità del Processo</message>
+		<description xml:lang="ko">Renice 프로세스</description>
+		<message xml:lang="ko">프로세스 우선 순위를 변경하려면 인증이 필요합니다</message>
+		<description xml:lang="lt">Pakeisti proceso prioriteto lygį</description>
+		<message xml:lang="lt">Kreipkitisis įtraukimas yra reikalingas keičiant proceso prioriteto lygį</message>
+		<description xml:lang="ms">Elok balik proses</description>
+		<message xml:lang="ms">Pengesahihan diperlukan untuk mengubah keutamaan proses</message>
+		<description xml:lang="nl">Proriteit aanpassen</description>
+		<message xml:lang="nl">Voer je wachtwoord in om de procespriorieit aan te passen</message>
+		<description xml:lang="pl">Zmień priorytet procesu</description>
+		<message xml:lang="pl">Wymagane jest uwierzytelnienie, aby zmienić priorytet procesu</message>
+		<description xml:lang="pt">Renice processo</description>
+		<message xml:lang="pt">É necessária a autenticação para alterar a prioridade do processo</message>
+		<description xml:lang="pt_BR">Alterar prioridade do processo</description>
+		<message xml:lang="pt_BR">É necessário autenticar-se para alterar a prioridade do processo</message>
+		<description xml:lang="ru">Изменить приоритет процесса</description>
+		<message xml:lang="ru">Для изменения приоритета процесса требуется аутентификация </message>
+		<description xml:lang="sl">Spremeni prioritet procesa</description>
+		<message xml:lang="sl">Za spremembo prioritete procesa je zahtevana preverjanje</message>
+		<description xml:lang="sq">Rikthejini procesit vlerën për “nice”</description>
+		<message xml:lang="sq">Që të ndryshohet përparësi procesi, lypset mirëfilltësim</message>
+		<description xml:lang="sr">Renice процес</description>
+		<message xml:lang="sr">Идентификација је неопходна за промену приоритета процеса</message>
+		<description xml:lang="tr">Yenileme süreci</description>
+		<message xml:lang="tr">İşlem önceliğini değiştirmek için kimlik doğrulama gerekiyor</message>
+		<description xml:lang="ug">قايتا قۇرۇش جەريانى</description>
+		<message xml:lang="ug">جەرياننىڭ مۇھىملىق دەرجىسىنى ئۆزگەرتىش ئۈچۈن دەلىللەش تەلەپ قىلىنىدۇ</message>
+		<description xml:lang="uk">Зміна пріоритетності процесу</description>
+		<message xml:lang="uk">Для зміни пріоритетності процесу слід пройти розпізнавання</message>
+		<description xml:lang="vi">Đổi mức độ ưu tiên của quá trình</description>
+		<message xml:lang="vi">Cần xác thực để thay đổi mức độ ưu tiên của quá trình</message>
+		<description xml:lang="zh_CN">更改进程nice值</description>
+		<message xml:lang="zh_CN">更改进程优先级需要授权</message>
+		<description xml:lang="zh_HK">更改進程nice值</description>
+		<message xml:lang="zh_HK">改變進程優先級需要認證</message>
+		<description xml:lang="lo">ປ່ຽນຄ່າ nice ຂອງໂປຣເຊດ</description>
+		<message xml:lang="lo">ຕ້ອງການການຢັ້ງຢືນເພື່ອປ່ຽນລະດັບຄວາມສຳຄັນຂອງໂປຣເຊດ</message>
+		<description xml:lang="zh_TW">更改進程nice值</description>
+		<message xml:lang="zh_TW">改變進程優先度需要認證</message>
+	</action>
+	<action id="com.deepin.pkexec.deepin-system-monitor.kill">
+		<description>Kill process</description>
+		<message>Authentication is required to control other users' processes</message>
+		<icon_name />
+		<defaults>
+			<allow_any>no</allow_any>
+			<allow_inactive>no</allow_inactive>
+			<allow_active>auth_admin_keep</allow_active>
+		</defaults>
+		<annotate key="org.freedesktop.policykit.exec.path">/usr/bin/kill</annotate>
+		<annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+		<description xml:lang="ar">قتل العملية</description>
+		<message xml:lang="ar">المصادقة مطلوبة للتحكم في عمليات المستخدمين الآخرين</message>
+		<description xml:lang="az">Prosesi məh etmək</description>
+		<message xml:lang="az">Digər istifadəçi proseslərini idarə etmək üçün doğrulama tələb olunur</message>
+		<description xml:lang="bn">প্রক্রিয়াটি হারিয়ে দিন</description>
+		<message xml:lang="bn">অন্য ইউজারদের প্রক্রিয়াগুলি কন্ট্রোল করতে জন্য পরিচয় প্রয়োজন</message>
+		<description xml:lang="bo">བཙན་ཐབས་ཀྱིས་བརྒྱུད་རིམ་མཇུག་སྒྲིལ་བ།</description>
+		<message xml:lang="bo">སྤྱོད་མཁན་གཞན་དག་གི་བརྒྱུད་རིམ་ཚོད་འཛིན་བྱེད་པར་དཔང་དཔྱད་བྱ་དགོས།</message>
+		<description xml:lang="br">Lazhañ ar prosesus</description>
+		<message xml:lang="br">An anaouadur a zo rekis evit kontroliñ prosesus an implijaderien all</message>
+		<description xml:lang="ca">Mata el procés</description>
+		<message xml:lang="ca">Cal autenticació per controlar els processos d'altres usuaris.</message>
+		<description xml:lang="cs">Vynutit ukončení procesu</description>
+		<message xml:lang="cs">Pro ovládání procesů ostatních uživatelů je třeba se ověřit</message>
+		<description xml:lang="da">Dræb proces</description>
+		<message xml:lang="da">Der kræves autentifikation for at styre andre brugeres processer</message>
+		<description xml:lang="de">Prozess abwürgen</description>
+		<message xml:lang="de">Authentifizierung ist erforderlich, um die Prozesse anderer Benutzer zu steuern</message>
+		<description xml:lang="en">Kill process</description>
+		<message xml:lang="en">Authentication is required to control other users' processes</message>
+		<description xml:lang="es">Matar proceso</description>
+		<message xml:lang="es">Se requieren autenticación para controlar los procesos de otros usuarios</message>
+		<description xml:lang="et">Lõpetage protsess</description>
+		<message xml:lang="et">Muid kasutajate protsesside kontrollimiseks on vajalik autentimine</message>
+		<description xml:lang="fi">Lopeta prosessi</description>
+		<message xml:lang="fi">Todennus vaaditaan muiden käyttäjien prosessien hallitsemiseksi</message>
+		<description xml:lang="fr">Tuer le processus</description>
+		<message xml:lang="fr">L'authentification est requise pour contrôler les processus des autres utilisateurs</message>
+		<description xml:lang="gl_ES">Proceso de Kill</description>
+		<message xml:lang="gl_ES">A autenticación é necesaria para controlar os procesos doutros usuarios</message>
+		<description xml:lang="he">כגרר את ההליך</description>
+		<message xml:lang="he">האם יש צורך-autentikציה כדי לשלוט בהליך של משתמשים אחרים</message>
+		<description xml:lang="hu">Folyamat kilövése</description>
+		<message xml:lang="hu">Hitelesítés szükséges a többi felhasználó folyamatainak vezérléséhez</message>
+		<description xml:lang="id">Matikan proses</description>
+		<message xml:lang="id">Autentikasi diperlukan untuk mengontrol proses pengguna lain</message>
+		<description xml:lang="it">Termina processo</description>
+		<message xml:lang="it">Autenticazione richiesta per gestire i processi di altri utenti</message>
+		<description xml:lang="ko">Kill 프로세스</description>
+		<message xml:lang="ko">다른 사용자의 프로세스를 제어하려면 인증이 필요합니다</message>
+		<description xml:lang="lt">Nukrauti proceso</description>
+		<message xml:lang="lt">Kreipkitisis įtraukimas yra reikalingas valdant kitų vartotojų procesus</message>
+		<description xml:lang="ms">Bunuh proses</description>
+		<message xml:lang="ms">Pengesahihan diperlukan untuk mengawal proses-proses pengguna yang lain</message>
+		<description xml:lang="nl">Geforceerd beëindigen</description>
+		<message xml:lang="nl">Je dient gemachtigd te zijn om processen van andere gebruikers te beheren</message>
+		<description xml:lang="pl">Zabij</description>
+		<message xml:lang="pl">Wymagane jest uwierzytelnienie do kontrolowania procesów innych użytkowników</message>
+		<description xml:lang="pt">Matar processo</description>
+		<message xml:lang="pt">É necessária autenticação para controlar os processos de outros utilizadores</message>
+		<description xml:lang="pt_BR">Interromper processo</description>
+		<message xml:lang="pt_BR">A autenticação é necessária para controlar os processos de outros usuários</message>
+		<description xml:lang="ru">Убить процесс</description>
+		<message xml:lang="ru">Для управления процессами других пользователей требуется аутентификация </message>
+		<description xml:lang="sl">Killed process</description>
+		<message xml:lang="sl">Za nadzor državljanstev procesov je zahtevana preverjanje</message>
+		<description xml:lang="sq">Asgjësoje procesin</description>
+		<message xml:lang="sq">Që të kontrollohen procese përdoruesish të tjerë, lypset mirëfilltësim</message>
+		<description xml:lang="sr">Убиј процес</description>
+		<message xml:lang="sr">Идентификација је неопходна за управљање процесима других корисника</message>
+		<description xml:lang="tr">Süreçleri öldür</description>
+		<message xml:lang="tr">Diğer kullanıcıların işlemlerini kontrol etmek için kimlik doğrulaması gerekiyor</message>
+		<description xml:lang="ug">جەرياننى ئۆلتۈرۈش</description>
+		<message xml:lang="ug">باشقا ئىشلەتكۈچىلەرنىڭ جەريانلىرىنى كونترول قىلىش ئۈچۈن دەلىللەش تەلەپ قىلىنىدۇ</message>
+		<description xml:lang="uk">Вбити процес</description>
+		<message xml:lang="uk">Для керування процесами інших користувачів слід пройти розпізнавання</message>
+		<description xml:lang="vi">Hủy quá trình</description>
+		<message xml:lang="vi">Cần xác thực để kiểm soát các quá trình của người dùng khác</message>
+		<description xml:lang="zh_CN">强制结束进程</description>
+		<message xml:lang="zh_CN">控制其他用户的进程需要授权</message>
+		<description xml:lang="zh_HK">強制結束進程</description>
+		<message xml:lang="zh_HK">控制其他用戶的進程需要認證</message>
+		<description xml:lang="lo">ຢຸດໂປຣເຊດດ້ວຍການບັງຄັບ</description>
+		<message xml:lang="lo">ຕ້ອງການການຢັ້ງຢືນເພື່ອຄວບຄຸມໂປຣເຊດຂອງຜູ້ໃຊ້ອື່ນ</message>
+		<description xml:lang="zh_TW">強制結束進程</description>
+		<message xml:lang="zh_TW">控制其他使用者的進程需要認證</message>
+	</action>
+	<action id="com.deepin.pkexec.deepin-system-monitor.systemctl">
+		<description>Set service startup type</description>
+		<message>Authentication is required to set service startup type</message>
+		<icon_name />
+		<defaults>
+			<allow_any>no</allow_any>
+			<allow_inactive>no</allow_inactive>
+			<allow_active>auth_admin_keep</allow_active>
+		</defaults>
+		<annotate key="org.freedesktop.policykit.exec.path">/usr/bin/systemctl</annotate>
+		<annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+		<description xml:lang="ar">تعيين نوع بدء تشغيل الخدمة</description>
+		<message xml:lang="ar">المصادقة مطلوبة لتعيين نوع بدء تشغيل الخدمة</message>
+		<description xml:lang="az">Xidmətin başladılma növünü təyin edin</description>
+		<message xml:lang="az">Xidmətin başladılma növünü təyin etmək üçün doğrulama tələb olunur</message>
+		<description xml:lang="bn">সেবার শুরু ধরন নির্ধারণ করুন</description>
+		<message xml:lang="bn">সেবা শুরু ধরন নির্ধারণ করতে জন্য পরিচয় প্রয়োজন</message>
+		<description xml:lang="bo">ཞབས་ཞུའི་འགོ་སློང་བྱེད་ཐབས་སྒྲིག་འགོད་བྱེད་པ།</description>
+		<message xml:lang="bo">ཞབས་ཞུའི་འགོ་སློང་ཐབས་སྒྲིག་འགོད་བྱེད་པར་དཔང་དཔྱད་བྱ་དགོས།</message>
+		<description xml:lang="br">Termeniñ doare loc'hañ ar servij</description>
+		<message xml:lang="br">An anaoudadur a zo rekis evit termeniñ an doare loc'hañ servij</message>
+		<description xml:lang="ca">Establiu el tipus d'inici del servei</description>
+		<message xml:lang="ca">Cal autenticació per establir el tipus d'inici del servei.</message>
+		<description xml:lang="cs">Nastavit typ spouštění služby</description>
+		<message xml:lang="cs">Pro nastavení typu spouštění služby je třeba ověření se</message>
+		<description xml:lang="da">Indstil tjenestens opstartstype</description>
+		<message xml:lang="da">Der kræves autentifikation for at indstille tjenestens opstartstype</message>
+		<description xml:lang="de">Dienst-Starttyp einstellen</description>
+		<message xml:lang="de">Authentifizierung ist erforderlich, um den Starttyp des Dienstes einzustellen</message>
+		<description xml:lang="en">Set service startup type</description>
+		<message xml:lang="en">Authentication is required to set service startup type</message>
+		<description xml:lang="es">Establecer tipo de inicio del servicio</description>
+		<message xml:lang="es">Se requiere autenticación para establecer el tipo de servicio de inicio</message>
+		<description xml:lang="et">Määrake süsteemi käivitusrakendus</description>
+		<message xml:lang="et">Süsteemi käivitusrakenduse määramiseks on vajalik autentimine</message>
+		<description xml:lang="fi">Palvelun käynnistystyypin vaihto</description>
+		<message xml:lang="fi">Palvelun käynnistystyypin vaihtamiseen vaaditaan todennus</message>
+		<description xml:lang="fr">Définir le type de démarrage du service</description>
+		<message xml:lang="fr">L'authentification est requise pour définir le type de démarrage du service</message>
+		<description xml:lang="gl_ES">Estableza o tipo de inicio de servizo</description>
+		<message xml:lang="gl_ES">A autenticación é necesaria para configurar o tipo de inicio de servizo</message>
+		<description xml:lang="he">הגדרת סוג הפעלת שירות</description>
+		<message xml:lang="he">נדרש אימות כדי להגדיר את סוג הפעלת השירות</message>
+		<description xml:lang="hu">Állítsa be a szolgáltatás indítási típusát</description>
+		<message xml:lang="hu">Hitelesítés szükséges a szolgáltatás indítási típusának beállításához</message>
+		<description xml:lang="id">Setel tipe layanan startup</description>
+		<message xml:lang="id">Autentikasi diperlukan untuk menyetel tipe layanan startup</message>
+		<description xml:lang="it">Imposta tipo di avvio del servizio</description>
+		<message xml:lang="it">Autenticazione richiesta per variare il tipo di avvio automatico</message>
+		<description xml:lang="ko">서비스 시작 유형 설정</description>
+		<message xml:lang="ko">서비스 시작 유형을 설정하려면 인증이 필요합니다.</message>
+		<description xml:lang="lt">Nustatyti paslaugos paleidimo tipą</description>
+		<message xml:lang="lt">Tėkite autentifikacijos norint nustatyti paslaugos paleidimo tipą</message>
+		<description xml:lang="ms">Tetapkan jenis permulaan perkhidmatan</description>
+		<message xml:lang="ms">Pengesahihan diperlukan untuk menetapkan jenis permulaan perkhidmatan</message>
+		<description xml:lang="nl">Soort opstart instellen</description>
+		<message xml:lang="nl">Voer je wachtwoord in om het soort opstart in te stellen</message>
+		<description xml:lang="pl">Ustaw typ uruchomienia usługi</description>
+		<message xml:lang="pl">Wymagane jest uwierzytelnienie, aby ustawić typ uruchamiania usługi</message>
+		<description xml:lang="pt">Definir o tipo de arranque do serviço</description>
+		<message xml:lang="pt">É necessária a autenticação para definir o tipo de arranque do serviço</message>
+		<description xml:lang="pt_BR">Definir o tipo de inicialização do serviço</description>
+		<message xml:lang="pt_BR">A autenticação é necessária para definir o tipo de inicialização do serviço</message>
+		<description xml:lang="ru">Задать тип запуска службы</description>
+		<message xml:lang="ru">Требуется  аутентификация для установки типа запуска службы </message>
+		<description xml:lang="sl">Nastavi vrsto zacetnega vrata storitve</description>
+		<message xml:lang="sl">Zaustavljanje zacetnega vrata storitve je zahtevano prijavljenost</message>
+		<description xml:lang="sq">Caktoni lloj nisjeje shërbimi</description>
+		<message xml:lang="sq">Që të caktohet lloj nisjeje shërbimi, lyspet mirëfilltësim</message>
+		<description xml:lang="sr">Постави режим покретања услуге</description>
+		<message xml:lang="sr">Идентификација је неопходна за поставку режима покретања услуга</message>
+		<description xml:lang="tr">Hizmet başlangıç ​​türünü ayarla</description>
+		<message xml:lang="tr">Hizmet başlangıç ​​türünü ayarlamak için kimlik doğrulaması gerekli</message>
+		<description xml:lang="ug">مۇلازىمەت باشلاش تىپىنى بەلگىلەش</description>
+		<message xml:lang="ug">مۇلازىمەت باشلاش تىپىنى تەڭشەش ئۈچۈن دەلىللەش تەلەپ قىلىنىدۇ</message>
+		<description xml:lang="uk">Встановлення типу запуску служби</description>
+		<message xml:lang="uk">Для встановлення типу запуску служби слід пройти розпізнавання</message>
+		<description xml:lang="vi">Thiết lập loại khởi động dịch vụ</description>
+		<message xml:lang="vi">Bạn cần xác thực để thiết lập loại khởi động dịch vụ</message>
+		<description xml:lang="zh_CN">设置服务的启动方式</description>
+		<message xml:lang="zh_CN">设置进程启动方式需要授权</message>
+		<description xml:lang="zh_HK">設置服務的啟動方式</description>
+		<message xml:lang="zh_HK">設置服務的啟動方式需要認證</message>
+		<description xml:lang="lo">ຕັ້ງປະເພດການເລີ່ມຕົ້ນຂອງບໍລິການ</description>
+		<message xml:lang="lo">ຕ້ອງການການຢັ້ງຢືນເພື່ອຕັ້ງປະເພດການເລີ່ມຕົ້ນຂອງບໍລິການ</message>
+		<description xml:lang="zh_TW">設定服務的啟動方式</description>
+		<message xml:lang="zh_TW">設定服務的啟動方式需要認證</message>
+	</action>
+	<action id="com.deepin.pkexec.deepin-system-monitor.logout">
+		<description>Logout other users</description>
+		<message>Logging out other users is required to change process priority</message>
+		<icon_name />
+		<defaults>
+			<allow_any>no</allow_any>
+			<allow_inactive>no</allow_inactive>
+			<allow_active>auth_admin_keep</allow_active>
+		</defaults>
+		<annotate key="org.freedesktop.policykit.exec.path">/usr/bin/pkill</annotate>
+		<annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+		<description xml:lang="lo">ອອກຈາກລະບົບຜູ້ໃຊ້ອື່ນ</description>
+		<message xml:lang="lo">ຕ້ອງການການຢັ້ງຢືນເພື່ອອອກຈາກລະບົບຜູ້ໃຊ້ອື່ນ</message>
+		<message xml:lang="zh_CN">注销其它用户需要授权</message>
+	</action>
+</policyconfig>

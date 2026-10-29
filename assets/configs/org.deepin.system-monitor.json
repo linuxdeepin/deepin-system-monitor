@@ -1,0 +1,53 @@
+{
+  "magic": "dsg.config.meta",
+  "version": "1.0",
+  "contents": {
+    "log_rules": {
+      "value": "*.debug=false;*.info=false;*.warning=true",
+      "serial": 0,
+      "flags": [
+        "global"
+      ],
+      "name": "log rules",
+      "name[zh_CN]": "日志规则",
+      "description": "log rules",
+      "description[zh_CN]": "日志规则",
+      "permissions": "readwrite",
+      "visibility": "public"
+    },
+    "enable_dkapture": {
+      "value": false,
+      "serial": 0,
+      "flags": [
+        "global"
+      ],
+      "name": "Enable DKapture",
+      "name[zh_CN]": "启用DKapture",
+      "description": "Enable DKapture eBPF monitoring for process data collection",
+      "description[zh_CN]": "启用DKapture eBPF监控进行进程数据收集",
+      "permissions": "readwrite",
+      "visibility": "public"
+    },
+    "displayMenuPauseAndRecovery": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "Display pause recovery process",
+          "name[zh_CN]": "显示暂停恢复进程",
+          "description": "显示暂停恢复进程",
+          "permissions": "readwrite",
+          "visibility": "public"
+    },
+    "readCPUFreqByCPU7": {
+      "value": 0,
+      "serial": 0,
+      "flags": ["global"],
+      "name": "Read CPU frequency from CPU7",
+      "name[zh_CN]": "从 CPU7 读取频率",
+      "description": "Read CPU frequency range (min/max) from CPU7 sysfs interface",
+      "description[zh_CN]": "从 CPU7 的 sysfs 接口读取 CPU 频率范围（最小值/最大值）",
+      "permissions": "readwrite",
+      "visibility": "public"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+#include "netif_detail_view_widget.h"
+#include "netif_stat_view_widget.h"
+#include "netif_summary_view_widget.h"
+#include "system/system_monitor.h"
+#include "ddlog.h"
+
+#include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
+
+using namespace DDLog;
+using namespace core::system;
+NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
+    : BaseDetailViewWidget(parent)
+{
+    qCDebug(app) << "NetifDetailViewWidget constructor";
+    this->setObjectName("NetifDetailViewWidget");
+
+    m_netifstatWIdget = new NetifStatViewWidget(this);
+    m_netifsummaryWidget = new NetifSummaryViewWidget(this);
+    m_netifsummaryWidget->setObjectName("NetifsummaryWidget");
+    m_netifsummaryWidget->setAccessibleName("NetifsummaryWidget");
+
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &NetifDetailViewWidget::updateData);
+    connect(m_netifstatWIdget, &NetifStatViewWidget::netifItemClicked, m_netifsummaryWidget, &NetifSummaryViewWidget::onNetifItemClicked);
+
+    setTitle(DApplication::translate("Process.Graph.View", "Network"));
+    m_centralLayout->addWidget(m_netifstatWIdget);
+    m_centralLayout->addWidget(m_netifsummaryWidget);
+
+    detailFontChanged(DApplication::font());
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    connect(DApplicationHelper::instance(), &DApplicationHelper::fontChanged,
+            this, &NetifDetailViewWidget::detailFontChanged);
+#else
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::fontChanged,
+            this, &NetifDetailViewWidget::detailFontChanged);
+#endif
+
+    updateData();
+}
+
+NetifDetailViewWidget::~NetifDetailViewWidget()
+{
+    // qCDebug(app) << "NetifDetailViewWidget destructor";
+}
+
+void NetifDetailViewWidget::detailFontChanged(const QFont &font)
+{
+    qCDebug(app) << "NetifDetailViewWidget detailFontChanged";
+    BaseDetailViewWidget::detailFontChanged(font);
+
+    m_netifstatWIdget->fontChanged(font);
+    m_netifsummaryWidget->fontChanged(font);
+}
+
+void NetifDetailViewWidget::updateData()
+{
+    qCDebug(app) << "NetifDetailViewWidget updateData";
+    m_netifstatWIdget->onModelUpdate();
+    m_netifsummaryWidget->onModelUpdate();
+}

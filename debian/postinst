@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = configure ]; then
+	if command -v setcap >/dev/null; then
+		setcap cap_net_raw+ep /usr/bin/deepin-system-monitor || true
+	fi
+fi
+
+exit 0

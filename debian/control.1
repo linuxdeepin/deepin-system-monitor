@@ -1,0 +1,43 @@
+Source: deepin-system-monitor
+Section: utils
+Priority: optional
+Maintainer: Deepin Packages Builder <packages@deepin.com>
+Build-Depends:
+ debhelper-compat (= 11),
+ cmake,
+ pkg-config,
+ qtbase5-dev,
+ libqt5svg5-dev,
+ qttools5-dev,
+ qttools5-dev-tools,
+ libdtkcore-dev,
+ libdtkgui-dev,
+ libdtkwidget-dev,
+ libxcb1-dev,
+ libxext-dev,
+ libpcap-dev,
+ libicu-dev,
+ deepin-gettext-tools,
+ libxcb-util0-dev,
+ libxcb-icccm4-dev,
+ libnl-3-dev,
+ libnl-route-3-dev,
+ libudev-dev,
+ dde-tray-loader-dev | dde-dock-dev,
+ libgtest-dev,
+ libgmock-dev,
+ libpolkit-qt5-1-dev,
+ libdwayland-dev | libkf5wayland-dev
+Standards-Version: 4.6.2
+Homepage: https://github.com/linuxdeepin/deepin-system-monitor
+
+Package: deepin-system-monitor
+Architecture: any
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ libcap2-bin,
+ deepin-service-manager
+Recommends: uos-reporter, deepin-event-log
+Replaces: deepin-system-monitor-plugin
+Description: A system monitor tool.
+ System Monitor is a system tool monitoring and managing hardware load, program running and system services. It's capable to real-time monitor CPU status, memory footprint, and upload/download speed, manage system and application processes, search and force end processes as well.

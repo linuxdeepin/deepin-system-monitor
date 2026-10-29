@@ -1,0 +1,53 @@
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+#include "mem_detail_view_widget.h"
+#include "mem_stat_view_widget.h"
+#include "mem_summary_view_widget.h"
+#include "system/system_monitor.h"
+#include "ddlog.h"
+
+#include <DApplication>
+#include <QVBoxLayout>
+
+using namespace DDLog;
+using namespace core::system;
+MemDetailViewWidget::MemDetailViewWidget(QWidget *parent)
+    : BaseDetailViewWidget(parent)
+{
+    qCDebug(app) << "MemDetailViewWidget constructor";
+    this->setObjectName("MemDetailViewWidget");
+    m_memstatWIdget = new MemStatViewWidget(this);
+    m_memsummaryWidget = new MemSummaryViewWidget(this);
+    m_memsummaryWidget->setObjectName("MemsummaryWidget");
+    m_memsummaryWidget->setAccessibleName("MemsummaryWidget");
+
+    setTitle(DApplication::translate("Process.Graph.Title", "Memory"));
+    m_centralLayout->addWidget(m_memstatWIdget);
+    m_centralLayout->addWidget(m_memsummaryWidget);
+
+    detailFontChanged(DApplication::font());
+
+    onModelUpdate();
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &MemDetailViewWidget::onModelUpdate);
+
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+                this, &MemDetailViewWidget::detailFontChanged);
+}
+
+void MemDetailViewWidget::onModelUpdate()
+{
+    qCDebug(app) << "MemDetailViewWidget onModelUpdate";
+    m_memstatWIdget->onModelUpdate();
+    m_memsummaryWidget->onModelUpdate();
+}
+
+void MemDetailViewWidget::detailFontChanged(const QFont &font)
+{
+    qCDebug(app) << "MemDetailViewWidget detailFontChanged";
+    BaseDetailViewWidget::detailFontChanged(font);
+    m_memstatWIdget->fontChanged(font);
+    m_memsummaryWidget->fontChanged(font);
+}
