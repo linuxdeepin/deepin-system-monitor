@@ -141,6 +141,7 @@ set(POPUP_UT_CPP
     # ---- 本批次新增:popup 日志/应用/DBus 单测(logger/application/dbus)----
     ut_logger.cpp
     ut_application.cpp
+    ut_dbus_adaptor.cpp
 )
 
 add_executable(${POPUP_UT_TARGET}
