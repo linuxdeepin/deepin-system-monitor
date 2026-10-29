@@ -89,7 +89,7 @@ TEST_F(UT_Toolbar, test_isSearchContentEmpty_01)
 {
     bool rt = m_tester->isSearchContentEmpty();
 
-    EXPECT_FALSE(rt);
+    EXPECT_TRUE(rt);
 }
 
 TEST_F(UT_Toolbar, test_isSearchContentEmpty_02)
@@ -97,7 +97,7 @@ TEST_F(UT_Toolbar, test_isSearchContentEmpty_02)
     m_tester->searchEdit->setText("1");
     bool rt = m_tester->isSearchContentEmpty();
 
-    EXPECT_TRUE(rt);
+    EXPECT_FALSE(rt);
 }
 
 TEST_F(UT_Toolbar, test_searchContent_01)
