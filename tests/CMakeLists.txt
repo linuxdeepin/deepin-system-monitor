@@ -762,6 +762,11 @@ endif()
 # 插件 GUI 模块（MonitorPlugin/MonitorPluginButtonWidget/QuickPanelWidget/
 # SystemMonitorTipsWidget/CommonIconButton/MLogger/DBusInterface）的 ddlog.h 日志类别
 # 定义与主程序/popup 重复（ODR），不能并入其它测试目标，独立成测试二进制。
+# ---------------- qt-autotest-generator (V-6444): system-server / server 单元测试 ----------------
+# 两个服务端模块内部存在同名无命名空间类（MLogger），与主程序及彼此均不能并入
+# deepin-system-monitor-test 目标，各自独立成测试二进制。
 if(DOTEST)
     add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-plugin plugin-ut-build)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-system-server sys-server-ut-build)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-server server-ut-build)
 endif()
