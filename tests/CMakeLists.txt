@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+# SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -735,4 +735,12 @@ add_subdirectory(${CMAKE_HOME_DIRECTORY}/deepin-system-monitor-plugin-popup/auto
 # 均无命名空间），不能并入 deepin-system-monitor-test 目标，故独立成测试二进制。
 if(DOTEST)
     add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-plugin-popup popup-ut-build)
+endif()
+
+# ---------------- qt-autotest-generator (V-6442): monitor plugin GUI 单元测试 ----------------
+# 插件 GUI 模块（MonitorPlugin/MonitorPluginButtonWidget/QuickPanelWidget/
+# SystemMonitorTipsWidget/CommonIconButton/MLogger/DBusInterface）的 ddlog.h 日志类别
+# 定义与主程序/popup 重复（ODR），不能并入其它测试目标，独立成测试二进制。
+if(DOTEST)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-plugin plugin-ut-build)
 endif()
