@@ -197,6 +197,11 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     qreal memPercent = m_lastMemPercent + ((m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1. / m_memInfo->memTotal() - m_lastMemPercent) * m_progress;
     qreal swapPercent = m_lastSwapPercent + ((m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1. / m_memInfo->swapTotal() - m_lastSwapPercent) * m_progress;
 
+    // if memPercent is not valid, set it zero
+    if (std::isnan(memPercent)) {
+        memPercent = 0.0;
+    }
+
     // Draw memory summary.
     // After the memory and swap space text, add a space before the brackets
     QString memoryTitle = QString("%1 (%2%)")
