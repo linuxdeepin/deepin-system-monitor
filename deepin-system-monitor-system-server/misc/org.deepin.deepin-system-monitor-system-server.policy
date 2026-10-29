@@ -74,6 +74,8 @@
 		<message xml:lang="sq">Që të caktohet lloj nisjeje shërbimi, lyspet mirëfilltësim</message>
 		<description xml:lang="sr">Постави режим покретања услуге</description>
 		<message xml:lang="sr">Идентификација је неопходна за поставку режима покретања услуга</message>
+		<description xml:lang="sv">Ange tjänstens starttyp</description>
+		<message xml:lang="sv">Autentisering krävs för att ange tjänstens starttyp.</message>
 		<description xml:lang="tr">Hizmet başlangıç ​​türünü ayarla</description>
 		<message xml:lang="tr">Hizmet başlangıç ​​türünü ayarlamak için kimlik doğrulaması gerekli</message>
 		<description xml:lang="ug">مۇلازىمەت باشلاش تىپىنى بەلگىلەش</description>
