@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2024-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -51,28 +51,6 @@ bool checkAuthorization(const QString &appBusName, const QString &action)
         qCWarning(app) << "Policy authorization check failed for bus:" << appBusName;
         return false;
     }
-}
-
-/**
-   @return 返回PID对应的可执行程序名称
- */
-static QString getProcIdExe(qint64 id)
-{
-    qCDebug(app) << "Getting executable for PID:" << id;
-    QString execName;
-    if (id > 0) {
-        // Read contents of virtual /proc/{pid}/cmdline file
-        QString exeSymlinkPath = QString("/proc/%1/exe").arg(id);
-        char *actualpath = realpath(exeSymlinkPath.toStdString().c_str(), nullptr);
-        if (actualpath) {
-            execName = QString(actualpath);
-            free(actualpath); // free the memory allocated by realpath
-        } else {
-            qCWarning(app) << "Failed to resolve path for PID" << id;
-        }
-    }
-    qCDebug(app) << "Executable for PID" << id << "is:" << execName;
-    return execName;
 }
 
 SystemDBusServer::SystemDBusServer(QObject *parent)
