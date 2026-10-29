@@ -361,7 +361,7 @@ QString format::formatUnit_memory_disk(QVariant size, format::SizeUnit base, int
     }
     qreal v = size.toReal();
 
-    while (v > 1024. && u <= EB) {
+    while (v > 1024. && u < EB) {
         v /= 1024;
         u++;
     }
@@ -386,7 +386,7 @@ QString format::formatUnit_net(QVariant size, format::SizeUnit base, int prec, b
     }
     qreal v = size.toReal();
 
-    while (v > 1024. && u <= EB) {
+    while (v > 1024. && u < EB) {
         v /= 1024;
         u++;
     }
