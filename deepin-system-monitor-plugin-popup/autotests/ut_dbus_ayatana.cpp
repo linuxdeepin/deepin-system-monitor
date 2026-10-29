@@ -185,7 +185,8 @@ TEST_F(UT_DBusAyatana, slot_replyEmpty_matchesEmptyName_emits)
     // Arrange
     DBusAyatanaInterface *iface = DBusAyatanaInterface::getInstance();
     QSignalSpy spy(iface, &DBusAyatanaInterface::sigSendCloseWidget);
-    g_desktopLines = QStringList { QStringLiteral("Name="),
+    g_desktopLines = QStringList { QStringLiteral("[Desktop Entry]"),
+                                   QStringLiteral("Name="),
                                    QStringLiteral("GenericName=AI助手"),
                                    QStringLiteral("Icon=ai-assistant") };
     // Act
