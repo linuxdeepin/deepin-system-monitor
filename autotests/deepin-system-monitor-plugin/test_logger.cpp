@@ -46,8 +46,7 @@
 //   B13 m_rules 非空 → "\n" + join 追加 → TEST_P（追加组）
 //   B14 子串误去重（"format=1" contains "mat=1"）→ Logger_AppendRules_SubstringFalselyDedups
 //
-// 【备注】appendRules 去重采用 m_rules.contains(整行) 的子串匹配而非整行匹配，
-// 存在部分规则串被误去重的隐患（Mode 5 报告记录）；用例 4 按现状断言该行为。
+// 【备注】appendRules 去重已改为按行精确匹配（DEF-001），同批次重复规则已去重（DEF-002）。
 //
 // 用例计数声明（self-check-structural 验证此块）：
 // | method | level | factors | min | actual |
@@ -186,7 +185,8 @@ INSTANTIATE_TEST_SUITE_P(AppendMerge, AppendParamTest,
                              AppendCase { "EmptyRules_JoinDirect", "", "a=1;b=2", "a=1\nb=2" },
                              AppendCase { "AppendDistinct", "a=1", "b=2;c=3", "a=1\nb=2\nc=3" },
                              AppendCase { "AppendWithDup", "a=1;b=2", "b=2;c=3", "a=1\nb=2\nc=3" },
-                             AppendCase { "AppendAllDuplicate", "a=1", "a=1", "a=1" }));
+                             AppendCase { "AppendAllDuplicate", "a=1", "a=1", "a=1" },
+                             AppendCase { "AppendBatchDup", "a=1", "b=2;b=2", "a=1\nb=2" }));
 
 TEST_F(LoggerTest, Logger_AppendRules_DedupsExactLines)
 {
@@ -214,7 +214,7 @@ TEST_F(LoggerTest, Logger_AppendRules_AllDuplicate_NoChange)
     EXPECT_EQ(logger.rules().count('\n'), 0);
 }
 
-TEST_F(LoggerTest, Logger_AppendRules_SubstringFalselyDedups)
+TEST_F(LoggerTest, Logger_AppendRules_ExactLineMatchPreservesSubstring)
 {
     // Arrange: 初始规则 "format=1"，追加串是其子串
     setTestRulesEnv("format=1");
@@ -222,10 +222,10 @@ TEST_F(LoggerTest, Logger_AppendRules_SubstringFalselyDedups)
     MLogger logger;
     // Act: 追加 "mat=1"（为 "format=1" 的子串）
     logger.appendRules("mat=1");
-    // Assert: 子串匹配导致误去重——按现状断言（记录潜在缺陷）：
-    // "mat=1" 行因 contains() 子串命中被丢弃，规则仍只有 "format=1" 单行
-    EXPECT_EQ(logger.rules(), QString("format=1"));
-    EXPECT_EQ(logger.rules().count('\n'), 0);
+    // Assert: 精确行匹配不会误去重子串（DEF-001 修复后）：
+    // "mat=1" 行与 "format=1" 行不同，应被保留追加
+    EXPECT_EQ(logger.rules(), QString("format=1\nmat=1"));
+    EXPECT_EQ(logger.rules().count('\n'), 1);
 }
 
 TEST_F(LoggerTest, Logger_AppendRules_EmptyRules_NoChange)
@@ -234,7 +234,7 @@ TEST_F(LoggerTest, Logger_AppendRules_EmptyRules_NoChange)
     setTestRulesEnv("a=1");
     stubDConfigValue(QString(""));
     MLogger logger;
-    // Act: 追加空串（"" → split 出单项空串 → contains("") 命中 → 全被移除 → 早退）
+    // Act: 追加空串（"" → split with SkipEmptyParts → 空列表 → 早退）
     logger.appendRules("");
     // Assert: 规则不变，仍为单行
     EXPECT_EQ(logger.rules(), QString("a=1"));

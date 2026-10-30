@@ -58,9 +58,20 @@ void MLogger::appendRules(const QString &rules)
     qCDebug(app) << "appendRules with rules:" << rules;
     QString tmpRules = rules;
     tmpRules = tmpRules.replace(";", "\n");
-    auto tmplist = tmpRules.split('\n');
+    auto tmplist = tmpRules.split('\n', Qt::SkipEmptyParts);
+
+    // DEF-002: deduplicate rules within the same batch
+    QStringList deduped;
+    for (const auto &line : tmplist) {
+        if (!deduped.contains(line))
+            deduped.append(line);
+    }
+    tmplist = deduped;
+
+    // DEF-001: use exact line matching instead of substring matching
+    QStringList existingRules = m_rules.split('\n', Qt::SkipEmptyParts);
     for (int i = 0; i < tmplist.count(); i++)
-        if (m_rules.contains(tmplist.at(i))) {
+        if (existingRules.contains(tmplist.at(i))) {
             qCDebug(app) << "rule" << tmplist.at(i) << "already exists";
             tmplist.removeAt(i);
             i--;
