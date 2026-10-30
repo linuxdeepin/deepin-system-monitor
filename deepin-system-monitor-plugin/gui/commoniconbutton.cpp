@@ -139,7 +139,8 @@ void CommonIconButton::startRotate()
 
 void CommonIconButton::stopRotate()
 {
-    m_refreshTimer->stop();
+    if (m_refreshTimer)
+        m_refreshTimer->stop();
     m_rotateAngle = 0;
     update();
 }
