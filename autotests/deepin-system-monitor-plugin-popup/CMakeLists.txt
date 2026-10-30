@@ -147,3 +147,11 @@ target_link_libraries(test_deepin-system-monitor-plugin-popup PRIVATE
 )
 
 message(STATUS "UT: test_deepin-system-monitor-plugin-popup configured with ${POPUP_TEST_SOURCES}")
+
+# qt-autotest-generator: Process/ProcessDB 的私有方法（read*/readSockInodes/
+# sendSignalToProcess 等）无公开入口且无入站调用方，仅能用 -fno-access-control
+# 直调（deepin-mail 等项目同款方案；仅影响编译期访问检查，不改变代码生成）
+target_compile_options(test_deepin-system-monitor-plugin-popup PRIVATE -fno-access-control)
+
+# qt-autotest-generator: QSignalSpy 需要 Qt::Test 模块（APPEND，不改已有行）
+target_link_libraries(test_deepin-system-monitor-plugin-popup PRIVATE ${QT_NS}::Test)

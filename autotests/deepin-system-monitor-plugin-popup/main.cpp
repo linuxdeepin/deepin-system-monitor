@@ -10,6 +10,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
 #include "application.h"
+#include "common/common.h"
 
 #if defined(CMAKE_SAFETYTEST_ARG_ON)
 #include <sanitizer/asan_interface.h>
@@ -20,6 +21,9 @@ DWIDGET_USE_NAMESPACE
 int main(int argc, char *argv[])
 {
     qputenv("QT_QPA_PLATFORM", "offscreen");
+    // HZ/kb_shift 等运行期全局量由 global_init 填充；不调用则 HZ=0，
+    // Process::startTime 等除以 HZ 直接 SIGFPE
+    common::init::global_init();
     Application app(argc, argv);
 
     ::testing::InitGoogleTest(&argc, argv);
