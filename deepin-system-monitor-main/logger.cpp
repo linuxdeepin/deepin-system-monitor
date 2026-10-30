@@ -41,8 +41,9 @@ MLogger::MLogger(QObject *parent)
 
 MLogger::~MLogger()
 {
-    // qCDebug(app) << "MLogger destructor";
-    m_config->deleteLater();
+    qCDebug(app) << "MLogger destructor";
+    delete m_config;
+    m_config = nullptr;
 }
 
 void MLogger::setRules(const QString &rules)

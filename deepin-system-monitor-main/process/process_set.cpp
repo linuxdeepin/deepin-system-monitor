@@ -107,7 +107,7 @@ ProcessSet::~ProcessSet()
     }
     
     if (m_config) {
-        m_config->deleteLater();
+        delete m_config;
         m_config = nullptr;
     }
 }
