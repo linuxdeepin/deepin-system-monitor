@@ -320,7 +320,17 @@ public Q_SLOTS:  // METHODS
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
             // check signature
             if (reply.signature() == "ba(sss)") {
-                // unfinished...
+                result.hasInstallInfo = reply.arguments()[0].toBool();
+                QDBusArgument changesArg = qvariant_cast<QDBusArgument>(reply.arguments()[1]);
+                changesArg.beginArray();
+                while (!changesArg.atEnd()) {
+                    QString type, fileName, destination;
+                    changesArg.beginStructure();
+                    changesArg >> type >> fileName >> destination;
+                    changesArg.endStructure();
+                    result.changes << QSharedPointer<UnitFileChange>(new UnitFileChange{type, fileName, destination});
+                }
+                changesArg.endArray();
             }
         }
 
@@ -365,7 +375,16 @@ public Q_SLOTS:  // METHODS
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
             // check signature
             if (reply.signature() == "a(sss)") {
-                // unfinished...
+                QDBusArgument changesArg = qvariant_cast<QDBusArgument>(reply.arguments()[0]);
+                changesArg.beginArray();
+                while (!changesArg.atEnd()) {
+                    QString type, fileName, destination;
+                    changesArg.beginStructure();
+                    changesArg >> type >> fileName >> destination;
+                    changesArg.endStructure();
+                    result.changes << QSharedPointer<UnitFileChange>(new UnitFileChange{type, fileName, destination});
+                }
+                changesArg.endArray();
             }
         }
 
