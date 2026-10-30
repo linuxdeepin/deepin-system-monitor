@@ -21,6 +21,12 @@ void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
 {
     m_textList = strList;
 
+    // 空列表防护：避免后续 at(0) 越界崩溃
+    if (m_textList.isEmpty()) {
+        update();
+        return;
+    }
+
     //  [   CPU: 100.0%    ↓ 1000kb/s  ]
     // 获取strList字符串，并存入cpu,mem,upLoad,download中
     QString cpu;
