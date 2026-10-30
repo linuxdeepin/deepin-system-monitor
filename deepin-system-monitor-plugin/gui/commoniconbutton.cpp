@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "commoniconbutton.h"
@@ -139,7 +139,8 @@ void CommonIconButton::startRotate()
 
 void CommonIconButton::stopRotate()
 {
-    m_refreshTimer->stop();
+    if (m_refreshTimer)
+        m_refreshTimer->stop();
     m_rotateAngle = 0;
     update();
 }
