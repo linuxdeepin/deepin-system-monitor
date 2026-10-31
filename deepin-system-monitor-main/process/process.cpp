@@ -169,7 +169,7 @@ void Process::readProcessSimpleInfo(bool skipStatReading)
 
     ok = ok && readCmdline(); // cmdline - DKapture无法提供，两种模式都需要
 
-    d->usrerName = SysInfo::userName(d->uid);
+    d->userName = SysInfo::userName(d->uid);
     d->proc_name.refreashProcessName(this);
     d->proc_icon.refreashProcessIcon(this);
 
@@ -207,7 +207,7 @@ void Process::readProcessInfo()
     readIO();
     readSockInodes();
 
-    d->usrerName = SysInfo::userName(d->uid);
+    d->userName = SysInfo::userName(d->uid);
     d->proc_name.refreashProcessName(this);
     d->proc_icon.refreashProcessIcon(this);
     d->uptime = SysInfo::instance()->uptime();
@@ -842,12 +842,12 @@ qulonglong Process::sharememory() const
 
 int Process::priority() const
 {
-    return d->nice;
+    return d->priority;
 }
 
 void Process::setPriority(int prio)
 {
-    d->nice = prio;
+    d->priority = prio;
 }
 
 char Process::state() const
@@ -882,7 +882,7 @@ uid_t Process::uid() const
 
 QString Process::userName() const
 {
-    return d->usrerName;
+    return d->userName;
 }
 
 gid_t Process::gid() const
@@ -1019,7 +1019,7 @@ void Process::refreashProcessIcon()
 
 void Process::setUserName(const QString &userName)
 {
-    d->usrerName = userName;
+    d->userName = userName;
 }
 
 void Process::applyDKaptureData(const QVariantMap &data)
@@ -1147,7 +1147,7 @@ void Process::applyDKaptureData(const QVariantMap &data)
     // 只有关键操作都成功才保持进程有效
     d->valid = d->valid && ok;
     
-    d->usrerName = SysInfo::userName(d->uid);
+    d->userName = SysInfo::userName(d->uid);
     d->proc_name.refreashProcessName(this);
     d->proc_icon.refreashProcessIcon(this);
     d->uptime = SysInfo::instance()->uptime();

@@ -1113,9 +1113,8 @@ TEST_F(ProcessTest, ApplyDK_FullMap_AllFieldsApplied)
     // Assert
     EXPECT_TRUE(p.isValid());
     EXPECT_EQ('D', p.state());
-    // 注意：applyDKaptureData 先处理 "priority"→setPriority(15)，后处理
-    // "nice"→d->nice=3 覆盖同字段 → 实际 priority()==3（疑似源码缺陷，见缺陷清单）
-    EXPECT_EQ(3, p.priority());
+    // 修复后：priority 与 nice 为独立字段，priority() 返回 15，d->nice 保持 3
+    EXPECT_EQ(15, p.priority());
     EXPECT_EQ(QStringLiteral("dk-comm"), p.name());
     EXPECT_EQ(11u, p.utime());
     EXPECT_EQ(22u, p.stime());

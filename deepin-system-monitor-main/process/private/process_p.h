@@ -57,6 +57,7 @@ public:
         , policy {0}
         , nthreads {0}
         , nice {0}
+        , priority {0}
         , utime {0}
         , stime {0}
         , cutime {0}
@@ -71,7 +72,7 @@ public:
         , read_bytes {0}
         , write_bytes {0}
         , cancelled_write_bytes {0}
-        , usrerName {}
+        , userName {}
         , name {}
         , proc_name{}
         , proc_icon{}
@@ -109,6 +110,7 @@ public:
         , policy(other.policy)
         , nthreads(other.nthreads)
         , nice(other.nice)
+        , priority(other.priority)
         , utime(other.utime)
         , stime(other.stime)
         , cutime(other.cutime)
@@ -123,7 +125,7 @@ public:
         , read_bytes(other.read_bytes)
         , write_bytes(other.write_bytes)
         , cancelled_write_bytes(other.cancelled_write_bytes)
-        , usrerName(other.name)
+        , userName(other.userName)
         , name(other.name)
         , proc_name(other.proc_name)
         , proc_icon(other.proc_icon)
@@ -170,6 +172,7 @@ private:
     unsigned int policy; // scheduling policy
     unsigned int nthreads; // number of threads
     int nice; // process nice
+    int priority; // process priority (from DKapture)
 
     unsigned long long utime; // user time
     unsigned long long stime; // kernel time
@@ -189,7 +192,7 @@ private:
     unsigned long long write_bytes; // disk write bytes
     unsigned long long cancelled_write_bytes; // cancelled write bytes
 
-    QString usrerName;
+    QString userName;
 
     QString name; // raw name
     ProcessName proc_name; // process name object

@@ -564,9 +564,10 @@ TEST_F(UT_Process, SetPriority_PositiveValue_NiceUpdated)
     // Act：写入优先级
     m_tester->setPriority(prio);
 
-    // Assert：getter 与私有字段一致
+    // Assert：priority 写入 d->priority，nice 不受影响
     EXPECT_EQ(m_tester->priority(), 15);
-    EXPECT_EQ(m_tester->d->nice, 15);
+    EXPECT_EQ(m_tester->d->priority, 15);
+    EXPECT_EQ(m_tester->d->nice, 0);
 }
 
 TEST_F(UT_Process, State_DefaultCtor_ZeroChar)
@@ -673,7 +674,7 @@ TEST_F(UT_Process, UserName_DefaultCtor_Empty)
 
     // Assert：未读取前为空
     EXPECT_EQ(userName, QString());
-    EXPECT_EQ(m_tester->d->usrerName, QString());
+    EXPECT_EQ(m_tester->d->userName, QString());
 }
 
 TEST_F(UT_Process, SetUserName_CustomName_FieldUpdated)
@@ -686,7 +687,7 @@ TEST_F(UT_Process, SetUserName_CustomName_FieldUpdated)
 
     // Assert：getter 与私有字段一致
     EXPECT_EQ(m_tester->userName(), user);
-    EXPECT_EQ(m_tester->d->usrerName, user);
+    EXPECT_EQ(m_tester->d->userName, user);
 }
 
 TEST_F(UT_Process, Gid_DefaultCtor_Zero)
@@ -1598,7 +1599,7 @@ TEST_F(UT_Process, ApplyDKaptureData_IdentityFields_AllApplied)
     EXPECT_EQ(m_tester->d->read_bytes, 1000ULL);
     EXPECT_EQ(m_tester->d->write_bytes, 2000ULL);
     EXPECT_EQ(m_tester->d->cancelled_write_bytes, 300ULL);
-    EXPECT_EQ(m_tester->d->usrerName, SysInfo::userName(getuid()));
+    EXPECT_EQ(m_tester->d->userName, SysInfo::userName(getuid()));
     EXPECT_EQ(m_tester->d->apptype, kFilterCurrentUser);
 }
 
