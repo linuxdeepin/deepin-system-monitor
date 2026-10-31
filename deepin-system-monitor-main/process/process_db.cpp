@@ -371,7 +371,7 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
                 ec = errfmt(
                          errno,
                          QApplication::translate("Process.Signal", "Failed in sending signal to process"),
-                         pid, SIGCONT, ec);
+                         pid, signal, ec);
                 Q_EMIT processControlResultReady(ec);
                 return;
             }
