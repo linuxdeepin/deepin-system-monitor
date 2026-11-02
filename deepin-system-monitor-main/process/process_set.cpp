@@ -643,7 +643,9 @@ void ProcessSet::dedupCompatibilityModeProcesses()
         pid_t mainPid = *std::min_element(pids.begin(), pids.end());
 
         qulonglong totalMemory = m_set[mainPid].memory();
-        qreal totalCpu = m_set[mainPid].cpu();
+        // Aggregate CPU only in DKapture mode (traditional mode already
+        // merges via mergeSubProcCpu) — same guard as groupProcessesByAMInstance
+        qreal totalCpu = m_useSystemService ? m_set[mainPid].cpu() : 0;
 
         for (pid_t pid : pids) {
             if (pid == mainPid)
@@ -651,19 +653,20 @@ void ProcessSet::dedupCompatibilityModeProcesses()
 
             m_set[pid].setAppType(kFilterCurrentUser);
             totalMemory += m_set[pid].memory();
-            totalCpu += m_set[pid].cpu();
+            if (m_useSystemService)
+                totalCpu += m_set[pid].cpu();
 
             m_pidMyApps.removeOne(pid);
         }
 
         m_set[mainPid].setMemory(totalMemory);
-        m_set[mainPid].setCpu(totalCpu);
+        if (m_useSystemService)
+            m_set[mainPid].setCpu(totalCpu);
 
         qCInfo(app) << "Deduplicated" << (pids.size() - 1)
                     << "compatibility-mode sub-processes for" << it.key()
                     << ", main pid:" << mainPid;
     }
 }
-
 } // namespace process
 } // namespace core
