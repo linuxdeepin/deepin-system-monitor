@@ -224,7 +224,7 @@ void Process::readProcessInfo()
         struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
         d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
 
-        d->networkIOSample->addSample(new IOSampleFrame(validrecentPtr->uptime, {0, 0}));
+        d->networkIOSample->addSample(new IOSampleFrame(validrecentPtr->uptime, {validrecentPtr->recv_bytes, validrecentPtr->sent_bytes}));
     }
     d->cpuUsageSample->addSample(new CPUUsageSampleFrame(qMax(0., timedelta) / cpuset->getUsageTotalDelta() * 100));
 
@@ -771,7 +771,7 @@ void Process::calculateProcessMetrics()
         struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
         d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
 
-        d->networkIOSample->addSample(new IOSampleFrame(validrecentPtr->uptime, {0, 0}));
+        d->networkIOSample->addSample(new IOSampleFrame(validrecentPtr->uptime, {validrecentPtr->recv_bytes, validrecentPtr->sent_bytes}));
     }
     d->cpuUsageSample->addSample(new CPUUsageSampleFrame(qMax(0., timedelta) / cpuset->getUsageTotalDelta() * 100));
 
