@@ -56,12 +56,14 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
         initStyleOption(&option);
 
         auto *style = dynamic_cast<DStyle *>(DApplication::style());
-        QStyleOptionFocusRect o;
-        o.QStyleOption::operator=(option);
-        // need take scroll offset into consideration
-        QRect focusRect{rect.x() - offset(), rect.y(), length() - sectionPosition(0), rect.height()};
-        o.rect = style->visualRect(layoutDirection(), rect, focusRect);
-        style->drawPrimitive(DStyle::PE_FrameFocusRect, &o, &painter);
+        if (style) {
+            QStyleOptionFocusRect o;
+            o.QStyleOption::operator=(option);
+            // need take scroll offset into consideration
+            QRect focusRect{rect.x() - offset(), rect.y(), length() - sectionPosition(0), rect.height()};
+            o.rect = style->visualRect(layoutDirection(), rect, focusRect);
+            style->drawPrimitive(DStyle::PE_FrameFocusRect, &o, &painter);
+        }
     }
     QPainter painter(viewport());
     QPainterPath innerPath,outPath;
@@ -86,6 +88,9 @@ void BaseHeaderView::focusInEvent(QFocusEvent *event)
 bool BaseHeaderView::eventFilter(QObject *obj, QEvent *ev)
 {
     // qCDebug(app) << "BaseHeaderView eventFilter";
+    if (obj != this) {
+        return DHeaderView::eventFilter(obj, ev);
+    }
     if (ev->type() == QEvent::KeyPress) {
         qCDebug(app) << "BaseHeaderView eventFilter: KeyPress";
         QKeyEvent *kev = dynamic_cast<QKeyEvent *>(ev);

@@ -92,6 +92,11 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
     // DStyle instance
     auto *style = dynamic_cast<DStyle *>(DApplication::style());
+    if (!style) {
+        painter->restore();
+        QStyledItemDelegate::paint(painter, option, index);
+        return;
+    }
     // icon size
     auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
     // qCDebug(app) << "BaseItemDelegate paint: Icon size is" << iconSize;
