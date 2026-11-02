@@ -11,6 +11,7 @@
 #include "gui/main_window.h"
 #include "common/perf.h"
 #include "dbus/dbus_object.h"
+#include "common/thread_manager.h"
 #include "dbus/dbusalarmnotify.h"
 #include "3rdparty/dmidecode/dmidecode.h"
 #include "ddlog.h"
@@ -146,6 +147,12 @@ int main(int argc, char *argv[])
         Dtk::Widget::moveToCenter(&mw);
         qCDebug(DDLog::app) << "Showing main window";
         mw.show();
+
+        QObject::connect(&app, &QCoreApplication::aboutToQuit, []() {
+            qCDebug(DDLog::app) << "aboutToQuit: cleaning up resources";
+            common::core::ThreadManager::instance()->cleanup();
+            DBusObject::getInstance().unRegister();
+        });
 
         qCDebug(DDLog::app) << "Starting application event loop";
         int result = app.exec();

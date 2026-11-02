@@ -9,6 +9,7 @@
 #include "system/system_monitor_thread.h"
 #include "system/netif_monitor_thread.h"
 #include "process/process_db.h"
+#include "dbus/dbus_object.h"
 #include "ddlog.h"
 
 #include <QEvent>
@@ -34,7 +35,9 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
-    // qCDebug(app) << "Application destructor";
+    qCDebug(app) << "Application destructor, cleaning up resources";
+    ThreadManager::instance()->cleanup();
+    DBusObject::getInstance().unRegister();
 }
 
 void Application::setCurrentTaskState(TaskState taskState)
