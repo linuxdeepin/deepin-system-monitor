@@ -384,6 +384,11 @@ void ProcessSet::scanProcess()
     // Group processes by AM instance for linglong apps
     groupProcessesByAMInstance();
 
+    // Deduplicate compatibility-mode processes (e.g. apps running in
+    // deepin-compatible-ctl bottles) that are not handled by AM grouping
+    // or ancestor dedup
+    dedupCompatibilityModeProcesses();
+
     // 性能统计
     qint64 elapsed = timer.elapsed();
     QString mode = m_useSystemService ? "DKapture" : "Traditional";
@@ -591,6 +596,74 @@ AMInstanceGroup ProcessSet::getInstanceGroup(const QString &instancePath) const
     return m_instanceGroups.value(instancePath);
 }
 
+void ProcessSet::dedupCompatibilityModeProcesses()
+{
+    // Group kFilterApps processes by name, excluding those already
+    // grouped by AM (linglong apps) — those are handled separately.
+    QMap<QString, QList<pid_t>> nameToPids;
+    for (const pid_t &pid : m_pidMyApps) {
+        if (!m_set.contains(pid))
+            continue;
+        if (m_set[pid].appType() != kFilterApps)
+            continue;
+        if (m_pidToInstance.contains(pid))
+            continue;
+        nameToPids[m_set[pid].name()].append(pid);
+    }
+
+    for (auto it = nameToPids.begin(); it != nameToPids.end(); ++it) {
+        const QList<pid_t> &pids = it.value();
+        if (pids.size() <= 1)
+            continue;
+
+        // Identify compatibility-mode processes via cgroup.
+        // Compatibility-mode processes run in containers/bottles created
+        // by deepin-compatible-ctl; their cgroup paths contain markers
+        // such as "compatible" or "bottle".
+        bool allCompat = true;
+        for (pid_t pid : pids) {
+            QFile cgroupFile(QString("/proc/%1/cgroup").arg(pid));
+            if (!cgroupFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                allCompat = false;
+                break;
+            }
+            QString cgroupContent = QString::fromUtf8(cgroupFile.readAll());
+            cgroupFile.close();
+            if (!cgroupContent.contains("compatible", Qt::CaseInsensitive) &&
+                !cgroupContent.contains("bottle", Qt::CaseInsensitive)) {
+                allCompat = false;
+                break;
+            }
+        }
+
+        if (!allCompat)
+            continue;
+
+        // Keep main process (lowest PID), demote others to kFilterCurrentUser
+        pid_t mainPid = *std::min_element(pids.begin(), pids.end());
+
+        qulonglong totalMemory = m_set[mainPid].memory();
+        qreal totalCpu = m_set[mainPid].cpu();
+
+        for (pid_t pid : pids) {
+            if (pid == mainPid)
+                continue;
+
+            m_set[pid].setAppType(kFilterCurrentUser);
+            totalMemory += m_set[pid].memory();
+            totalCpu += m_set[pid].cpu();
+
+            m_pidMyApps.removeOne(pid);
+        }
+
+        m_set[mainPid].setMemory(totalMemory);
+        m_set[mainPid].setCpu(totalCpu);
+
+        qCInfo(app) << "Deduplicated" << (pids.size() - 1)
+                    << "compatibility-mode sub-processes for" << it.key()
+                    << ", main pid:" << mainPid;
+    }
+}
 
 } // namespace process
 } // namespace core
