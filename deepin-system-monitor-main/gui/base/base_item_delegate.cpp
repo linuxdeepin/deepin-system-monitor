@@ -6,6 +6,7 @@
 #include "base_item_delegate.h"
 #include "process/process_icon_cache.h"
 #include "ddlog.h"
+#include "base_style_helper.h"
 
 #include <DApplication>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -91,7 +92,12 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
 
     // DStyle instance
-    auto *style = dynamic_cast<DStyle *>(DApplication::style());
+    auto *style = getDStyle();
+    if (!style) {
+        painter->restore();
+        QStyledItemDelegate::paint(painter, option, index);
+        return;
+    }
     // icon size
     auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
     // qCDebug(app) << "BaseItemDelegate paint: Icon size is" << iconSize;
