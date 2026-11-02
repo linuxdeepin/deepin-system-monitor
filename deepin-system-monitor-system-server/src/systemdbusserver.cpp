@@ -185,7 +185,7 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
     qCDebug(app) << "Checking service status after operation...";
     process.start("systemctl", { "is-enabled", serviceName });
     process.waitForFinished();
-    QString checkRet = process.readAll();
+    QString checkRet = process.readAll().trimmed();
     if (enable && ("enabled" == checkRet)) {
         qCDebug(app) << "Service successfully enabled:" << serviceName;
         return {};
