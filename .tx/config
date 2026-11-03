@@ -43,3 +43,10 @@ source_file = deepin-system-monitor-system-server/translations/policy/policy.ts
 preTranlate_file = deepin-system-monitor-system-server/misc/com.deepin.deepin-system-monitor-system-server.policy
 source_lang = en_US
 type = QT
+
+#dde-shell-plugin
+[o:linuxdeepin:p:deepin-system-monitor:r:deepin-system-monitor-dde-shell-plugin]
+file_filter = deepin-system-monitor-dde-shell-plugin/translations/deepin-system-monitor-dde-shell-plugin_<lang>.ts
+source_file = deepin-system-monitor-dde-shell-plugin/translations/deepin-system-monitor-dde-shell-plugin.ts
+source_lang = en_US
+type = QT
