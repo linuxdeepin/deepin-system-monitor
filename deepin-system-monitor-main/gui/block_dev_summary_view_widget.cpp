@@ -60,6 +60,11 @@ protected:
             qCDebug(app) << "DeailTableModelBlock::data: Invalid index or empty device name";
             return QVariant();
         }
+        if (index.row() < 0 || index.row() >= rowCount(index) ||
+            index.column() < 0 || index.column() >= columnCount(index)) {
+            qCDebug(app) << "DeailTableModelBlock::data: Index out of bounds";
+            return QVariant();
+        }
 
         int row = index.row();
         int column = index.column();
@@ -182,7 +187,10 @@ public:
         currDeciveName = str;
         if (!str.isEmpty()) {
             // qCDebug(app) << "DeailTableModelBlock::setCurrentName: device name is not empty";
-            m_blockInfo = m_mapInfo.find(currDeciveName).value();
+            auto it = m_mapInfo.find(currDeciveName);
+            if (it != m_mapInfo.end()) {
+                m_blockInfo = it.value();
+            }
         }
         updateModel();
     }
@@ -216,7 +224,10 @@ void DeailTableModelBlock::updateModel()
         m_blockInfo = infoDB[0];
     } else if (!infoDB.isEmpty()) {
         qCDebug(app) << "DeailTableModelBlock::updateModel: updating info for" << currDeciveName;
-        m_blockInfo = m_mapInfo.find(currDeciveName).value();
+        auto it = m_mapInfo.find(currDeciveName);
+        if (it != m_mapInfo.end()) {
+            m_blockInfo = it.value();
+        }
     }
 
     endResetModel();
