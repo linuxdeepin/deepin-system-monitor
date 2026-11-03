@@ -51,7 +51,8 @@ protected:
 
     QVariant data(const QModelIndex &index, int role) const
     {
-        if (!index.isValid()) {
+        if (!index.isValid() || index.model() != this
+                || index.row() >= rowCount(index) || index.column() >= columnCount(index)) {
             qCDebug(app) << "DeailTableModel::data invalid index";
             return QVariant();
         }
