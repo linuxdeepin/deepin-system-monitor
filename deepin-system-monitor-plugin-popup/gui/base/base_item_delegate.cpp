@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -228,12 +228,12 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
         const QString &procPid = index.data(Qt::UserRole + 4).toString();
         QPixmap  *iconPixmap = nullptr;
-        core::process::ProcessIconCache::instance()->iconPixmapCache.find(procPid, iconPixmap);
+        QPixmapCache::find(procPid, iconPixmap);
         if (iconPixmap) {
             painter->drawPixmap(iconRect, *iconPixmap);
         } else {
             const QPixmap &iconPix = icon.pixmap(iconRect.size());
-            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(procPid, iconPix);
+            QPixmapCache::insert(procPid, iconPix);
             painter->drawPixmap(iconRect, iconPix);
         }
     }
