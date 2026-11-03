@@ -54,7 +54,10 @@ QString ProcessName::normalizeProcessName(const QString &source, const QByteArra
     // windows apps case
     if (cmdline[0].length() > 3 && isalpha(cmdline[0].at(0)) && cmdline[0].at(1) == ':' && (cmdline[0].at(2) == '/' || cmdline[0].at(2) == '\\')) {
         qCDebug(app) << "Windows app case detected";
-        return QFileInfo(cmdline[0]).fileName();
+        // On non-Windows platforms QFileInfo only treats '/' as a path separator,
+        // so backslash-style Windows paths (e.g. C:\Program Files\app.exe) must be
+        // normalized before extracting the file name.
+        return QFileInfo(QString(cmdline[0]).replace('\\', '/')).fileName();
     }
 
     for (auto cmd : cmdline) {
