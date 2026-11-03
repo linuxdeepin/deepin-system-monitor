@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/systemmonitor">
+        <file alias="SystemMonitorCard.qml">qml/SystemMonitorCard.qml</file>
+    </qresource>
+</RCC>
