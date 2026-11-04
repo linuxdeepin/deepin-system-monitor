@@ -796,3 +796,12 @@ endif()
 # >>> BEGIN add-uos ut-sm-t22: 测试目标增加仓库根目录头文件路径（dbusalarmnotify.cpp 依赖根目录 helper.hpp）
 target_include_directories(${PROJECT_NAME_TEST} PRIVATE ${CMAKE_HOME_DIRECTORY})
 # <<< END
+
+# ---------------- qt-autotest-generator (V-7756): dde-shell 卡片插件单元测试 ----------------
+# dde-shell 系统监视器卡片插件（SystemMonitorPlugin/SystemMonitorController/
+# SystemMonitorProber）依赖 dde-dock V3 插件接口且与主程序/dock 插件存在同名类
+# （SystemMonitorController 等），不能并入其它测试目标，独立成测试二进制；
+# /proc 读取经 POSIX ::open 前缀重定向沙箱注入，DBus 激活与进程拉起均打桩。
+if(DOTEST)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-dde-shell-plugin dde-shell-plugin-ut-build)
+endif()
