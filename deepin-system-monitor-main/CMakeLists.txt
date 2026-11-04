@@ -209,6 +209,7 @@ set(HPP_GUI
     gui/base/base_table_view.h
     gui/base/base_item_delegate.h
     gui/base/base_header_view.h
+    gui/base/base_style_helper.h
     gui/base/base_detail_view_widget.h
     gui/base/base_commandlink_button.h
     gui/ui_common.h
