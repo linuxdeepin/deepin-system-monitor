@@ -35,6 +35,7 @@
 #include <DStackedWidget>
 
 #include <QDebug>
+#include <QCoreApplication>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QDesktopWidget>
 #endif
@@ -82,6 +83,16 @@ ProcessPageWidget::ProcessPageWidget(DWidget *parent)
 ProcessPageWidget::~ProcessPageWidget()
 {
     qCDebug(app) << "ProcessPageWidget destroyed";
+
+    // Disconnect cross-thread queued connections from SystemMonitor before base class destruction.
+    // SystemMonitor lives in SystemMonitorThread (background thread); without explicit disconnect,
+    // posted QMetaCallEvent entries may still be delivered after this object is destroyed,
+    // causing Qt type-mismatch abort (exit 134).
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    if (monitor) {
+        disconnect(monitor, &SystemMonitor::appAndProcCountUpdate, this, &ProcessPageWidget::onAppAndProcCountUpdated);
+    }
+    QCoreApplication::removePostedEvents(this);
 }
 
 // initialize ui components
