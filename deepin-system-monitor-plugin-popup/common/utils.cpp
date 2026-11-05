@@ -302,24 +302,6 @@ void drawTooltipText(QPainter &painter, QString text, QString textColor, int tex
     painter.drawText(rect, Qt::AlignCenter, text);
 }
 
-void removeChildren(QWidget *widget)
-{
-    qDeleteAll(widget->children());
-}
-
-void removeLayoutChild(QLayout *layout, int index)
-{
-    QLayoutItem *item = layout->itemAt(index);
-    if (item != nullptr) {
-        QWidget *widget = item->widget();
-        if (widget != nullptr) {
-            widget->hide();
-            widget->setParent(nullptr);
-            layout->removeWidget(widget);
-        }
-    }
-}
-
 void setFontSize(QPainter &painter, int textSize)
 {
     QFont font = painter.font();
