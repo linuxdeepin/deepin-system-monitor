@@ -34,7 +34,8 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
-    // qCDebug(app) << "Application destructor";
+    qCDebug(app) << "Application destructor";
+    ThreadManager::instance()->cleanup();
 }
 
 void Application::setCurrentTaskState(TaskState taskState)

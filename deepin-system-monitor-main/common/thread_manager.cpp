@@ -19,6 +19,35 @@ ThreadManager *ThreadManager::instance()
     return theInstance();
 }
 
+ThreadManager::~ThreadManager()
+{
+    cleanup();
+}
+
+void ThreadManager::cleanup()
+{
+    for (auto it = m_threadDB.begin(); it != m_threadDB.end(); ++it) {
+        BaseThread *thread = it.value();
+        if (!thread)
+            continue;
+
+        if (thread->isRunning()) {
+            thread->quit();
+            if (!thread->wait(200)) {
+                qCWarning(app) << "Thread" << thread->threadKey()
+                               << "failed to quit in time, terminating";
+                thread->terminate();
+                thread->wait(100);
+            }
+        }
+
+        delete thread;
+        it.value() = nullptr;
+    }
+
+    m_threadDB.clear();
+}
+
 void ThreadManager::attach(BaseThread *thread)
 {
     // qCDebug(app) << "ThreadManager attach thread with key:" << thread->threadKey();
