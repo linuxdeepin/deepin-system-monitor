@@ -230,9 +230,9 @@ void UserPageWidget::onTextContentChanged()
 
     m_VMemUsageSummary->setText(formatUnit_memory_disk(m_procTable->getUserVMemUsage(), KB));
 
-    m_UploadSummary->setText(formatUnit_net(8 * m_procTable->getUserUpload(), B, 1, true));
+    m_UploadSummary->setText(formatUnit_memory_disk(m_procTable->getUserUpload(), B, 1, true));
 
-    m_DownLoadSummary->setText(formatUnit_net(8 * m_procTable->getUserDownload(), B, 1, true));
+    m_DownLoadSummary->setText(formatUnit_memory_disk(m_procTable->getUserDownload(), B, 1, true));
 
     m_DiskReadSummary->setText(formatUnit_memory_disk(m_procTable->getUserDiskRead(), B, 1, true));
 
@@ -246,9 +246,9 @@ void UserPageWidget::onTextContentChanged()
 
     m_VMemUsageSummary->setToolTip(formatUnit_memory_disk(m_procTable->getUserVMemUsage(), KB));
 
-    m_UploadSummary->setToolTip(formatUnit_net(8 * m_procTable->getUserUpload(), B, 1, true));
+    m_UploadSummary->setToolTip(formatUnit_memory_disk(m_procTable->getUserUpload(), B, 1, true));
 
-    m_DownLoadSummary->setToolTip(formatUnit_net(8 * m_procTable->getUserDownload(), B, 1, true));
+    m_DownLoadSummary->setToolTip(formatUnit_memory_disk(m_procTable->getUserDownload(), B, 1, true));
 
     m_DiskReadSummary->setToolTip(formatUnit_memory_disk(m_procTable->getUserDiskRead(), B, 1, true));
 

@@ -196,7 +196,7 @@ TEST_F(UT_UserPageWidget, OnTextContentChanged_LabelsMatchLiveValues)
     EXPECT_EQ(m_tester->m_MemeryUsageSummary->text(),
               common::format::formatUnit_memory_disk(m_tester->m_procTable->getUserMemUsage(), common::format::KB));
     EXPECT_EQ(m_tester->m_UploadSummary->text(),
-              common::format::formatUnit_net(8 * m_tester->m_procTable->getUserUpload(), common::format::B, 1, true));
+              common::format::formatUnit_memory_disk(m_tester->m_procTable->getUserUpload(), common::format::B, 1, true));
 }
 
 TEST_F(UT_UserPageWidget, OnTextContentChanged_TooltipMatchesText)
