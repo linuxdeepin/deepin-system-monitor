@@ -395,8 +395,18 @@ void XWinKillPreviewWidget::initUI()
     setAttribute(Qt::WA_DeleteOnClose, true);
 
     // rquest exclusive owning keyboard & mouse
+    // Guard: release any existing grabber before grabbing to avoid
+    // stale-grabber SIGSEGV in abnormal destruction order
+    if (auto *prevKbd = QWidget::keyboardGrabber()) {
+        if (prevKbd != this)
+            prevKbd->releaseKeyboard();
+    }
     grabKeyboard();
     setMouseTracking(true);
+    if (auto *prevMouse = QWidget::mouseGrabber()) {
+        if (prevMouse != this)
+            prevMouse->releaseMouse();
+    }
     grabMouse();
 
     // styled kill cursor

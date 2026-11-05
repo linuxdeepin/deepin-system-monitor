@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "ddlog.h"
@@ -64,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    disconnect(gApp, &Application::backgroundTaskStateChanged, this, nullptr);
     // qCDebug(app) << "MainWindow destructor";
     PERF_PRINT_END("POINT-02");
 
@@ -265,7 +266,7 @@ void MainWindow::initConnections()
         if (state == Application::kTaskStarted) {
             qCDebug(app) << "Task started, disabling main window";
             // save last focused widget inside main window
-            m_focusedWidget = gApp->mainWindow()->focusWidget();
+            m_focusedWidget = focusWidget();
             // disable main window (and any children widgets inside) if background process ongoing
             setEnabled(false);
         } else if (state == Application::kTaskFinished) {
