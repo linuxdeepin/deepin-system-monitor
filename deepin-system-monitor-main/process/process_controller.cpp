@@ -29,8 +29,8 @@ ProcessController::ProcessController(pid_t pid, int signal, QObject *parent)
         // EINVAL means call with invalid signal
         Q_ASSERT(rc != EINVAL);
         if (rc == ESRCH)
-            // binary non exists
-            rc = ESRCH;
+            // process already exited; treat as success
+            rc = 0;
         else if (rc != 0) {
             // permission denied
             rc = EPERM;
