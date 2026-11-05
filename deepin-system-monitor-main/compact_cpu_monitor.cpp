@@ -128,10 +128,11 @@ void CompactCpuMonitor::updateStatus()
     // 更新追加，各个独立CPU占用曲线数据
     if(cpulist.size() < cpuPercents.size() - 1) {
         qCDebug(app) << "cpu core removed";
-        for(int i = cpulist.size(); i < cpuPercents.size() - 1; i++) {
-            cpuPercents[i].append(0.0);
-            appendIndex.append(i);
+        // 移除多余的核心行，总行保持在列表末尾
+        while (cpuPercents.size() - 1 > cpulist.size()) {
+            cpuPercents.removeAt(cpulist.size());
         }
+        numCPU = cpulist.size();
     } else if (cpulist.size() > cpuPercents.size() - 1){
         qCDebug(app) << "cpu core added";
         QList<qreal> addPointList;
@@ -139,9 +140,10 @@ void CompactCpuMonitor::updateStatus()
             addPointList.append(0);
         }
         for(int i = cpuPercents.size() - 1; i < cpulist.size(); i++) {
-            cpuPercents.append(addPointList);
+            cpuPercents.insert(i, addPointList);
             appendIndex.append(i);
         }
+        numCPU = cpulist.size();
     } else {
         appendIndex.append(-1);
     }
@@ -338,7 +340,12 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     // enum cpu
     for (int i = statrpos; i >= endpos && i >= 0; i--) {
         // set stroke color
-        QColor c = cpuColors[i % cpuColors.size()];
+        QColor c;
+        if (i < cpuColors.size()) {
+            c = cpuColors[i];
+        } else {
+            c = QColor::fromHsl((i * 137) % 360, 200, 128);
+        }
         painter.setPen(QPen(c, strokeWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
         QPainterPath Painterpath;
