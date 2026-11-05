@@ -114,8 +114,8 @@ public:
     // wireless link only
     QByteArray essid() const;
     uint8_t linkQuality() const;
-    uint8_t signalLevel() const;
-    uint8_t noiseLevel() const;
+    int signalLevel() const;
+    int noiseLevel() const;
     bool isWireless() const;
 
     // link stats
@@ -257,7 +257,7 @@ inline uint8_t NetifInfo::linkQuality() const
         return 0;
 }
 
-inline uint8_t NetifInfo::signalLevel() const
+inline int NetifInfo::signalLevel() const
 {
     if (d->iw_info)
         return d->iw_info->qual.level;
@@ -270,7 +270,7 @@ inline bool NetifInfo::isWireless() const
     return d->isWireless;
 }
 
-inline uint8_t NetifInfo::noiseLevel() const
+inline int NetifInfo::noiseLevel() const
 {
     if (d->iw_info)
         return d->iw_info->qual.noise;
