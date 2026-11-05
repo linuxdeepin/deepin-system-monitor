@@ -193,6 +193,9 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
         if (rc == -1 && errno != 0) {
             if (errno == EPERM) {
                 pctl(pid, signal);
+            } else if (errno == ESRCH) {
+                // process already exited; treat as kill success
+                emitSignal(signal);
             } else {
                 ec1 = errfmt(errno, fmsg(signal), pid, signal, ec1);
                 Q_EMIT processControlResultReady(ec1);
@@ -213,6 +216,9 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
             // not authorized, use pkexec instead
             if (errno == EPERM) {
                 pctl(pid, signal);
+            } else if (errno == ESRCH) {
+                // process already exited; treat as kill success
+                emitSignal(signal);
             } else {
                 ec = errfmt(
                          errno,
