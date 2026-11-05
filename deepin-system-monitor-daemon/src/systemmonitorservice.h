@@ -130,6 +130,9 @@ private:
      */
     QTimer mMoniterTimer;
     qint64 mLastAlarmTimeStamp;
+    // DEF-010: separate timestamp for memory alarm to prevent CPU alarm
+    // from suppressing memory alarm notifications
+    qint64 mLastMemAlarmTimeStamp;
     /*!
      * 设置数据类
      */

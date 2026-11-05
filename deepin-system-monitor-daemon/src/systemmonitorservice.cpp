@@ -53,7 +53,8 @@ QString getNameByPid(pid_t pid)
 
 SystemMonitorService::SystemMonitorService(const char *name, QObject *parent)
     : QObject(parent), mProtectionStatus(InitAlarmOn), mAlarmInterval(InitAlarmInterval), mAlarmCpuUsage(InitAlarmCpuUsage), mAlarmMemoryUsage(InitAlarmMemUsage), mCpuUsage(0), mMemoryUsage(0), mMoniterTimer(this)
-      //    , mLastAlarmTimeStamp(0)
+      , mLastAlarmTimeStamp(0)
+      , mLastMemAlarmTimeStamp(0)
       ,
       mSettings(this),
       mCpu(this),
@@ -88,9 +89,10 @@ SystemMonitorService::SystemMonitorService(const char *name, QObject *parent)
     // 启动监测定时器
     if (mProtectionStatus) {
         mMoniterTimer.start();
+        qCInfo(app) << "Started monitoring timer with interval:" << MonitorTimeOut << "ms";
+    } else {
+        qCInfo(app) << "Monitoring timer not started (protection disabled)";
     }
-
-    qCInfo(app) << "Started monitoring timer with interval:" << MonitorTimeOut << "ms";
 
     QDBusConnection::RegisterOptions opts =
             QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals | QDBusConnection::ExportAllProperties;
@@ -260,34 +262,36 @@ void SystemMonitorService::showDeepinSystemMoniter()
 void SystemMonitorService::changeAlarmItem(const QString &item, const QDBusVariant &value)
 {
     qCDebug(app) << "Changing alarm item:" << item << "to value:" << value.variant();
-    if (mSettings.itemKeys().contains(item) && mSettings.isVaildValue(item, value.variant())) {
-        if (mSettings.isVaildValue(item, value.variant())) {
-            qCDebug(app) << "value is vaild";
-            if (item == AlarmStatusOptionName) {
-                mProtectionStatus = value.variant().toBool();
-                if (mProtectionStatus) {
-                    qCDebug(app) << "mProtectionStatus value:" << mProtectionStatus;
-                    mMoniterTimer.start();
-                }
-            } else if (item == AlarmCpuUsageOptionName) {
-                mAlarmCpuUsage = value.variant().toInt();
-            } else if (item == AlarmMemUsageOptionName) {
-                mAlarmMemoryUsage = value.variant().toInt();
-            } else if (item == AlarmIntervalOptionName) {
-                mAlarmInterval = value.variant().toInt();
-            }
-            // 更改设置文件
-            mSettings.changedOptionValue(item, value.variant());
-            qCInfo(app) << "Successfully changed alarm item:" << item << "to:" << value.variant();
-        } else {
-            QPair<double, double> range = mSettings.getValueRange(item);
-            qCWarning(app) << "Invalid value for" << item << ":" << value.variant() << "Valid range:" << range;
-            sendErrorReply(QDBusError::NotSupported, QString("invalid value! value range[%1,%2]").arg(range.first).arg(range.second));
-        }
-    } else {
+    // DEF-006: distinguish "item not found" from "invalid value"
+    if (!mSettings.itemKeys().contains(item)) {
         qCWarning(app) << "Invalid alarm item:" << item;
         sendErrorReply(QDBusError::NotSupported, QString("invalid item(%1) !").arg(item));
+        return;
     }
+    if (!mSettings.isVaildValue(item, value.variant())) {
+        QPair<double, double> range = mSettings.getValueRange(item);
+        qCWarning(app) << "Invalid value for" << item << ":" << value.variant() << "Valid range:" << range;
+        sendErrorReply(QDBusError::NotSupported, QString("invalid value! value range[%1,%2]").arg(range.first).arg(range.second));
+        return;
+    }
+
+    qCDebug(app) << "value is vaild";
+    if (item == AlarmStatusOptionName) {
+        mProtectionStatus = value.variant().toBool();
+        if (mProtectionStatus) {
+            qCDebug(app) << "mProtectionStatus value:" << mProtectionStatus;
+            mMoniterTimer.start();
+        }
+    } else if (item == AlarmCpuUsageOptionName) {
+        mAlarmCpuUsage = value.variant().toInt();
+    } else if (item == AlarmMemUsageOptionName) {
+        mAlarmMemoryUsage = value.variant().toInt();
+    } else if (item == AlarmIntervalOptionName) {
+        mAlarmInterval = value.variant().toInt();
+    }
+    // 更改设置文件
+    mSettings.changedOptionValue(item, value.variant());
+    qCInfo(app) << "Successfully changed alarm item:" << item << "to:" << value.variant();
 }
 
 bool SystemMonitorService::checkCpuAlarm()
@@ -326,12 +330,13 @@ bool SystemMonitorService::checkMemoryAlarm()
 {
     qCDebug(app) << "checkMemoryAlarm";
     qint64 curTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
-    qint64 diffTime = curTimeStamp - mLastAlarmTimeStamp;
+    // DEF-010: use dedicated memory alarm timestamp instead of shared mLastAlarmTimeStamp
+    qint64 diffTime = curTimeStamp - mLastMemAlarmTimeStamp;
     qint64 timeGap = 1000 * 60 * mAlarmInterval;
 
     if (mMemoryUsage >= mAlarmMemoryUsage && diffTime > timeGap) {
         qCInfo(app) << "Memory usage alarm triggered - Usage:" << mMemoryUsage << "% Threshold:" << mAlarmMemoryUsage << "%";
-        mLastAlarmTimeStamp = curTimeStamp;
+        mLastMemAlarmTimeStamp = curTimeStamp;
         QString cmd = QString("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showMemoryAlarmNotify \"%1\" ").arg(QString::number(mMemoryUsage));
         QTimer::singleShot(100, this, [=]() {
             qCDebug(app) << "showMemoryAlarmNotify";

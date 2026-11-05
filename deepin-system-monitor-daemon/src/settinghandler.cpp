@@ -90,9 +90,11 @@ QVariant SettingHandler::getOptionValue(const QString key)
         qCDebug(app) << "get option value success";
         return mSettings->getOption(key);
     } else {
+        // DEF-003: isCompelted() is always true (both mBackend and mSettings
+        // are set in constructor), so this branch is effectively dead code.
+        // Guard mSettings access to avoid potential null dereference.
         qCWarning(app) << "Failed to get option value for" << key
-                       << "Completion status:" << isCompelted()
-                       << "Available keys:" << mSettings->keys();
+                       << "Completion status:" << isCompelted();
     }
 
     return QVariant();
