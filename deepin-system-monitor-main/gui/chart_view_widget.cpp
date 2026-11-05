@@ -49,7 +49,7 @@ void ChartViewWidget::setSpeedAxis(bool speed)
     if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
         setAxisTitle(formatUnit_memory_disk(qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong()), B, 1, true));
     else
-        setAxisTitle(formatUnit_net(qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong()), B, 1, true));
+        setAxisTitle(formatUnit_memory_disk(qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong()), B, 1, true));
 }
 
 void ChartViewWidget::setData1Color(const QColor &color)
@@ -82,7 +82,7 @@ void ChartViewWidget::addData1(const QVariant &data)
             if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
                 setAxisTitle(formatUnit_memory_disk(m_maxData, B, 1, true));
             else
-                setAxisTitle(formatUnit_net(m_maxData, B, 1, true));
+                setAxisTitle(formatUnit_memory_disk(m_maxData, B, 1, true));
         }
 
     } else {
@@ -92,7 +92,7 @@ void ChartViewWidget::addData1(const QVariant &data)
             if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
                 setAxisTitle(formatUnit_memory_disk(0, B, 1, true));
             else
-                setAxisTitle(formatUnit_net(0, B, 1, true));
+                setAxisTitle(formatUnit_memory_disk(0, B, 1, true));
         }
     }
 }
@@ -125,7 +125,7 @@ void ChartViewWidget::addData2(const QVariant &data)
             if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
                 setAxisTitle(formatUnit_memory_disk(m_maxData, B, 1, true));
             else
-                setAxisTitle(formatUnit_net(m_maxData, B, 1, true));
+                setAxisTitle(formatUnit_memory_disk(m_maxData, B, 1, true));
         }
 
     } else {
@@ -135,7 +135,7 @@ void ChartViewWidget::addData2(const QVariant &data)
             if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
                 setAxisTitle(formatUnit_memory_disk(0, B, 1, true));
             else
-                setAxisTitle(formatUnit_net(0, B, 1, true));
+                setAxisTitle(formatUnit_memory_disk(0, B, 1, true));
         }
     }
 }

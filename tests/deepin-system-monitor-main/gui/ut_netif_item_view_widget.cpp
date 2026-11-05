@@ -21,7 +21,7 @@ using namespace core::system;
 using namespace common::format;
 
 /***************************************STUB begin*********************************************/
-// 打桩说明：本类依赖 ChartViewWidget(纯内存绘制)与 formatUnit_net(纯格式化函数)，
+// 打桩说明：本类依赖 ChartViewWidget(纯内存绘制)与 formatUnit_memory_disk(纯格式化函数)，
 // 均为无外部 I/O 的实现，直接使用真实实现；NetifInfo 为纯数据对象，走真实对象。
 /***************************************STUB end**********************************************/
 
@@ -68,7 +68,7 @@ TEST_F(UT_NetifItemViewWidget, initTest)
 
 TEST_F(UT_NetifItemViewWidget, test_updateData_01)
 {
-    // 正常数据：速率写入图表 + 速率文案按 formatUnit_net 转换
+    // 正常数据：速率写入图表 + 速率文案按 formatUnit_memory_disk 转换
     auto info = std::make_shared<NetifInfo>();
     info->set_recv_bps(1048576);
     info->set_sent_bps(2048);
@@ -79,8 +79,8 @@ TEST_F(UT_NetifItemViewWidget, test_updateData_01)
     EXPECT_DOUBLE_EQ(m_tester->m_ChartWidget->m_listData1.last().toDouble(), 1048576.0);
     EXPECT_EQ(m_tester->m_ChartWidget->m_listData2.size(), 1);
     EXPECT_DOUBLE_EQ(m_tester->m_ChartWidget->m_listData2.last().toDouble(), 2048.0);
-    EXPECT_EQ(m_tester->m_recv_bps, formatUnit_net(1048576 * 8, B, 1, true));
-    EXPECT_EQ(m_tester->m_sent_bps, formatUnit_net(2048 * 8, B, 1, true));
+    EXPECT_EQ(m_tester->m_recv_bps, formatUnit_memory_disk(1048576, B, 1, true));
+    EXPECT_EQ(m_tester->m_sent_bps, formatUnit_memory_disk(2048, B, 1, true));
     // 默认 NetifInfo 无网卡名 -> 保持构造时的 "Ethernet"
     EXPECT_EQ(m_tester->m_ifname, QString("Ethernet"));
 }
@@ -101,7 +101,7 @@ TEST_F(UT_NetifItemViewWidget, test_updateData_02_append)
     EXPECT_EQ(m_tester->m_ChartWidget->m_listData1.size(), 2);
     EXPECT_DOUBLE_EQ(m_tester->m_ChartWidget->m_listData1.first().toDouble(), 1024.0);
     EXPECT_DOUBLE_EQ(m_tester->m_ChartWidget->m_listData1.last().toDouble(), 2048.0);
-    EXPECT_EQ(m_tester->m_recv_bps, formatUnit_net(2048 * 8, B, 1, true));
+    EXPECT_EQ(m_tester->m_recv_bps, formatUnit_memory_disk(2048, B, 1, true));
 }
 
 TEST_F(UT_NetifItemViewWidget, test_updateActiveStatus_01)
@@ -231,6 +231,6 @@ TEST_F(UT_NetifItemViewWidget, test_paintEvent_03_afterDataUpdate)
     QPaintEvent event(m_tester->rect());
     m_tester->paintEvent(&event);
 
-    EXPECT_EQ(m_tester->m_recv_bps, formatUnit_net(1048576 * 8, B, 1, true));
-    EXPECT_EQ(m_tester->m_sent_bps, formatUnit_net(2048 * 8, B, 1, true));
+    EXPECT_EQ(m_tester->m_recv_bps, formatUnit_memory_disk(1048576, B, 1, true));
+    EXPECT_EQ(m_tester->m_sent_bps, formatUnit_memory_disk(2048, B, 1, true));
 }
