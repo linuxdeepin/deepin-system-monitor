@@ -104,7 +104,7 @@ bool ErrorContext::operator==(const ErrorContext &other) const
 {
     // qCDebug(app) << "ErrorContext operator==";
     return (data->m_code == other.getCode() && data->m_subCode == other.getSubCode() &&
-            data->m_errName == other.getErrorName() && data->m_errMessage == getErrorMessage());
+            data->m_errName == other.getErrorName() && data->m_errMessage == other.getErrorMessage());
 }
 
 // get error code
