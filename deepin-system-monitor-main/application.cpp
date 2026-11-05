@@ -34,7 +34,14 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
-    // qCDebug(app) << "Application destructor";
+    qCDebug(app) << "Application destructor";
+
+    // Stop and clean up all managed threads before the application is destroyed.
+    // ThreadManager holds raw pointers to SystemMonitorThread and NetifMonitorThread;
+    // without explicit cleanup their destructors (which contain proper quit+wait+terminate
+    // logic) are never called, leaving background threads running and causing the process
+    // to hang at exit.
+    ThreadManager::instance()->cleanup();
 }
 
 void Application::setCurrentTaskState(TaskState taskState)

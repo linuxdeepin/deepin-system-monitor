@@ -7,6 +7,8 @@
 #include "base_thread.h"
 #include "ddlog.h"
 
+#include <QThread>
+
 namespace common {
 namespace core {
 
@@ -28,6 +30,30 @@ void ThreadManager::attach(BaseThread *thread)
     }
 
     m_threadDB[thread->threadKey()] = thread;
+}
+
+void ThreadManager::cleanup()
+{
+    // qCDebug(app) << "ThreadManager cleanup, stopping and deleting all threads";
+    for (auto it = m_threadDB.begin(); it != m_threadDB.end(); ++it) {
+        BaseThread *thread = it.value();
+        if (!thread)
+            continue;
+
+        if (thread->isRunning()) {
+            thread->quit();
+            if (!thread->wait(200)) {
+                qCWarning(app) << "Thread" << it.key()
+                               << "failed to quit in time, terminating";
+                thread->terminate();
+                thread->wait(100);
+            }
+        }
+
+        delete thread;
+        it.value() = nullptr;
+    }
+    m_threadDB.clear();
 }
 
 } // namespace core
