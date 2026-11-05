@@ -81,6 +81,9 @@ ProcessPageWidget::ProcessPageWidget(DWidget *parent)
 // destructor
 ProcessPageWidget::~ProcessPageWidget()
 {
+    // 断开所有入向连接，防止析构期间外部信号回调半析构对象
+    // 覆盖子对象、mainWindow、monitor 后台线程、dAppHelper 单例等全部信号源
+    QObject::disconnect(nullptr, nullptr, this, nullptr);
     qCDebug(app) << "ProcessPageWidget destroyed";
 }
 
