@@ -19,6 +19,22 @@ ThreadManager *ThreadManager::instance()
     return theInstance();
 }
 
+ThreadManager::~ThreadManager()
+{
+    cleanup();
+}
+
+void ThreadManager::cleanup()
+{
+    for (auto it = m_threadDB.begin(); it != m_threadDB.end(); ++it) {
+        if (it.value()) {
+            delete it.value();
+            it.value() = nullptr;
+        }
+    }
+    m_threadDB.clear();
+}
+
 void ThreadManager::attach(BaseThread *thread)
 {
     // qCDebug(app) << "ThreadManager attach thread with key:" << thread->threadKey();
