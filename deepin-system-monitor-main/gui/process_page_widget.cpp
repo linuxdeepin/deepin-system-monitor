@@ -174,6 +174,7 @@ void ProcessPageWidget::initUI()
     m_appButton->setFocusPolicy(Qt::TabFocus);
     m_appButton->setToolTip(DApplication::translate("Process.Show.Mode", appText));
     m_appButton->setAccessibleName(m_appButton->toolTip());
+    m_appButton->setObjectName("AppProcessButton");
 
     // show my process mode button
     m_myProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
@@ -182,6 +183,7 @@ void ProcessPageWidget::initUI()
     m_myProcButton->setFocusPolicy(Qt::TabFocus);
     m_myProcButton->setToolTip(DApplication::translate("Process.Show.Mode", myProcText));
     m_myProcButton->setAccessibleName(m_myProcButton->toolTip());
+    m_myProcButton->setObjectName("MyProcessButton");
 
     // show all process mode button
     m_allProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
@@ -190,6 +192,7 @@ void ProcessPageWidget::initUI()
     m_allProcButton->setFocusPolicy(Qt::TabFocus);
     m_allProcButton->setToolTip(DApplication::translate("Process.Show.Mode", allProcText));
     m_allProcButton->setAccessibleName(m_allProcButton->toolTip());
+    m_allProcButton->setObjectName("AllProcessButton");
 
     // install event filters to handle left/right direction key press
     m_appButton->installEventFilter(this);
