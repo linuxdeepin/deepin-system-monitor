@@ -96,6 +96,20 @@ public:
     QString getUnitActiveState(const QModelIndex &index);
 
     /**
+     * @brief Get unit's canStart property
+     * @param index Model index
+     * @return Return true if the unit can be started
+     */
+    bool getCanStart(const QModelIndex &index);
+
+    /**
+     * @brief Get unit's load state
+     * @param index Model index
+     * @return Return unit's load state string
+     */
+    QString getUnitLoadState(const QModelIndex &index);
+
+    /**
      * @brief data Returns the data stored under the given role for the item referred to by the index
      * @param index Index of the data
      * @param role Role of the data
@@ -195,6 +209,22 @@ inline QString SystemServiceTableModel::getUnitActiveState(const QModelIndex &in
         return {};
 
     return m_svcMap[m_svcList[index.row()]].getActiveState();
+}
+
+inline bool SystemServiceTableModel::getCanStart(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return false;
+
+    return m_svcMap[m_svcList[index.row()]].getCanStart();
+}
+
+inline QString SystemServiceTableModel::getUnitLoadState(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return {};
+
+    return m_svcMap[m_svcList[index.row()]].getLoadState();
 }
 
 #endif  // SYSTEM_SERVICE_TABLE_MODEL_H
