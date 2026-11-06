@@ -71,6 +71,7 @@ private:
     void mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps);
     void mergeSubProcCpu(pid_t ppid, qreal &cpu);
     void groupProcessesByAMInstance();
+    void dedupCompatibilityModeProcesses();
 
     class Iterator
     {
