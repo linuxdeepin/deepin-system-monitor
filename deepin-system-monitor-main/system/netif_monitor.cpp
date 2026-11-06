@@ -8,6 +8,7 @@
 #include "common/thread_manager.h"
 #include "netif_monitor_thread.h"
 
+#include <QSet>
 #include <QTimerEvent>
 #include <QDebug>
 
@@ -111,6 +112,29 @@ void NetifMonitor::handleNetData()
         }
     }
     qCDebug(app) << "handleNetData loop finished";
+}
+
+void NetifMonitor::cleanupStaleSockIOStats(const SockStatMap &activeSockStats)
+{
+    // collect active socket inodes from the current kernel socket table snapshot
+    QSet<ino_t> activeInodes;
+    for (auto it = activeSockStats.constBegin(); it != activeSockStats.constEnd(); ++it) {
+        if (it.value()->ino != 0) {
+            activeInodes.insert(it.value()->ino);
+        }
+    }
+
+    // remove m_sockIOStatMap entries whose inodes are no longer open
+    m_sockIOStatMapLock.lock();
+    auto mapIt = m_sockIOStatMap.begin();
+    while (mapIt != m_sockIOStatMap.end()) {
+        if (!activeInodes.contains(mapIt.key())) {
+            mapIt = m_sockIOStatMap.erase(mapIt);
+        } else {
+            ++mapIt;
+        }
+    }
+    m_sockIOStatMapLock.unlock();
 }
 
 }
