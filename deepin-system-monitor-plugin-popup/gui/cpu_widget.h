@@ -1,5 +1,5 @@
 // Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -66,6 +66,8 @@ private:
     QColor summaryColor;
     QColor textColor;
     QColor ltextColor;
+    QColor m_baseColor;
+    QColor m_separatorColor;
 
     QFont m_TitleFont;
     QFont m_contentFont;
