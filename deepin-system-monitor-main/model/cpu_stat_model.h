@@ -78,11 +78,17 @@ public:
         if (!lhs)
             return 0;
 
-        if (!rhs)
+        if (!rhs) {
+            if (lhs->stat->total == 0)
+                return 0;
             return qreal(lhs->stat->total - lhs->stat->idle) * 1. / lhs->stat->total * 100;
+        }
 
         auto totald = (rhs->stat->total > lhs->stat->total) ? (rhs->stat->total - lhs->stat->total) : 0;
         auto idled = (rhs->stat->idle > lhs->stat->idle) ? (rhs->stat->idle - lhs->stat->idle) : 0;
+
+        if (totald == 0)
+            return 0;
 
         return qreal(totald - idled) * 1. / totald * 100;
     }
