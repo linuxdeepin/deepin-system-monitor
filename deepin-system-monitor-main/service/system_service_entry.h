@@ -49,22 +49,23 @@ public:
 
     //////////////////////////////////// SET ///////////////////////////////////
 
-    inline void setId(const QString &id) { data->m_id = id; }
-    inline void setSName(const QString &sname) { data->m_sname = sname; }
-    inline void setLoadState(const QString &loadState) { data->m_loadState = loadState; }
-    inline void setActiveState(const QString &activeState) { data->m_activeState = activeState; }
-    inline void setSubState(const QString &subState) { data->m_subState = subState; }
-    inline void setState(const QString &state) { data->m_state = state; }
-    inline void setStartupType(const QString &startupType) { data->m_startupType = startupType; }
+    inline void setId(const QString &id) { data.detach(); data->m_id = id; }
+    inline void setSName(const QString &sname) { data.detach(); data->m_sname = sname; }
+    inline void setLoadState(const QString &loadState) { data.detach(); data->m_loadState = loadState; }
+    inline void setActiveState(const QString &activeState) { data.detach(); data->m_activeState = activeState; }
+    inline void setSubState(const QString &subState) { data.detach(); data->m_subState = subState; }
+    inline void setState(const QString &state) { data.detach(); data->m_state = state; }
+    inline void setStartupType(const QString &startupType) { data.detach(); data->m_startupType = startupType; }
     inline void setUnitObjectPath(const QString &unitObjectPath)
     {
+        data.detach();
         data->m_unitObjectPath = unitObjectPath;
     }
-    inline void setDescription(const QString &description) { data->m_description = description; }
-    inline void setMainPID(quint32 mainPID) { data->m_mainPID = mainPID; }
-    inline void setCanReload(bool canReload) { data->m_canReload = canReload; }
-    inline void setCanStart(bool canStart) { data->m_canStart = canStart; }
-    inline void setCanStop(bool canStop) { data->m_canStop = canStop; }
+    inline void setDescription(const QString &description) { data.detach(); data->m_description = description; }
+    inline void setMainPID(quint32 mainPID) { data.detach(); data->m_mainPID = mainPID; }
+    inline void setCanReload(bool canReload) { data.detach(); data->m_canReload = canReload; }
+    inline void setCanStart(bool canStart) { data.detach(); data->m_canStart = canStart; }
+    inline void setCanStop(bool canStop) { data.detach(); data->m_canStop = canStop; }
 
 private:
     QExplicitlySharedDataPointer<SystemServiceEntryData> data;
