@@ -50,12 +50,12 @@ public:
 public:
     explicit DBusDockInterface( QObject *parent = nullptr);
     ~DBusDockInterface();
-    Q_PROPERTY(QRect geometry READ geometry)
+    Q_PROPERTY(QRect geometry READ geometry NOTIFY geometryChanged)
     inline QRect geometry() const
     {
         return qvariant_cast<QRect>(property("geometry"));
     }
 Q_SIGNALS: // SIGNALS
-    void geometryChanged(const QRect &rect);
+    void geometryChanged();
 };
 #endif

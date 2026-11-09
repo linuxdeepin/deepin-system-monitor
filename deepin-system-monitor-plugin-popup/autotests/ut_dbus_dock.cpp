@@ -194,15 +194,14 @@ TEST_F(UT_DBusDock, propertyChanged_interfaceMismatch_ignored)
     EXPECT_EQ(spy.count(), 0);
 }
 
-// 用例名称: propertyChanged_geometryProp_currentBehaviorNoSignal
+// 用例名称: propertyChanged_geometryProp_emitsSignal
 // 测试类型: 正常场景
 // 覆盖函数: __propertyChanged__(接口匹配 + a{sv} 解组 + 属性查找 + 通知信号调用分支)
 // 操作步骤: 经 mock 服务真实发送 geometry 属性变化信号,测试进程收到
 //           read 模式消息后转发给被测槽
-// 预期结果: 属性查找命中 geometry,但 Q_PROPERTY(geometry READ geometry)
-//           未声明 NOTIFY,notifySignal() 无效 → geometryChanged 不会发出
-//           (疑似源码缺陷:属性变化信号永久失效,已标红待复核)
-TEST_F(UT_DBusDock, propertyChanged_geometryProp_currentBehaviorNoSignal)
+// 预期结果: 属性查找命中 geometry,Q_PROPERTY 已声明 NOTIFY geometryChanged,
+//           notifySignal() 有效 → geometryChanged 发出
+TEST_F(UT_DBusDock, propertyChanged_geometryProp_emitsSignal)
 {
     // Arrange
     DBusDockInterface dock;
@@ -211,8 +210,8 @@ TEST_F(UT_DBusDock, propertyChanged_geometryProp_currentBehaviorNoSignal)
     triggerDockPropertiesChanged(common::systemInfo().DockService, { QStringLiteral("geometry") });
     QTRY_COMPARE(lastMessage().arguments().count(), 3);
     QMetaObject::invokeMethod(&dock, "__propertyChanged__", Q_ARG(QDBusMessage, lastMessage()));
-    // Assert: 当前实现下信号不发出(缺陷感知)
-    EXPECT_EQ(spy.count(), 0);
+    // Assert: 修复后信号已发出
+    EXPECT_EQ(spy.count(), 1);
 }
 
 // 用例名称: propertyChanged_unmatchedProp_noCrash
