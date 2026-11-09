@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011 ~ 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -130,6 +130,9 @@ private:
      */
     QTimer mMoniterTimer;
     qint64 mLastAlarmTimeStamp;
+    // DEF-010: separate timestamp for memory alarm to prevent CPU alarm
+    // from suppressing memory alarm notifications
+    qint64 mLastMemAlarmTimeStamp;
     /*!
      * 设置数据类
      */
