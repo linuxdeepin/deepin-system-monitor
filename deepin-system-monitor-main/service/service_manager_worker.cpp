@@ -284,7 +284,6 @@ QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &pat
     FILE *fp { nullptr };
     const int BLEN { 2048 };
     QByteArray buf { BLEN, 0 };
-    QByteArray desc { BLEN, 0 };
     bool b { false };
 
     fp = fopen(path.toLocal8Bit(), "r");
@@ -292,19 +291,12 @@ QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &pat
     if (fp) {
         qCDebug(app) << "Successfully opened unit file:" << path;
         while ((fgets(buf.data(), BLEN, fp))) {
-            descStr = QString("Description=%1").arg(buf.data());
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            QStringList descStrList = descStr.split(QRegularExpression("[\n]"), QString::SkipEmptyParts);
-#else
-            QStringList descStrList = descStr.split(QRegularExpression("[\n]"), Qt::SkipEmptyParts);
-#endif
-            if (descStrList.size() > 0) {
-                descStr = descStrList.at(0);
+            QString line = QString::fromLocal8Bit(buf.data()).trimmed();
+            if (line.startsWith("Description=")) {
+                descStr = line.mid(QString("Description=").length());
                 b = true;
                 qCDebug(app) << "Found description in unit file:" << descStr;
                 break;
-            } else {
-                b = false;
             }
         }
         fclose(fp);
