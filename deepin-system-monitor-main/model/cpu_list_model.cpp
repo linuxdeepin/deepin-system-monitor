@@ -54,8 +54,10 @@ QVariant CPUListModel::data(const QModelIndex &idx, int role) const
             auto cpu = m_cpuInfoDB[row];
             auto stat = m_statModelDB[cpu.logicalName()];
             // only most recent sample cared here
-            auto total = stat->data(index(0, 0), CPUStatModel::kStatTotalUsage).toULongLong();
-            auto idle = stat->data(index(0, 0), CPUStatModel::kStatIdleUsage).toULongLong();
+            auto total = stat->data(stat->index(0, CPUStatModel::kStatTotalUsage), Qt::DisplayRole).toULongLong();
+            auto idle = stat->data(stat->index(0, CPUStatModel::kStatIdleUsage), Qt::DisplayRole).toULongLong();
+            if (total == 0)
+                return QString("0%");
             return QString("%1%2").arg((total - idle) * 1. / total * 100).arg('%');
         }
         default:
@@ -70,8 +72,10 @@ QVariant CPUListModel::data(const QModelIndex &idx, int role) const
             auto cpu = m_cpuInfoDB[row];
             auto stat = m_statModelDB[cpu.logicalName()];
             // only most recent sample cared here
-            auto total = stat->data(index(0, 0), CPUStatModel::kStatTotalUsage).toULongLong();
-            auto idle = stat->data(index(0, 0), CPUStatModel::kStatIdleUsage).toULongLong();
+            auto total = stat->data(stat->index(0, CPUStatModel::kStatTotalUsage), Qt::DisplayRole).toULongLong();
+            auto idle = stat->data(stat->index(0, CPUStatModel::kStatIdleUsage), Qt::DisplayRole).toULongLong();
+            if (total == 0)
+                return 0.0;
             return (total - idle) * 1. / total;
         }
         default:
