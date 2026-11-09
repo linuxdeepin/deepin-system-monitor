@@ -109,8 +109,7 @@ void AccountsInfoModel::updateUserOnlineStatus()
 {
     m_onlineUsers.clear();
 
-    //异步获取SessionList
-    QDBusMessage message = m_LoginInter->call("ListSessions");
+    // 获取SessionList
     QDBusPendingReply<SessionInfoList> reply = m_LoginInter->asyncCall(QStringLiteral("ListSessions"));
     reply.waitForFinished();
     if (reply.isValid()) {
