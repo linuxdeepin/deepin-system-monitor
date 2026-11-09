@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2024-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -510,8 +510,6 @@ QVariantMap SystemDBusServer::getProcessInfoBatch(const QList<int> &pids)
                 result["error"] = QString("Failed to read DKapture data: %1").arg(bytesRead);
                 qCWarning(app) << "SystemServer: Failed to read DKapture data:" << bytesRead;
             }
-        } else {
-            result["error"] = "DKapture manager not initialized";
         }
         
     } catch (const std::exception &e) {
