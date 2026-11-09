@@ -29,7 +29,7 @@ private:
     struct XDisconnector {
         void operator()(xcb_connection_t *conn)
         {
-            if (conn && !xcb_connection_has_error(conn))
+            if (conn)
                 xcb_disconnect(conn);
         }
     };
@@ -39,7 +39,7 @@ private:
     xcb_screen_t *m_screen {};
     WMAtom m_atoms;
     int m_screenNumber {};
-    WMWId m_root;
+    WMWId m_root {};
 };
 
 } // namespace wm

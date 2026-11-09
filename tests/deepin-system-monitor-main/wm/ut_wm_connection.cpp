@@ -7,7 +7,7 @@
 // ============================ 用例计数声明 ============================
 // 方法                        | level | 维度                                 | min | actual
 // | WMConnection(display)       | mid   | display空/非空,X错误,screen越界       | 3   | 4 |
-// | ~WMConnection/XDisconnector | mid   | 有效连接断开一次,错误与空连接不断开   | 2   | 3 |
+// | ~WMConnection/XDisconnector | mid   | 有效/错误连接断开,空连接不断开       | 2   | 3 |
 // | xcb_connection/rootWindow/atom | mid | 由构造与析构用例断言                 | 3   | 8 |
 //
 // ============================== 最小清单 ==============================
@@ -33,11 +33,11 @@
 // XDisconnector::operator():
 //   B6  conn 为 null        → 不 disconnect                  → XServerError（析构空连接）覆盖
 //   B7  conn 有效           → xcb_disconnect 恰好一次        → Destruction_ValidConnection_...
-//   B8  has_error != 0      → 不 disconnect                  → XServerError（显式 reset）覆盖
+//   B8  has_error != 0      → 仍 disconnect                  → XServerError（显式 reset）覆盖
 //
 // 说明：xcb_connect 依据库契约永不返回 nullptr（失败返回错误态连接），
-// 对应分支不可达，不设用例；rootWindow() 在越界路径下读取未初始化成员（源码现状），
-// 值不确定，该用例不断言其返回值。
+// 对应分支不可达，不设用例；rootWindow() 在越界路径下 m_root 已初始化为 0，
+// 可断言其返回值为 0。
 
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
@@ -129,10 +129,10 @@ TEST_F(UT_WMConnection, Construction_XServerError_ConnectionCleared_NoAtomsIniti
     // Act
     WMConnection conn;
 
-    // Assert：连接清空、atom 未初始化为 0、错误路径不断开（B6/B8）
+    // Assert：连接清空、atom 未初始化为 0、错误路径仍断开（B8）
     EXPECT_EQ(conn.xcb_connection(), nullptr);
     EXPECT_EQ(conn.atom(WMAtom::WM_STATE), 0);
-    EXPECT_EQ(FakeX::instance().disconnectCount, 0);
+    EXPECT_EQ(FakeX::instance().disconnectCount, 1);
 }
 
 TEST_F(UT_WMConnection, Construction_ScreenOutOfRange_ConnectionKeptAtomsInitialized)
@@ -145,11 +145,12 @@ TEST_F(UT_WMConnection, Construction_ScreenOutOfRange_ConnectionKeptAtomsInitial
     WMConnection conn;
 
     // Assert：连接保留、atom 已初始化（initialize 在 setup 检查之前）；
-    // rootWindow() 读取未初始化成员（源码现状），值不确定，不作断言。
+    // rootWindow() m_root 已初始化为 0（修复 B-DEF-CONN-01），可断言返回值。
     EXPECT_NE(conn.xcb_connection(), nullptr);
     EXPECT_EQ(conn.m_screenNumber, 2);
     EXPECT_EQ(conn.atom(WMAtom::WM_STATE),
               FakeX::instance().atomByName.value("WM_STATE", 0xFFFF));
+    EXPECT_EQ(conn.rootWindow(), static_cast<WMWId>(0));
     EXPECT_EQ(FakeX::instance().disconnectCount, 0);
 }
 

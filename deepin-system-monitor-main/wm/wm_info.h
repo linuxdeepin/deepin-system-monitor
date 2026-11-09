@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -87,7 +87,7 @@ private:
     void findDockWindows();
 
     void initAtomCache(xcb_connection_t *conn);
-    inline xcb_atom_t getAtom(xcb_connection_t *conn, xcb_intern_atom_cookie_t &cookie);
+    xcb_atom_t getAtom(xcb_connection_t *conn, xcb_intern_atom_cookie_t &cookie);
     QByteArray getAtomName(xcb_connection_t *conn, xcb_atom_t atom);
 
     WMWindowExt requestWindowExtInfo(xcb_connection_t *conn, xcb_window_t window);

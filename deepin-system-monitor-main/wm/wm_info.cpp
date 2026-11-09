@@ -356,6 +356,7 @@ void WMInfo::buildWindowTreeSchema()
 
     xcb_window_t root = screen->root;
     auto rootWinExtInfo = requestWindowExtInfo(conn, root);
+    if (!rootWinExtInfo) return;
 
     WMTree tree(new struct wm_tree_t());
     m_tree = std::move(tree);
@@ -380,6 +381,7 @@ void WMInfo::buildWindowTreeSchema()
 
 void WMInfo::findDockWindows()
 {
+    if (!m_tree || !m_tree->root) return;
     m_dockWindowList.clear();
 
     std::function<void(const struct wm_window_ext_t *)> scan_tree;
@@ -538,10 +540,11 @@ QByteArray WMInfo::getAtomName(xcb_connection_t *conn, xcb_atom_t atom)
             auto name = xcb_get_atom_name_name(reply.get());
             meta->name = QByteArray { name, len };
             qCDebug(app) << "Atom" << atom << "name:" << meta->name;
+            m_atomCache[atom] = std::move(meta);
         } else {
             qCWarning(app) << "Failed to get name for atom:" << atom;
+            return {};
         }
-        m_atomCache[atom] = std::move(meta);
     }
 
     return m_atomCache[atom]->name;
