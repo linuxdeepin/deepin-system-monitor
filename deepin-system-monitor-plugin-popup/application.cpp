@@ -30,9 +30,12 @@ Application::Application(int &argc, char **argv)
 
 bool Application::event(QEvent *event)
 {
-    SystemMonitorThread *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    thread->start();
-
+    if (event && event->type() == kMonitorStartEventType) {
+        SystemMonitorThread *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
+        if (thread) {
+            thread->start();
+        }
+    }
     return DApplication::event(event);
 }
 
