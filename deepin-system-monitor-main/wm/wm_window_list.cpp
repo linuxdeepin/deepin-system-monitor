@@ -113,7 +113,7 @@ int WMWindowList::getAppCount()
     }
     int trayAppNum = 0;
     unsigned long traySize = m_trayAppcache.size();
-    std::map<pid_t, WMWindow>::iterator itTray;
+    std::multimap<pid_t, WMWindow>::iterator itTray;
     //if uid = 0,read tray apps number
     for (itTray = m_trayAppcache.begin(); itTray != m_trayAppcache.end(); ++itTray) {
         Process proc(itTray->first);
@@ -127,7 +127,7 @@ int WMWindowList::getAppCount()
             break;
     }
     int guiAppNum = 0;
-    std::map<pid_t, WMWindow>::iterator itGui;
+    std::multimap<pid_t, WMWindow>::iterator itGui;
     unsigned long  guiSize = m_guiAppcache.size();
     //if uid = 0,read gui apps number
     for (itGui = m_guiAppcache.begin(); itGui != m_guiAppcache.end(); ++itGui) {
@@ -299,6 +299,7 @@ QList<WMWId> WMWindowList::getTrayWindows() const
     QDBusInterface busInterface(common::systemInfo().TrayManagerService, common::systemInfo().TrayManagerPath,
                                 common::systemInfo().TrayManagerInterface, QDBusConnection::sessionBus());
     QDBusMessage reply = busInterface.call("Get", common::systemInfo().TrayManagerService, "TrayIcons");
+    if (reply.arguments().isEmpty()) return {};
     QVariant v = reply.arguments().first();
     const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
 
@@ -337,7 +338,7 @@ void WMWindowList::updateWindowListCache()
         auto winfo = getWindowInfo(wid);
         const QStringList &windowtype = getWindowType(wid);
         if (winfo && (windowtype.contains("_NET_WM_WINDOW_TYPE_NORMAL") || windowtype.contains("_NET_WM_WINDOW_TYPE_DIALOG"))) {
-            m_guiAppcache[winfo->pid] = std::move(winfo);
+            m_guiAppcache.insert({winfo->pid, std::move(winfo)});
         }
     }
 
@@ -425,13 +426,14 @@ WMWindow WMWindowList::getWindowInfo(WMWId winId)
     int len {};
     xcb_atom_t encoding = XCB_NONE;
     XGetPropertyReply netNameReply(xcb_get_property_reply(conn, netNameCookie, nullptr));
+    XGetPropertyReply nameReply;
     if (netNameReply && netNameReply->type != XCB_NONE) {
         name = reinterpret_cast<const char *>(xcb_get_property_value(netNameReply.get()));
         len = xcb_get_property_value_length(netNameReply.get());
         encoding = netNameReply->type;
     } else {
         auto nameCookie = xcb_icccm_get_wm_name(conn, winId);
-        XGetPropertyReply nameReply(xcb_get_property_reply(conn, nameCookie, nullptr));
+        nameReply.reset(xcb_get_property_reply(conn, nameCookie, nullptr));
         if (nameReply && nameReply->type != XCB_NONE) {
             name = reinterpret_cast<const char *>(xcb_get_property_value(nameReply.get()));
             len = xcb_get_property_value_length(nameReply.get());

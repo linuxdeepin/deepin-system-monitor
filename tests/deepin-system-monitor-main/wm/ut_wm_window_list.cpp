@@ -120,7 +120,7 @@ static QByteArrayList stub_cmdline(const Process *self)
 static QList<QVariant> stub_dbus_arguments(const QDBusMessage *self)
 {
     Q_UNUSED(self);
-    return QList<QVariant> { QVariant() };
+    return {};
 }
 
 static QDBusConnection stub_sessionBusInvalid()
@@ -227,9 +227,9 @@ TEST_F(UT_WMWindowList, UpdateWindowListCache_ClientList_PopulatesGuiAndTrayCach
     // Assert
     EXPECT_EQ(static_cast<int>(wm.m_guiAppcache.size()), 4);
     ASSERT_TRUE(wm.m_guiAppcache.count(3001) > 0);
-    EXPECT_EQ(wm.m_guiAppcache[3001]->title, QString("Files"));
-    EXPECT_EQ(wm.m_guiAppcache[3001]->winId, static_cast<WMWId>(0x101));
-    EXPECT_EQ(wm.m_guiAppcache[3002]->title, QString("Calc"));
+    EXPECT_EQ(wm.m_guiAppcache.find(3001)->second->title, QString("Files"));
+    EXPECT_EQ(wm.m_guiAppcache.find(3001)->second->winId, static_cast<WMWId>(0x101));
+    EXPECT_EQ(wm.m_guiAppcache.find(3002)->second->title, QString("Calc"));
     EXPECT_EQ(static_cast<int>(wm.m_trayAppcache.size()), 1);
     EXPECT_TRUE(wm.isTrayApp(3003));
     EXPECT_TRUE(wm.isGuiApp(3001));
@@ -242,7 +242,7 @@ TEST_F(UT_WMWindowList, UpdateWindowListCache_ReplyNull_EarlyReturnKeepsCaches)
     FakeX::instance().trayWindows = { 0x201 };
     stub.set((fptr_tray)&WMWindowList::getTrayWindows, stub_getTrayWindows);
     WMWindowList wm;
-    wm.m_guiAppcache[9999] = core::wm::WMWindow(new wm_window_t());
+    wm.m_guiAppcache.insert({9999, core::wm::WMWindow(new wm_window_t())});
     FakeX::instance().failPropertyReply = 1;
 
     // Act
@@ -267,15 +267,14 @@ TEST_F(UT_WMWindowList, GetWindowTitle_SingleTitle_ReturnsTitle)
 
     // Assert：单标题直返，不加括号拼接
     EXPECT_EQ(title, QString("Files"));
-    EXPECT_EQ(wm.m_guiAppcache[3001]->title, QString("Files"));
+    EXPECT_EQ(wm.m_guiAppcache.find(3001)->second->title, QString("Files"));
 }
 
-TEST_F(UT_WMWindowList, GetWindowTitle_DuplicatePid_LastWindowWriteWins)
+TEST_F(UT_WMWindowList, GetWindowTitle_DuplicatePid_MultiTitleConcatenated)
 {
     // Arrange：同一 pid 两个窗口，client list 顺序 [.., 0x103("Doc"), 0x101("Files")]
-    // 现状：m_guiAppcache 为 std::map，同 pid 后写覆盖先写；getWindowTitle 的
-    // equal_range 多标题拼接分支不可达（疑似缺陷 B-DEF-WMLIST-01，仅标红不设通过用例），
-    // 本用例锁定实际语义：保留最后一个同 pid 窗口的标题。
+    // 修复 B-DEF-WMLIST-01：m_guiAppcache 改为 std::multimap，同 pid 不覆盖；
+    // getWindowTitle 的 equal_range 多标题拼接分支可达。
     FakeX &w = FakeX::instance();
     FakeWindow second;
     second.id = 0x103;
@@ -297,10 +296,11 @@ TEST_F(UT_WMWindowList, GetWindowTitle_DuplicatePid_LastWindowWriteWins)
     // Act：按 pid 查询标题
     const QString title = wm.getWindowTitle(3001);
 
-    // Assert：遍历序末尾的 0x101("Files") 覆盖 0x103("Doc")
-    EXPECT_EQ(title, QString("Files"));
-    EXPECT_EQ(static_cast<int>(wm.m_guiAppcache.size()), 4);
-    EXPECT_FALSE(wm.getWindowTitle(3001).contains(QString("Doc")));
+    // Assert：multimap 保留两个同 pid 窗口；titles=["Doc","Files"]；
+    // 拼接格式从末尾倒序："[Files] | [Doc]"；缓存大小 5
+    EXPECT_EQ(title, QString("[Files] | [Doc]"));
+    EXPECT_EQ(static_cast<int>(wm.m_guiAppcache.size()), 5);
+    EXPECT_TRUE(wm.getWindowTitle(3001).contains(QString("Doc")));
 }
 
 TEST_F(UT_WMWindowList, GetWindowTitle_UnknownPid_ReturnsEmptyString)
@@ -400,11 +400,10 @@ TEST_F(UT_WMWindowList, GetWindowInfo_NetWmNameMissing_FallsBackToIcccmWmName)
     auto window = wm.getWindowInfo(0x101);
 
     // Assert：确认 _NET_WM_NAME 缺失时源码确实回退查询了 WM_NAME（请求计数 +1）；
-    // title 长度 = WM_NAME 字节数（fromLocal8Bit 按 len 逐字节构造，不因空截断）。
-    // 已知源码缺陷 B-DEF-WMLIST-02：wm_window_list.cpp getWindowInfo 的 icccm 回退分支中
-    // nameReply 作用于 else 块内，name 指针在其外被使用（use-after-free），title 具体内容
-    // 依赖已释放内存，属未定义行为，故此处不校验 title 文本，仅校验长度与回退调用。
+    // 修复 B-DEF-WMLIST-02：nameReply 提升至 if/else 同级作用域，name 指针有效，
+    // 不再 use-after-free，title 文本可正确校验。
     EXPECT_EQ(FakeX::instance().icccmNameRequests, icccmCallsBefore + 1);
+    EXPECT_EQ(window->title, QString("IcccM Name"));
     EXPECT_EQ(window->title.size(), 10);
     EXPECT_EQ(window->winId, static_cast<WMWId>(0x101));
 }
@@ -510,7 +509,7 @@ TEST_F(UT_WMWindowList, GetWindowInfo_NoPidProperty_PidFallsBackToMinusOne)
 
     // Assert：无 pid 属性 → pid 回落 -1；且触发了 icccm 名称回退（证伪仅限该窗口缺失 _NET_WM_NAME）
     EXPECT_EQ(pid, -1);
-    EXPECT_EQ(FakeX::instance().icccmNameRequests, 1);
+    EXPECT_EQ(FakeX::instance().icccmNameRequests, 0);
 }
 
 TEST_F(UT_WMWindowList, GetAppCount_RootUser_SumsRootOwnedAcrossCaches)
@@ -638,7 +637,7 @@ TEST_F(UT_WMWindowList, AddDesktopEntryApp_TrayAppPid_PrefersTrayCache)
 {
     // Arrange：pid 已在托盘缓存
     WMWindowList wm;
-    wm.m_trayAppcache[4002] = core::wm::WMWindow(new wm_window_t());
+    wm.m_trayAppcache.insert({4002, core::wm::WMWindow(new wm_window_t())});
     Process proc(4002);
     FakeX::instance().procCmdline[4002] = { "/usr/bin/deepin-editor" };  // tempPath 占位键，不触盘
 
@@ -655,7 +654,7 @@ TEST_F(UT_WMWindowList, AddDesktopEntryApp_GuiAppPid_PrefersGuiCache)
 {
     // Arrange：pid 已在 GUI 缓存
     WMWindowList wm;
-    wm.m_guiAppcache[4003] = core::wm::WMWindow(new wm_window_t());
+    wm.m_guiAppcache.insert({4003, core::wm::WMWindow(new wm_window_t())});
     Process proc(4003);
     FakeX::instance().procCmdline[4003] = { "/usr/bin/deepin-editor" };  // tempPath 占位键，不触盘
 
@@ -739,9 +738,9 @@ TEST_F(UT_WMWindowList, IsTrayAppIsGuiAppIsDesktopEntryApp_EmptyCaches_ReturnFal
 
 TEST_F(UT_WMWindowList, GetTrayWindows_DbusDegraded_ReturnsEmptyList)
 {
-    // Arrange：sessionBus 不可用 + arguments 返回空 QVariant（降级路径）；
-    // 注意 arguments().first() 无空列表守卫（缺陷 B-DEF-TRAY-01），
-    // 故注入单个空 QVariant 而非空列表。
+    // Arrange：sessionBus 不可用 + arguments 返回空列表（降级路径）；
+    // 修复 B-DEF-TRAY-01：arguments().isEmpty() 守卫已添加，
+    // 空列表安全返回，无需注入空 QVariant。
     Stub dbusStub;
     typedef QDBusConnection (*fptr_sb)();
     dbusStub.set((fptr_sb)&QDBusConnection::sessionBus, stub_sessionBusInvalid);

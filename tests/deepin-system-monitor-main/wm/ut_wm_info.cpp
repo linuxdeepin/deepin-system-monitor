@@ -724,23 +724,24 @@ TEST_F(UT_WMInfo, GetAtomName_CachedAtom_WithoutServerLookup)
     EXPECT_EQ(w.getAtomNameCalls, callsBefore);
 }
 
-TEST_F(UT_WMInfo, GetAtomName_UnknownAtom_ServerLookupOnceThenCached)
+TEST_F(UT_WMInfo, GetAtomName_UnknownAtom_ServerLookupTwiceNoCacheOnFailure)
 {
-    // Arrange：未知 atom → xcb_get_atom_name 返回空名并缓存；
-    // 构造期已有若干 type/state 原子名查询，以 callsBefore 为基准断言增量
+    // Arrange：未知 atom → xcb_get_atom_name 返回空名；
+    // 修复 B-DEF-WMINFO-01：失败不写缓存，故每次查询都访问服务器
     WMInfo info;
     FakeX &w = FakeX::instance();
     const xcb_atom_t unknownAtom = 0x9ABC;
     const int callsBefore = w.getAtomNameCalls;
+    w.failAtomNameReply = 2;  // 强制 xcb_get_atom_name_reply 返回 nullptr，模拟服务器失败
 
     // Act：连续两次查询未知原子
     const QByteArray first = info.getAtomName(conn(), unknownAtom);
     const QByteArray second = info.getAtomName(conn(), unknownAtom);
 
-    // Assert：两次调用仅一次服务器访问（第二次命中缓存）
+    // Assert：失败不缓存，两次调用各自访问服务器（callsBefore + 2）
     EXPECT_EQ(first, QByteArray());
     EXPECT_EQ(second, QByteArray());
-    EXPECT_EQ(w.getAtomNameCalls, callsBefore + 1);
+    EXPECT_EQ(w.getAtomNameCalls, callsBefore + 2);
 }
 
 TEST_F(UT_WMInfo, GetAtom_InternReplyFailure_ReturnsNoneAtom)

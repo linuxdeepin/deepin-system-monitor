@@ -61,8 +61,8 @@ private:
     QByteArray getAtomName(xcb_connection_t *conn, xcb_atom_t atom) const;
 
 private:
-    std::map<pid_t, WMWindow> m_guiAppcache;
-    std::map<pid_t, WMWindow> m_trayAppcache;
+    std::multimap<pid_t, WMWindow> m_guiAppcache;
+    std::multimap<pid_t, WMWindow> m_trayAppcache;
 
     QList<pid_t> m_desktopEntryCache;
     WMConnection m_conn;
