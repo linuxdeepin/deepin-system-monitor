@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,6 +9,10 @@
 #include "wm_connection.h"
 #include "wm_atom.h"
 #include "wm_info.h"
+
+#ifdef USE_DEEPIN_WAYLAND
+#include "3rdparty/displayjack/wayland_client.h"
+#endif
 
 namespace core {
 namespace process {
@@ -57,6 +61,9 @@ private:
     pid_t getWindowPid(WMWId window) const;
     QStringList getWindowType(WMWId winId) const;
     QByteArray getAtomName(xcb_connection_t *conn, xcb_atom_t atom) const;
+#ifdef USE_DEEPIN_WAYLAND
+    void updateWaylandWindowCache();
+#endif
 
 private:
     std::map<pid_t, WMWindow> m_guiAppcache;

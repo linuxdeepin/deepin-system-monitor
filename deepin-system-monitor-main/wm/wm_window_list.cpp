@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,8 +13,21 @@
 #include "helper.hpp"
 
 #include <QtDBus>
+#include <QLibrary>
 
 #include <xcb/xcb.h>
+
+#ifdef USE_DEEPIN_WAYLAND
+using namespace common::init;
+
+// displayjack library function pointer types
+typedef int (*InitDtkWmDisplayPtr)();
+typedef int (*GetAllWindowStatesListPtr)(WindowState **states);
+
+// displayjack library function pointers (resolved at runtime from libdtkwmjack.so)
+static InitDtkWmDisplayPtr InitDtkWmDisplay = nullptr;
+static GetAllWindowStatesListPtr GetAllWindowStatesList = nullptr;
+#endif
 
 using namespace core::process;
 using namespace common::core;
@@ -40,6 +53,18 @@ const int offsetImagePointerWH = 2;
 WMWindowList::WMWindowList(QObject *parent)
     : QObject(parent)
 {
+#ifdef USE_DEEPIN_WAYLAND
+    if (WaylandCentered) {
+        // Resolve displayjack library functions at runtime (same pattern as
+        // XWinKillPreviewWidget). libdtkwmjack.so provides GetAllWindowStatesList
+        // which enumerates Wayland windows including native Wayland applications.
+        QLibrary library("libdtkwmjack.so");
+        InitDtkWmDisplay = reinterpret_cast<InitDtkWmDisplayPtr>(library.resolve("InitDtkWmDisplay"));
+        GetAllWindowStatesList = reinterpret_cast<GetAllWindowStatesListPtr>(library.resolve("GetAllWindowStatesList"));
+        if (InitDtkWmDisplay)
+            InitDtkWmDisplay();
+    }
+#endif
 }
 
 void WMWindowList::addDesktopEntryApp(Process *proc)
@@ -291,6 +316,29 @@ void WMWindowList::updateWindowListCache()
 {
     m_desktopEntryCache.clear();
 
+#ifdef USE_DEEPIN_WAYLAND
+    if (WaylandCentered) {
+        // Wayland session: enumerate windows via displayjack library instead of
+        // XCB. Native Wayland applications (e.g. dde-file-manager) are invisible
+        // to XCB, so the X11 _NET_CLIENT_LIST_STACKING property does not contain
+        // them. GetAllWindowStatesList returns all Wayland windows including
+        // XWayland clients, so m_guiAppcache is populated correctly.
+        updateWaylandWindowCache();
+
+        // Tray apps are still enumerated via D-Bus + XCB (XEmbed protocol),
+        // which works through XWayland in Wayland sessions.
+        m_trayAppcache.clear();
+        const QList<WMWId> &trayWndList = getTrayWindows();
+        for (auto i = 0; i < trayWndList.size(); i++) {
+            auto wid = trayWndList[i];
+            auto winfo = getWindowInfo(wid);
+            if (winfo && winfo.get()->pid > 0)
+                m_trayAppcache.insert({winfo->pid, std::move(winfo)});
+        }
+        return;
+    }
+#endif
+
     auto *conn = m_conn.xcb_connection();
     // get window info
     auto cookie = xcb_get_property(conn, 0, m_conn.rootWindow(), m_conn.atom(WMAtom::_NET_CLIENT_LIST_STACKING), XCB_ATOM_WINDOW, 0, UINT_MAX);
@@ -322,6 +370,50 @@ void WMWindowList::updateWindowListCache()
             m_trayAppcache.insert({winfo->pid, std::move(winfo)});
     }
 }
+
+#ifdef USE_DEEPIN_WAYLAND
+void WMWindowList::updateWaylandWindowCache()
+{
+    m_guiAppcache.clear();
+
+    // Ensure the displayjack display connection is initialized. InitDtkWmDisplay
+    // may have been called in the constructor, but XWinKillPreviewWidget calls
+    // DestoryDtkWmDisplay in its destructor, so we re-init here to be safe.
+    if (InitDtkWmDisplay)
+        InitDtkWmDisplay();
+
+    if (!GetAllWindowStatesList)
+        return;
+
+    WindowState *pStates = nullptr;
+    int nCount = GetAllWindowStatesList(&pStates);
+    if (nCount <= 0)
+        return;
+
+    for (int i = 0; i < nCount; i++) {
+        WindowState *p = &pStates[i];
+
+        if (p->pid <= 0)
+            continue;
+
+        // Skip desktop background and dock windows (same filtering as
+        // XWinKillPreviewWidget) so they are not classified as user GUI apps.
+        QString resourceName = QString::fromUtf8(p->resourceName);
+        if (resourceName == "dde-desktop" || resourceName == "dde-dock" ||
+            resourceName == "deepin-deepinid-client")
+            continue;
+
+        WMWindow window(new struct wm_window_t());
+        window->winId = static_cast<WMWId>(p->windowId);
+        window->pid = p->pid;
+        window->title = resourceName;
+
+        m_guiAppcache[p->pid] = std::move(window);
+    }
+
+    free(pStates);
+}
+#endif
 
 pid_t WMWindowList::getWindowPid(WMWId winId) const
 {
