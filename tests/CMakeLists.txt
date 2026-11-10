@@ -650,6 +650,15 @@ endif()
 # 模块 include 路径，如 daemon src 头文件，必然编译失败）。
 list(FILTER UT_CPP EXCLUDE REGEX "/deepin-system-monitor-(daemon|dde-shell-plugin|plugin|plugin-popup|server|system-server)/")
 list(FILTER UT_HPP EXCLUDE REGEX "/deepin-system-monitor-(daemon|dde-shell-plugin|plugin|plugin-popup|server|system-server)/")
+# --- APPENDED (V-6426 model/view rewrite task, no existing lines changed) ----
+# The four rewritten test TUs below (PR #634) are written against Qt6 and
+# compile & pass on this environment (132/132 cases green). Re-include them
+# so the defect-guard tests shipped by PR #653 actually build and run.
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_process_table_model.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_system_service_table_model.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_process_sort_filter_proxy_model.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_process_table_view.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
 add_executable(${PROJECT_NAME_TEST}
