@@ -41,8 +41,9 @@ MLogger::MLogger(QObject *parent)
 
 MLogger::~MLogger()
 {
-    // qCDebug(app) << "MLogger destructor";
-    m_config->deleteLater();
+    qCDebug(app) << "MLogger destructor";
+    delete m_config;
+    m_config = nullptr;
 }
 
 void MLogger::setRules(const QString &rules)
@@ -59,8 +60,9 @@ void MLogger::appendRules(const QString &rules)
     QString tmpRules = rules;
     tmpRules = tmpRules.replace(";", "\n");
     auto tmplist = tmpRules.split('\n');
+    auto existingRules = m_rules.split('\n');
     for (int i = 0; i < tmplist.count(); i++)
-        if (m_rules.contains(tmplist.at(i))) {
+        if (tmplist.at(i).isEmpty() || existingRules.contains(tmplist.at(i))) {
             qCDebug(app) << "Rule already exists, removing from list:" << tmplist.at(i);
             tmplist.removeAt(i);
             i--;

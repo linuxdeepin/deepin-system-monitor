@@ -11,6 +11,9 @@
 #include <QFile>
 #include <QProcess>
 
+#include <signal.h>
+#include <cerrno>
+
 #define CMD_PKEXEC "/usr/bin/pkexec"
 #define CMD_KILL "/usr/bin/kill"
 
@@ -30,20 +33,28 @@ ProcessController::ProcessController(pid_t pid, int signal, QObject *parent)
         Q_EMIT gApp->backgroundTaskStateChanged(Application::kTaskStarted);
     });
     // process finished signal
-    connect(m_proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int rc, QProcess::ExitStatus) {
-        qCDebug(app) << "pkexec kill finished with rc:" << rc;
-        // EINVAL means call with invalid signal
-        Q_ASSERT(rc != EINVAL);
-        if (rc == ESRCH) {
-            qCDebug(app) << "Process not found (ESRCH)";
-            // binary non exists
-            rc = ESRCH;
-        } else if (rc != 0) {
-            qCDebug(app) << "Permission denied (EPERM)";
-            // permission denied
-            rc = EPERM;
+    connect(m_proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int rc, QProcess::ExitStatus status) {
+        qCDebug(app) << "pkexec kill finished with rc:" << rc << "status:" << status;
+        // pkexec exit codes: 0=success, 126=dialog dismissed, 127=auth/exec failure
+        // kill exit code: 0=success, 1=error (does NOT return errno as exit code)
+        if (status == QProcess::CrashExit) {
+            qCWarning(app) << "pkexec process crashed";
+            Q_EMIT resultReady(EPERM);
+        } else if (rc == 0) {
+            Q_EMIT resultReady(0);
+        } else if (rc == 127 || rc == 126) {
+            qCDebug(app) << "pkexec authorization failed or dismissed, exit:" << rc;
+            Q_EMIT resultReady(EPERM);
+        } else {
+            // kill returned non-zero (typically 1); probe process to distinguish ESRCH from EPERM
+            if (kill(m_pid, 0) == -1 && errno == ESRCH) {
+                qCDebug(app) << "Process not found (ESRCH)";
+                Q_EMIT resultReady(ESRCH);
+            } else {
+                qCDebug(app) << "Permission denied (EPERM)";
+                Q_EMIT resultReady(EPERM);
+            }
         }
-        Q_EMIT resultReady(rc);
         // emit background task state changed signal when finished
         Q_EMIT gApp->backgroundTaskStateChanged(Application::kTaskFinished);
         m_proc->deleteLater();

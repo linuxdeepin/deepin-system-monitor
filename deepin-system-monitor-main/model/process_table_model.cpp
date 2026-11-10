@@ -161,15 +161,19 @@ void ProcessTableModel::updateProcessListDelay()
 }
 
 // returns the number of rows under the given parent
-int ProcessTableModel::rowCount(const QModelIndex &) const
+int ProcessTableModel::rowCount(const QModelIndex &parent) const
 {
+    if (parent.isValid())
+        return 0;
     // qCDebug(app) << "Getting row count:" << m_procIdList.size();
     return m_procIdList.size();
 }
 
 // returns the number of columns for the children of the given parent
-int ProcessTableModel::columnCount(const QModelIndex &) const
+int ProcessTableModel::columnCount(const QModelIndex &parent) const
 {
+    if (parent.isValid())
+        return 0;
     // qCDebug(app) << "Getting column count:" << kProcessColumnCount;
     return kProcessColumnCount;
 }
@@ -178,6 +182,9 @@ int ProcessTableModel::columnCount(const QModelIndex &) const
 QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     qCDebug(app) << "Getting header data for section:" << section << "role:" << role;
+    if (orientation != Qt::Horizontal) {
+        return {};
+    }
     if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         switch (section) {
         case kProcessNameColumn: {

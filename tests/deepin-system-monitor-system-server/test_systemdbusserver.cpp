@@ -537,12 +537,11 @@ TEST_F(SystemDBusServerTest, GetProcessInfoBatch_StatRecord_ConvertsAndMapsField
     QVariantMap pidData = data["100"].toMap();
     EXPECT_EQ(pidData["pid"].toInt(), 100);
     EXPECT_EQ(pidData["tgid"].toInt(), 100);
-    // [缺陷标注] QString::fromUtf8(hdr->comm, TASK_COMM_LEN) 按固定 16 字节转换，
-    // 保留内核 NUL 填充的尾随空字符（"testproc\0..."），下游字符串相等比较/长度判断
-    // 会与预期不符；此处按当前实际行为断言，缺陷已登记 Mode 5 清单
+    // comm：被测代码已用 qstrnlen 截断实际长度（修复了旧的固定 16 字节
+    // fromUtf8 保留 NUL 填充的缺陷），此处按正确行为断言完整字符串相等
     const QString comm = pidData["comm"].toString();
-    EXPECT_TRUE(comm.startsWith(QStringLiteral("testproc")));
-    EXPECT_EQ(comm.size(), TASK_COMM_LEN);
+    EXPECT_EQ(comm, QStringLiteral("testproc"));
+    EXPECT_EQ(comm.size(), static_cast<int>(qstrlen("testproc")));
     EXPECT_EQ(pidData["state"].toInt(), 1);
     EXPECT_EQ(pidData["ppid"].toInt(), 1);
     EXPECT_EQ(pidData["utime"].toULongLong(), static_cast<qulonglong>(300 * hz));

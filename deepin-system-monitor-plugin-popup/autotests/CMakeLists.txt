@@ -82,6 +82,16 @@ set(CPP_SYSTEM
     ${MAIN_APP_DIR}/system/block_device.cpp
 )
 
+# 链接期同名校验修复（DeviceDB ODR 分叉）：main 版 DeviceDB 为虚析构多态类，
+# system_monitor.cpp 的 #include "device_db.h" 以自身目录优先解析到 main 版，
+# 其 gcov 元数据引用 typeinfo for core::system::DeviceDB；而本目标只编入
+# popup 版 device_db.cpp（同名类、非多态、不产出 typeinfo），链接必然报
+# undefined reference。两份头文件 include guard 相同（DEVICE_DB_H），对该源
+# 单独强制预包含 popup 版头文件，使其与本目标其余 TU 一致地使用 popup 的
+# 非多态 DeviceDB（system_monitor.cpp 仅用 ctor/dtor/update，API 兼容）。
+set_source_files_properties(${MAIN_APP_DIR}/system/system_monitor.cpp PROPERTIES
+    COMPILE_OPTIONS "-include;${POPUP_DIR}/system/device_db.h")
+
 set(CPP_GUI
     ${POPUP_DIR}/gui/base/base_table_view.cpp
     ${MAIN_APP_DIR}/gui/base/base_header_view.cpp

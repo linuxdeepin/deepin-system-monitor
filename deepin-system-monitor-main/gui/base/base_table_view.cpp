@@ -141,6 +141,11 @@ void BaseTableView::paintEvent(QPaintEvent *event)
 
     // DStyle object
     auto style = dynamic_cast<DStyle *>(DApplication::style());
+    if (!style) {
+        painter.restore();
+        DTreeView::paintEvent(event);
+        return;
+    }
     // global app helper instance
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
@@ -208,6 +213,11 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     }
     // DStyle instance
     auto *style = dynamic_cast<DStyle *>(DApplication::style());
+    if (!style) {
+        painter->restore();
+        QTreeView::drawRow(painter, options, index);
+        return;
+    }
 
     // frame radius
     auto radius = style->pixelMetric(DStyle::PM_FrameRadius, &options);

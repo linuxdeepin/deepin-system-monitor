@@ -41,6 +41,8 @@ void DBusInterface::showOrHideDeepinSystemMonitorPluginPopupWidget()
                 if (!mp_Iface->isValid()) {
                     QDBusReply<void> reply = mp_Iface->call("slotShowOrHideSystemMonitorPluginPopupWidget");
                 }
+            } else {
+                qCWarning(app) << "DBus interface is invalid and startDetached failed; showOrHide cannot proceed";
             }
         }
     } else {

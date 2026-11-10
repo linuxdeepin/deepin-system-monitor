@@ -55,6 +55,11 @@ protected:
             qCDebug(app) << "DeailTableModel::data invalid index";
             return QVariant();
         }
+        if (index.row() < 0 || index.row() >= rowCount(index) ||
+            index.column() < 0 || index.column() >= columnCount(index)) {
+            qCDebug(app) << "DeailTableModel::data index out of bounds";
+            return QVariant();
+        }
 
         int row = index.row();
         int column = index.column();
@@ -252,4 +257,3 @@ void MemSummaryViewWidget::paintEvent(QPaintEvent *event)
     painter.drawLine(this->horizontalHeader()->sectionSize(0) - 1, 2, this->horizontalHeader()->sectionSize(0) - 1, this->viewport()->height() - 2);
     painter.drawRoundedRect(this->rect().adjusted(1, 1, -1, -1), 6, 6);
 }
-

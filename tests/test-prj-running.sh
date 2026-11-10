@@ -73,8 +73,11 @@ for ((i = 0; i < ${#suites[@]}; i += CHUNK_SIZE)); do
         # 10 分钟硬超时兕底: 个别套件用例全部通过但进程退出阶段挂死
         timeout -k 5 600 "${TESTBIN}" --gtest_filter="${filter}" --gtest_output="xml:${xml}"
         rc=$?
-        # 用例跑完即写 XML; 退出阶段崩溃/挂死(rc>=128 或超时)但 XML 有效时也算成功
-        if [ "${rc}" -lt 128 ] || grep -q '<testsuite' "${xml}" 2>/dev/null; then
+        # 以 XML 有效性为唯一成功标准：用例跑完即写 XML；退出阶段崩溃/挂死
+        # (rc>=128) 或整体超时(rc=124)但 XML 有效时也算成功；rc<128 但无 XML
+        # （如超时被杀、写盘前中断）同样视为失败重试，避免整片用例结果与
+        # .gcda 覆盖率数据静默丢失
+        if grep -q '<testsuite' "${xml}" 2>/dev/null; then
             ok=1
             break
         fi
@@ -91,7 +94,7 @@ for ((i = 0; i < ${#suites[@]}; i += CHUNK_SIZE)); do
             for attempt in 1 2; do
                 timeout -k 5 300 "${TESTBIN}" --gtest_filter="${suites[j]}.*" --gtest_output="xml:${s_xml}"
                 rc=$?
-                if [ "${rc}" -lt 128 ] || grep -q '<testsuite' "${s_xml}" 2>/dev/null; then
+                if grep -q '<testsuite' "${s_xml}" 2>/dev/null; then
                     s_ok=1
                     break
                 fi
@@ -110,14 +113,56 @@ if [ -n "${failed_suites}" ]; then
     echo ">>> FAILED (always-crashing) suites:${failed_suites}"
 fi
 
+# >>> BEGIN add-uos ut-sm: 运行各子模块独立 UT 二进制，采集全部子模块的用例结果与覆盖率
+# 各模块（daemon/server/system-server/plugin/plugin-popup/dde-shell-plugin）因 ODR
+# 冲突各自独立成测试二进制，主二进制之外它们也要运行，否则其源码无 .gcda，
+# 覆盖率统计会遗漏全部子模块。注：遗留目标 dsm-popup-ut（popup 模块内 autotests，
+# 253 用例）在 ASAN+stub 野写下早期崩溃（DConfigGlobalTh 线程 SEGV），暂不纳入。
+# LeakSanitizer 的泄漏退出码不影响测试结果判定（以 XML 为准），关闭以免误报。
+MODULE_UTS=(
+    "daemon-ut-build/test_deepin-system-monitor-daemon:daemon"
+    "server-ut-build/test_deepin-system-monitor-server:server"
+    "sys-server-ut-build/test_deepin-system-monitor-system-server:system-server"
+    "plugin-ut-build/test_deepin-system-monitor-plugin:plugin"
+    "popup-ut-build/test_deepin-system-monitor-plugin-popup:plugin-popup"
+    "dde-shell-plugin-ut-build/test_deepin-system-monitor-dde-shell-plugin:dde-shell-plugin"
+)
+for entry in "${MODULE_UTS[@]}"; do
+    m_bin="./tests/${entry%%:*}"
+    m_name="${entry##*:}"
+    m_xml="./report/report_${m_name}.xml"
+    echo ">>> module UT ${m_name}: ${m_bin}"
+    ASAN_OPTIONS=detect_leaks=0 timeout -k 5 300 "${m_bin}" --gtest_output="xml:${m_xml}" >/dev/null 2>&1
+    m_rc=$?
+    if grep -q '<testsuite' "${m_xml}" 2>/dev/null; then
+        m_total=$(grep -oE '<testsuites[^>]* tests="[0-9]+"' "${m_xml}" | grep -oE '[0-9]+' | head -1)
+        m_fail=$(grep -oE '<testsuites[^>]* failures="[0-9]+"' "${m_xml}" | grep -oE '[0-9]+' | head -1)
+        echo ">>> module UT ${m_name}: ${m_total} tests, ${m_fail} failures (rc=${m_rc})"
+        if [ "${m_fail:-0}" -ne 0 ]; then
+            test_exit_code=1
+        fi
+    else
+        echo "WARNING: module UT ${m_name} produced no XML (rc=${m_rc}), excluded from stats"
+        rm -f "${m_xml}"
+        test_exit_code=1
+    fi
+done
+# <<< END
+
 workdir="${build_path}"
 
 #统计代码覆盖率并生成html报告
+# 注：不按模块 extract，保留全部子模块生产代码的覆盖率；
+# 仅排除测试代码自身(tests//autotests/)与vendored第三方库(3rdparty/)
 lcov -d "${workdir}" -c -o ./coverage.info
 
-lcov --extract ./coverage.info '*/deepin-system-monitor-main/*' -o ./coverage.info
-
 lcov --remove ./coverage.info '*/tests/*' -o ./coverage.info
+lcov --remove ./coverage.info '*/autotests/*' -o ./coverage.info
+lcov --remove ./coverage.info '*/3rdparty/*' -o ./coverage.info
+# 剔除系统头文件（/usr/include 的 STL/Qt 模板实例化会被 gcov 记录，
+# 本机实测混入 228 个文件 7229 行，占报告总行数 24%，严重稀释项目真实覆盖率）
+lcov --remove ./coverage.info '/usr/include/*' -o ./coverage.info
+lcov --remove ./coverage.info '/usr/lib/*' -o ./coverage.info
 
 genhtml -o ./html ./coverage.info
 

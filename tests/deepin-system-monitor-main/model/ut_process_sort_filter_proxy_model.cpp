@@ -28,7 +28,7 @@
 // 来源: get_code_snippet ProcessSortFilterProxyModel::filterAcceptsRow @
 //       deepin-system-monitor-main/model/process_sort_filter_proxy_model.cpp:56-141
 // F1 : !sourceModel() || row<0 || row>=rowCount -> false
-// F2 : m_fileterType == kNoFilter -> filter = true
+// F2 : m_filterType == kNoFilter -> filter = true
 // F3 : kFilterCurrentUser && (apptype==kFilterApps || apptype==kFilterCurrentUser) -> true
 // F4 : kFilterApps && apptype==kFilterApps -> true
 // F5 : !filter -> return false（类型不匹配即使名称命中也不放行）
@@ -63,7 +63,7 @@
 // SS1: m_search 保存；中文 locale 分支（convHanToLatin）随环境豁免
 // SS2: setFilterRegularExpression(CaseInsensitiveOption)
 // setFilterType @ process_sort_filter_proxy_model.cpp:
-// SF1: m_fileterType 更新（源码成员名即 m_fileterType，拼写与源码一致）
+// SF1: m_filterType 更新（源码成员名即 m_filterType，拼写与源码一致）
 // SF2: 以原 pattern 重新应用过滤
 // 用例映射:
 //   FilterAcceptsRow_NoSourceModel_ReturnsFalse            -> F1
@@ -488,14 +488,14 @@ TEST_F(ProcessSortFilterProxyModelTest, SetSortFilterString_EmptyPattern_KeepsAl
 
 TEST_F(ProcessSortFilterProxyModelTest, SetFilterType_UpdatesMember)
 {
-    // branch SF1: 成员名 m_fileterType 与源码拼写一致
+    // branch SF1: 成员名 m_filterType 与源码拼写一致
     // Act
     m_proxy->setFilterType(kNoFilter);
 
     // Assert
-    EXPECT_EQ(m_proxy->m_fileterType, kNoFilter);
+    EXPECT_EQ(m_proxy->m_filterType, kNoFilter);
     m_proxy->setFilterType(kFilterCurrentUser);
-    EXPECT_EQ(m_proxy->m_fileterType, kFilterCurrentUser);
+    EXPECT_EQ(m_proxy->m_filterType, kFilterCurrentUser);
 }
 
 TEST_F(ProcessSortFilterProxyModelTest, SetFilterType_ReappliesFilterForNewType)
