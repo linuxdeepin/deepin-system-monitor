@@ -250,9 +250,11 @@ TEST_F(UT_MLogger, AppendRules_EmptyStart_DirectAssign)
     EXPECT_EQ(logger.rules().count('\n'), 1);
 }
 
-// [缺陷锁定 D1] appendRules 子串判重误伤：新规则 "core=true" 并非重复，
-// 但 m_rules 中 "debug.core=true" 包含其子串 → 被误剔（仅标红不修复）
-TEST_F(UT_MLogger, AppendRules_SubstringOverlap_WronglyDeduped)
+// [核查记录] 原标记的 D1“缺陷”（子串判重误伤）不成立：appendRules 的判重用
+// QStringList::contains（existingRules = m_rules.split('\n')），是逐元素精确
+// 比较，"debug.core=true" 与 "core=true" 不相等 → 正常追加。QString::contains
+// 的子串语义在此不适用。用例保留并改锁正确行为，防止将来误改成子串判重。
+TEST_F(UT_MLogger, AppendRules_SubstringOverlap_Appended)
 {
     // Arrange
     MLogger logger;
@@ -261,9 +263,9 @@ TEST_F(UT_MLogger, AppendRules_SubstringOverlap_WronglyDeduped)
     // Act
     logger.appendRules("core=true");
 
-    // Assert: 期望应为 "debug.core=true\ncore=true"，实际因子串判重保持不变（缺陷行为）
-    EXPECT_EQ(logger.rules(), QString("debug.core=true"));
-    EXPECT_EQ(logger.rules().count('\n'), 0);
+    // Assert: 精确判重不命中子串 → "core=true" 应被追加
+    EXPECT_EQ(logger.rules(), QString("debug.core=true\ncore=true"));
+    EXPECT_EQ(logger.rules().count('\n'), 1);
 }
 
 // [缺陷锁定 D2] 同批次内重复规则不互相去重（仅标红不修复）

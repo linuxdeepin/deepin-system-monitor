@@ -45,7 +45,18 @@ else()
 endif()
 
 # Auto-detect Qt version (tries Qt6 first, falls back to Qt5)
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+# 注：不用 find_package(QT NAMES Qt6 Qt5 ...) 多名字探测——CMake 3.31 在
+# 系统同时存在 Qt5/Qt6 config 且 cmake/Qt6 目录 mtime 异常（deb 打包归一化为
+# 1970-01-01）时，<name>* 目录通配会漏掉 Qt6* 而静默回退 Qt5，导致 DTK_NS
+# 变成 Qt5 版 Dtk 并因缺 libdtkcore-dev 配置失败。改为显式两步探测，语义
+# 等价（优先 Qt6）且不受该问题影响。
+find_package(Qt6 QUIET COMPONENTS Core)
+if(Qt6_FOUND)
+    set(QT_VERSION_MAJOR 6)
+else()
+    find_package(Qt5 REQUIRED COMPONENTS Core)
+    set(QT_VERSION_MAJOR 5)
+endif()
 message(STATUS "Found Qt version: ${QT_VERSION_MAJOR}")
 
 # Map to DTK version (Qt6→DTK6, Qt5→DTK5)

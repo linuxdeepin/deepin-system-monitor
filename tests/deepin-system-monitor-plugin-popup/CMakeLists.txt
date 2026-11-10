@@ -93,6 +93,16 @@ add_executable(test_deepin-system-monitor-plugin-popup
     ${MAIN_APP_DIR}/wm/wm_window_tree.cpp
 )
 
+# 链接期同名校验修复（DeviceDB ODR 分叉）：main 版 device_db.h 声明的是虚析构
+# 多态类，system_monitor.cpp 的 #include "device_db.h" 以自身目录优先解析到
+# main 版，导致其 gcov 元数据引用 typeinfo for core::system::DeviceDB；而本
+# 目标只编入 popup 版 device_db.cpp（同名类、非多态、不产出 typeinfo），链接必
+# 然报 undefined reference。两份头文件 include guard 相同（DEVICE_DB_H），
+# 对该源单独强制预包含 popup 版头文件，使其与本目标其余 TU 一致地使用
+# popup 的非多态 DeviceDB（system_monitor.cpp 仅用 ctor/dtor/update，API 兼容）。
+set_source_files_properties(${MAIN_APP_DIR}/system/system_monitor.cpp PROPERTIES
+    COMPILE_OPTIONS "-include;${POPUP_DIR}/system/device_db.h")
+
 # 目录级 include（BEFORE 前置 popup 路径，确保 popup 自带头文件优先于
 # tests/CMakeLists.txt 目录属性里继承的 deepin-system-monitor-main 路径，
 # 避免同名头文件（如 model/process_table_model.h）解析到主程序版本）

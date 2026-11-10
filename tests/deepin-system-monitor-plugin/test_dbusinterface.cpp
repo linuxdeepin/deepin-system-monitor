@@ -103,11 +103,15 @@ protected:
                        });
     }
     // 打桩 DBus 方法调用：捕获方法名并返回错误应答
+    // 注：Qt6 中 QDBusAbstractInterface 的所有 call(...) 重载都是头文件内
+    // inline 函数，内部统一转发到非内联导出函数 doCall(mode, method, args,
+    // numArgs)（qdbusabstractinterface.h:133，public 成员）。打桩 call 拦不到
+    // （无独立符号），必须打 doCall（本机实测 capturedCalls 恒为 0 → 改后通过）。
     void stubDBusCall()
     {
-        stub.set_lamda(static_cast<QDBusMessage (QDBusAbstractInterface::*)(const QString &)>(
-                           &QDBusAbstractInterface::call),
-                       [](QDBusAbstractInterface *, const QString &method) {
+        stub.set_lamda(&QDBusAbstractInterface::doCall,
+                       [](QDBusAbstractInterface *, QDBus::CallMode, const QString &method,
+                          const QVariant *, size_t) {
                            capturedCalls.append(method);
                            return QDBusMessage::createError(QDBusError::ServiceUnknown, QStringLiteral("stubbed"));
                        });
