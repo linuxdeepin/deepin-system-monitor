@@ -643,6 +643,13 @@ file(GLOB_RECURSE UT_LEGACY_EXCLUDE
 if (UT_LEGACY_EXCLUDE)
     list(REMOVE_ITEM UT_CPP ${UT_LEGACY_EXCLUDE})
 endif()
+# --- APPENDED (merge autotests/ into tests/) -------------------------------
+# 六个模块 UT 目录从 autotests/ 迁入 tests/，各自独立成测试可执行
+# （见下方 add_subdirectory 块）；从主测试目标的 GLOB_RECURSE 扫描中排除，
+# 避免被重复编译进 deepin-system-monitor-test（其源码缺少主目标对应的
+# 模块 include 路径，如 daemon src 头文件，必然编译失败）。
+list(FILTER UT_CPP EXCLUDE REGEX "/deepin-system-monitor-(daemon|dde-shell-plugin|plugin|plugin-popup|server|system-server)/")
+list(FILTER UT_HPP EXCLUDE REGEX "/deepin-system-monitor-(daemon|dde-shell-plugin|plugin|plugin-popup|server|system-server)/")
 # --- end APPENDED block ------------------------------------------------------
 
 add_executable(${PROJECT_NAME_TEST}
@@ -772,7 +779,7 @@ add_subdirectory(${CMAKE_HOME_DIRECTORY}/deepin-system-monitor-plugin-popup/auto
 # popup 模块与主程序存在同名类（ProcessTableView/BaseTableView/ProcessTableModel 等，
 # 均无命名空间），不能并入 deepin-system-monitor-test 目标，故独立成测试二进制。
 if(DOTEST)
-    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-plugin-popup popup-ut-build)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/tests/deepin-system-monitor-plugin-popup popup-ut-build)
 endif()
 
 # ---------------- qt-autotest-generator (V-6442): monitor plugin GUI 单元测试 ----------------
@@ -787,10 +794,10 @@ endif()
 # 与 popup 同模式按模块隔离，避免并入主测试目标 deepin-system-monitor-test
 # （daemon 源码不在其 APP_CPP 集合内）。
 if(DOTEST)
-    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-plugin plugin-ut-build)
-    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-system-server sys-server-ut-build)
-    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-server server-ut-build)
-    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-daemon daemon-ut-build)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/tests/deepin-system-monitor-plugin plugin-ut-build)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/tests/deepin-system-monitor-system-server sys-server-ut-build)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/tests/deepin-system-monitor-server server-ut-build)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/tests/deepin-system-monitor-daemon daemon-ut-build)
 endif()
 
 # >>> BEGIN add-uos ut-sm-t22: 测试目标增加仓库根目录头文件路径（dbusalarmnotify.cpp 依赖根目录 helper.hpp）
@@ -803,5 +810,5 @@ target_include_directories(${PROJECT_NAME_TEST} PRIVATE ${CMAKE_HOME_DIRECTORY})
 # （SystemMonitorController 等），不能并入其它测试目标，独立成测试二进制；
 # /proc 读取经 POSIX ::open 前缀重定向沙箱注入，DBus 激活与进程拉起均打桩。
 if(DOTEST)
-    add_subdirectory(${CMAKE_HOME_DIRECTORY}/autotests/deepin-system-monitor-dde-shell-plugin dde-shell-plugin-ut-build)
+    add_subdirectory(${CMAKE_HOME_DIRECTORY}/tests/deepin-system-monitor-dde-shell-plugin dde-shell-plugin-ut-build)
 endif()

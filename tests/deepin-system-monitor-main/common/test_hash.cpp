@@ -588,6 +588,13 @@ TEST_F(HashTest, InitSeed_UrandomFallback_WritesSeedValue)
 
 TEST_F(HashTest, InitSeed_OpenFails_AbortsAndKeepsSeed)
 {
+    // ASAN 环境跳过：::abort 在 ASAN 下是拦截器函数，stub 野写补丁会破坏其
+    // 指令布局，跳板失控后反复落回“日志+abort”路径形成死循环（本机复现：
+    // 单测刷出十万级 qCCritical 日志并挂死，600s 超时连带丢失整片用例结果
+    // 与 .gcda 覆盖率数据）。非 ASAN 构建下仍完整验证本用例。
+#if defined(__SANITIZE_ADDRESS__)
+    GTEST_SKIP() << "abort stub unstable under ASAN (interceptor prologue corrupted by wild-write patch)";
+#endif
     // Arrange：urandom 打开失败桩（abort 预期）
     Stub stub;
     stub.set(&::open, stub_open_fail);
@@ -609,6 +616,10 @@ TEST_F(HashTest, InitSeed_OpenFails_AbortsAndKeepsSeed)
 
 TEST_F(HashTest, InitSeed_UrandomShortRead_AbortsAndKeepsSeed)
 {
+    // 同 InitSeed_OpenFails：abort 桩在 ASAN 下失控挂死，跳过（非 ASAN 构建仍验证）
+#if defined(__SANITIZE_ADDRESS__)
+    GTEST_SKIP() << "abort stub unstable under ASAN (interceptor prologue corrupted by wild-write patch)";
+#endif
     // Arrange：urandom 短读桩（abort 预期）
     Stub stub;
     stub.set(&::read, stub_read_zero);
