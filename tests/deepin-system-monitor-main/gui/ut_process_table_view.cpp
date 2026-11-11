@@ -148,8 +148,7 @@
 // ErrorDialog::show               错误弹框拦截计数
 // ProcessTableView::adjustInfoLabelVisibility（私有）/changeProcessPriority    经 addr_pri 录制
 //
-// 已知源码缺陷（仅标红不修复，详见 defects 报告）：
-//   Toolbar::isSearchContentEmpty() 语义反转（空文本返回 false），影响 B47/B48 断言来源。
+// isSearchContentEmpty() 语义正确（空文本返回 true），影响 B47/B48 断言来源。
 
 //Self
 #include "process_table_view.h"
@@ -459,14 +458,14 @@ static Toolbar *ut_toolbarTarget = nullptr;
 static bool ut_stub_toolbar_search_not_empty(void *)
 {
     Q_UNUSED(ut_toolbarTarget);
-    return true;
+    return false;
 }
 
-// 空搜索态：isSearchContentEmpty 返 false（同时红标其语义反转缺陷）
+// 空搜索态：isSearchContentEmpty 返 true（搜索框为空时返回 true）
 static bool ut_stub_toolbar_search_empty(void *)
 {
     Q_UNUSED(ut_toolbarTarget);
-    return false;
+    return true;
 }
 
 static void ut_stub_model_setUserModeName(void *, const QString &)
@@ -1489,15 +1488,15 @@ TEST_F(UT_ProcessTableView, SizeHintForColumn_Stubs_ReturnsMaxPlusMargin)
     EXPECT_GT(value, 0);
 }
 
-// adjustInfoLabelVisibility：搜索框为空（当前实现返回 false）时标签保持隐藏
+// adjustInfoLabelVisibility：搜索框为空（isSearchContentEmpty 返回 true）时标签保持隐藏
 TEST_F(UT_ProcessTableView, AdjustInfoLabelVisibility_EmptySearch_KeepsHidden)
 {
-    // Arrange: 测试环境模型为空，真实 Toolbar 在搜索框无内容时 isSearchContentEmpty 返 false
+    // Arrange: 测试环境模型为空，真实 Toolbar 在搜索框无内容时 isSearchContentEmpty 返 true
     Stub stub;
     stub.set(ADDR(Toolbar, isSearchContentEmpty), ut_stub_toolbar_search_empty);
     // Act
     m_tester->adjustInfoLabelVisibility();
-    // Assert（B47；同时红标 Toolbar::isSearchContentEmpty 语义反转缺陷）:
+    // Assert（B47）:
     // rowCount==0 但搜索为空 → 标签保持隐藏
     EXPECT_FALSE(m_tester->m_notFoundLabel->isVisible());
     EXPECT_TRUE(m_tester->m_notFoundLabel->isHidden());
