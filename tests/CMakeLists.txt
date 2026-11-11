@@ -673,7 +673,8 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_mem_summary_view_widget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_block_dev_stat_view_widget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_netif_stat_view_widget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_xwin_kill_preview_widget.cpp)
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_xwin_kill_preview_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_block_dev_summary_view_widget.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
 add_executable(${PROJECT_NAME_TEST}

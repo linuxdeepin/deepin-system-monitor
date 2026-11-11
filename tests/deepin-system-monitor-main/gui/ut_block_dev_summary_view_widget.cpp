@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2026 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //Self
@@ -86,14 +86,18 @@ protected:
 };
 
 // Arrange-Act-Assert：构造后模型挂接与基础尺寸应就绪
-TEST_F(UT_BlockDevSummaryViewWidget, initTest)
+TEST_F(UT_BlockDevSummaryViewWidget, Ctor_DefaultState_Model7x2)
 {
-    // Act: SetUp 已构造
-    // Assert
+    // Arrange：SetUp 已完成打桩与构造
     ASSERT_NE(m_tester, nullptr);
-    ASSERT_NE(m_tester->model(), nullptr);
-    EXPECT_EQ(m_tester->model()->rowCount(), 7);
-    EXPECT_EQ(m_tester->model()->columnCount(), 2);
+
+    // Act：读取构造后的模型指针与尺寸
+    QAbstractItemModel *model = m_tester->model();
+
+    // Assert：模型挂接且固定 7 行 2 列
+    ASSERT_NE(model, nullptr);
+    EXPECT_EQ(model->rowCount(), 7);
+    EXPECT_EQ(model->columnCount(), 2);
 }
 
 // fontChanged 应更新 m_font、控件字体并固定高度 260
@@ -121,9 +125,11 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_chageSummaryInfo_01)
     // Act
     m_tester->chageSummaryInfo(deviceName);
 
-    // Assert: 有效索引下可取到数据（设备名非空），说明当前设备名已生效
+    // Assert: 有效索引下数据为源码标题文本，说明当前设备名已生效
     QModelIndex index = m_tester->model()->index(0, 0);
-    EXPECT_TRUE(m_tester->model()->data(index, Qt::DisplayRole).isValid());
+    QVariant value = m_tester->model()->data(index, Qt::DisplayRole);
+    EXPECT_TRUE(value.isValid());
+    EXPECT_EQ(value.toString(), QApplication::translate("DeailTableModelBlock", "Read speed"));
 }
 
 // chageSummaryInfo 空名称触发 updateModel 的"自动选中首台设备"分支，数据恢复有效
@@ -136,39 +142,68 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_chageSummaryInfo_02)
     // Act
     m_tester->chageSummaryInfo(QString(""));
 
-    // Assert: updateModel 在 currDeciveName 为空时自动选中首台设备
+    // Assert: updateModel 在 currDeciveName 为空时自动选中首台设备，数据恢复为标题文本
     EXPECT_TRUE(m_tester->model()->data(index, Qt::DisplayRole).isValid());
     EXPECT_TRUE(m_tester->model()->data(index, Qt::UserRole).isValid());
+    EXPECT_EQ(m_tester->model()->data(index, Qt::DisplayRole).toString(),
+              QApplication::translate("DeailTableModelBlock", "Read speed"));
 }
 
 // paintEvent：grab 渲染不崩溃且产出非空位图
 TEST_F(UT_BlockDevSummaryViewWidget, test_paintEvent_01)
 {
-    // Act & Assert
-    EXPECT_FALSE(m_tester->grab().isNull());
+    // Arrange：构造后的控件
+    ASSERT_NE(m_tester, nullptr);
+
+    // Act
+    QPixmap pixmap = m_tester->grab();
+
+    // Assert：渲染产出非空且与控件同尺寸的位图
+    EXPECT_FALSE(pixmap.isNull());
+    EXPECT_EQ(pixmap.size(), m_tester->size());
 }
 
 // paintEvent：设置字体后渲染仍正常（覆盖字体相关绘制路径）
 TEST_F(UT_BlockDevSummaryViewWidget, test_paintEvent_02)
 {
-    // Arrange
+    // Arrange：切换字体后渲染
     QFont font;
     font.setPointSizeF(12.0);
     m_tester->fontChanged(font);
 
-    // Act & Assert
-    EXPECT_FALSE(m_tester->grab().isNull());
+    // Act
+    QPixmap pixmap = m_tester->grab();
+
+    // Assert：渲染产出非空且与控件同尺寸的位图
+    EXPECT_FALSE(pixmap.isNull());
+    EXPECT_EQ(pixmap.size(), m_tester->size());
 }
 
 // 模型固定 7 行 2 列
 TEST_F(UT_BlockDevSummaryViewWidget, test_rowCount_01)
 {
-    EXPECT_EQ(m_tester->model()->rowCount(), 7);
+    // Arrange：构造后的模型
+    ASSERT_NE(m_tester->model(), nullptr);
+
+    // Act：读取行数与末尾单元格有效性
+    int rows = m_tester->model()->rowCount();
+
+    // Assert：固定 7 行，末行末列索引有效
+    EXPECT_EQ(rows, 7);
+    EXPECT_EQ(m_tester->model()->index(rows - 1, 1).isValid(), true);
 }
 
 TEST_F(UT_BlockDevSummaryViewWidget, test_columnCount_01)
 {
-    EXPECT_EQ(m_tester->model()->columnCount(), 2);
+    // Arrange：构造后的模型
+    ASSERT_NE(m_tester->model(), nullptr);
+
+    // Act：读取列数与首行末列有效性
+    int cols = m_tester->model()->columnCount();
+
+    // Assert：固定 2 列，首行末列索引有效
+    EXPECT_EQ(cols, 2);
+    EXPECT_EQ(m_tester->model()->index(0, cols - 1).isValid(), true);
 }
 
 // DisplayRole：7x2 全矩阵标题文本与源码一致（经真实模型调用，非测试副本）
@@ -187,11 +222,15 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_data_displayRole_matrix)
         {6, 0, "Writes merged/s"},    {6, 1, ""},
     };
 
-    // Act & Assert
+    // Act：逐单元格读取 DisplayRole 数据
+    // Assert（前置守卫）：模型维度固定 7x2
+    EXPECT_EQ(m_tester->model()->rowCount(), 7);
+    EXPECT_EQ(m_tester->model()->columnCount(), 2);
     for (const Cell &c : cells) {
         QModelIndex index = m_tester->model()->index(c.row, c.col);
         QVariant value = m_tester->model()->data(index, Qt::DisplayRole);
         QString expected = QApplication::translate("DeailTableModelBlock", c.text);
+        // Assert: 与源码翻译文本一致
         EXPECT_EQ(value.toString(), expected)
                 << "cell(" << c.row << "," << c.col << ")";
     }
@@ -208,6 +247,7 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_data_displayRole_outOfRange)
 
     // Assert
     EXPECT_FALSE(value.isValid());
+    EXPECT_EQ(value.toString(), QString());
 }
 
 // UserRole：formatUnit 单元格（速度/容量）在零值设备下可稳定求值
@@ -222,6 +262,7 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_data_userRole_unitCells)
     for (const Cell &c : cells) {
         QModelIndex index = m_tester->model()->index(c.row, c.col);
         QVariant value = m_tester->model()->data(index, Qt::UserRole);
+        // Assert: UserRole 数据有效且等于零值 formatUnit 结果
         EXPECT_TRUE(value.isValid()) << "cell(" << c.row << "," << c.col << ")";
         EXPECT_EQ(value.toString(), formatUnit_memory_disk(static_cast<quint64>(0), B, 1))
                 << "cell(" << c.row << "," << c.col << ")";
@@ -244,6 +285,7 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_data_userRole_countCells)
     for (const Cell &c : cells) {
         QModelIndex index = m_tester->model()->index(c.row, c.col);
         QVariant value = m_tester->model()->data(index, Qt::UserRole);
+        // Assert: 数据有效且数值单元格均为零值设备下的 0
         EXPECT_TRUE(value.isValid()) << "cell(" << c.row << "," << c.col << ")";
         if (c.isReal) {
             EXPECT_DOUBLE_EQ(value.toDouble(), 0.0) << "cell(" << c.row << "," << c.col << ")";
@@ -282,7 +324,13 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_data_foregroundRole)
 #endif
 
     // Assert
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    DPalette palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    DPalette palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
     EXPECT_TRUE(value.canConvert<QColor>());
+    EXPECT_EQ(value.value<QColor>(), palette.color(DPalette::Text));
 }
 
 // 未处理角色返回无效 QVariant
@@ -296,6 +344,7 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_data_unhandledRole)
 
     // Assert
     EXPECT_FALSE(value.isValid());
+    EXPECT_EQ(value.toString(), QString());
 }
 
 // 无效索引返回无效 QVariant（isValid 分支）
@@ -305,9 +354,13 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_data_invalidIndex)
     m_tester->chageSummaryInfo(QString("ut-sm-disk-a"));
     QModelIndex invalidIndex;
 
-    // Act & Assert
-    EXPECT_FALSE(m_tester->model()->data(invalidIndex, Qt::DisplayRole).isValid());
-    EXPECT_FALSE(m_tester->model()->data(invalidIndex, Qt::UserRole).isValid());
+    // Act：以无效索引读取两个角色
+    QVariant displayValue = m_tester->model()->data(invalidIndex, Qt::DisplayRole);
+    QVariant userValue = m_tester->model()->data(invalidIndex, Qt::UserRole);
+
+    // Assert: 均返回无效 QVariant，与空 QVariant 相等
+    EXPECT_EQ(displayValue, QVariant());
+    EXPECT_EQ(userValue, QVariant());
 }
 
 // 设备列表为空时模型仍可用（updateModel 空表分支，不崩溃）
@@ -331,9 +384,15 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_flags_01)
 {
     // Arrange
     QModelIndex index = m_tester->model()->index(0, 0);
+    QModelIndex otherIndex = m_tester->model()->index(3, 1);
 
-    // Act & Assert
-    EXPECT_EQ(m_tester->model()->flags(index), Qt::NoItemFlags);
+    // Act：读取两个不同索引的 flags
+    Qt::ItemFlags flags00 = m_tester->model()->flags(index);
+    Qt::ItemFlags flags31 = m_tester->model()->flags(otherIndex);
+
+    // Assert：均为 NoItemFlags（只读表格）
+    EXPECT_EQ(flags00, Qt::NoItemFlags);
+    EXPECT_EQ(flags31, Qt::NoItemFlags);
 }
 
 // 合成越界列索引（外部模型索引）：switch 落空走 break 分支后返回无效 QVariant
@@ -351,7 +410,10 @@ TEST_F(UT_BlockDevSummaryViewWidget, test_data_outOfRangeColumn)
     // Act & Assert: column==2 时 DisplayRole/UserRole 均落入 break 分支返回无效
     for (int row = 0; row < 7; ++row) {
         QModelIndex idx = fakeModel.index(row, 2);
-        EXPECT_FALSE(m_tester->model()->data(idx, Qt::DisplayRole).isValid()) << row;
-        EXPECT_FALSE(m_tester->model()->data(idx, Qt::UserRole).isValid()) << row;
+        QVariant displayValue = m_tester->model()->data(idx, Qt::DisplayRole);
+        QVariant userValue = m_tester->model()->data(idx, Qt::UserRole);
+        // Assert: 两角色均无效且与空 QVariant 相等
+        EXPECT_EQ(displayValue, QVariant()) << row;
+        EXPECT_EQ(userValue, QVariant()) << row;
     }
 }
