@@ -1519,8 +1519,9 @@ TEST_F(UT_ProcessSet, Iterator_Advance_ReaddirError_PrintsErrno)
     // Act：构造迭代器（ctor 内 advance 触发 readdir 失败分支）
     ProcessSet::Iterator it;
 
-    // Assert：无可用项，无崩溃
-    EXPECT_FALSE(it.hasNext());
+    // Assert：无可用项；next() 返回空 Process（pid 为 0）
+    EXPECT_EQ(it.hasNext(), false);
+    EXPECT_EQ(it.next().pid(), 0);
 }
 
 // groupProcessesByAMInstance Step2 恢复循环：缓存 pid 不在 m_set → continue 跳过

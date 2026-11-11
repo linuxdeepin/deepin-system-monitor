@@ -677,9 +677,9 @@ TEST_F(UT_SystemServiceClient, connectToService_SecondCall_ReleasesPreviousInter
     // Act：再次调用 connectToService → 删除旧接口并重建
     m_tester->connectToService();
 
-    // Assert：重建后服务仍可用
-    EXPECT_TRUE(m_tester->m_serviceAvailable);
-    EXPECT_TRUE(m_tester->m_interface != nullptr);
+    // Assert：重建后服务仍可用，接口有效
+    EXPECT_EQ(m_tester->m_serviceAvailable, true);
+    EXPECT_NE(m_tester->m_interface, nullptr);
 }
 
 // 接口无效：connectToService 走失败分支，标记服务不可用并广播 false
@@ -698,9 +698,9 @@ TEST_F(UT_SystemServiceClient, connectToService_InterfaceInvalid_MarksUnavailabl
     m_tester->connectToService();
 
     // Assert
-    EXPECT_FALSE(m_tester->m_serviceAvailable);
+    EXPECT_EQ(m_tester->m_serviceAvailable, false);
     ASSERT_EQ(spy.count(), 1);
-    EXPECT_FALSE(spy.first().first().toBool());
+    EXPECT_EQ(spy.first().first().toBool(), false);
 }
 
 // 批量数据：某 pid 的值字段为标量（非 QDBusArgument）→ 直接赋值不解封

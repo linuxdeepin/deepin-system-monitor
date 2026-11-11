@@ -1037,8 +1037,8 @@ TEST_F(UT_AMIconManager, InitializeAMInterface_Available_CreatesInterfaceAndMark
     obj->initializeAMInterface();
 
     // Assert：接口被创建；虚拟总线 introspection 失败 → AM 标记为不可用
-    EXPECT_TRUE(obj->m_amInterface != nullptr);
-    EXPECT_FALSE(obj->m_amAvailable);
+    EXPECT_NE(obj->m_amInterface, nullptr);
+    EXPECT_EQ(obj->m_amAvailable, false);
     delete obj->m_amInterface;
     obj->m_amInterface = nullptr;
 }
