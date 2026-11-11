@@ -15,6 +15,7 @@
 // | canReload     | low   | -       | 1   | 5      |
 // | canStart      | low   | -       | 1   | 5      |
 // | canStop       | low   | -       | 1   | 5      |
+// | normalizeUnitPath | low | -     | 1   | 3      |
 // | dtor          | low   | -       | 1   | 全局隐式覆盖 |
 
 //self
@@ -30,6 +31,7 @@
 
 //qt
 #include <QDBusMessage>
+#include <QDBusObjectPath>
 #include <QDBusVariant>
 #include <QDBusError>
 #include <QMap>
@@ -133,6 +135,41 @@ TEST_F(UT_Systemd1UnitInterface, Ctor_ValidParams_InterfaceConfigured)
     EXPECT_EQ(service, QStringLiteral("org.freedesktop.systemd1"));
     EXPECT_EQ(path, QStringLiteral("/org/freedesktop/systemd1/unit/dbus_2eservice"));
     EXPECT_EQ(m_tester->interface(), QString(Systemd1UnitInterface::staticInterfaceName()));
+}
+
+// ─────────────────────────── normalizeUnitPath ───────────────────────────
+
+// 路径归一化：字母/数字保留，特殊字符转义为 _<hex>
+TEST_F(UT_Systemd1UnitInterface, NormalizeUnitPath_AlnumKept_SpecialCharsHexEscaped)
+{
+    // Arrange: 混合字母数字与特殊字符（'-'→2d，'.'→2e）的单元名
+    // Act: 归一化为 DBus 对象路径
+    const QDBusObjectPath path =
+        Systemd1UnitInterface::normalizeUnitPath(QStringLiteral("dev-sda1.device"));
+
+    // Assert: 基路径 + 保留字母数字 + 特殊字符 _2d/_2e 转义
+    EXPECT_EQ(path.path(),
+              QStringLiteral("/org/freedesktop/systemd1/unit/dev_2dsda1_2edevice"));
+}
+
+TEST_F(UT_Systemd1UnitInterface, NormalizeUnitPath_PureAlnum_AppendsAsIs)
+{
+    // Arrange: 纯字母数字单元名（无转义需要）
+    // Act:
+    const QDBusObjectPath path =
+        Systemd1UnitInterface::normalizeUnitPath(QStringLiteral("dbus2service"));
+    // Assert: 原样拼接
+    EXPECT_EQ(path.path(), QStringLiteral("/org/freedesktop/systemd1/unit/dbus2service"));
+}
+
+TEST_F(UT_Systemd1UnitInterface, NormalizeUnitPath_EmptyId_ReturnsInvalidPath)
+{
+    // Arrange: 空单元名（边界）
+    // Act:
+    const QDBusObjectPath path = Systemd1UnitInterface::normalizeUnitPath(QString());
+    // Assert: 空名产生仅含基路径的串，QDBusObjectPath 校验拒绝尾斜杠路径，
+    // 返回无效（空）路径对象——调用方需自行避免空 id
+    EXPECT_TRUE(path.path().isEmpty());
 }
 
 // ─────────────────────────── getId ───────────────────────────
