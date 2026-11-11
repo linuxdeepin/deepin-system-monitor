@@ -155,6 +155,17 @@ static int stub_appType_fixed()
     return g_stubAppType;
 }
 
+static bool g_stubIsGuiWin = false;
+static bool stub_isGui_flagged()
+{
+    return g_stubIsGuiWin;
+}
+
+static bool stub_isValid_false(Process *)
+{
+    return false;
+}
+
 // ---- WMWindowList 窗口状态 ----
 static bool stub_bool_false()
 {
@@ -184,6 +195,10 @@ static QString stub_cmdlineString_de()
 
 // ---- 图标子系统隔离：任何 scanProcess/refresh 测试都不得触达 xcb/缓存逻辑 ----
 static void stub_refreashProcessIcon_noop(Process *)
+{
+}
+// ---- 变量信息读取隔离：让进程保持构造默认的无效状态 ----
+static void stub_readProcessVariableInfo_noop(Process *)
 {
 }
 
@@ -734,11 +749,11 @@ TEST_F(UT_ProcessSet, ScanProcess_SecondScanWithDKapture_RecentStageSynced)
     m_tester->scanProcess();
 
     // Assert：批量接口调用两次、集合完整。
-    // 注：实现源 process_set.cpp:382 在 scanProcess 尾部无条件 m_recentProcStage.clear()，
-    // 同步循环产物被清除（疑似源码缺陷，已另行标红报告），此处按实际行为断言。
+    // 注：源码 scanProcess 开头（process_set.cpp:160-170）将上一轮 m_set 的阶段信息
+    // 同步进 m_recentProcStage，尾部不做 clear —— 二次扫描后必含首扫进程的阶段条目。
     EXPECT_EQ(g_stubBatchCalls, 2);
     EXPECT_TRUE(m_tester->m_set.contains(getpid()));
-    EXPECT_TRUE(m_tester->m_recentProcStage.isEmpty());
+    EXPECT_TRUE(m_tester->m_recentProcStage.contains(getpid()));
 }
 
 // kFilterApps 且非托盘：进程加入 myApps，合并循环执行（B7 加入/B12 传统 CPU 合并）
@@ -864,6 +879,39 @@ TEST_F(UT_ProcessSet, ScanProcess_CurrentUserNoWindow_RemovedFromMyApps)
 }
 
 // GUI 祖先 + /bin/bash 父进程：跳过 appType 覆写，保持 kFilterApps（B13 bash 分支）
+// 列表变化触发变更段：预置 simpleSet/prePid 后扫描，pid 已存在（isNewProcess=false）→
+// kFilterCurrentUser 且出现窗口 → 重分类为 kFilterApps 并回写 simpleSet（回写分支）
+TEST_F(UT_ProcessSet, ScanProcess_ReclassifyOnSecondScan_InsertsIntoSimpleSet)
+{
+    // Arrange：预置等价于"首轮已扫描"的状态；prePid 仅含自身进程（与真实列表不同 → 变更段必进）
+    Process self(getpid());
+    self.setAppType(static_cast<int>(kFilterCurrentUser));
+    m_tester->m_simpleSet.insert(getpid(), self);
+    m_tester->m_prePid = QList<pid_t>{ getpid() };
+
+    Stub b1;
+    b1.set(ADDR(Process, appType), stub_appType_fixed);
+    Stub b2;
+    b2.set(ADDR(WMWindowList, isGuiApp), stub_isGui_flagged);
+    Stub b3;
+    b3.set(ADDR(WMWindowList, isTrayApp), stub_bool_false);
+    Stub b4;
+    b4.set(ADDR(WMWindowList, isDesktopEntryApp), stub_bool_false);
+    Stub bIcon;
+    bIcon.set(ADDR(ProcessIcon, refreashProcessIcon), stub_refreashProcessIcon_noop);
+    g_stubAppType = static_cast<int>(kFilterCurrentUser);
+    g_stubIsGuiWin = true;
+
+    // Act：变更段处理自身 pid：isNewProcess=false → 有窗口 → 重分类并回写 simpleSet
+    m_tester->scanProcess();
+
+    // Assert
+    g_stubAppType = static_cast<int>(kNoFilter);
+    ASSERT_TRUE(m_tester->m_simpleSet.contains(getpid()));
+    EXPECT_EQ(m_tester->m_simpleSet.value(getpid()).d->apptype, static_cast<int>(kFilterApps));
+    EXPECT_EQ(m_tester->m_pidMyApps.count(getpid()), 1);
+}
+
 TEST_F(UT_ProcessSet, ScanProcess_BashParent_GuiAncestorKeepsAppType)
 {
     // Arrange：真实分类经 isDesktopEntryApp→true 写为 kFilterApps（readProcessVariableInfo），
@@ -1364,6 +1412,146 @@ TEST_F(UT_ProcessSet, Advance_RepeatedCalls_TerminatesCleanly)
     // Assert：保持耗尽状态，next 返回默认进程，无崩溃
     EXPECT_FALSE(it.hasNext());
     EXPECT_EQ(it.next().pid(), 0);
+}
+
+TEST_F(UT_ProcessSet, ScanProcess_ReevaluatedCurrentUserWindow_ReinsertedIntoSimpleSet)
+{
+    // Arrange：全部进程分类为 kFilterCurrentUser 且有窗口；连续两次扫描，
+    // 第二次扫描对已存在 pid 走 isNewProcess=false 分支，重分类后回写 m_simpleSet
+    g_stubAppType = static_cast<int>(kFilterCurrentUser);
+    Stub b1;
+    b1.set(ADDR(Process, appType), stub_appType_fixed);
+    Stub b2;
+    b2.set(ADDR(WMWindowList, isTrayApp), stub_bool_false);
+    Stub b3;
+    b3.set(ADDR(WMWindowList, isGuiApp), stub_bool_true);
+    Stub b4;
+    b4.set(ADDR(WMWindowList, isDesktopEntryApp), stub_bool_false);
+    Stub bIcon;
+    bIcon.set(ADDR(ProcessIcon, refreashProcessIcon), stub_refreashProcessIcon_noop);
+
+    // Act：两轮扫描
+    m_tester->scanProcess();
+    m_tester->scanProcess();
+
+    // Assert：重分类为 kFilterApps 并加入 myApps，simpleSet 保留该 pid
+    g_stubAppType = static_cast<int>(kNoFilter);
+    EXPECT_EQ(m_tester->m_set[getpid()].d->apptype, kFilterApps);
+    EXPECT_EQ(m_tester->m_pidMyApps.count(getpid()), 1);
+    EXPECT_TRUE(m_tester->m_simpleSet.contains(getpid()));
+}
+
+// myApps 进程传统读取后无效：跳过插入 m_set（B2 无效分支）
+TEST_F(UT_ProcessSet, ScanProcess_InvalidMyApp_SkippedFromSet)
+{
+    // Arrange：全部分类为 kFilterApps 且非托盘，但变量读取打桩为 no-op → 进程无效
+    g_stubAppType = static_cast<int>(kFilterApps);
+    Stub b1;
+    b1.set(ADDR(Process, appType), stub_appType_fixed);
+    Stub b2;
+    b2.set(ADDR(WMWindowList, isTrayApp), stub_bool_false);
+    Stub b3;
+    b3.set(ADDR(Process, readProcessVariableInfo), stub_readProcessVariableInfo_noop);
+    Stub b4;
+    b4.set(ADDR(Process, isValid), stub_isValid_false);
+    Stub bIcon;
+    bIcon.set(ADDR(ProcessIcon, refreashProcessIcon), stub_refreashProcessIcon_noop);
+
+    // Act
+    m_tester->scanProcess();
+
+    // Assert：无效进程不入集合（m_set 中即使因合并阶段 operator[] 产生占位项，
+    //         也是默认构造的无效进程）；父子映射无该 pid
+    g_stubAppType = static_cast<int>(kNoFilter);
+    const auto it = m_tester->m_set.find(getpid());
+    if (it != m_tester->m_set.end()) {
+        EXPECT_FALSE(it->d->valid);
+    }
+    EXPECT_EQ(m_tester->m_pidPtoCMapping.count(getpid()), 0);
+    EXPECT_EQ(m_tester->m_pidCtoPMapping.count(getpid()), 0);
+}
+
+// DKapture 模式但批量数据不可用：传统读取 + 合并循环跳过 CPU 合并（B12 DKapture 分支）
+TEST_F(UT_ProcessSet, ScanProcess_DKaptureMode_TraditionalReadSkipsCpuMerge)
+{
+    // Arrange：系统服务模式开启，批量接口返回失败 → 传统 /proc 读取；
+    // 合并循环因 DKapture 模式跳过 CPU 合并
+    m_tester->m_useSystemService = true;
+    m_tester->m_systemServiceClient = new SystemServiceClient();
+    g_stubBatchResponse.clear();
+    g_stubBatchResponse["success"] = false;
+    g_stubBatchResponse["error"] = QStringLiteral("ut-batch-failure");
+    g_stubAppType = static_cast<int>(kFilterApps);
+    g_stubBatchCalls = 0;
+    Stub bBatch;
+    bBatch.set(ADDR(SystemServiceClient, getProcessInfoBatch), stub_getProcessInfoBatch);
+    Stub b1;
+    b1.set(ADDR(Process, appType), stub_appType_fixed);
+    Stub b2;
+    b2.set(ADDR(WMWindowList, isTrayApp), stub_bool_false);
+    Stub bIcon;
+    bIcon.set(ADDR(ProcessIcon, refreashProcessIcon), stub_refreashProcessIcon_noop);
+
+    // Act
+    m_tester->scanProcess();
+
+    // Assert：批量接口被调用一次；进程经传统读取入集合
+    g_stubAppType = static_cast<int>(kNoFilter);
+    EXPECT_EQ(g_stubBatchCalls, 1);
+    EXPECT_TRUE(m_tester->m_set.contains(getpid()));
+    EXPECT_EQ(m_tester->m_pidMyApps.count(getpid()), 1);
+}
+
+// Iterator advance：readdir 失败且 errno 置位 → print_errno 告警分支
+// readdir 失败打桩：返回 nullptr 且 errno 置为 EBADF
+static dirent *stub_readdir_ebadf(DIR *)
+{
+    errno = EBADF;
+    return nullptr;
+}
+
+TEST_F(UT_ProcessSet, Iterator_Advance_ReaddirError_PrintsErrno)
+{
+    // Arrange：readdir 返回 nullptr 且 errno 置为 EBADF
+    Stub b;
+    b.set(::readdir, stub_readdir_ebadf);
+
+    // Act：构造迭代器（ctor 内 advance 触发 readdir 失败分支）
+    ProcessSet::Iterator it;
+
+    // Assert：无可用项，无崩溃
+    EXPECT_FALSE(it.hasNext());
+}
+
+// groupProcessesByAMInstance Step2 恢复循环：缓存 pid 不在 m_set → continue 跳过
+TEST_F(UT_ProcessSet, GroupProcesses_RecoveryPidNotInSet_Continues)
+{
+    // Arrange：首轮正常建立 pid→实例映射；再注入一个不在 m_set 的历史映射条目
+    g_stubAmAvailable = true;
+    g_stubGroupInfo = AMProcessGroupInfo();
+    g_stubGroupInfo.appId = QStringLiteral("org.example.app");
+    g_stubGroupInfo.instancePath = QStringLiteral("/instance/path");
+    g_stubGroupInfo.displayName = QStringLiteral("Example");
+    m_tester->m_set.insert(100, Process(100));
+    m_tester->m_pidMyApps.append(100);
+    Stub b1;
+    b1.set(ADDR(AMIconManager, isAMAvailable), stub_isAMAvailable_fixed);
+    Stub b2;
+    b2.set(ADDR(AMIconManager, getProcessGroupInfo), stub_getProcessGroupInfo_fixed);
+
+    m_tester->groupProcessesByAMInstance();
+    ASSERT_TRUE(m_tester->m_pidToInstance.contains(100));
+
+    // 注入历史映射：pid 99999 不在 m_set 中，恢复循环应 continue 跳过
+    m_tester->m_pidToInstance.insert(99999, QStringLiteral("/orphan/instance"));
+
+    // Act：第二次分组（Step2 恢复循环命中 continue）
+    m_tester->groupProcessesByAMInstance();
+
+    // Assert：孤儿条目不在 m_set → continue 跳过，不进入重建后的映射；
+    //         有效 pid 100 的映射保持稳定
+    EXPECT_EQ(m_tester->m_pidToInstance.value(100), QStringLiteral("/instance/path"));
+    EXPECT_FALSE(m_tester->m_pidToInstance.contains(99999));
 }
 
 #pragma GCC diagnostic pop
