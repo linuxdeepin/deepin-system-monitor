@@ -666,7 +666,8 @@ list(APPEND UT_CPP
 # 重新编入主测试目标 deepin-system-monitor-test）。
 list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_animation_stackedwidget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_xwin_kill_preview_background_widget.cpp)
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_xwin_kill_preview_background_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/base/ut_base_item_delegate.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
 add_executable(${PROJECT_NAME_TEST}
