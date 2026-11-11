@@ -54,7 +54,6 @@
 
 //Self
 #include "base/base_item_delegate.h"
-#include "process/process_icon_cache.h"
 
 //gtest
 #include "stub.h"
@@ -69,6 +68,7 @@
 #include <QListView>
 #include <QPainter>
 #include <QPainterPath>
+#include <QPixmapCache>
 #include <QStandardItemModel>
 #include <QToolTip>
 
@@ -895,7 +895,8 @@ TEST_F(BaseItemDelegateTest, Paint_HoveredNormalRow_AdjustsTextPen)
 
 TEST_F(BaseItemDelegateTest, Paint_WithDecoration_CacheMiss_GeneratesAndCachesIcon)
 {
-    // Arrange：装饰绘制 + 进程名，缓存未命中 → 生成图标并写入缓存
+    // Arrange：装饰绘制 + 进程名，全局 QPixmapCache 未命中 → 生成图标并写入缓存
+    // （源码用 QPixmapCache 按 "procName@DPR" 键管理进程图标内存，见 base_item_delegate.cpp）
     const QString procName = QStringLiteral("ut-cache-miss");
     QModelIndex idx = makeIndex(0, 0, "cached", QVariant(), testIcon(), procName);
     QStyleOptionViewItem opt = baseOption(idx, QStyleOptionViewItem::Beginning);
@@ -904,8 +905,8 @@ TEST_F(BaseItemDelegateTest, Paint_WithDecoration_CacheMiss_GeneratesAndCachesIc
     qreal dpr = 1.0;
     QString cacheKey = QStringLiteral("%1@%2").arg(procName).arg(dpr);
     QPixmap cached;
-    core::process::ProcessIconCache::instance()->iconPixmapCache.remove(cacheKey);
-    ASSERT_FALSE(core::process::ProcessIconCache::instance()->iconPixmapCache.find(cacheKey, &cached));
+    QPixmapCache::remove(cacheKey);
+    ASSERT_FALSE(QPixmapCache::find(cacheKey, &cached));
     stub.set_lamda(static_cast<void (QPainter::*)(const QRect &, const QPixmap &)>(&QPainter::drawPixmap),
                    [](QPainter *, const QRect &, const QPixmap &pm) {
                        ++g_drawPixmapCount;
@@ -918,11 +919,11 @@ TEST_F(BaseItemDelegateTest, Paint_WithDecoration_CacheMiss_GeneratesAndCachesIc
     m_tester->paint(&p, opt, idx);
     p.end();
 
-    // Assert：绘制了图标，且缓存中已生成该进程图标
+    // Assert：绘制了图标，且全局 QPixmapCache 中已生成该进程图标
     EXPECT_EQ(g_drawPixmapCount, 1);
     EXPECT_FALSE(g_drawPixmapData().isNull());
     QPixmap stored;
-    EXPECT_TRUE(core::process::ProcessIconCache::instance()->iconPixmapCache.find(cacheKey, &stored));
+    EXPECT_TRUE(QPixmapCache::find(cacheKey, &stored));
 }
 
 TEST_F(BaseItemDelegateTest, Paint_WithDecoration_CacheHit_ReusesCachedPixmap)
@@ -937,7 +938,8 @@ TEST_F(BaseItemDelegateTest, Paint_WithDecoration_CacheHit_ReusesCachedPixmap)
     src.fill(Qt::blue);
     QPixmap preset = QPixmap::fromImage(src);
     QString cacheKey = QStringLiteral("%1@%2").arg(procName).arg(1.0);
-    core::process::ProcessIconCache::instance()->iconPixmapCache.insert(cacheKey, preset);
+    QPixmapCache::remove(cacheKey);
+    QPixmapCache::insert(cacheKey, preset);
     stub.set_lamda(static_cast<void (QPainter::*)(const QRect &, const QPixmap &)>(&QPainter::drawPixmap),
                    [](QPainter *, const QRect &, const QPixmap &pm) {
                        ++g_drawPixmapCount;
