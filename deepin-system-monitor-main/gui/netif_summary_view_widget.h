@@ -341,7 +341,7 @@ public:
 
             // 总计接收
             stInfo.strKey = QApplication::translate("NetInfoModel", "RX bytes");
-            stInfo.strValue = formatUnit_net(stNetifInfo->rxBytes() * 8, B, 1);
+            stInfo.strValue = formatUnit_memory_disk(stNetifInfo->rxBytes(), B, 1);
             m_listInfo << stInfo;
 
             // 接收错误包
@@ -371,7 +371,7 @@ public:
 
             // 总计发送
             stInfo.strKey = QApplication::translate("NetInfoModel", "TX bytes");
-            stInfo.strValue = formatUnit_net(stNetifInfo->txBytes() * 8, B, 1);
+            stInfo.strValue = formatUnit_memory_disk(stNetifInfo->txBytes(), B, 1);
             m_listInfo << stInfo;
 
             // 发送错误包

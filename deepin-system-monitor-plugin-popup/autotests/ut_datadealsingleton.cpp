@@ -294,8 +294,8 @@ TEST_F(UT_DataDealSingleton, ReadMemInfo_ZeroTotal_YieldsNanPercent)
  * 前置条件: 打桩 NetInfo 四个 getter(recv=1024B/s sent=2048B/s
  *           totalRecv=1MiB totalSent=512B)
  * 操作步骤: 调用 readNetInfo
- * 预期结果: recv*8=8192b→"8.0 Kb/s" sent*8=16384b→"16.0 Kb/s"
- *           totalRecv*8=8388608b→"8.0 Mb" totalSent*8=4096b→"4.0 Kb"
+ * 预期结果: recv=1024B→"1024.0 B/s" sent=2048B→"2.0 KB/s"
+ *           totalRecv=1MiB→"1024.0 KB" totalSent=512B→"512.0 B"
  */
 TEST_F(UT_DataDealSingleton, ReadNetInfo_InjectedGetters_FormatsTrafficStrings)
 {
@@ -310,10 +310,10 @@ TEST_F(UT_DataDealSingleton, ReadNetInfo_InjectedGetters_FormatsTrafficStrings)
     bool rt = DataDealSingleton::getInstance().readNetInfo(netReceive, netTotalReceive, netSend, totalSend);
     // Assert
     EXPECT_TRUE(rt);
-    EXPECT_EQ(netReceive, QStringLiteral("8.0 Kb/s"));
-    EXPECT_EQ(netSend, QStringLiteral("16.0 Kb/s"));
-    EXPECT_EQ(netTotalReceive, QStringLiteral("8.0 Mb"));
-    EXPECT_EQ(totalSend, QStringLiteral("4.0 Kb"));
+    EXPECT_EQ(netReceive, QStringLiteral("1024.0 B/s"));
+    EXPECT_EQ(netSend, QStringLiteral("2.0 KB/s"));
+    EXPECT_EQ(netTotalReceive, QStringLiteral("1024.0 KB"));
+    EXPECT_EQ(totalSend, QStringLiteral("512.0 B"));
 }
 
 /**
