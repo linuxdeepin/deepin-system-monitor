@@ -663,3 +663,92 @@ TEST_F(UT_ProcessIcon, Refresh_CacheMiss_CreatesAndStores)
     EXPECT_EQ(cache->getProcessIcon(54323)->m_data.get(), obj->m_data.get());
     cache->m_cache.remove(54323);
 }
+
+// ---------------- V-8163 覆盖率收口补充用例 ----------------
+
+// 进程指针为空：直接回退默认图标数据（name 为空串）
+TEST_F(UT_ProcessIcon, GetIcon_NullProcess_ReturnsDefaultIcon)
+{
+    // Arrange: AM 不可用（不影响空指针早退分支，但避免触达真实 D-Bus）
+    hookAM(stub, false);
+    std::unique_ptr<ProcessIcon> obj = std::make_unique<ProcessIcon>();
+    // Act: 空进程查询图标
+    std::shared_ptr<icon_data_t> result = obj->getIcon(nullptr);
+    // Assert: 默认图标（名称类型，兜底主题名，proc_name 为哨兵值）
+    ASSERT_NE(result, nullptr);
+    auto *named = static_cast<icon_data_name_type *>(result.get());
+    EXPECT_EQ(named->type, kIconDataNameType);
+    EXPECT_EQ(named->icon_name, QStringLiteral("application-x-executable"));
+    EXPECT_EQ(named->proc_name, QStringLiteral("[::default::]"));
+}
+
+// GUI 应用但窗口图像为空：走窗口属性缺图的 else 分支后继续兜底
+TEST_F(UT_ProcessIcon, GetIcon_GuiAppWindowImageEmpty_ContinuesToDefault)
+{
+    // Arrange: GUI 应用，窗口图像为空图
+    hookAM(stub, false);
+    stub.set_lamda(&WMWindowList::isGuiApp, [](WMWindowList *, pid_t) -> bool {
+        __DBG_STUB_INVOKE__
+        return true;
+    });
+    stub.set_lamda(&WMWindowList::getWindowIcon, [](WMWindowList *, pid_t) -> QImage {
+        __DBG_STUB_INVOKE__
+        return QImage();
+    });
+    std::unique_ptr<ProcessIcon> obj = std::make_unique<ProcessIcon>();
+    Process proc = makeProc(12345, QStringLiteral("ut-nullwin-proc"));
+    proc.d->cmdline = QByteArrayList{"ut-app-bin/ut-nullwin-proc"};
+    // Act: 获取图标
+    std::shared_ptr<icon_data_t> result = obj->getIcon(&proc);
+    // Assert: 后续无命中 → 兜底默认图标
+    ASSERT_NE(result, nullptr);
+    auto *named = static_cast<icon_data_name_type *>(result.get());
+    EXPECT_EQ(named->type, kIconDataNameType);
+    EXPECT_EQ(named->icon_name, QStringLiteral("application-x-executable"));
+    EXPECT_EQ(named->proc_name, QStringLiteral("[::default::]"));
+}
+
+// 桌面项缓存按名称命中但 icon 为空：走缺图 else 分支后继续兜底
+TEST_F(UT_ProcessIcon, GetIcon_EntryCacheByNameEmptyIcon_ContinuesToDefault)
+{
+    // Arrange: 缓存条目 icon 为空
+    hookAM(stub, false);
+    DesktopEntryCache *dec = ProcessDB::instance()->desktopEntryCache();
+    dec->m_cache.insert(QStringLiteral("ut-emptyicon-proc"),
+                        makeEntry(QStringLiteral("ut-emptyicon-proc"), QString()));
+    std::unique_ptr<ProcessIcon> obj = std::make_unique<ProcessIcon>();
+    Process proc = makeProc(12345, QStringLiteral("ut-emptyicon-proc"));
+    proc.d->cmdline = QByteArrayList{"ut-app-bin/ut-emptyicon-proc"};
+    // Act: 获取图标
+    std::shared_ptr<icon_data_t> result = obj->getIcon(&proc);
+    // Assert: 后续无命中 → 兜底默认图标
+    ASSERT_NE(result, nullptr);
+    auto *named = static_cast<icon_data_name_type *>(result.get());
+    EXPECT_EQ(named->type, kIconDataNameType);
+    EXPECT_EQ(named->icon_name, QStringLiteral("application-x-executable"));
+    // 清理缓存条目，避免影响其他用例
+    dec->m_cache.remove(QStringLiteral("ut-emptyicon-proc"));
+}
+
+// environ 中 GIO 桌面文件存在但条目 icon 为空：走缺图 else 分支后继续兜底
+TEST_F(UT_ProcessIcon, GetIcon_EnvironDesktopFileEmptyIcon_ContinuesToDefault)
+{
+    // Arrange: 真实桌面项文件（无 Icon 行）+ GIO 环境变量指向它
+    hookAM(stub, false);
+    QTemporaryDir dir;
+    const QString desktopFile = writeDesktopFile(dir, QStringLiteral("ut-env-empty-icon.desktop"), false);
+    std::unique_ptr<ProcessIcon> obj = std::make_unique<ProcessIcon>();
+    Process proc = makeProc(12345, QStringLiteral("ut-env-empty-icon"));
+    proc.d->cmdline = QByteArrayList{"ut-app-bin/ut-env-empty-icon"};
+    proc.d->environ = QHash<QString, QString>{
+        {QStringLiteral("GIO_LAUNCHED_DESKTOP_FILE"), desktopFile},
+        {QStringLiteral("XDG_DATA_DIRS"), QStringLiteral("/ut/data/dirs")}
+    };
+    // Act: 获取图标
+    std::shared_ptr<icon_data_t> result = obj->getIcon(&proc);
+    // Assert: 桌面文件条目无 icon → 兜底默认图标
+    ASSERT_NE(result, nullptr);
+    auto *named = static_cast<icon_data_name_type *>(result.get());
+    EXPECT_EQ(named->type, kIconDataNameType);
+    EXPECT_EQ(named->icon_name, QStringLiteral("application-x-executable"));
+}
