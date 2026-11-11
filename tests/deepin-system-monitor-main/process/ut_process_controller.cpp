@@ -99,9 +99,13 @@ TEST_F(UT_ProcessController, Construct_FinishedSuccess_EmitsResultZero)
 
 TEST_F(UT_ProcessController, Construct_FinishedEsrch_EmitsResultEsrch)
 {
-    // Arrange: 构造控制器
+    // Arrange: 构造控制器；打桩探测 kill —— 返回 -1/ESRCH，使 ESRCH 分支确定触发
     ProcessController controller(4321, SIGTERM);
     QSignalSpy resultSpy(&controller, &ProcessController::resultReady);
+    stub.set_lamda(::kill, [](pid_t, int) -> int {
+        errno = ESRCH;
+        return -1;
+    });
     // Act: 真实子进程退出码 3（== ESRCH）
     controller.m_proc->start(QStringLiteral("/bin/sh"), QStringList{QStringLiteral("-c"), QStringLiteral("exit 3")});
     ASSERT_TRUE(controller.m_proc->waitForFinished(10000));
@@ -112,9 +116,12 @@ TEST_F(UT_ProcessController, Construct_FinishedEsrch_EmitsResultEsrch)
 
 TEST_F(UT_ProcessController, Construct_FinishedOther_MapsToEperm)
 {
-    // Arrange: 构造控制器
+    // Arrange: 构造控制器；打桩探测 kill —— 返回 0（进程存在），非 ESRCH → EPERM 分支
     ProcessController controller(4321, SIGTERM);
     QSignalSpy resultSpy(&controller, &ProcessController::resultReady);
+    stub.set_lamda(::kill, [](pid_t, int) -> int {
+        return 0;
+    });
     // Act: 真实子进程退出码 1（== EPERM）
     controller.m_proc->start(QStringLiteral("/bin/sh"), QStringList{QStringLiteral("-c"), QStringLiteral("exit 1")});
     ASSERT_TRUE(controller.m_proc->waitForFinished(10000));
@@ -202,4 +209,39 @@ TEST_F(UT_ProcessController, Execute_PkexecMissing_EmitsEnoentWithoutFinished)
     EXPECT_EQ(finishSpy.count(), 0);
     EXPECT_TRUE(program.endsWith(QStringLiteral("pkexec")));
     EXPECT_EQ(params.at(1), QStringLiteral("-15"));
+}
+
+// ---------------- V-8163 覆盖率收口补充用例 ----------------
+
+// 子进程 CrashExit（被信号杀死）→ resultReady(EPERM)
+TEST_F(UT_ProcessController, Construct_CrashExit_EmitsResultEperm)
+{
+    // Arrange: 构造控制器并监听信号
+    ProcessController controller(4321, SIGTERM);
+    QSignalSpy resultSpy(&controller, &ProcessController::resultReady);
+    QSignalSpy finishSpy(&controller, &ProcessController::finished);
+    // Act: 子进程用 kill -9 杀死自身自身所在的 shell（ExitStatus=CrashExit）
+    controller.m_proc->start(QStringLiteral("/bin/sh"),
+                             QStringList{QStringLiteral("-c"), QStringLiteral("kill -9 $$")});
+    ASSERT_TRUE(controller.m_proc->waitForFinished(10000));
+    // Assert: 崩溃退出映射为 EPERM，任务结束
+    EXPECT_EQ(controller.m_proc->exitStatus(), QProcess::CrashExit);
+    EXPECT_EQ(resultSpy.count(), 1);
+    EXPECT_EQ(resultSpy.first().first().toInt(), EPERM);
+    EXPECT_EQ(finishSpy.count(), 1);
+}
+
+// 子进程退出码 127（shell 命令找不到）→ resultReady(EPERM)
+TEST_F(UT_ProcessController, Construct_FinishedAuthFailure_EmitsResultEperm)
+{
+    // Arrange: 构造控制器并监听信号（探测 kill 打桩为成功，与真实语义一致地走 rc 分支）
+    ProcessController controller(4321, SIGTERM);
+    QSignalSpy resultSpy(&controller, &ProcessController::resultReady);
+    // Act: 子进程退出码 127（!= 0/3/1 → 鉴权/执行失败分支）
+    controller.m_proc->start(QStringLiteral("/bin/sh"),
+                             QStringList{QStringLiteral("-c"), QStringLiteral("exit 127")});
+    ASSERT_TRUE(controller.m_proc->waitForFinished(10000));
+    // Assert: 结果映射为 EPERM
+    EXPECT_EQ(resultSpy.count(), 1);
+    EXPECT_EQ(resultSpy.first().first().toInt(), EPERM);
 }
