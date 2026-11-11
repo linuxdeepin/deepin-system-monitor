@@ -425,11 +425,13 @@ Process ProcessSet::Iterator::next()
 void ProcessSet::Iterator::advance()
 {
     while ((m_dirent = readdir(m_dir.get()))) {
-        if (isdigit(m_dirent->d_name[0]))
-        if(pid_t(atoi(m_dirent->d_name)) < 10)
+        if (isdigit(m_dirent->d_name[0])) {
+            if(pid_t(atoi(m_dirent->d_name)) < 10) {
                 continue;
-        else 
-            break;
+            } else {
+                break;
+            }
+        }
     }
     // qCDebug(app) << "Iterator advanced to" << (m_dirent ? m_dirent->d_name : "end");
     if (!m_dirent && errno) {
