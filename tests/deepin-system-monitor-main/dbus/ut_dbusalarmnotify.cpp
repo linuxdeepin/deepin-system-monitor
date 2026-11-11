@@ -206,7 +206,10 @@ TEST_F(UT_DBusAlarmNotify, ShowAlarmNotify_ViaPublic_ReplyError_ResetsAlarmTimes
     g_replyKind = StubReplyKind::Error;
 
     // Act: 经公开重载路由 cpu 有效分支，内部调用私有重载（错误路径）
-    DBusAlarmNotify::getInstance().showAlarmNotify(QStringList{QStringLiteral("cpu"),
+    // 注意：公开重载 showAlarmNotify(const QStringList&) 按 allArguments[1]
+    // 分派类型、[2] 取值，入参须为完整三元素列表（与生产 DBus 调用一致）
+    DBusAlarmNotify::getInstance().showAlarmNotify(QStringList{QStringLiteral("alarm"),
+                                                              QStringLiteral("cpu"),
                                                               QStringLiteral("90")});
 
     // Assert: 通知发出且时间戳复位为 0
@@ -228,7 +231,9 @@ TEST_F(UT_DBusAlarmNotify, ShowAlarmNotify_ViaPublic_ReplySuccess_UpdatesAlarmTi
     resetAlarmStubState();
 
     // Act: 经公开重载路由 memory 有效分支，内部调用私有重载（成功路径）
-    DBusAlarmNotify::getInstance().showAlarmNotify(QStringList{QStringLiteral("memory"),
+    // 注意：公开重载按 allArguments[1] 分派类型、[2] 取值，入参须为完整三元素列表
+    DBusAlarmNotify::getInstance().showAlarmNotify(QStringList{QStringLiteral("alarm"),
+                                                              QStringLiteral("memory"),
                                                               QStringLiteral("75")});
 
     // Assert: 通知发出且时间戳为正数（当前毫秒）
