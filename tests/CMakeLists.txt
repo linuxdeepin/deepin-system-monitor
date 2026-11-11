@@ -695,6 +695,28 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_accounts_widget.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
+# --- APPENDED (V-8165 system module re-include task, no existing lines changed) ----
+# The ten system-module test TUs below were rewritten against the unified
+# stub-ext infrastructure in earlier rounds (net_info / wireless /
+# netif_info_db / block_device_info_db / device_db / netif_monitor /
+# system_monitor / netlink / nl_link / private netif_p) but were caught by
+# the V-6431 wholesale directory exclusion above and never compiled. The
+# tests build with -fno-access-control (line 20) so the private/protected
+# access they rely on is legal in this target. Each file is verified to
+# compile and pass against Qt 6.8 in this task before being re-included.
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_net_info.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_wireless.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_netif_info_db.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_block_device_info_db.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_device_db.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_netif_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_system_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_netlink.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_nl_link.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/private/ut_netif_p.cpp)
+# --- end APPENDED block ------------------------------------------------------
+
 add_executable(${PROJECT_NAME_TEST}
     ${UT_CPP}
     ${APP_HPP}
