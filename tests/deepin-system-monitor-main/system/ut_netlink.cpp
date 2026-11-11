@@ -33,12 +33,22 @@ static struct nl_object *g_fakeEntries[4];
 static int g_entryCount = 0;
 static int g_entrySeq = 0;
 static int g_refillCalled = 0;
+static int g_connectCalled = 0;
 
 static int stub_nl_cache_refill(struct nl_sock *sock, struct nl_cache *cache)
 {
     Q_UNUSED(sock);
     Q_UNUSED(cache);
     g_refillCalled++;
+    return 0;
+}
+
+// nl_connect 桩：不再创建 AF_NETLINK 套接字，构造流程完全脱离内核环境
+static int stub_nl_connect(struct nl_sock *sock, int protocol)
+{
+    Q_UNUSED(sock);
+    Q_UNUSED(protocol);
+    g_connectCalled++;
     return 0;
 }
 
@@ -73,6 +83,7 @@ public:
         g_entryCount = 0;
         g_entrySeq = 0;
         g_refillCalled = 0;
+        g_connectCalled = 0;
     }
 
     virtual void TearDown()
@@ -87,59 +98,90 @@ protected:
     Netlink *m_tester;
 };
 
-// 构造：netlink 套接字与链路/地址缓存分配成功（只读内核 dump，不依赖具体设备）
+// 构造：套接字与链路/地址缓存分配成功（nl_connect/refill 打桩，无任何内核通信）
 TEST_F(UT_Netlink, Netlink_Construction_SockAndCachesAllocated)
 {
-    // Arrange
-    // SetUp 中已重置桩状态，本用例不打桩走真实构造
+    // Arrange：套接字连接与缓存内核 dump 全部打桩，真实分配仅内存对象
+    Stub stub;
+    stub.set(nl_connect, stub_nl_connect);
+    stub.set(nl_cache_refill, stub_nl_cache_refill);
 
     // Act
     m_tester = new Netlink();
 
-    // Assert
+    // Assert：三个成员句柄均分配成功，connect 恰好调用一次
     EXPECT_NE(m_tester->m_sock, nullptr);
     EXPECT_NE(m_tester->m_linkCache, nullptr);
     EXPECT_NE(m_tester->m_addrCache, nullptr);
+    EXPECT_EQ(g_connectCalled, 1);
 }
 
-// 链路迭代器：真实缓存至少含回环设备，首个元素存在。
-// 注：不调用 next()——next() 返回 hold=false 的 NLLink，析构时会对缓存持有的对象
-// rtnl_link_put，破坏缓存引用计数（疑似源码缺陷，仅 hasNext 验证真实路径）
-TEST_F(UT_Netlink, LinkIterator_RealCache_ReturnsRealLink)
+// 链路迭代器：经 Netlink::linkIterator() 拿到迭代器，桩缓存按序返回真实
+// libnl 内存对象，验证 sock/cache 句柄接线正确。
+// 注：不调用 next() 之后的缓存生命周期——hold=false 的 NLLink 析构时对
+// 对象 rtnl_link_put，真实内核缓存场景下会破坏引用计数（疑似源码缺陷，
+// 见 Mode 5 缺陷清单）；本用例用自分配对象规避该副作用，仅验证迭代接线。
+TEST_F(UT_Netlink, LinkIterator_ThroughNetlink_StubbedCache)
 {
-    // Arrange
+    // Arrange：真实 libnl 链路对象充当桩缓存条目，refill/get_first/get_next 打桩
+    struct rtnl_link *entry = rtnl_link_alloc();
+    rtnl_link_set_name(entry, "utlinkA");
+    g_fakeEntries[0] = reinterpret_cast<struct nl_object *>(entry);
+    g_entryCount = 1;
+    Stub stub;
+    stub.set(nl_connect, stub_nl_connect);
+    stub.set(nl_cache_refill, stub_nl_cache_refill);
+    stub.set(nl_cache_get_first, stub_nl_cache_get_first);
+    stub.set(nl_cache_get_next, stub_nl_cache_get_next);
     m_tester = new Netlink();
 
-    // Act
+    // Act：经真实成员句柄构造迭代器并消费首元素
     LinkIterator iter = m_tester->linkIterator();
-    bool has = iter.hasNext();
 
     // Assert
-    EXPECT_TRUE(has);
-    EXPECT_NE(m_tester->m_linkCache, nullptr);
-    // 迭代器在作用域结束时自动析构（缓存由 Netlink 持有，析构不崩溃）
+    ASSERT_TRUE(iter.hasNext());
+    std::unique_ptr<NLLink> link = iter.next();
+    ASSERT_TRUE(link != nullptr);
+    EXPECT_EQ(link->ifname(), QByteArray("utlinkA"));
+    EXPECT_FALSE(iter.hasNext());
+    // entry 已由 hold=false 的 NLLink 析构时 rtnl_link_put 释放，不再重复释放
 }
 
-// 地址迭代器：真实地址缓存可遍历（回环地址至少存在一条）
-TEST_F(UT_Netlink, AddrIterator_RealCache_ReturnsRealAddr)
+// 地址迭代器：经 Netlink::addrIterator() 消费桩缓存中的真实 libnl 地址对象，
+// 验证 addr 迭代接线与字段读取（ifindex 回读）
+TEST_F(UT_Netlink, AddrIterator_ThroughNetlink_StubbedCache)
 {
-    // Arrange
+    // Arrange：真实 libnl 地址对象，ifindex 置为非零可回读值
+    struct rtnl_addr *entry = rtnl_addr_alloc();
+    rtnl_addr_set_ifindex(entry, 7);
+    g_fakeEntries[0] = reinterpret_cast<struct nl_object *>(entry);
+    g_entryCount = 1;
+    Stub stub;
+    stub.set(nl_connect, stub_nl_connect);
+    stub.set(nl_cache_refill, stub_nl_cache_refill);
+    stub.set(nl_cache_get_first, stub_nl_cache_get_first);
+    stub.set(nl_cache_get_next, stub_nl_cache_get_next);
     m_tester = new Netlink();
 
     // Act
     AddrIterator iter = m_tester->addrIterator();
-    bool has = iter.hasNext();
 
-    // Assert
-    EXPECT_NE(m_tester->m_addrCache, nullptr);
-    // 同链路迭代器：仅验证 hasNext 真实路径，不消费缓存对象
-    EXPECT_TRUE(has || !has);
+    // Assert：hasNext 为真且字段可回读（替代原先断言真空的 EXPECT_TRUE(has || !has)）
+    ASSERT_TRUE(iter.hasNext());
+    std::unique_ptr<NLAddr> addr = iter.next();
+    ASSERT_TRUE(addr != nullptr);
+    EXPECT_EQ(addr->ifindex(), 7);
+    EXPECT_FALSE(iter.hasNext());
+    // entry 已由 hold=false 的 NLAddr 析构时 rtnl_addr_put 释放，不再重复释放
 }
 
-// 析构：释放套接字与缓存不崩溃
+// 析构：释放套接字与缓存不崩溃（nl_connect/refill 打桩，真实 free 仅作用于内存对象）
 TEST_F(UT_Netlink, Netlink_Destruction_ReleasesResources)
 {
     // Arrange
+    Stub stub;
+    stub.set(nl_connect, stub_nl_connect);
+    stub.set(nl_cache_refill, stub_nl_cache_refill);
     Netlink *netlink = new Netlink();
     ASSERT_NE(netlink->m_sock, nullptr);
 
@@ -147,7 +189,7 @@ TEST_F(UT_Netlink, Netlink_Destruction_ReleasesResources)
     delete netlink;
 
     // Assert
-    // 析构后套接字资源可重新分配（验证无泄漏破坏环境）
+    // 析构后资源可重新分配（验证无泄漏破坏环境，free 全部真实执行）
     Netlink rebuilt;
     EXPECT_NE(rebuilt.m_sock, nullptr);
     EXPECT_NE(rebuilt.m_linkCache, nullptr);
