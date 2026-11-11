@@ -44,6 +44,8 @@
 #include <QFileInfo>
 #include <QVariantMap>
 #include <QTest>
+#include <QThread>
+#include <QDBusServer>
 
 using namespace core::process;
 
@@ -570,3 +572,163 @@ TEST_F(UT_SystemServiceClient, dtor_AfterConnected_DisconnectsCleanly)
     EXPECT_EQ(spyDkapture.count(), 1);
     EXPECT_FALSE(spyDkapture.at(0).at(0).toBool());
 }
+
+// ---------------- V-8163 覆盖率收口补充用例 ----------------
+
+// 进程内 D-Bus 服务端对象：提供 getProcessInfoBatch 方法，返回嵌套 a{sv} 结构。
+// 经真实 D-Bus 编解码往返后，客户端侧 "data" 字段为 read 状态 QDBusArgument，
+// 用以覆盖源码中嵌套 QDBusArgument 解封分支（进程内写入态 QDBusArgument 无法直接解封）。
+class UTBatchServiceObject : public QObject
+{
+    Q_OBJECT
+public:
+    QVariantMap overrideData; // 非空时原样返回（标量/混合形态用例）
+public slots:
+    QVariantMap getProcessInfoBatch(const QList<int> &pids)
+    {
+        QVariantMap data;
+        if (!overrideData.isEmpty()) {
+            data = overrideData;
+        } else {
+            QVariantMap per;
+            per["name"] = QStringLiteral("TestApp");
+            per["utime"] = 10;
+            for (int pid : pids)
+                data[QString::number(pid)] = per;
+        }
+        QVariantMap result;
+        result["success"] = true;
+        result["data"] = data;
+        return result;
+    }
+};
+
+// 进程内 D-Bus 对等总线测试装置
+struct UtPeerBatchHarness
+{
+    QDBusServer server;
+    QThread worker;
+    QDBusConnection peer;
+    UTBatchServiceObject svcObj;
+
+    UtPeerBatchHarness()
+        : server(QStringLiteral("unix:abstract=ut_svc_peer_v8163")),
+          peer(QDBusConnection(QString()))
+    {
+        worker.start();
+        svcObj.moveToThread(&worker);
+        QObject::connect(&server, &QDBusServer::newConnection,
+                         [this](QDBusConnection c) {
+            c.registerObject(QStringLiteral("/org/deepin/SystemMonitorSystemServer"),
+                             QStringLiteral("org.deepin.SystemMonitorSystemServer"),
+                             &svcObj, QDBusConnection::ExportAllSlots);
+        });
+        peer = QDBusConnection::connectToPeer(server.address(),
+                                              QStringLiteral("ut_svc_peer_conn"));
+    }
+
+    ~UtPeerBatchHarness()
+    {
+        QDBusConnection::disconnectFromPeer(peer.name());
+        worker.quit();
+        worker.wait(2000);
+    }
+};
+
+// getProcessInfoBatch：data 字段为 QDBusArgument（a{sv}）时执行嵌套解封
+TEST_F(UT_SystemServiceClient, getProcessInfoBatch_DataAsQDBusArgument_UnwrapsNestedMaps)
+{
+    // Arrange: 对等总线在工作线程提供批量接口；系统总线打桩返回对等连接；
+    //          restore 真实 connectToService 与真实 doCall（isValid/isConnected 保持打桩）
+    UtPeerBatchHarness harness;
+    ASSERT_TRUE(harness.peer.isConnected());
+    QTest::qWait(50); // 等待服务端注册对象
+    delete g_realSystemBus;
+    g_realSystemBus = new QDBusConnection(harness.peer);
+    g_busConnected = true;
+    g_ifaceValid = true;
+    m_stub.set(ADDR(QDBusConnection, isConnected), stub_isConnected);
+    m_stub.set(ADDR(QDBusAbstractInterface, isValid), stub_ifaceValid);
+    m_stub.reset(ADDR(SystemServiceClient, connectToService));
+    m_tester->checkServiceConnection();
+    ASSERT_TRUE(m_tester->m_serviceAvailable);
+
+    // Act
+    QVariantMap result = m_tester->getProcessInfoBatch(QList<int>{ 1001 });
+
+    // Assert: success 为真；data 已解封为普通嵌套 QVariantMap
+    EXPECT_TRUE(result.value("success").toBool());
+    EXPECT_FALSE(result.contains("error"));
+    QVariantMap data = result.value("data").toMap();
+    ASSERT_TRUE(data.contains("1001"));
+    QVariantMap per = data.value("1001").toMap();
+    EXPECT_EQ(per.value("name").toString(), QString("TestApp"));
+    EXPECT_EQ(per.value("utime").toInt(), 10);
+}
+
+// 二次连接：释放旧接口并重建（接口释放分支）
+TEST_F(UT_SystemServiceClient, connectToService_SecondCall_ReleasesPreviousInterface)
+{
+    // Arrange：先建立一次可用连接
+    makeServiceAvailable();
+    ASSERT_TRUE(m_tester->m_serviceAvailable);
+    ASSERT_TRUE(m_tester->m_interface != nullptr);
+
+    // Act：再次调用 connectToService → 删除旧接口并重建
+    m_tester->connectToService();
+
+    // Assert：重建后服务仍可用
+    EXPECT_TRUE(m_tester->m_serviceAvailable);
+    EXPECT_TRUE(m_tester->m_interface != nullptr);
+}
+
+// 接口无效：connectToService 走失败分支，标记服务不可用并广播 false
+TEST_F(UT_SystemServiceClient, connectToService_InterfaceInvalid_MarksUnavailable)
+{
+    // Arrange：总线已连接但接口无效
+    m_stub.set(ADDR(QDBusConnection, systemBus), stub_systemBus);
+    m_stub.set(ADDR(QDBusConnection, isConnected), stub_isConnected);
+    m_stub.set(ADDR(QDBusAbstractInterface, isValid), stub_ifaceValid);
+    g_busConnected = true;
+    g_ifaceValid = false;
+    m_stub.reset(ADDR(SystemServiceClient, connectToService));
+    QSignalSpy spy(m_tester, &SystemServiceClient::serviceConnectionChanged);
+
+    // Act
+    m_tester->connectToService();
+
+    // Assert
+    EXPECT_FALSE(m_tester->m_serviceAvailable);
+    ASSERT_EQ(spy.count(), 1);
+    EXPECT_FALSE(spy.first().first().toBool());
+}
+
+// 批量数据：某 pid 的值字段为标量（非 QDBusArgument）→ 直接赋值不解封
+TEST_F(UT_SystemServiceClient, getProcessInfoBatch_ScalarValueField_DirectAssign)
+{
+    // Arrange：对等总线在工作线程提供批量接口，返回标量值形态
+    UtPeerBatchHarness harness;
+    harness.svcObj.overrideData.insert(QStringLiteral("2002"), QStringLiteral("scalar-value"));
+    ASSERT_TRUE(harness.peer.isConnected());
+    QTest::qWait(50); // 等待服务端注册对象
+    delete g_realSystemBus;
+    g_realSystemBus = new QDBusConnection(harness.peer);
+    g_busConnected = true;
+    g_ifaceValid = true;
+    m_stub.set(ADDR(QDBusConnection, isConnected), stub_isConnected);
+    m_stub.set(ADDR(QDBusAbstractInterface, isValid), stub_ifaceValid);
+    m_stub.reset(ADDR(SystemServiceClient, connectToService));
+    m_tester->checkServiceConnection();
+    ASSERT_TRUE(m_tester->m_serviceAvailable);
+
+    // Act
+    QVariantMap result = m_tester->getProcessInfoBatch(QList<int>{ 2002 });
+
+    // Assert：标量值字段不经解封，原样透传
+    EXPECT_TRUE(result.value("success").toBool());
+    QVariantMap data = result.value("data").toMap();
+    ASSERT_TRUE(data.contains("2002"));
+    EXPECT_EQ(data.value("2002").toString(), QString("scalar-value"));
+}
+
+#include "ut_system_service_client.moc"
