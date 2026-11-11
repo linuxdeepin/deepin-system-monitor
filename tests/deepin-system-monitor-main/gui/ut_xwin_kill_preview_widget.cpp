@@ -34,6 +34,7 @@
 
 //Self
 #include "xwin_kill_preview_widget.h"
+#include "xwin_kill_preview_background_widget.h"
 #include "wm/wm_info.h"
 #include "application.h"
 #include "main_window.h"
@@ -107,6 +108,17 @@ bool stub_xwk_wm_isCursorHoveringDocks_false(const QPoint &)
 std::list<WMWindowArea> stub_xwk_wm_getHoveredByWindowList(WMWId, QRect &)
 {
     return std::list<WMWindowArea>();
+}
+
+std::list<WMWindowArea> stub_xwk_wm_getHoveredByWindowList_nonempty(WMWId, QRect &)
+{
+    wm_window_area_t *area = new wm_window_area_t;
+    area->pid = 100000;
+    area->wid = 222222;
+    area->rect = QRect(0, 0, 50, 50);
+    std::list<WMWindowArea> list;
+    list.emplace_back(area);
+    return list;
 }
 
 QPoint stub_xwk_cursorPos_50_50()
@@ -434,6 +446,66 @@ TEST_F(UT_XWinKillPreviewWidget, test_mouseMoveEvent_04)
     ASSERT_EQ(spy.count(), 1);
     EXPECT_EQ(spy.at(0).at(0).value<QCursor>().shape(), Qt::ForbiddenCursor);
     EXPECT_NE(spy.at(0).at(0).value<QCursor>().shape(), Qt::PointingHandCursor);
+}
+
+TEST_F(UT_XWinKillPreviewWidget, test_mouseMoveEvent_05)
+{
+    // 命中窗口且背景与选区相交：裁剪悬停窗口区域后更新背景选区，光标为高亮样式
+    // Arrange：打桩命中窗口 + 非空悬停列表，构造相交/不相交两个背景
+    Stub stub;
+    stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
+    stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow_hit);
+    stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_false);
+    stub.set(ADDR(WMInfo, getHoveredByWindowList), stub_xwk_wm_getHoveredByWindowList_nonempty);
+
+    QWidget holder;
+    QPixmap pixmap(100, 100);
+    pixmap.fill(Qt::black);
+    XWinKillPreviewBackgroundWidget *bgHit = new XWinKillPreviewBackgroundWidget(pixmap, &holder);
+    bgHit->setGeometry(QRect(0, 0, 400, 400));
+    XWinKillPreviewBackgroundWidget *bgMiss = new XWinKillPreviewBackgroundWidget(pixmap, &holder);
+    bgMiss->setGeometry(QRect(500, 500, 100, 100));
+    m_tester->m_backgroundList << bgHit << bgMiss;
+
+    // Act：发送鼠标移动事件
+    QSignalSpy spy(m_tester, &XWinKillPreviewWidget::cursorUpdated);
+    QMouseEvent me(QEvent::MouseMove, QPoint(50, 50), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    m_tester->mouseMoveEvent(&me);
+
+    // Assert：相交背景选区为裁剪后的区域，光标非禁止样式；不相交背景选区被清空
+    QRegion expected = QRegion(QRect(0, 0, 100, 100)).subtracted(QRegion(QRect(0, 0, 50, 50)));
+    EXPECT_EQ(spy.count(), 1);
+    EXPECT_NE(spy.at(0).at(0).value<QCursor>().shape(), Qt::ForbiddenCursor);
+    EXPECT_EQ(bgHit->m_selRegion, expected);
+    EXPECT_EQ(bgMiss->m_selRegion, QRegion());
+}
+
+TEST_F(UT_XWinKillPreviewWidget, test_mouseMoveEvent_06)
+{
+    // 无命中窗口且背景带历史选区：清空所有背景选区并恢复默认(禁止)光标
+    // Arrange：构造带选区的背景，打桩无命中窗口场景
+    Stub stub;
+    stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
+    stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow);
+    stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_false);
+
+    QWidget holder;
+    QPixmap pixmap(100, 100);
+    pixmap.fill(Qt::black);
+    XWinKillPreviewBackgroundWidget *bg = new XWinKillPreviewBackgroundWidget(pixmap, &holder);
+    bg->setGeometry(QRect(0, 0, 400, 400));
+    bg->updateSelection(QRegion(QRect(10, 10, 30, 30)));
+    m_tester->m_backgroundList << bg;
+
+    // Act：发送鼠标移动事件
+    QSignalSpy spy(m_tester, &XWinKillPreviewWidget::cursorUpdated);
+    QMouseEvent me(QEvent::MouseMove, QPoint(50, 50), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    m_tester->mouseMoveEvent(&me);
+
+    // Assert：背景选区被清空，恢复禁止光标
+    EXPECT_EQ(bg->m_selRegion, QRegion());
+    EXPECT_EQ(spy.count(), 1);
+    EXPECT_EQ(spy.at(0).at(0).value<QCursor>().shape(), Qt::ForbiddenCursor);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_keyPressEvent_02)

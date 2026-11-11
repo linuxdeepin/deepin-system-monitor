@@ -218,7 +218,8 @@ public:
         if (m_tester) {
             m_tester->hide();
             m_tester->deleteLater();
-            QCoreApplication::processEvents();
+            // deleteLater 需要显式派发 DeferredDelete 事件，否则析构不会执行
+            QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
             QCoreApplication::processEvents();
             m_tester = nullptr;
         }
