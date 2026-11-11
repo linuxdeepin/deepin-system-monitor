@@ -37,7 +37,7 @@
 //   B3: maxdata != m_maxData2 → 更新 m_maxData2 并同步 m_maxData [AddData2_FirstPositiveData_UpdatesMax]
 //   B4: m_speedAxis → 进入速度标题分支 [AddData2_SpeedAxisMemChart_UpdatesAxisTitle]
 //   B5: B4 内层 viewType != NET_CHART → formatUnit_memory_disk [AddData2_SpeedAxisMemChart_UpdatesAxisTitle]
-//   B6: B4 的 else 内层 if(m_speedAxis) 为不可达死分支（疑似源码缺陷, 只标红不改源码, 观察标题保持默认） [AddData2_ZeroData_KeepsAxisTitleDefault]
+//   B6: maxdata <= 0 → else 分支（零值可达）且 m_speedAxis → 零值标题回退 [AddData2_ZeroData_SpeedAxisMemChart_ShowsZeroTitle]
 
 // 分支清单（来源：chart_view_widget.cpp ChartViewWidget::drawBackPixmap）
 //   B1: width/height 为 0 → 早退 return, 背景与网格区不重建 [DrawBackPixmap_ZeroSize_LeavesPixmapNull]
@@ -54,6 +54,7 @@
 
 #include <DFontSizeManager>
 #include <gtest/gtest.h>
+#include "addr_pri.h"
 
 #include <QColor>
 #include <DFontSizeManager>
@@ -94,6 +95,32 @@ static bool hasNonWhitePixel(const QImage &image)
     return false;
 }
 
+
+// 私有成员/受保护函数经 addr_pri.h 访问（不修改生产头文件）
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QString, m_axisTitle)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QFont, m_textfont)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QPixmap, m_backPixmap)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QRect, m_chartRect)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QColor, m_data1Color)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QColor, m_data2Color)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, bool, m_speedAxis)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QVariant, m_maxData)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QVariant, m_maxData1)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QVariant, m_maxData2)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QList<QVariant>, m_listData1)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, QList<QVariant>, m_listData2)
+ACCESS_PRIVATE_FIELD(ChartViewWidget, ChartViewWidget::ChartViewTypes, m_viewType)
+ACCESS_PRIVATE_FUN(ChartViewWidget, void(const QFont &), changeFont)
+ACCESS_PRIVATE_FUN(ChartViewWidget, void(void), changeTheme)
+ACCESS_PRIVATE_FUN(ChartViewWidget, void(void), drawBackPixmap)
+ACCESS_PRIVATE_FUN(ChartViewWidget, void(QPainter *), drawData1)
+ACCESS_PRIVATE_FUN(ChartViewWidget, void(QPainter *), drawData2)
+ACCESS_PRIVATE_FUN(ChartViewWidget, void(QPainter *), drawAxisText)
+ACCESS_PRIVATE_FUN(ChartViewWidget, void(const QString &), setAxisTitle)
+using UtChartPathFn = void(const QList<QVariant> &, QPainterPath &, QVariant);
+ACCESS_PRIVATE_FUN(ChartViewWidget, UtChartPathFn, getPainterPathByData)
+ACCESS_PRIVATE_FUN(ChartViewWidget, void(QResizeEvent *), resizeEvent)
+
 class UT_ChartViewWidget : public ::testing::Test
 {
 public:
@@ -127,11 +154,11 @@ TEST_F(UT_ChartViewWidget, Constructor_DefaultState_InitializesMembers)
     m_tester = new ChartViewWidget(ChartViewWidget::ChartViewTypes::MEM_CHART, nullptr);
 
     // Assert: 默认标题/数据列表/最大值与视图类型均为初始状态
-    EXPECT_EQ(m_tester->m_axisTitle, QString("100%"));
-    EXPECT_EQ(m_tester->m_listData1.size(), 0);
-    EXPECT_EQ(m_tester->m_listData2.size(), 0);
-    EXPECT_EQ(m_tester->m_maxData.toLongLong(), qlonglong(1));
-    EXPECT_EQ(m_tester->m_viewType, ChartViewWidget::ChartViewTypes::MEM_CHART);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_axisTitle(*m_tester), QString("100%"));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData1(*m_tester).size(), 0);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData2(*m_tester).size(), 0);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData(*m_tester).toLongLong(), qlonglong(1));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_viewType(*m_tester), ChartViewWidget::ChartViewTypes::MEM_CHART);
 }
 
 TEST_F(UT_ChartViewWidget, SetData1Color_CustomColor_SetsMemberColor)
@@ -142,11 +169,11 @@ TEST_F(UT_ChartViewWidget, SetData1Color_CustomColor_SetsMemberColor)
     // Act: 先后设置两种颜色
     m_tester->setData1Color(QColor(255, 0, 0));
     // Assert: 成员颜色与设置值一致
-    EXPECT_EQ(m_tester->m_data1Color, QColor(255, 0, 0));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_data1Color(*m_tester), QColor(255, 0, 0));
 
     m_tester->setData1Color(QColor(0, 0, 255));
     // Assert: 二次设置覆盖前值
-    EXPECT_EQ(m_tester->m_data1Color, QColor(0, 0, 255));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_data1Color(*m_tester), QColor(0, 0, 255));
 }
 
 TEST_F(UT_ChartViewWidget, SetData2Color_CustomColor_SetsMemberColor)
@@ -157,11 +184,11 @@ TEST_F(UT_ChartViewWidget, SetData2Color_CustomColor_SetsMemberColor)
     // Act: 先后设置两种颜色
     m_tester->setData2Color(QColor(255, 215, 0));
     // Assert: 成员颜色与设置值一致
-    EXPECT_EQ(m_tester->m_data2Color, QColor(255, 215, 0));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_data2Color(*m_tester), QColor(255, 215, 0));
 
     m_tester->setData2Color(QColor(0, 128, 0));
     // Assert: 二次设置覆盖前值
-    EXPECT_EQ(m_tester->m_data2Color, QColor(0, 128, 0));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_data2Color(*m_tester), QColor(0, 128, 0));
 }
 
 TEST_F(UT_ChartViewWidget, AddData1_FirstPositiveData_UpdatesMax)
@@ -173,9 +200,9 @@ TEST_F(UT_ChartViewWidget, AddData1_FirstPositiveData_UpdatesMax)
     m_tester->addData1(QVariant(20));
 
     // Assert: 最大值按 1.1 倍放大, 总最大值同步, 列表记录样本
-    EXPECT_EQ(m_tester->m_maxData1.toLongLong(), qlonglong(22));
-    EXPECT_EQ(m_tester->m_maxData.toLongLong(), qlonglong(22));
-    EXPECT_EQ(m_tester->m_listData1.size(), 1);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData1(*m_tester).toLongLong(), qlonglong(22));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData(*m_tester).toLongLong(), qlonglong(22));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData1(*m_tester).size(), 1);
 }
 
 TEST_F(UT_ChartViewWidget, AddData1_FullList_PopsOldestData)
@@ -188,9 +215,9 @@ TEST_F(UT_ChartViewWidget, AddData1_FullList_PopsOldestData)
     m_tester->addData1(QVariant(20));
 
     // Assert: 最旧样本被淘汰, 列表维持上限容量, 最大值仍来自历史峰值 40
-    EXPECT_EQ(m_tester->m_listData1.size(), 31);
-    EXPECT_EQ(m_tester->m_listData1.first().toLongLong(), qlonglong(11));
-    EXPECT_EQ(m_tester->m_maxData1.toLongLong(), qlonglong(44));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData1(*m_tester).size(), 31);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData1(*m_tester).first().toLongLong(), qlonglong(11));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData1(*m_tester).toLongLong(), qlonglong(44));
 }
 
 TEST_F(UT_ChartViewWidget, AddData1_SpeedAxisMemChart_UpdatesAxisTitle)
@@ -202,9 +229,9 @@ TEST_F(UT_ChartViewWidget, AddData1_SpeedAxisMemChart_UpdatesAxisTitle)
     m_tester->addData1(QVariant(20));
 
     // Assert: 标题由默认 "100%" 更新为容量速度文案
-    EXPECT_EQ(m_tester->m_maxData1.toLongLong(), qlonglong(22));
-    EXPECT_NE(m_tester->m_axisTitle, QString("100%"));
-    EXPECT_FALSE(m_tester->m_axisTitle.isEmpty());
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData1(*m_tester).toLongLong(), qlonglong(22));
+    EXPECT_NE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester), QString("100%"));
+    EXPECT_FALSE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester).isEmpty());
 }
 
 TEST_F(UT_ChartViewWidget, AddData1_ZeroData_SpeedAxisMemChart_ShowsZeroTitle)
@@ -216,9 +243,9 @@ TEST_F(UT_ChartViewWidget, AddData1_ZeroData_SpeedAxisMemChart_ShowsZeroTitle)
     m_tester->addData1(QVariant(0));
 
     // Assert: 最大值保持初始 1, 标题被置为零值文案
-    EXPECT_EQ(m_tester->m_maxData1.toLongLong(), qlonglong(1));
-    EXPECT_NE(m_tester->m_axisTitle, QString("100%"));
-    EXPECT_FALSE(m_tester->m_axisTitle.isEmpty());
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData1(*m_tester).toLongLong(), qlonglong(1));
+    EXPECT_NE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester), QString("100%"));
+    EXPECT_FALSE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester).isEmpty());
 }
 
 TEST_F(UT_ChartViewWidget, AddData2_FirstPositiveData_UpdatesMax)
@@ -230,9 +257,9 @@ TEST_F(UT_ChartViewWidget, AddData2_FirstPositiveData_UpdatesMax)
     m_tester->addData2(QVariant(20));
 
     // Assert: 最大值按 1.1 倍放大, 总最大值同步, 列表记录样本
-    EXPECT_EQ(m_tester->m_maxData2.toLongLong(), qlonglong(22));
-    EXPECT_EQ(m_tester->m_maxData.toLongLong(), qlonglong(22));
-    EXPECT_EQ(m_tester->m_listData2.size(), 1);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData2(*m_tester).toLongLong(), qlonglong(22));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData(*m_tester).toLongLong(), qlonglong(22));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData2(*m_tester).size(), 1);
 }
 
 TEST_F(UT_ChartViewWidget, AddData2_FullList_PopsOldestData)
@@ -245,9 +272,9 @@ TEST_F(UT_ChartViewWidget, AddData2_FullList_PopsOldestData)
     m_tester->addData2(QVariant(20));
 
     // Assert: 最旧样本被淘汰, 最大值仍来自历史峰值 40
-    EXPECT_EQ(m_tester->m_listData2.size(), 31);
-    EXPECT_EQ(m_tester->m_listData2.first().toLongLong(), qlonglong(11));
-    EXPECT_EQ(m_tester->m_maxData2.toLongLong(), qlonglong(44));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData2(*m_tester).size(), 31);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData2(*m_tester).first().toLongLong(), qlonglong(11));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData2(*m_tester).toLongLong(), qlonglong(44));
 }
 
 TEST_F(UT_ChartViewWidget, AddData2_SpeedAxisMemChart_UpdatesAxisTitle)
@@ -259,25 +286,26 @@ TEST_F(UT_ChartViewWidget, AddData2_SpeedAxisMemChart_UpdatesAxisTitle)
     m_tester->addData2(QVariant(20));
 
     // Assert: 标题由默认 "100%" 更新为容量速度文案
-    EXPECT_EQ(m_tester->m_maxData2.toLongLong(), qlonglong(22));
-    EXPECT_NE(m_tester->m_axisTitle, QString("100%"));
-    EXPECT_FALSE(m_tester->m_axisTitle.isEmpty());
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData2(*m_tester).toLongLong(), qlonglong(22));
+    EXPECT_NE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester), QString("100%"));
+    EXPECT_FALSE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester).isEmpty());
 }
 
-TEST_F(UT_ChartViewWidget, AddData2_ZeroData_KeepsAxisTitleDefault)
+TEST_F(UT_ChartViewWidget, AddData2_ZeroData_SpeedAxisMemChart_ShowsZeroTitle)
 {
     // Arrange: 先预置零值样本, 避免空列表 max_element 未定义行为
     m_tester->setSpeedAxis(true);
-    m_tester->m_listData2 << QVariant(0);
+    access_private_field::ChartViewWidgetm_listData2(*m_tester) << QVariant(0);
+    QString titleBefore = access_private_field::ChartViewWidgetm_axisTitle(*m_tester);
 
-    // Act: 写入零值; addData2 的零值标题回退位于 else(m_speedAxis) 内层,
-    // 实际不可达（疑似源码缺陷, 只标红不改源码）; 零值样本不触发外层 max 分支
-    QString titleBefore = m_tester->m_axisTitle;
+    // Act: 写入零值; maxdata <= 0 进入 else 分支, m_speedAxis 为真时标题回退为 0 值文案
     m_tester->addData2(QVariant(0));
 
-    // Assert: 最大值保持初始 1, 标题维持 setSpeedAxis 生成的当前值不变
-    EXPECT_EQ(m_tester->m_maxData2.toLongLong(), qlonglong(1));
-    EXPECT_EQ(m_tester->m_axisTitle, titleBefore);
+    // Assert: 最大值保持初始 1（零值不触发正数最大值更新）,
+    // 标题由 setSpeedAxis 生成的 "1.0 B/s" 回退为 formatUnit_memory_disk(0,...) 的 "0.0 B/s"
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_maxData2(*m_tester).toLongLong(), qlonglong(1));
+    EXPECT_NE(titleBefore, QString("0.0 B/s"));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_axisTitle(*m_tester), QString("0.0 B/s"));
 }
 
 TEST_F(UT_ChartViewWidget, SetSpeedAxis_MemChart_UsesMemoryUnitTitle)
@@ -289,9 +317,9 @@ TEST_F(UT_ChartViewWidget, SetSpeedAxis_MemChart_UsesMemoryUnitTitle)
     m_tester->setSpeedAxis(true);
 
     // Assert: 依据 m_maxData1/m_maxData2 默认值 1 生成速度文案
-    EXPECT_TRUE(m_tester->m_speedAxis);
-    EXPECT_NE(m_tester->m_axisTitle, QString("100%"));
-    EXPECT_FALSE(m_tester->m_axisTitle.isEmpty());
+    EXPECT_TRUE(access_private_field::ChartViewWidgetm_speedAxis(*m_tester));
+    EXPECT_NE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester), QString("100%"));
+    EXPECT_FALSE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester).isEmpty());
 }
 
 TEST_F(UT_ChartViewWidget, SetSpeedAxis_NetChart_UsesNetUnitTitle)
@@ -304,9 +332,9 @@ TEST_F(UT_ChartViewWidget, SetSpeedAxis_NetChart_UsesNetUnitTitle)
     m_tester->setSpeedAxis(true);
 
     // Assert: 网络图表标题同样被更新为速度文案
-    EXPECT_TRUE(m_tester->m_speedAxis);
-    EXPECT_NE(m_tester->m_axisTitle, QString("100%"));
-    EXPECT_FALSE(m_tester->m_axisTitle.isEmpty());
+    EXPECT_TRUE(access_private_field::ChartViewWidgetm_speedAxis(*m_tester));
+    EXPECT_NE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester), QString("100%"));
+    EXPECT_FALSE(access_private_field::ChartViewWidgetm_axisTitle(*m_tester).isEmpty());
 }
 
 TEST_F(UT_ChartViewWidget, PaintEvent_WithData_GrabsValidPixmap)
@@ -333,11 +361,11 @@ TEST_F(UT_ChartViewWidget, ResizeEvent_NewSize_RerendersBackPixmap)
 
     // Act: 直接投递新尺寸的 resizeEvent
     QResizeEvent re(QSize(300, 200), QSize(0, 0));
-    m_tester->resizeEvent(&re);
+    call_private_fun::ChartViewWidgetresizeEvent(*m_tester, &re);
 
     // Assert: resizeEvent 内部重建背景图, 网格区宽度 = 控件宽 - 2
-    EXPECT_EQ(m_tester->m_backPixmap.size(), QSize(300, 200));
-    EXPECT_EQ(m_tester->m_chartRect.width(), 298);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_backPixmap(*m_tester).size(), QSize(300, 200));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_chartRect(*m_tester).width(), 298);
 }
 
 TEST_F(UT_ChartViewWidget, DrawBackPixmap_NewSize_CutsGridRect)
@@ -346,12 +374,12 @@ TEST_F(UT_ChartViewWidget, DrawBackPixmap_NewSize_CutsGridRect)
     m_tester->resize(150, 120);
 
     // Act: 直接重绘背景
-    m_tester->drawBackPixmap();
+    call_private_fun::ChartViewWidgetdrawBackPixmap(*m_tester);
 
     // Assert: 背景尺寸一致, 网格区从 x=1 开始且宽为 w-2, 顶部留出字号高度
-    EXPECT_EQ(m_tester->m_backPixmap.size(), QSize(150, 120));
-    EXPECT_EQ(m_tester->m_chartRect.width(), 148);
-    EXPECT_EQ(m_tester->m_chartRect.y(), 1 + QFontMetrics(m_tester->m_textfont).height());
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_backPixmap(*m_tester).size(), QSize(150, 120));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_chartRect(*m_tester).width(), 148);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_chartRect(*m_tester).y(), 1 + QFontMetrics(access_private_field::ChartViewWidgetm_textfont(*m_tester)).height());
 }
 
 TEST_F(UT_ChartViewWidget, DrawBackPixmap_ZeroSize_LeavesPixmapNull)
@@ -360,11 +388,11 @@ TEST_F(UT_ChartViewWidget, DrawBackPixmap_ZeroSize_LeavesPixmapNull)
     m_tester->setGeometry(0, 0, 0, 0);
 
     // Act
-    m_tester->drawBackPixmap();
+    call_private_fun::ChartViewWidgetdrawBackPixmap(*m_tester);
 
     // Assert: 背景图未被创建, 网格区未更新
-    EXPECT_TRUE(m_tester->m_backPixmap.isNull());
-    EXPECT_EQ(m_tester->m_backPixmap.size(), QSize(0, 0));
+    EXPECT_TRUE(access_private_field::ChartViewWidgetm_backPixmap(*m_tester).isNull());
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_backPixmap(*m_tester).size(), QSize(0, 0));
 }
 
 TEST_F(UT_ChartViewWidget, DrawData1_WithData_DrawsRedLine)
@@ -374,17 +402,17 @@ TEST_F(UT_ChartViewWidget, DrawData1_WithData_DrawsRedLine)
     pixmap.fill(Qt::white);
     QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    m_tester->m_chartRect = QRect(0, 0, 100, 100);
+    access_private_field::ChartViewWidgetm_chartRect(*m_tester) = QRect(0, 0, 100, 100);
     m_tester->setData1Color(QColor(255, 0, 0));
-    m_tester->m_listData1 << QVariant(20) << QVariant(50);
-    m_tester->m_maxData = QVariant(100);
+    access_private_field::ChartViewWidgetm_listData1(*m_tester) << QVariant(20) << QVariant(50);
+    access_private_field::ChartViewWidgetm_maxData(*m_tester) = QVariant(100);
 
     // Act
-    m_tester->drawData1(&painter);
+    call_private_fun::ChartViewWidgetdrawData1(*m_tester, &painter);
 
     // Assert: 画布出现红色系像素（曲线已绘制）, 数据列表保持两条
     EXPECT_TRUE(hasPixelNear(pixmap.toImage(), QColor(255, 0, 0)));
-    EXPECT_EQ(m_tester->m_listData1.size(), 2);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData1(*m_tester).size(), 2);
 }
 
 TEST_F(UT_ChartViewWidget, DrawData1_NoData_SkipsDrawing)
@@ -395,11 +423,11 @@ TEST_F(UT_ChartViewWidget, DrawData1_NoData_SkipsDrawing)
     QPainter painter(&pixmap);
 
     // Act: 空列表走早退分支
-    m_tester->drawData1(&painter);
+    call_private_fun::ChartViewWidgetdrawData1(*m_tester, &painter);
 
     // Assert: 画笔未被销毁, 画布无线色像素, 列表仍为空
     EXPECT_TRUE(painter.isActive());
-    EXPECT_EQ(m_tester->m_listData1.size(), 0);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData1(*m_tester).size(), 0);
     EXPECT_FALSE(hasPixelNear(pixmap.toImage(), QColor(0, 197, 192)));
 }
 
@@ -410,17 +438,17 @@ TEST_F(UT_ChartViewWidget, DrawData2_WithData_DrawsYellowLine)
     pixmap.fill(Qt::white);
     QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    m_tester->m_chartRect = QRect(0, 0, 100, 100);
+    access_private_field::ChartViewWidgetm_chartRect(*m_tester) = QRect(0, 0, 100, 100);
     m_tester->setData2Color(QColor(255, 215, 0));
-    m_tester->m_listData2 << QVariant(30) << QVariant(60);
-    m_tester->m_maxData = QVariant(120);
+    access_private_field::ChartViewWidgetm_listData2(*m_tester) << QVariant(30) << QVariant(60);
+    access_private_field::ChartViewWidgetm_maxData(*m_tester) = QVariant(120);
 
     // Act
-    m_tester->drawData2(&painter);
+    call_private_fun::ChartViewWidgetdrawData2(*m_tester, &painter);
 
     // Assert: 画布出现黄色系像素（曲线已绘制）, 数据列表保持两条
     EXPECT_TRUE(hasPixelNear(pixmap.toImage(), QColor(255, 215, 0)));
-    EXPECT_EQ(m_tester->m_listData2.size(), 2);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData2(*m_tester).size(), 2);
 }
 
 TEST_F(UT_ChartViewWidget, DrawData2_NoData_SkipsDrawing)
@@ -431,11 +459,11 @@ TEST_F(UT_ChartViewWidget, DrawData2_NoData_SkipsDrawing)
     QPainter painter(&pixmap);
 
     // Act: 空列表走早退分支
-    m_tester->drawData2(&painter);
+    call_private_fun::ChartViewWidgetdrawData2(*m_tester, &painter);
 
     // Assert: 画笔未被销毁, 列表仍为空, 画布无线色像素
     EXPECT_TRUE(painter.isActive());
-    EXPECT_EQ(m_tester->m_listData2.size(), 0);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_listData2(*m_tester).size(), 0);
     EXPECT_FALSE(hasPixelNear(pixmap.toImage(), QColor(255, 215, 0)));
 }
 
@@ -446,10 +474,10 @@ TEST_F(UT_ChartViewWidget, DrawAxisText_WithTitle_DrawsTexts)
     pixmap.fill(Qt::white);
     QPainter painter(&pixmap);
     m_tester->resize(200, 100);
-    m_tester->setAxisTitle("1.5MB");
+    call_private_fun::ChartViewWidgetsetAxisTitle(*m_tester, "1.5MB");
 
     // Act
-    m_tester->drawAxisText(&painter);
+    call_private_fun::ChartViewWidgetdrawAxisText(*m_tester, &painter);
 
     // Assert: 标题/底部 "0"/"60 seconds" 以 0.3 透明度灰字绘制在白底上
     EXPECT_TRUE(hasNonWhitePixel(pixmap.toImage()));
@@ -463,14 +491,14 @@ TEST_F(UT_ChartViewWidget, DrawAxisText_NoTitle_StillDrawsBottomTexts)
     pixmap.fill(Qt::white);
     QPainter painter(&pixmap);
     m_tester->resize(200, 100);
-    m_tester->setAxisTitle(QString());
+    call_private_fun::ChartViewWidgetsetAxisTitle(*m_tester, QString());
 
     // Act
-    m_tester->drawAxisText(&painter);
+    call_private_fun::ChartViewWidgetdrawAxisText(*m_tester, &painter);
 
     // Assert: 底部文本已绘制, 标题保持为空
     EXPECT_TRUE(hasNonWhitePixel(pixmap.toImage()));
-    EXPECT_EQ(m_tester->m_axisTitle, QString());
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_axisTitle(*m_tester), QString());
 }
 
 // getPainterPathByData 参数化用例: 元素数 = 1(moveTo) + 3×cubicTo 数
@@ -493,7 +521,7 @@ protected:
     {
         // Arrange(夹具): 固定网格区 120x100, distance = 120/30 = 4.0
         m_tester = new ChartViewWidget(ChartViewWidget::ChartViewTypes::MEM_CHART, nullptr);
-        m_tester->m_chartRect = QRect(0, 0, 120, 100);
+        access_private_field::ChartViewWidgetm_chartRect(*m_tester) = QRect(0, 0, 120, 100);
     }
 
     virtual void TearDown()
@@ -515,7 +543,7 @@ TEST_P(UT_ChartViewWidgetPath, GetPainterPathByData_DataVariants_BuildsExpectedP
     QPainterPath path;
 
     // Act: 按数据序列构建曲线路径
-    m_tester->getPainterPathByData(param.data, path, QVariant(param.maxY));
+    call_private_fun::ChartViewWidgetgetPainterPathByData(*m_tester, param.data, path, QVariant(param.maxY));
 
     // Assert: 元素数/首点 Y（-h×last/max）/末点 X（-(n-1)×distance）均符合公式
     ASSERT_NE(m_tester, nullptr);
@@ -540,26 +568,26 @@ TEST_F(UT_ChartViewWidget, ChangeFont_T8Font_AppliesToMember)
 {
     // Arrange: 预置一个自定义字体（家族不同, 确保可与 T8 区分）
     QFont custom("serif", 10);
-    m_tester->m_textfont = custom;
+    access_private_field::ChartViewWidgetm_textfont(*m_tester) = custom;
 
     // Act
-    m_tester->changeFont(custom);
+    call_private_fun::ChartViewWidgetchangeFont(*m_tester, custom);
 
     // Assert: 成员字体被替换为字号管理器 T8 字号
-    EXPECT_EQ(m_tester->m_textfont, DFontSizeManager::instance()->get(DFontSizeManager::T8));
-    EXPECT_NE(m_tester->m_textfont, custom);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_textfont(*m_tester), DFontSizeManager::instance()->get(DFontSizeManager::T8));
+    EXPECT_NE(access_private_field::ChartViewWidgetm_textfont(*m_tester), custom);
 }
 
 TEST_F(UT_ChartViewWidget, ChangeTheme_ClearsState_RerendersBackPixmap)
 {
     // Arrange: 先给一个尺寸并清空背景图, 使 changeTheme 的重绘效果可观察
     m_tester->resize(120, 90);
-    m_tester->m_backPixmap = QPixmap();
+    access_private_field::ChartViewWidgetm_backPixmap(*m_tester) = QPixmap();
 
     // Act: 主题变化 → 重建背景图并请求重绘
-    m_tester->changeTheme();
+    call_private_fun::ChartViewWidgetchangeTheme(*m_tester);
 
     // Assert: 背景图按当前尺寸重建, 网格区宽度恢复
-    EXPECT_EQ(m_tester->m_backPixmap.size(), QSize(120, 90));
-    EXPECT_EQ(m_tester->m_chartRect.width(), 118);
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_backPixmap(*m_tester).size(), QSize(120, 90));
+    EXPECT_EQ(access_private_field::ChartViewWidgetm_chartRect(*m_tester).width(), 118);
 }
