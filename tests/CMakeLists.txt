@@ -665,7 +665,8 @@ list(APPEND UT_CPP
 # 重纳入此前被 UT_LEGACY_EXCLUDE 排除的 gui 类测试 TU（逐类补齐后随本任务分支
 # 重新编入主测试目标 deepin-system-monitor-test）。
 list(APPEND UT_CPP
-    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_animation_stackedwidget.cpp)
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_animation_stackedwidget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_xwin_kill_preview_background_widget.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
 add_executable(${PROJECT_NAME_TEST}
