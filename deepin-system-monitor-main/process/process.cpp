@@ -1072,11 +1072,6 @@ void Process::applyDKaptureData(const QVariantMap &data)
         qulonglong sharedPages = data["memory_shared"].toULongLong();
         d->shm = sharedPages << kb_shift; // 页数转KB，与readStatm()一致
     }
-    int pid = 0;
-    if (data.contains("pid")) {
-        pid = data["pid"].toInt();
-    }
-
     // 设置其他基本信息
     if (data.contains("ppid")) {
         d->ppid = data["ppid"].toInt();
