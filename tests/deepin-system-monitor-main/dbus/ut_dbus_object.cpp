@@ -22,7 +22,7 @@
 // registerOrNotify()         | mid   | 2 | 3 | 注册成功 / 已占用+通知带错误 / 已占用+通知无错误
 // unRegister()               | low   | 1 | 1 | unregisterService 被调用一次
 // handleWindow()             | mid   | 2 | 1 | 最小化窗口被还原（raise/activate 经真实 offscreen 窗口）
-// ~DBusObject()              | low   | 1 | - | 单例生命周期覆盖（进程退出时析构）
+// ~DBusObject()              | low   | 1 | 1 | 堆实例析构覆盖（单例析构在 __gcov_dump 后不可测） |
 //
 // ============================== 最小清单 ==============================
 // [x] 1 公开方法已列出，每个方法 ≥ 1 用例
@@ -179,6 +179,20 @@ TEST_F(UT_DBusObject, GetInstance_TwiceCalled_SameInstance)
     // Assert: 均为有效对象且同一实例
     EXPECT_NE(&first, nullptr);
     EXPECT_EQ(&first, &second);
+}
+
+// ~DBusObject(): 单例析构在进程退出且 __gcov_dump() 之后才执行，覆盖率统计不到；
+// 测试二进制以 -fno-access-control 编译，可直接构造私有构造的堆实例并析构，
+// 不触碰单例静态指针（后续用例仍用 getInstance 单例），析构空实现无副作用
+TEST_F(UT_DBusObject, Dtor_HeapInstance_DestructsCleanly)
+{
+    // Arrange: 独立于单例的堆实例
+    // Act: 构造后立即析构
+    DBusObject *heapInstance = new DBusObject();
+    // Assert: 与单例互不为同一对象，析构不崩溃
+    EXPECT_NE(heapInstance, &DBusObject::getInstance());
+    delete heapInstance;
+    SUCCEED();
 }
 
 // B1: 服务未被占用 → 注册服务并注册对象路径，返回 true
