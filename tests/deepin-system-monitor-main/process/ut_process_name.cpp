@@ -245,19 +245,18 @@ INSTANTIATE_TEST_SUITE_P(NormalizePartitions, UT_ProcessName_Normalize,
                              NormalizeCase{ "deepin-system-monitor",
                                            QByteArrayList{ (kFakeUsrBin + "/deepin-system-monitor").toLocal8Bit() },
                                            "deepin-system-monitor", "命令行匹配" },
-                             // Windows 盘符路径（反斜杠）→ 非 Windows 平台 \ 非分隔符，
-                             // QFileInfo::fileName 返回整体（源码现状行为）
+                             // Windows 盘符路径（反斜杠）→ 源码先 replace('\\','/') 再取文件名
                              NormalizeCase{ "verylongsource1234",
                                            QByteArrayList{ "C:\\Program Files\\app.exe" },
-                                           "C:\\Program Files\\app.exe", "Windows反斜杠路径" },
+                                           "app.exe", "Windows反斜杠路径" },
                              // Windows 盘符路径（正斜杠）→ 返回文件名
                              NormalizeCase{ "verylongsource1234",
                                            QByteArrayList{ "C:/Users/app.exe" },
                                            "app.exe", "Windows正斜杠路径" },
-                             // 盘符路径长度边界（> 3）：\ 非分隔符 → 整体返回（源码现状行为）
+                             // 盘符路径长度边界（> 3）：replace 后返回文件名
                              NormalizeCase{ "verylongsource1234",
                                            QByteArrayList{ "C:\\a.exe" },
-                                           "C:\\a.exe", "盘符路径最短合法长度" },
+                                           "a.exe", "盘符路径最短合法长度" },
                              // 无匹配分支：多参数命令行
                              NormalizeCase{ "abcdefghijklmno",
                                            QByteArrayList{ (QStringLiteral("/opt") + "/app/bin/run").toLocal8Bit(), "--flag" },
@@ -366,9 +365,10 @@ TEST_F(UT_ProcessName, getDisplayName_TrayAppEmptyGioEntry_FallsThroughToName)
     // Act
     QString result = m_tester->getDisplayName(&proc);
 
-    // Assert：托盘分支未命中标题/显示名 → 继续向下，最终回退进程名
-    EXPECT_EQ(result, QString("app"));
-    EXPECT_EQ(result, proc.name());
+    // Assert：托盘分支内 GIO displayName 为空时回退 "Tray: <进程名>"；
+    // 源码托盘分支所有路径都带 "Tray: " 前缀，不会跌落到裸进程名
+    EXPECT_EQ(result, QString("Tray: app"));
+    EXPECT_EQ(result, QString("%1: %2").arg(QApplication::translate("Process.Table", "Tray")).arg(proc.name()));
 }
 
 // B7+B8+B9+B10: GUI 应用带标题且末参为本地文件 URL → “文件名 - 标题”
