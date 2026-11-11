@@ -189,6 +189,12 @@
 #include <QDBusReply>
 #include <QDBusObjectPath>
 #include <QDBusError>
+#include <QDBusVariant>
+#include <QDBusArgument>
+#include <QDBusServer>
+#include <QtDBus/qdbusmetatype.h>
+#include <QThread>
+#include <QTest>
 
 //dtk
 #include <DSysInfo>
@@ -398,12 +404,12 @@ TEST_F(UT_AMIconManager, ClearCache_PopulatedCaches_EmptiesAllMaps)
     obj->m_pidToGroupCache[100] = AMProcessGroupInfo();
     // Act: 清空缓存
     obj->clearCache();
-    // Assert: 三个映射为空；名称缓存不在 clearCache 范围内（保持不变，
-    // 该行为与源码一致，疑似设计疏漏，已记入缺陷清单）
+    // Assert: 五类映射全部清空（源码 clearCache 对全部缓存 map 执行 clear）
     EXPECT_EQ(obj->m_pidToIconCache.size(), 0);
     EXPECT_EQ(obj->m_appIdToIconCache.size(), 0);
     EXPECT_EQ(obj->m_pidToGroupCache.size(), 0);
-    EXPECT_EQ(obj->m_appIdToNameCache.size(), 1);
+    EXPECT_EQ(obj->m_appIdToNameCache.size(), 0);
+    EXPECT_EQ(obj->m_linglongAppIdCache.size(), 0);
 }
 
 TEST_F(UT_AMIconManager, ClearCache_Idempotent_SecondCallStaysEmpty)
@@ -963,8 +969,125 @@ TEST_F(UT_AMIconManager, ResolveLinglongAppId_NoDesktopFile_ReturnsEmpty)
     QString result = QStringLiteral("sentinel");
     // Act: 查询未缓存且无 desktop 文件的 appId
     result = obj->resolveLinglongAppId(appId);
-    // Assert: 返回空串，且空结果已写入缓存
+    // Assert: 返回空串；源码仅在 desktop 文件存在时才写入缓存，
+    // 负向查询结果不缓存（cache 保持为空）
     EXPECT_TRUE(result.isEmpty());
-    EXPECT_EQ(obj->m_linglongAppIdCache.count(appId), 1);
-    EXPECT_EQ(obj->m_linglongAppIdCache[appId], QString());
+    EXPECT_EQ(obj->m_linglongAppIdCache.count(appId), 0);
 }
+
+// ---------------- V-8163 覆盖率收口补充用例 ----------------
+
+// 进程内 D-Bus 服务端对象：按 AM 的属性接口规范提供 Name 属性（a{ss}）。
+// Q_CLASSINFO 指定 D-Bus 接口名，使 org.freedesktop.DBus.Properties.Get 能按接口名寻址。
+class UTAMPropsObject : public QObject {
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.desktopspec.ApplicationManager1.Application")
+    Q_PROPERTY(QMap<QString, QString> Name READ name CONSTANT)
+public:
+    QMap<QString, QString> m_names;
+    QMap<QString, QString> name() const { return m_names; }
+};
+
+// 进程内 D-Bus 对等总线测试装置：
+// QDBusServer + 工作线程服务对象 + connectToPeer 客户端连接，提供真实 D-Bus 编解码往返，
+// 以构造 read 状态的 QDBusArgument（进程内写入的 QDBusArgument 为 write-only，无法直接解封）。
+struct UtPeerBusHarness {
+    QDBusServer server;
+    QThread worker;
+    QDBusConnection peer;
+    UTAMPropsObject propsObj;
+
+    explicit UtPeerBusHarness(const QString &socketName, const QString &objPath,
+                              const QString &clientConnName)
+        : server(QStringLiteral("unix:abstract=ut_am_peer_v8163")), peer(QDBusConnection(QString()))
+    {
+        worker.start();
+        qDBusRegisterMetaType<QMap<QString, QString>>();
+        propsObj.m_names.insert(QStringLiteral("xx_XX"), QStringLiteral("fallback-name"));
+        propsObj.moveToThread(&worker);
+        QObject::connect(&server, &QDBusServer::newConnection,
+                         [this, objPath](QDBusConnection c) {
+            c.registerObject(objPath, &propsObj, QDBusConnection::ExportAllContents);
+        });
+        peer = QDBusConnection::connectToPeer(server.address(), clientConnName);
+    }
+
+    ~UtPeerBusHarness()
+    {
+        QDBusConnection::disconnectFromPeer(peer.name());
+        worker.quit();
+        worker.wait(2000);
+    }
+};
+
+// 名称映射既无 locale 键也无 default 键：回退取映射首项并写缓存。
+// 经进程内 D-Bus 对等总线返回真实 a{ss}（write 态 QDBusArgument 无法在进程内解封）。
+// AM 可用且接口未创建：initializeAMInterface 创建接口；虚拟总线上 isValid=false → 标记不可用
+TEST_F(UT_AMIconManager, InitializeAMInterface_Available_CreatesInterfaceAndMarksInvalid)
+{
+    // Arrange：sessionBus 打桩为虚拟总线；AM 可用但接口为空
+    stub.set_lamda(&QDBusConnection::sessionBus, []() -> QDBusConnection {
+        return QDBusConnection(QStringLiteral("ut_am_init_fallback"));
+    });
+    auto obj = makeUnavailableManager();
+    obj->m_amAvailable = true;
+    obj->m_amInterface = nullptr;
+
+    // Act
+    obj->initializeAMInterface();
+
+    // Assert：接口被创建；虚拟总线 introspection 失败 → AM 标记为不可用
+    EXPECT_TRUE(obj->m_amInterface != nullptr);
+    EXPECT_FALSE(obj->m_amAvailable);
+    delete obj->m_amInterface;
+    obj->m_amInterface = nullptr;
+}
+
+TEST_F(UT_AMIconManager, GetAppNameByAppId_NoLocaleNoDefault_FallsBackToFirstName)
+{
+    // Arrange: 对等总线在工作线程提供 Name 属性；sessionBus 打桩返回对等连接
+    UtPeerBusHarness harness(QStringLiteral("ut_am_peer_v8163"),
+                             QStringLiteral("/org/desktopspec/ApplicationManager1/utfallbackapp"),
+                             QStringLiteral("ut_am_peer_conn"));
+    ASSERT_TRUE(harness.peer.isConnected());
+    QTest::qWait(50); // 等待服务端注册对象
+    stub.set_lamda(&QDBusConnection::sessionBus, [&harness]() -> QDBusConnection {
+        __DBG_STUB_INVOKE__
+        return harness.peer;
+    });
+    stub.set_lamda(VADDR(QDBusInterface, isValid), [](QDBusAbstractInterface *) -> bool {
+        __DBG_STUB_INVOKE__
+        return true;
+    });
+    std::unique_ptr<AMIconManager> obj = makeUnavailableManager();
+    // Act: 查询无 locale/default 键的 appId（路径元素不得含 '.'）
+    const QString result = obj->getAppNameByAppId(QStringLiteral("utfallbackapp"));
+    // Assert: 取映射首项；结果写入缓存
+    EXPECT_EQ(result, QStringLiteral("fallback-name"));
+    EXPECT_EQ(obj->m_appIdToNameCache.value(QStringLiteral("utfallbackapp")),
+              QStringLiteral("fallback-name"));
+}
+
+// linglong desktop 文件存在：读取 X-linglong 键并写入缓存
+TEST_F(UT_AMIconManager, ResolveLinglongAppId_DesktopFileExists_UsesXLinglongKey)
+{
+    // Arrange: QFile::exists 打桩为存在，DDesktopEntry::stringValue 返回真实 appId
+    std::unique_ptr<AMIconManager> obj = makeUnavailableManager();
+    stub.set_lamda(static_cast<bool (*)(const QString &)>(&QFile::exists), [](const QString &) -> bool {
+        __DBG_STUB_INVOKE__
+        return true;
+    });
+    stub.set_lamda(ADDR(DDesktopEntry, stringValue),
+                   [](const DDesktopEntry *, const QString &key, const QString &, const QString &) -> QString {
+        __DBG_STUB_INVOKE__
+        return key == QStringLiteral("X-linglong") ? QStringLiteral("org.deepin.ut.real") : QString();
+    });
+    const QString appId = QStringLiteral("org.example.linglong");
+    // Act: 查询存在 desktop 文件的 appId
+    const QString result = obj->resolveLinglongAppId(appId);
+    // Assert: 返回 X-linglong 键值并写入缓存
+    EXPECT_EQ(result, QStringLiteral("org.deepin.ut.real"));
+    EXPECT_EQ(obj->m_linglongAppIdCache.value(appId), QStringLiteral("org.deepin.ut.real"));
+}
+
+#include "ut_am_icon_manager.moc"
