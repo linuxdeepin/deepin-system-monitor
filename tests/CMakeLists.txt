@@ -661,6 +661,13 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_process_table_view.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
+# --- APPENDED (V-T43 gui autotest re-include task, no existing lines changed) ----
+# 重纳入此前被 UT_LEGACY_EXCLUDE 排除的 gui 类测试 TU（逐类补齐后随本任务分支
+# 重新编入主测试目标 deepin-system-monitor-test）。
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_animation_stackedwidget.cpp)
+# --- end APPENDED block ------------------------------------------------------
+
 add_executable(${PROJECT_NAME_TEST}
     ${UT_CPP}
     ${APP_HPP}
