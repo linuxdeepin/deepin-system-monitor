@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2026 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //Self
@@ -59,14 +59,19 @@ protected:
 };
 
 // 构造/析构：图表子控件创建、默认水平模式、未激活
-TEST_F(UT_BlockDevItemWidget, initTest)
+TEST_F(UT_BlockDevItemWidget, Ctor_DefaultState_HorizontalModeNotActive)
 {
-    // Act: SetUp 已构造
-    // Assert
+    // Arrange：SetUP 已完成默认构造，初始状态即待验证场景
     ASSERT_NE(m_tester, nullptr);
+
+    // Act: 读取构造后的默认状态
+    const bool active = m_tester->isActiveItem();
+    const bool nameEmpty = m_tester->m_blokeDeviceInfo.deviceName().isEmpty();
+
+    // Assert
     EXPECT_EQ(m_tester->m_mode, BlockDevItemWidget::TitleStyle::TITLE_HORIZONTAL);
-    EXPECT_FALSE(m_tester->isActiveItem());
-    EXPECT_TRUE(m_tester->m_blokeDeviceInfo.deviceName().isEmpty());
+    EXPECT_FALSE(active);
+    EXPECT_TRUE(nameEmpty);
 }
 
 // updateData 应保存设备数据并推送速率到图表
@@ -87,22 +92,29 @@ TEST_F(UT_BlockDevItemWidget, test_updateData_01)
 // activeItemWidget(true/false) 应同步 m_isActive
 TEST_F(UT_BlockDevItemWidget, test_activeItemWidget_01)
 {
-    // Act
+    // Arrange：初始未激活
+    ASSERT_NE(m_tester, nullptr);
+    EXPECT_EQ(m_tester->isActiveItem(), false);
+
+    // Act：激活后再取消
     m_tester->activeItemWidget(true);
 
     // Assert
-    EXPECT_TRUE(m_tester->isActiveItem());
+    EXPECT_EQ(m_tester->isActiveItem(), true);
 
-    // Act
+    // Act：再次取消激活
     m_tester->activeItemWidget(false);
 
     // Assert
-    EXPECT_FALSE(m_tester->isActiveItem());
+    EXPECT_EQ(m_tester->isActiveItem(), false);
 }
 
 // setMode 应更新 m_mode（0=水平 / 1=垂直）
 TEST_F(UT_BlockDevItemWidget, test_setMode_01)
 {
+    // Arrange：初始为默认水平模式
+    EXPECT_EQ(m_tester->m_mode, BlockDevItemWidget::TitleStyle::TITLE_HORIZONTAL);
+
     // Act
     m_tester->setMode(BlockDevItemWidget::TitleStyle::TITLE_VERTICAL);
 
@@ -244,8 +256,12 @@ TEST_F(UT_BlockDevItemWidget, test_paintEvent_01)
     m_tester->m_isActive = true;
     m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_VERTICAL;
 
-    // Act & Assert
-    EXPECT_FALSE(m_tester->grab().isNull());
+    // Act：离屏渲染整幅控件
+    QPixmap grabbed = m_tester->grab();
+
+    // Assert：渲染成功且尺寸与控件一致
+    EXPECT_FALSE(grabbed.isNull());
+    EXPECT_EQ(grabbed.size(), m_tester->size());
 }
 
 TEST_F(UT_BlockDevItemWidget, test_paintEvent_02)
@@ -254,8 +270,12 @@ TEST_F(UT_BlockDevItemWidget, test_paintEvent_02)
     m_tester->m_isActive = false;
     m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_VERTICAL;
 
-    // Act & Assert
-    EXPECT_FALSE(m_tester->grab().isNull());
+    // Act：离屏渲染整幅控件
+    QPixmap grabbed = m_tester->grab();
+
+    // Assert：渲染成功且尺寸与控件一致
+    EXPECT_FALSE(grabbed.isNull());
+    EXPECT_EQ(grabbed.size(), m_tester->size());
 }
 
 TEST_F(UT_BlockDevItemWidget, test_paintEvent_03)
@@ -264,8 +284,12 @@ TEST_F(UT_BlockDevItemWidget, test_paintEvent_03)
     m_tester->m_isActive = true;
     m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_HORIZONTAL;
 
-    // Act & Assert
-    EXPECT_FALSE(m_tester->grab().isNull());
+    // Act：离屏渲染整幅控件
+    QPixmap grabbed = m_tester->grab();
+
+    // Assert：渲染成功且尺寸与控件一致
+    EXPECT_FALSE(grabbed.isNull());
+    EXPECT_EQ(grabbed.size(), m_tester->size());
 }
 
 TEST_F(UT_BlockDevItemWidget, test_paintEvent_04)
@@ -274,8 +298,12 @@ TEST_F(UT_BlockDevItemWidget, test_paintEvent_04)
     m_tester->m_isActive = false;
     m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_HORIZONTAL;
 
-    // Act & Assert
-    EXPECT_FALSE(m_tester->grab().isNull());
+    // Act：离屏渲染整幅控件
+    QPixmap grabbed = m_tester->grab();
+
+    // Assert：渲染成功且尺寸与控件一致
+    EXPECT_FALSE(grabbed.isNull());
+    EXPECT_EQ(grabbed.size(), m_tester->size());
 }
 
 // paintEvent：携带非空设备名与速率文本的绘制路径
@@ -287,20 +315,28 @@ TEST_F(UT_BlockDevItemWidget, test_paintEvent_05)
     m_tester->m_isActive = true;
     m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_VERTICAL;
 
-    // Act & Assert
-    EXPECT_FALSE(m_tester->grab().isNull());
+    // Act：离屏渲染整幅控件
+    QPixmap grabbed = m_tester->grab();
+
+    // Assert：渲染成功且尺寸与控件一致，设备数据已生效
+    EXPECT_FALSE(grabbed.isNull());
+    EXPECT_EQ(grabbed.size(), m_tester->size());
+    EXPECT_EQ(m_tester->m_blokeDeviceInfo.deviceName(), QString("ut-sm-disk-a"));
 }
 
 // 析构路径：图表子控件被安全释放
-TEST_F(UT_BlockDevItemWidget, test_dtor_01)
+TEST_F(UT_BlockDevItemWidget, Dtor_WithChartData_ChartReleasedSafely)
 {
-    // Arrange
+    // Arrange：先填充设备数据并定位图表子控件
     std::unique_ptr<BlockDevItemWidget> widget(new BlockDevItemWidget());
     widget->updateData(makeBlockDevice("ut-sm-disk-a"));
+    ChartViewWidget *chart = widget->findChild<ChartViewWidget *>();
+    EXPECT_NE(chart, nullptr);
+    EXPECT_EQ(widget->m_blokeDeviceInfo.deviceName(), QString("ut-sm-disk-a"));
 
-    // Act
+    // Act：析构控件
     widget.reset();
 
-    // Assert: 正常返回不崩溃即为通过
-    SUCCEED();
+    // Assert：指针复位为空，析构正常完成不崩溃
+    EXPECT_EQ(widget.get(), nullptr);
 }
