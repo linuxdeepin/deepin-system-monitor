@@ -659,6 +659,23 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_system_service_table_model.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_process_sort_filter_proxy_model.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_process_table_view.cpp)
+# --- APPENDED (V-8169 UT-sysmonitor-42 rewrite task, no existing lines changed) ----
+# The ten monitor/chart test TUs below are Qt6-compatible unit tests for the
+# deepin-system-monitor-main monitor widgets and chart helpers. They were
+# previously caught by the V-6431 wholesale exclusion above (the directory
+# globs also matched these rewritten files). Each file has been verified to
+# compile and pass against Qt 6.8 in this task before being re-included.
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_cpu_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_memory_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_compact_cpu_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_compact_memory_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_compact_network_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_compact_disk_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_network_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_smooth_curve_generator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_chart_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_toolbar.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
 # --- APPENDED (V-T43 gui autotest re-include task, no existing lines changed) ----
