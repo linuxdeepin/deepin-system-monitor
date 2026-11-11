@@ -207,100 +207,128 @@ protected:
     XWinKillPreviewWidget *m_tester;
 };
 
-TEST_F(UT_XWinKillPreviewWidget, initTest)
+TEST_F(UT_XWinKillPreviewWidget, Ctor_DefaultState_FramelessOffscreen)
 {
+    // Arrange：SetUp 已完成构造
     ASSERT_NE(m_tester, nullptr);
-    // 帧窗属性
-    EXPECT_TRUE(m_tester->windowFlags() & Qt::FramelessWindowHint);
-    EXPECT_TRUE(m_tester->windowFlags() & Qt::WindowStaysOnTopHint);
-    EXPECT_TRUE(m_tester->windowFlags() & Qt::Window);
-    // 透明背景 + 关闭即自删
+
+    // Act：读取构造后的窗口属性
+    const Qt::WindowFlags flags = m_tester->windowFlags();
+
+    // Assert：帧窗置顶、透明背景、鼠标跟踪、1x1 离屏、WM 实例就绪
+    EXPECT_TRUE(flags & Qt::FramelessWindowHint);
+    EXPECT_TRUE(flags & Qt::WindowStaysOnTopHint);
+    EXPECT_TRUE(flags & Qt::Window);
     EXPECT_TRUE(m_tester->testAttribute(Qt::WA_TranslucentBackground));
     EXPECT_TRUE(m_tester->testAttribute(Qt::WA_DeleteOnClose));
-    // 鼠标跟踪（grabMouse 期间用于悬停高亮）
     EXPECT_TRUE(m_tester->hasMouseTracking());
-    // 1x1 尺寸且被移出屏幕外
     EXPECT_EQ(m_tester->size(), QSize(1, 1));
     EXPECT_EQ(m_tester->pos(), QPoint(-65536, -65536));
-    // 窗口管理器实例已创建
     EXPECT_NE(m_tester->m_wminfo, nullptr);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_initUI_02)
 {
     // 重复调用 initUI：鼠标跟踪与帧窗标志保持不变（定时器 lambda 不触发，见文件头说明）
+    // Arrange：构造后再次调用前的初始状态
+    ASSERT_NE(m_tester, nullptr);
+
+    // Act：重复执行 initUI
     m_tester->initUI();
 
+    // Assert：鼠标跟踪、帧窗与置顶标志均保持不变
     EXPECT_TRUE(m_tester->hasMouseTracking());
     EXPECT_TRUE(m_tester->windowFlags() & Qt::FramelessWindowHint);
     EXPECT_TRUE(m_tester->testAttribute(Qt::WA_DeleteOnClose));
+    EXPECT_EQ(m_tester->windowFlags() & Qt::WindowStaysOnTopHint, Qt::WindowStaysOnTopHint);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_initConnections_01)
 {
     // WaylandCentered=false 分支：Wayland 连接块被编译宏+运行时开关双重隔离，调用不应崩溃
+    // Arrange：构造后的连接状态
+    ASSERT_NE(m_tester, nullptr);
+
+    // Act：执行连接初始化
     m_tester->initConnections();
 
+    // Assert：非 Wayland 居中场景成立，窗口管理器实例仍然可用
     EXPECT_FALSE(WaylandCentered);
+    EXPECT_NE(m_tester->m_wminfo, nullptr);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_mousePressEvent_01)
 {
     // 非左键点击：直接早退，不查询窗口、不发信号、不关闭
+    // Arrange：打桩光标与窗口查询，构造右键按压事件
     Stub stub;
     stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
     stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow_hit);
     stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_false);
 
+    // Act：发送非左键按压事件
     QSignalSpy spy(m_tester, &XWinKillPreviewWidget::windowClicked);
     QMouseEvent me(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::RightButton, Qt::NoModifier);
     m_tester->mousePressEvent(&me);
 
+    // Assert：无点击信号，窗口未被关闭
     EXPECT_EQ(spy.count(), 0);
+    EXPECT_EQ(m_tester->isVisible(), true);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_mousePressEvent_02)
 {
     // 左键但无命中窗口：不发信号
+    // Arrange：打桩 selectWindow 返回无效窗口
     Stub stub;
     stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
     stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow);
     stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_false);
 
+    // Act：发送左键按压事件
     QSignalSpy spy(m_tester, &XWinKillPreviewWidget::windowClicked);
     QMouseEvent me(QEvent::MouseButtonPress, QPoint(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mousePressEvent(&me);
 
+    // Assert：无命中不发信号，窗口未被关闭
     EXPECT_EQ(spy.count(), 0);
+    EXPECT_EQ(m_tester->isVisible(), true);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_mousePressEvent_03)
 {
     // 左键且光标悬停在任务栏区域：早退不发信号
+    // Arrange：打桩命中窗口但光标悬停任务栏
     Stub stub;
     stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
     stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow_hit);
     stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_true);
 
+    // Act：发送左键按压事件
     QSignalSpy spy(m_tester, &XWinKillPreviewWidget::windowClicked);
     QMouseEvent me(QEvent::MouseButtonPress, QPoint(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mousePressEvent(&me);
 
+    // Assert：任务栏区域早退不发信号，窗口未被关闭
     EXPECT_EQ(spy.count(), 0);
+    EXPECT_EQ(m_tester->isVisible(), true);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_mousePressEvent_04)
 {
     // 左键命中普通窗口：emit windowClicked(pid) 后自关（WA_DeleteOnClose 延迟删除）
+    // Arrange：打桩命中 pid=100000 的普通窗口
     Stub stub;
     stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
     stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow_hit);
     stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_false);
 
+    // Act：发送左键按压事件
     QSignalSpy spy(m_tester, &XWinKillPreviewWidget::windowClicked);
     QMouseEvent me(QEvent::MouseButtonPress, QPoint(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mousePressEvent(&me);
 
+    // Assert：信号携带命中 pid，窗口已触发 close 隐藏
     ASSERT_EQ(spy.count(), 1);
     EXPECT_EQ(spy.at(0).at(0).toInt(), 100000);
     EXPECT_FALSE(m_tester->isVisible());
@@ -310,91 +338,115 @@ TEST_F(UT_XWinKillPreviewWidget, test_mousePressEvent_04)
 TEST_F(UT_XWinKillPreviewWidget, test_mousePressEvent_05)
 {
     // 左键命中但窗口属于自身进程：跳过（getpid continue 分支），不发信号不关闭
+    // Arrange：打桩命中自身进程窗口
     Stub stub;
     stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
     stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow_selfpid);
     stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_false);
 
+    // Act：发送左键按压事件
     QSignalSpy spy(m_tester, &XWinKillPreviewWidget::windowClicked);
     QMouseEvent me(QEvent::MouseButtonPress, QPoint(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mousePressEvent(&me);
 
+    // Assert：自身进程跳过不发信号，窗口未被关闭
     EXPECT_EQ(spy.count(), 0);
+    EXPECT_EQ(m_tester->isVisible(), true);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_mouseMoveEvent_01)
 {
     // 光标悬停任务栏：清空背景选区并恢复默认(禁止)光标
     // （selectWindow 在悬停检查之前被调用，同样需要打桩避免真实 X11 查询）
+    // Arrange：打桩光标悬停任务栏场景
     Stub stub;
     stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
     stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow);
     stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_true);
 
+    // Act：发送鼠标移动事件
     QSignalSpy spy(m_tester, &XWinKillPreviewWidget::cursorUpdated);
     QMouseEvent me(QEvent::MouseMove, QPoint(50, 50), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
     m_tester->mouseMoveEvent(&me);
 
+    // Assert：发出禁止光标信号，且不是悬停高亮手型光标
     ASSERT_EQ(spy.count(), 1);
     EXPECT_EQ(spy.at(0).at(0).value<QCursor>().shape(), Qt::ForbiddenCursor);
+    EXPECT_NE(spy.at(0).at(0).value<QCursor>().shape(), Qt::PointingHandCursor);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_mouseMoveEvent_02)
 {
     // 无命中窗口：恢复默认(禁止)光标
+    // Arrange：打桩无命中窗口场景
     Stub stub;
     stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
     stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow);
     stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_false);
 
+    // Act：发送鼠标移动事件
     QSignalSpy spy(m_tester, &XWinKillPreviewWidget::cursorUpdated);
     QMouseEvent me(QEvent::MouseMove, QPoint(50, 50), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
     m_tester->mouseMoveEvent(&me);
 
+    // Assert：发出禁止光标信号，且不是悬停高亮手型光标
     ASSERT_EQ(spy.count(), 1);
     EXPECT_EQ(spy.at(0).at(0).value<QCursor>().shape(), Qt::ForbiddenCursor);
+    EXPECT_NE(spy.at(0).at(0).value<QCursor>().shape(), Qt::PointingHandCursor);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_mouseMoveEvent_03)
 {
     // 命中窗口但背景列表为空（500ms 定时器未触发，m_backgroundList 为空）：
     // 不做选区更新也不发光标信号
+    // Arrange：打桩命中窗口但背景列表为空
     Stub stub;
     stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
     stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow_hit);
     stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_false);
     stub.set(ADDR(WMInfo, getHoveredByWindowList), stub_xwk_wm_getHoveredByWindowList);
 
+    // Act：发送鼠标移动事件
     QSignalSpy spy(m_tester, &XWinKillPreviewWidget::cursorUpdated);
     QMouseEvent me(QEvent::MouseMove, QPoint(50, 50), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
     m_tester->mouseMoveEvent(&me);
 
+    // Assert：背景列表为空不发信号，窗口未被关闭
     EXPECT_EQ(spy.count(), 0);
+    EXPECT_EQ(m_tester->isVisible(), true);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_mouseMoveEvent_04)
 {
     // 唯一窗口属于自身进程：continue 跳过，found=false → 默认光标
+    // Arrange：打桩唯一窗口属于自身进程场景
     Stub stub;
     stub.set((QPoint (*)())&QCursor::pos, stub_xwk_cursorPos_50_50);
     stub.set(ADDR(WMInfo, selectWindow), stub_xwk_wm_selectWindow_selfpid);
     stub.set(ADDR(WMInfo, isCursorHoveringDocks), stub_xwk_wm_isCursorHoveringDocks_false);
 
+    // Act：发送鼠标移动事件
     QSignalSpy spy(m_tester, &XWinKillPreviewWidget::cursorUpdated);
     QMouseEvent me(QEvent::MouseMove, QPoint(50, 50), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
     m_tester->mouseMoveEvent(&me);
 
+    // Assert：发出禁止光标信号，且不是悬停高亮手型光标
     ASSERT_EQ(spy.count(), 1);
     EXPECT_EQ(spy.at(0).at(0).value<QCursor>().shape(), Qt::ForbiddenCursor);
+    EXPECT_NE(spy.at(0).at(0).value<QCursor>().shape(), Qt::PointingHandCursor);
 }
 
 TEST_F(UT_XWinKillPreviewWidget, test_keyPressEvent_02)
 {
     // 非 ESC 按键：无动作，窗口保持存活
+    // Arrange：构造非 ESC 按键事件
+    ASSERT_NE(m_tester, nullptr);
+
+    // Act：发送 Key_A 按键事件
     QKeyEvent keyEvent(QEvent::KeyPress, Qt::Key_A, Qt::NoModifier);
     m_tester->keyPressEvent(&keyEvent);
 
-    // ctor 已 show()，非 ESC 按键不应关闭窗口（对比 ESC 用例 close 后不可见）
+    // Assert：窗口未关闭，主窗未进入最小化状态（对比 ESC 用例 close 后不可见）
     EXPECT_TRUE(m_tester->isVisible());
     EXPECT_EQ(gApp->mainWindow()->windowState() & Qt::WindowMinimized, Qt::WindowNoState);
 }
@@ -402,11 +454,14 @@ TEST_F(UT_XWinKillPreviewWidget, test_keyPressEvent_02)
 TEST_F(UT_XWinKillPreviewWidget, test_keyPressEvent_01)
 {
     // ESC：还原主窗状态（清除最小化标志）并 close（WA_DeleteOnClose 延迟删除）
+    // Arrange：主窗预置最小化状态
     gApp->mainWindow()->setWindowState(Qt::WindowMinimized);
 
+    // Act：发送 ESC 按键事件
     QKeyEvent keyEvent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
     m_tester->keyPressEvent(&keyEvent);
 
+    // Assert：主窗最小化标志被清除，预览窗已关闭隐藏
     EXPECT_EQ(gApp->mainWindow()->windowState() & Qt::WindowMinimized, Qt::WindowNoState);
     EXPECT_FALSE(m_tester->isVisible());
     closeAndForget();
