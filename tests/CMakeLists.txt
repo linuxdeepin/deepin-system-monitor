@@ -734,6 +734,15 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_process_controller.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
+# --- APPENDED (V-8173 UT-sysmonitor-46 dbus re-include task, no existing lines changed) ----
+# dbus 模块 Qt6 兼容测试 TU 重新纳入主测试目标（一笔一类，按类核实编译+运行全绿）。
+# 此前被 V-6431 的 UT_LEGACY_EXCLUDE 整目录排除（Qt5 时代描述已过时：
+# 本目录测试均已适配 Qt6——stub.h 打桩、Qt6 API 签名、无 QtTest 依赖），
+# 源文件长期 0% 覆盖。以下逐类重纳入：
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/dbus/ut_unit_info.cpp)
+# --- end APPENDED block ------------------------------------------------------
+
 add_executable(${PROJECT_NAME_TEST}
     ${UT_CPP}
     ${APP_HPP}
