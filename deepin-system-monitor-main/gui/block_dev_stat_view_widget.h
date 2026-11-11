@@ -44,7 +44,6 @@ private:
     QMap<QString, BlockDevItemWidget *> m_mapDeviceItemWidget;
 
     QWidget *m_centralWidget;
-    QFont m_font;
 };
 
 #endif // BLOCK_DEV_STAT_VIEW_WIDGET_H
