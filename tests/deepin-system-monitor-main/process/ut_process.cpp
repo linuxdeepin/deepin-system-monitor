@@ -73,10 +73,12 @@
 #include "process/process_set.h"
 #include "process/process_db.h"
 #include "wm/wm_window_list.h"
+#include "system/netif_monitor.h"
 #include "common/common.h"
 #include "process/private/process_p.h"
 //gtest
 #include "stub.h"
+#include "3rdparty/stub-ext/stubext.h"
 #include <gtest/gtest.h>
 //Qt
 #include <QIcon>
@@ -87,6 +89,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
 #include <cstring>
 #include <sys/types.h>
 
@@ -166,6 +170,10 @@ DIR *stub_opendir_fail(const char *)
 bool stub_bool_false()
 {
     return false;
+}
+bool stub_bool_true()
+{
+    return true;
 }
 // WMWindowList::isGuiApp 成员函数打桩（成员 ABI：rdi=this, rsi=pid）
 bool stub_wm_gui_flag(void *, pid_t)
@@ -1984,4 +1992,308 @@ TEST(UT_Process_GetProcessPriorityStub, OutOfRange_MappedInvalid)
     EXPECT_EQ(mapped, kInvalidPriority);
     EXPECT_EQ(getProcessPriorityStub(50), kInvalidPriority);
     EXPECT_EQ(getProcessPriorityStub(100), kInvalidPriority);
+}
+
+/***************************************************************************************************
+ * V-8163 覆盖率收口补充用例（分支 ut-sm-t37）
+ * 目标：process.cpp 剩余未覆盖分支——operator= 自赋值、readProcessInfo 真实读取与套接字
+ *       IO 累加、各 /proc 读取器失败分支、calculateProcessMetrics CPU 修正与套接字累加、
+ *       recvBytes/sentBytes 已有采样帧返回。
+ **************************************************************************************************/
+
+// 注入括号成对但字段不足的非法 stat 内容（readStat sscanf 解析失败分支）
+ssize_t stub_readStat_read_fewfields(int, void *buf, size_t)
+{
+    strcpy(static_cast<char *>(buf), "ut (ut-proc) S 1 1");
+    m_Sresult = "read";
+    return 18;
+}
+
+TEST_F(UT_Process, OperatorAssign_SelfAssignment_ReturnsReferenceWithoutChange)
+{
+    // Arrange：直接在 d 指针中填充可观测字段
+    m_tester->d->cmdline = QByteArrayList{"ut-self-assign"};
+    const pid_t before = m_tester->pid();
+
+    // Act：自赋值
+    Process &ref = (*m_tester) = (*m_tester);
+
+    // Assert：返回自身引用，pid 与 cmdline 保持不变
+    EXPECT_EQ(&ref, m_tester);
+    EXPECT_EQ(m_tester->pid(), before);
+    EXPECT_EQ(m_tester->cmdlineString(), QString("ut-self-assign"));
+}
+
+TEST_F(UT_Process, ReadProcessInfo_SelfRealReads_AppTypeFilterAppsAndSockIoAccumulate)
+{
+    // Arrange：托盘不命中、GUI 不命中、桌面项命中 → kFilterApps 分类；
+    // 用 socketpair 造真实套接字 fd，在 NetifMonitor 套接字缓存注入该 inode，
+    // 验证 readProcessInfo 内部套接字 IO 累加（L259-260）。
+    stub_ext::StubExt bWm;
+    bWm.set(ADDR(core::wm::WMWindowList, isTrayApp), stub_bool_false);
+    bWm.set(ADDR(core::wm::WMWindowList, isGuiApp), stub_wm_gui_flag);
+    bWm.set(ADDR(core::wm::WMWindowList, isDesktopEntryApp), stub_bool_true);
+    g_stubWmGui = false;
+
+    int sockFds[2] = {-1, -1};
+    ASSERT_EQ(::socketpair(AF_UNIX, SOCK_STREAM, 0, sockFds), 0);
+    struct stat sbuf {};
+    ASSERT_EQ(::fstat(sockFds[0], &sbuf), 0);
+    const ino_t sockIno = sbuf.st_ino;
+
+    auto *netif = NetifMonitor::instance();
+    netif->m_sockIOStatMapLock.lock();
+    auto stat = SockIOStat::create();
+    stat->ino = sockIno;
+    stat->rx_bytes = 1111;
+    stat->tx_bytes = 2222;
+    netif->m_sockIOStatMap.insert(sockIno, stat);
+    netif->m_sockIOStatMapLock.unlock();
+
+    // Act：真实读取本进程全部 /proc 数据（cmdline/stat/environ/status/statm/io/schedstat/fd）
+    stub_ext::StubExt bIcon;
+    bIcon.set(ADDR(ProcessIcon, refreashProcessIcon), stub_refreashProcessIcon_noop);
+    m_tester->readProcessInfo();
+
+    // Assert：分类为 kFilterApps；套接字 IO 采样记录注入的字节数；cmdline 含本二进制名
+    EXPECT_EQ(m_tester->appType(), kFilterApps);
+    EXPECT_EQ(m_tester->recvBytes(), 1111u);
+    EXPECT_EQ(m_tester->sentBytes(), 2222u);
+    EXPECT_TRUE(m_tester->cmdlineString().contains("deepin-system-monitor-test"));
+
+    // 清理：注入项已被 getSockIOStatByInode 消费，防御性清理
+    netif->m_sockIOStatMapLock.lock();
+    netif->m_sockIOStatMap.remove(sockIno);
+    netif->m_sockIOStatMapLock.unlock();
+    ::close(sockFds[0]);
+    ::close(sockFds[1]);
+}
+
+TEST_F(UT_Process, ReadProcessInfo_AccessFails_AllReadersFailAndMarkInvalid)
+{
+    // Arrange：bogus pid → 所有 /proc 文件 access 失败；隔离图标刷新
+    Process bogus(ut_bogus_pid());
+    stub_ext::StubExt bIcon;
+    bIcon.set(ADDR(ProcessIcon, refreashProcessIcon), stub_refreashProcessIcon_noop);
+
+    // Act：读取不存在的进程
+    bogus.readProcessInfo();
+
+    // Assert：读取失败标记 valid=false；各读取器结果字段保持空
+    EXPECT_EQ(bogus.d->valid, false);
+    EXPECT_EQ(bogus.d->cmdline.size(), 0);
+    EXPECT_EQ(bogus.d->environ.size(), 0);
+    EXPECT_EQ(bogus.d->sockInodes.size(), 0);
+}
+
+TEST_F(UT_Process, ReadStat_MalformedFields_ParseFailMarksInvalid)
+{
+    // Arrange：注入括号成对但字段不足的内容（sscanf 不足 15 个字段）
+    stub_ext::StubExt b1, b2, b3;
+    b1.set(open, stub_readStat_open1);
+    b2.set(read, stub_readStat_read_fewfields);
+    b3.set(close, stub_readStat_close);
+
+    // Act
+    const bool ok = m_tester->readStat();
+
+    // Assert：解析失败返回 false，时间字段未写入
+    EXPECT_FALSE(ok);
+    EXPECT_EQ(m_Sresult, QString("read"));
+    EXPECT_EQ(m_tester->d->utime, 0ULL);
+    EXPECT_EQ(m_tester->d->stime, 0ULL);
+}
+
+TEST_F(UT_Process, ReadCmdline_FreadError_MarksInvalid)
+{
+    // Arrange：fread 返回 0 且 ferror 置位
+    stub_ext::StubExt bFread, bFerror;
+    bFread.set_lamda(::fread, [](void *, size_t, size_t, FILE *) -> size_t { return 0; });
+    bFerror.set_lamda(::ferror, [](FILE *) -> int { return 1; });
+
+    // Act
+    const bool ok = m_tester->readCmdline();
+
+    // Assert：读失败返回 false，cmdline 为空
+    EXPECT_FALSE(ok);
+    EXPECT_EQ(m_tester->d->cmdline.size(), 0);
+}
+
+TEST_F(UT_Process, ReadCmdline_MultiArgContent_AppendsEachArgumentAndTailSegment)
+{
+    // Arrange：注入含 NUL 分隔且末段无 NUL 的多参数内容（覆盖尾部收尾分支 L389-391）
+    static const QByteArray content = QByteArrayLiteral("ut-app\0arg1\0arg2");
+    stub_ext::StubExt bFread;
+    bFread.set_lamda(::fread, [](void *ptr, size_t size, size_t nmemb, FILE *) -> size_t {
+        const size_t want = size * nmemb;
+        const size_t n = qMin(want, size_t(content.size()));
+        memcpy(ptr, content.constData(), n);
+        return n;
+    });
+
+    // Act
+    const bool ok = m_tester->readCmdline();
+
+    // Assert：按 NUL 逐参数切分，末段经收尾分支追加
+    EXPECT_TRUE(ok);
+    ASSERT_EQ(m_tester->d->cmdline.size(), 3);
+    EXPECT_EQ(m_tester->d->cmdline.at(0), QByteArray("ut-app"));
+    EXPECT_EQ(m_tester->d->cmdline.at(1), QByteArray("arg1"));
+    EXPECT_EQ(m_tester->d->cmdline.at(2), QByteArray("arg2"));
+}
+
+TEST_F(UT_Process, ReadEnviron_ReadError_EnvironRemainsEmpty)
+{
+    // Arrange：read 返回 0 且 errno 置位 → 读失败分支
+    stub_ext::StubExt bRead;
+    bRead.set_lamda(::read, [](int, void *, size_t) -> ssize_t { errno = ENOENT; return 0; });
+
+    // Act
+    m_tester->readEnviron();
+
+    // Assert：环境表保持为空
+    EXPECT_EQ(m_tester->d->environ.size(), 0);
+}
+
+TEST_F(UT_Process, ReadSchedStat_AccessFail_EarlyReturnKeepsWtime)
+{
+    // Arrange：access 失败 → 提前返回（L482-483）
+    stub_ext::StubExt bAccess;
+    bAccess.set_lamda(::access, [](const char *, int) -> int { return -1; });
+
+    // Act
+    m_tester->readSchedStat();
+
+    // Assert：wtime 保持 0
+    EXPECT_EQ(m_tester->d->wtime, 0);
+}
+
+TEST_F(UT_Process, ReadSchedStat_MalformedContent_ParseFailWarnsOnly)
+{
+    // Arrange：注入不可解析内容（sscanf "%*u %llu %*d" 匹配失败）
+    stub_ext::StubExt bRead;
+    bRead.set_lamda(::read, [](int fd, void *buf, size_t n) -> ssize_t {
+        strcpy(static_cast<char *>(buf), "not-a-number");
+        return 12;
+    });
+
+    // Act
+    m_tester->readSchedStat();
+
+    // Assert：解析失败仅告警，wtime 保持 0
+    EXPECT_EQ(m_tester->d->wtime, 0);
+}
+
+TEST_F(UT_Process, ReadStatus_FerrorAtEof_MarksInvalid)
+{
+    // Arrange：fgets 提前返回 nullptr 且 ferror 置位
+    stub_ext::StubExt bFgets, bFerror;
+    bFgets.set_lamda(::fgets, [](char *, int, FILE *) -> char * { return nullptr; });
+    bFerror.set_lamda(::ferror, [](FILE *) -> int { return 1; });
+
+    // Act
+    const bool ok = m_tester->readStatus();
+
+    // Assert：读失败返回 false
+    EXPECT_FALSE(ok);
+    EXPECT_EQ(m_tester->d->mask, 0u);
+}
+
+TEST_F(UT_Process, ReadStatm_ReadError_MarksInvalid)
+{
+    // Arrange：open 成功但 read 失败
+    stub_ext::StubExt bRead;
+    bRead.set_lamda(::read, [](int, void *, size_t) -> ssize_t { errno = EIO; return -1; });
+
+    // Act
+    const bool ok = m_tester->readStatm();
+
+    // Assert：读失败返回 false，内存字段保持 0
+    EXPECT_FALSE(ok);
+    EXPECT_EQ(m_tester->d->rss, 0ULL);
+}
+
+TEST_F(UT_Process, CalculateProcessMetrics_CorrectedCpuTime_UsesCurrentAsBaseline)
+{
+    // Arrange：注入合法 stat 使 utime/stime 有效；上次采样 ptime 远大于当前
+    // （timedelta < -1000），触发 CPU 时间修正基线分支；同时注入套接字缓存
+    // 条目覆盖 calculateProcessMetrics 内的套接字 IO 累加。
+    stub_ext::StubExt b1, b2, b3;
+    b1.set(open, stub_readStat_open1);
+    b2.set(read, stub_readStat_read_valid);
+    b3.set(close, stub_readStat_close);
+    ASSERT_TRUE(m_tester->readStat());
+
+    auto *procset = ProcessDB::instance()->processSet();
+    procset->m_recentProcStage.insert(getpid(), std::make_shared<RecentProcStage>());
+    auto stage = procset->getRecentProcStage(getpid()).lock();
+    ASSERT_TRUE(bool(stage));
+    stage->ptime = m_tester->d->utime + m_tester->d->stime + 5000;
+
+    const ino_t fakeInode = 123456789;
+    auto *netif = NetifMonitor::instance();
+    netif->m_sockIOStatMapLock.lock();
+    auto stat = SockIOStat::create();
+    stat->ino = fakeInode;
+    stat->rx_bytes = 3000;
+    stat->tx_bytes = 4000;
+    netif->m_sockIOStatMap.insert(fakeInode, stat);
+    netif->m_sockIOStatMapLock.unlock();
+    m_tester->d->sockInodes.append(fakeInode);
+
+    // Act：计算指标（修正分支 + 套接字累加）
+    m_tester->calculateProcessMetrics();
+
+    // Assert：网络采样记录注入字节数；进程集的最近阶段表保留该 pid 条目
+    EXPECT_EQ(m_tester->recvBytes(), 3000u);
+    EXPECT_EQ(m_tester->sentBytes(), 4000u);
+    EXPECT_TRUE(procset->m_recentProcStage.contains(getpid()));
+
+    // 清理
+    procset->m_recentProcStage.remove(getpid());
+    netif->m_sockIOStatMapLock.lock();
+    netif->m_sockIOStatMap.remove(fakeInode);
+    netif->m_sockIOStatMapLock.unlock();
+}
+
+TEST_F(UT_Process, RecvSentBytes_WithExistingSample_ReturnsSampleBytes)
+{
+    // Arrange：注入一帧网络 IO 采样
+    timeval tv {1, 0};
+    m_tester->d->networkIOSample->addSample(new IOSampleFrame(tv, {2345, 6789}));
+
+    // Act + Assert：已有采样时返回帧内字节数（而非无样本时的 0）
+    EXPECT_EQ(m_tester->recvBytes(), 2345u);
+    EXPECT_EQ(m_tester->sentBytes(), 6789u);
+}
+
+// getPriorityName：优先级值落在命名档位内 → 直接映射档位名（L56）
+TEST_F(UT_Process, GetPriorityName_NamedPriorities_ReturnsMappedNames)
+{
+    // Act + Assert：各命名档位返回对应翻译名；自定义/非法档位不进该分支
+    EXPECT_EQ(getPriorityName(kVeryHighPriority), QApplication::translate("Process.Priority", "Very high"));
+    EXPECT_EQ(getPriorityName(kHighPriority), QApplication::translate("Process.Priority", "High"));
+    EXPECT_EQ(getPriorityName(kNormalPriority), QApplication::translate("Process.Priority", "Normal"));
+    EXPECT_EQ(getPriorityName(kLowPriority), QApplication::translate("Process.Priority", "Low"));
+    EXPECT_EQ(getPriorityName(kVeryLowPriority), QApplication::translate("Process.Priority", "Very low"));
+}
+
+// 直接调用私有读取路径（绕过 readProcessInfo 的 ok&& 短路门）：
+// /proc/[pid]/cmdline 不可访问 → 告警并返回 false
+TEST_F(UT_Process, ReadCmdline_DirectAccessFail_EarlyReturnFalse)
+{
+    // Arrange：pid 超出 pid_max，/proc 下无对应 cmdline
+    Process bogus(ut_bogus_pid());
+
+    // Act / Assert
+    EXPECT_FALSE(bogus.readCmdline());
+    EXPECT_TRUE(bogus.d->cmdline.isEmpty());
+}
+
+// /proc/[pid]/statm 不可访问 → 告警并返回 false
+TEST_F(UT_Process, ReadStatm_DirectAccessFail_EarlyReturnFalse)
+{
+    Process bogus(ut_bogus_pid());
+
+    EXPECT_FALSE(bogus.readStatm());
 }
