@@ -223,22 +223,30 @@ TEST_F(UT_UnitFileInfo, GetterSetter_NameAndStatus_Roundtrip)
     EXPECT_EQ(m_tester->getStatus(), QStringLiteral("masked"));
 }
 
-// ─────────────────────────── QDBusArgument 编组（列表，须在 registerMetaType 之前执行） ───────────────────────────
+// ─────────────────────────── QDBusArgument 编组（列表，自控注册状态） ───────────────────────────
 
-TEST_F(UT_UnitFileInfo, DBusMarshal_ListWrite_BeginArrayUsesListTypeId_SignatureBroken)
+TEST_F(UT_UnitFileInfo, DBusMarshal_ListWrite_AfterRegister_ProducesValidArraySignature)
 {
-    // Arrange: 构造非空列表（不注册列表元类型，避免触发 libdbus 断言崩溃；
-    // 列表元类型注册后的写入段错误已在 Mode 5 缺陷报告中以最小复现佐证）
+    // Arrange: 先确保元素/列表元类型完成 DBus 注册（幂等）。注册状态是进程全局的：
+    // 其他套件先执行时会经 qMetaTypeId<UnitFileInfo>() 懒注册，依赖"此前未注册"
+    // 的旧行为（签名断裂为空）会引入套件顺序依赖——全量批跑与过滤批跑结果不一致的根因。
+    // （Qt 6.8 实测：未注册时 beginArray 仅告警并产出空签名，注册后产出 a(ss)，两种
+    //  状态下写入均不崩溃；此前记录的"注册后写入段错误"在本环境不复现）
+    UnitFileInfo::registerMetaType();
     UnitFileInfoList list;
     list << makeFullUnitFileInfo() << makeFullUnitFileInfo();
 
-    // Act: 写入 QDBusArgument（缺陷实现：beginArray 传入列表而非元素元类型 id）
+    // Act: 写入 QDBusArgument（生产实现 beginArray 传入元素元类型 id）
     QDBusArgument argument;
     argument << list;
 
-    // Assert: beginArray 因列表元类型未注册而失败，未产生有效数组签名
-    EXPECT_EQ(argument.currentSignature(), QString());
-    EXPECT_TRUE(argument.currentSignature().isEmpty());
+    // Assert: 注册后数组签名有效为 a(ss)（两个元素同签名，与元素个数无关）
+    EXPECT_EQ(argument.currentSignature(), QStringLiteral("a(ss)"));
+    QDBusArgument oneArgument;
+    UnitFileInfoList one;
+    one << makeFullUnitFileInfo();
+    oneArgument << one;
+    EXPECT_EQ(oneArgument.currentSignature(), QStringLiteral("a(ss)"));
 }
 
 TEST_F(UT_UnitFileInfo, DBusUnmarshal_ListFromWriteModeArgument_ReadsBackEmptyList)
