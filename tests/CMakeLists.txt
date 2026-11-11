@@ -767,6 +767,14 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/dbus/ut_dbusalarmnotify.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
+# --- APPENDED (V-8173 UT-sysmonitor-46 dbus re-include task, no existing lines changed) ----
+# dbus 模块 Qt6 兼容测试 TU 重新纳入主测试目标（一笔一类，按类核实编译+运行全绿）。
+# 注：DBusObject 测试文件原名 dbus_object.cpp 与被测源文件同名易混淆，
+# 按仓库 ut_<class>.cpp 命名惯例更名为 ut_dbus_object.cpp（git mv 保留历史）。
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/dbus/ut_dbus_object.cpp)
+# --- end APPENDED block ------------------------------------------------------
+
 add_executable(${PROJECT_NAME_TEST}
     ${UT_CPP}
     ${APP_HPP}
