@@ -2144,44 +2144,56 @@ TEST_F(UT_Process, ReadCmdline_MultiArgContent_AppendsEachArgumentAndTailSegment
 
 TEST_F(UT_Process, ReadEnviron_ReadError_EnvironRemainsEmpty)
 {
-    // Arrange：read 返回 0 且 errno 置位 → 读失败分支
+    // Arrange：read 返回 0 且 errno 置位 → 读失败分支；预置环境项验证不被覆盖
     stub_ext::StubExt bRead;
     bRead.set_lamda(::read, [](int, void *, size_t) -> ssize_t { errno = ENOENT; return 0; });
+    m_tester->d->environ.insert(QStringLiteral("UT_KEEP"), QStringLiteral("1"));
 
     // Act
     m_tester->readEnviron();
 
-    // Assert：环境表保持为空
-    EXPECT_EQ(m_tester->d->environ.size(), 0);
+    // Assert：读失败提前返回，既有环境表不被清空也不被追加
+    EXPECT_EQ(m_tester->d->environ.size(), 1);
+    EXPECT_EQ(m_tester->d->environ.value(QStringLiteral("UT_KEEP")), QStringLiteral("1"));
 }
 
 TEST_F(UT_Process, ReadSchedStat_AccessFail_EarlyReturnKeepsWtime)
 {
-    // Arrange：access 失败 → 提前返回（L482-483）
+    // Arrange：access 失败 → 提前返回（L482-483）；预置 wtime 验证不被改写
     stub_ext::StubExt bAccess;
-    bAccess.set_lamda(::access, [](const char *, int) -> int { return -1; });
+    int accessCalls = 0;
+    bAccess.set_lamda(::access, [&](const char *, int) -> int {
+        ++accessCalls;
+        return -1;
+    });
+    m_tester->d->wtime = 555;
 
     // Act
     m_tester->readSchedStat();
 
-    // Assert：wtime 保持 0
-    EXPECT_EQ(m_tester->d->wtime, 0);
+    // Assert：access 被调用一次即提前返回；既有 wtime 不被改写
+    EXPECT_EQ(accessCalls, 1);
+    EXPECT_EQ(m_tester->d->wtime, 555u);
 }
 
 TEST_F(UT_Process, ReadSchedStat_MalformedContent_ParseFailWarnsOnly)
 {
-    // Arrange：注入不可解析内容（sscanf "%*u %llu %*d" 匹配失败）
+    // Arrange：注入不可解析内容（sscanf "%*u %llu %*d" 匹配失败）；预置 wtime
     stub_ext::StubExt bRead;
-    bRead.set_lamda(::read, [](int fd, void *buf, size_t n) -> ssize_t {
+    int readCalls = 0;
+    bRead.set_lamda(::read, [&](int fd, void *buf, size_t n) -> ssize_t {
+        ++readCalls;
         strcpy(static_cast<char *>(buf), "not-a-number");
         return 12;
     });
+    m_tester->d->wtime = 777;
 
     // Act
     m_tester->readSchedStat();
 
-    // Assert：解析失败仅告警，wtime 保持 0
-    EXPECT_EQ(m_tester->d->wtime, 0);
+    // Assert：读取恰好发生一次；解析失败仅告警，wtime 不被部分写入
+    EXPECT_EQ(readCalls, 1);
+    EXPECT_EQ(m_tester->d->wtime, 777u);
 }
 
 TEST_F(UT_Process, ReadStatus_FerrorAtEof_MarksInvalid)
@@ -2262,20 +2274,34 @@ TEST_F(UT_Process, RecvSentBytes_WithExistingSample_ReturnsSampleBytes)
     timeval tv {1, 0};
     m_tester->d->networkIOSample->addSample(new IOSampleFrame(tv, {2345, 6789}));
 
-    // Act + Assert：已有采样时返回帧内字节数（而非无样本时的 0）
-    EXPECT_EQ(m_tester->recvBytes(), 2345u);
-    EXPECT_EQ(m_tester->sentBytes(), 6789u);
+    // Act
+    const auto inBytes = m_tester->recvBytes();
+    const auto outBytes = m_tester->sentBytes();
+
+    // Assert：已有采样时返回帧内字节数（而非无样本时的 0）
+    EXPECT_EQ(inBytes, 2345u);
+    EXPECT_EQ(outBytes, 6789u);
 }
 
 // getPriorityName：优先级值落在命名档位内 → 直接映射档位名（L56）
 TEST_F(UT_Process, GetPriorityName_NamedPriorities_ReturnsMappedNames)
 {
-    // Act + Assert：各命名档位返回对应翻译名；自定义/非法档位不进该分支
-    EXPECT_EQ(getPriorityName(kVeryHighPriority), QApplication::translate("Process.Priority", "Very high"));
-    EXPECT_EQ(getPriorityName(kHighPriority), QApplication::translate("Process.Priority", "High"));
-    EXPECT_EQ(getPriorityName(kNormalPriority), QApplication::translate("Process.Priority", "Normal"));
-    EXPECT_EQ(getPriorityName(kLowPriority), QApplication::translate("Process.Priority", "Low"));
-    EXPECT_EQ(getPriorityName(kVeryLowPriority), QApplication::translate("Process.Priority", "Very low"));
+    // Arrange：命名档位枚举值与翻译上下文
+    constexpr auto kCtx = "Process.Priority";
+
+    // Act：逐档位取映射名
+    const QString veryHigh = getPriorityName(kVeryHighPriority);
+    const QString high = getPriorityName(kHighPriority);
+    const QString normal = getPriorityName(kNormalPriority);
+    const QString low = getPriorityName(kLowPriority);
+    const QString veryLow = getPriorityName(kVeryLowPriority);
+
+    // Assert：各命名档位返回对应翻译名；自定义/非法档位不进该分支
+    EXPECT_EQ(veryHigh, QApplication::translate(kCtx, "Very high"));
+    EXPECT_EQ(high, QApplication::translate(kCtx, "High"));
+    EXPECT_EQ(normal, QApplication::translate(kCtx, "Normal"));
+    EXPECT_EQ(low, QApplication::translate(kCtx, "Low"));
+    EXPECT_EQ(veryLow, QApplication::translate(kCtx, "Very low"));
 }
 
 // 直接调用私有读取路径（绕过 readProcessInfo 的 ok&& 短路门）：
@@ -2285,15 +2311,27 @@ TEST_F(UT_Process, ReadCmdline_DirectAccessFail_EarlyReturnFalse)
     // Arrange：pid 超出 pid_max，/proc 下无对应 cmdline
     Process bogus(ut_bogus_pid());
 
-    // Act / Assert
-    EXPECT_FALSE(bogus.readCmdline());
-    EXPECT_TRUE(bogus.d->cmdline.isEmpty());
+    // Act
+    const bool ok = bogus.readCmdline();
+
+    // Assert：访问失败返回 false，cmdline 保持为空
+    EXPECT_EQ(ok, false);
+    EXPECT_EQ(bogus.d->cmdline.size(), 0);
 }
 
 // /proc/[pid]/statm 不可访问 → 告警并返回 false
 TEST_F(UT_Process, ReadStatm_DirectAccessFail_EarlyReturnFalse)
 {
+    // Arrange：pid 超出 pid_max，/proc 下无对应 statm；预置内存字段验证不被改写
     Process bogus(ut_bogus_pid());
+    bogus.d->vmsize = 111;
+    bogus.d->rss = 222;
 
-    EXPECT_FALSE(bogus.readStatm());
+    // Act
+    const bool ok = bogus.readStatm();
+
+    // Assert：访问失败返回 false，内存字段保持原值
+    EXPECT_EQ(ok, false);
+    EXPECT_EQ(bogus.d->vmsize, 111u);
+    EXPECT_EQ(bogus.d->rss, 222u);
 }
