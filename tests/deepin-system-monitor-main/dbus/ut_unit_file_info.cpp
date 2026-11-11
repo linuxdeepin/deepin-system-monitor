@@ -262,15 +262,14 @@ TEST_F(UT_UnitFileInfo, DBusUnmarshal_ListFromWriteModeArgument_ReadsBackEmptyLi
 
 TEST_F(UT_UnitFileInfo, RegisterMetaType_TypesRegistered_MetaTypesValid)
 {
-    // Arrange: 注册前按名称查找（本套件此用例之前无任何注册动作，
-    // 期望此时仍为未注册状态；gtest 在同一进程内按文件顺序执行）
-    const int beforeUnitId = QMetaType::type("UnitFileInfo");
-
-    // Act: 注册 UnitFileInfo / UnitFileInfoList
+    // Act: 注册 UnitFileInfo / UnitFileInfoList（注册幂等，重复调用安全）
+    // 注：不假设注册前的"未注册"状态——编组操作符内的 qMetaTypeId<UnitFileInfo>()
+    // 会触发懒注册，同一进程内先执行的其他套件可能已注册，断言注册前状态
+    // 会引入套件执行顺序依赖（批跑失败、单跑通过的根因）。
+    UnitFileInfo::registerMetaType();
     UnitFileInfo::registerMetaType();
 
-    // Assert: 两个元类型均可按名称查到
-    EXPECT_EQ(beforeUnitId, QMetaType::UnknownType);
+    // Assert: 两个元类型均可按名称查到（注册后的稳定后置条件）
     EXPECT_NE(QMetaType::type("UnitFileInfo"), QMetaType::UnknownType);
     EXPECT_NE(QMetaType::type("UnitFileInfoList"), QMetaType::UnknownType);
 }
