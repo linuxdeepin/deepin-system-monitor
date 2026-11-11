@@ -8,6 +8,7 @@
 
 //gtest
 #include <gtest/gtest.h>
+#include "addr_pri.h"
 
 //qt
 #include <QPainterPath>
@@ -15,6 +16,13 @@
 #include <QList>
 #include <QtGlobal>
 #include <cmath>
+
+// 私有静态算法函数经 addr_pri.h 访问（不修改生产头文件）
+// 注：多参数函数类型含顶层逗号，需用 using 别名包一层再传给宏
+using UtCalcFirstControlFn = void(double *&, const double *, int);
+using UtCalcControlPointsFn = void(const QList<QPointF> &, QList<QPointF> *, QList<QPointF> *);
+ACCESS_PRIVATE_STATIC_FUN(SmoothCurveGenerator, UtCalcFirstControlFn, calculateFirstControlPoints)
+ACCESS_PRIVATE_STATIC_FUN(SmoothCurveGenerator, UtCalcControlPointsFn, calculateControlPoints)
 
 // SmoothCurveGenerator 为纯静态算法类，无外部依赖（DBus/文件/网络），
 // 无需打桩，直接构造受控数据点验证曲线生成数学性质。
@@ -117,7 +125,7 @@ TEST_F(SmoothCurveGeneratorTest, CalculateControlPoints_WithTwoKnots_ProducesStr
     QList<QPointF> secondControlPoints;
 
     // Act
-    SmoothCurveGenerator::calculateControlPoints(knots, &firstControlPoints, &secondControlPoints);
+    call_private_static_fun::SmoothCurveGenerator::SmoothCurveGeneratorcalculateControlPoints(knots, &firstControlPoints, &secondControlPoints);
 
     // Assert: P1 = ((2*0+3)/3, (2*0+6)/3) = (1, 2)
     ASSERT_EQ(firstControlPoints.size(), 1);
@@ -139,7 +147,7 @@ TEST_F(SmoothCurveGeneratorTest, CalculateControlPoints_WithFiveKnots_ProducesFi
     QList<QPointF> secondControlPoints;
 
     // Act
-    SmoothCurveGenerator::calculateControlPoints(knots, &firstControlPoints, &secondControlPoints);
+    call_private_static_fun::SmoothCurveGenerator::SmoothCurveGeneratorcalculateControlPoints(knots, &firstControlPoints, &secondControlPoints);
 
     // Assert: 控制点数量与曲线段数一致，且坐标均为有限值（求解矩阵无发散）
     ASSERT_EQ(firstControlPoints.size(), 4);
@@ -163,7 +171,7 @@ TEST_F(SmoothCurveGeneratorTest, CalculateFirstControlPoints_WithThreeElementRHS
     double *result = new double[3];
 
     // Act
-    SmoothCurveGenerator::calculateFirstControlPoints(result, rhs, 3);
+    call_private_static_fun::SmoothCurveGenerator::SmoothCurveGeneratorcalculateFirstControlPoints(result, rhs, 3);
 
     // Assert: 求解结果与手工推演一致（三分量收敛至 2/3）
     EXPECT_NEAR(result[0], 2.0 / 3.0, 1e-12);
@@ -182,7 +190,7 @@ TEST_F(SmoothCurveGeneratorTest, CalculateFirstControlPoints_WithTwoElementRHS_A
     double *result = new double[2];
 
     // Act
-    SmoothCurveGenerator::calculateFirstControlPoints(result, rhs, 2);
+    call_private_static_fun::SmoothCurveGenerator::SmoothCurveGeneratorcalculateFirstControlPoints(result, rhs, 2);
 
     // Assert
     EXPECT_NEAR(result[0], -1.0 / 6.0, 1e-12);
