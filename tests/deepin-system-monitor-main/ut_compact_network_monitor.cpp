@@ -14,6 +14,7 @@
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
+#include "addr_pri.h"
 
 //qt
 #include <QPainterPath>
@@ -30,6 +31,33 @@ using ThemeHelper = DGuiApplicationHelper;
 #endif
 
 using namespace core::system;
+
+
+// 私有成员/受保护函数经 addr_pri.h 访问（不修改生产头文件）
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QList<double> *, downloadSpeeds)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QList<double> *, uploadSpeeds)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QPainterPath, downloadPath)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QPainterPath, uploadPath)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QColor, summaryColor)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QColor, textColor)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QColor, m_frameColor)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QFont, m_sectionFont)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QFont, m_contentFont)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, QFont, m_subContentFont)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, qreal, m_recvBps)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, qreal, m_sentBps)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, qulonglong, m_totalRecvBytes)
+ACCESS_PRIVATE_FIELD(CompactNetworkMonitor, qulonglong, m_totalSentBytes)
+ACCESS_PRIVATE_FUN(CompactNetworkMonitor, void(const QFont &), changeFont)
+using UtPathBuildFn = void(QList<double> *, QPainterPath &, qreal);
+ACCESS_PRIVATE_FUN(CompactNetworkMonitor, UtPathBuildFn, getPainterPathByData)
+ACCESS_PRIVATE_FUN(CompactNetworkMonitor, void(QMouseEvent *), mouseReleaseEvent)
+ACCESS_PRIVATE_FUN(CompactNetworkMonitor, void(QMouseEvent *), mouseMoveEvent)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+ACCESS_PRIVATE_FUN(CompactNetworkMonitor, void(DApplicationHelper::ColorType), changeTheme)
+#else
+ACCESS_PRIVATE_FUN(CompactNetworkMonitor, void(DGuiApplicationHelper::ColorType), changeTheme)
+#endif
 
 /***************************************STUB begin*********************************************/
 namespace {
@@ -134,16 +162,16 @@ TEST_F(CompactNetworkMonitorTest, Construction_DefaultInit_FixedSizeAndSpeedsLis
     // Act: 读取构造后的固定尺寸与速率列表状态
     const int fixedWidth = m_tester->width();
     const int fixedHeight = m_tester->height();
-    const int dlSize = m_tester->downloadSpeeds->size();
-    const int ulSize = m_tester->uploadSpeeds->size();
-    const double dlFirst = m_tester->downloadSpeeds->first();
-    const double ulFirst = m_tester->uploadSpeeds->first();
+    const int dlSize = access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->size();
+    const int ulSize = access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->size();
+    const double dlFirst = access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->first();
+    const double ulFirst = access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->first();
     // Assert: 宽度 = 280，高度 = 150
     EXPECT_EQ(fixedWidth, 280);
     EXPECT_EQ(fixedHeight, 150);
     // Assert: 两个速率列表均初始化为 pointsNumber+1 个 0 值
-    EXPECT_NE(m_tester->downloadSpeeds, nullptr);
-    EXPECT_NE(m_tester->uploadSpeeds, nullptr);
+    EXPECT_NE(access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester), nullptr);
+    EXPECT_NE(access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester), nullptr);
     EXPECT_EQ(dlSize, kPointsNumber + 1);
     EXPECT_EQ(ulSize, kPointsNumber + 1);
     EXPECT_DOUBLE_EQ(dlFirst, 0.0);
@@ -163,57 +191,57 @@ TEST_F(CompactNetworkMonitorTest, UpdateStatus_WhenInvoked_ReadsNetInfoAndAppend
     m_tester->updateStatus();
 
     // Assert: 私有状态被刷新为打桩值
-    EXPECT_DOUBLE_EQ(m_tester->m_recvBps, 1024.0);
-    EXPECT_DOUBLE_EQ(m_tester->m_sentBps, 2048.0);
-    EXPECT_EQ(m_tester->m_totalRecvBytes, 100000u);
-    EXPECT_EQ(m_tester->m_totalSentBytes, 200000u);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactNetworkMonitorm_recvBps(*m_tester), 1024.0);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactNetworkMonitorm_sentBps(*m_tester), 2048.0);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitorm_totalRecvBytes(*m_tester), 100000u);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitorm_totalSentBytes(*m_tester), 200000u);
     // Assert: 列表从初始 31 项 -> 追加 1 项(32) 超界 -> pop 1 项 = 31 项
-    EXPECT_EQ(m_tester->downloadSpeeds->size(), kPointsNumber + 1);
-    EXPECT_EQ(m_tester->uploadSpeeds->size(), kPointsNumber + 1);
-    EXPECT_DOUBLE_EQ(m_tester->downloadSpeeds->last(), 1024.0);
-    EXPECT_DOUBLE_EQ(m_tester->uploadSpeeds->last(), 2048.0);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->size(), kPointsNumber + 1);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->size(), kPointsNumber + 1);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->last(), 1024.0);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->last(), 2048.0);
 }
 
 TEST_F(CompactNetworkMonitorTest, UpdateStatus_WhenListAtBoundary_PopsOldestEntry)
 {
     // Arrange: 清空列表后填满 pointsNumber+1 个可辨识旧值（31 项，处于阈值边界）
-    m_tester->downloadSpeeds->clear();
+    access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->clear();
     for (int i = 0; i <= kPointsNumber; ++i)
-        m_tester->downloadSpeeds->append(i * 1.0);
-    const double oldestExpectedAfterPop = m_tester->downloadSpeeds->at(1);
+        access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->append(i * 1.0);
+    const double oldestExpectedAfterPop = access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->at(1);
     s_recvBps = 512.0;
 
     // Act: 追加后变为 32 > pointsNumber+1，应 pop 掉最老一项
     m_tester->updateStatus();
 
     // Assert: 窗口长度维持 pointsNumber+1，且最老一项（值为 0）已被移除
-    EXPECT_EQ(m_tester->downloadSpeeds->size(), kPointsNumber + 1);
-    EXPECT_DOUBLE_EQ(m_tester->downloadSpeeds->first(), oldestExpectedAfterPop);
-    EXPECT_DOUBLE_EQ(m_tester->downloadSpeeds->last(), 512.0);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->size(), kPointsNumber + 1);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->first(), oldestExpectedAfterPop);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->last(), 512.0);
 }
 
 TEST_F(CompactNetworkMonitorTest, UpdateStatus_WhenListBelowBoundary_KeepsAllEntries)
 {
     // Arrange: 列表长度(5)小于 pointsNumber+1，不触发 pop 分支
-    m_tester->downloadSpeeds->clear();
-    m_tester->downloadSpeeds->append(1.0);
-    m_tester->downloadSpeeds->append(2.0);
-    m_tester->downloadSpeeds->append(3.0);
-    m_tester->downloadSpeeds->append(4.0);
-    m_tester->downloadSpeeds->append(5.0);
-    m_tester->uploadSpeeds->clear();
-    m_tester->uploadSpeeds->append(1.0);
-    m_tester->uploadSpeeds->append(2.0);
-    m_tester->uploadSpeeds->append(3.0);
-    m_tester->uploadSpeeds->append(4.0);
-    m_tester->uploadSpeeds->append(5.0);
+    access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->clear();
+    access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->append(1.0);
+    access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->append(2.0);
+    access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->append(3.0);
+    access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->append(4.0);
+    access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->append(5.0);
+    access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->clear();
+    access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->append(1.0);
+    access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->append(2.0);
+    access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->append(3.0);
+    access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->append(4.0);
+    access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->append(5.0);
 
     // Act
     m_tester->updateStatus();
 
     // Assert: 全部保留，仅各自追加 1 项
-    EXPECT_EQ(m_tester->downloadSpeeds->size(), 6);
-    EXPECT_EQ(m_tester->uploadSpeeds->size(), 6);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitordownloadSpeeds(*m_tester)->size(), 6);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitoruploadSpeeds(*m_tester)->size(), 6);
 }
 
 TEST_F(CompactNetworkMonitorTest, UpdateStatus_WhenInvoked_BuildsDownloadAndUploadPaths)
@@ -226,8 +254,8 @@ TEST_F(CompactNetworkMonitorTest, UpdateStatus_WhenInvoked_BuildsDownloadAndUplo
     m_tester->updateStatus();
 
     // Assert: 路径由 31 个数据点生成：隐式 moveTo + 30 段 cubicTo（每段 3 元素）= 91
-    EXPECT_EQ(m_tester->downloadPath.elementCount(), 1 + 3 * kPointsNumber);
-    EXPECT_EQ(m_tester->uploadPath.elementCount(), 1 + 3 * kPointsNumber);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitordownloadPath(*m_tester).elementCount(), 1 + 3 * kPointsNumber);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitoruploadPath(*m_tester).elementCount(), 1 + 3 * kPointsNumber);
 }
 
 // ───────────────────────── getPainterPathByData ─────────────────────────
@@ -238,7 +266,7 @@ TEST_F(CompactNetworkMonitorTest, GetPainterPathByData_WithEmptyList_ReturnsEmpt
 
     // Act
     QPainterPath path;
-    m_tester->getPainterPathByData(&emptyList, path, 20.0);
+    call_private_fun::CompactNetworkMonitorgetPainterPathByData(*m_tester, &emptyList, path, 20.0);
 
     // Assert: 循环体不执行，路径为空
     EXPECT_TRUE(path.isEmpty());
@@ -252,7 +280,7 @@ TEST_F(CompactNetworkMonitorTest, GetPainterPathByData_WithSinglePoint_ReturnsEm
 
     // Act
     QPainterPath path;
-    m_tester->getPainterPathByData(&single, path, 20.0);
+    call_private_fun::CompactNetworkMonitorgetPainterPathByData(*m_tester, &single, path, 20.0);
 
     // Assert
     EXPECT_TRUE(path.isEmpty());
@@ -266,7 +294,7 @@ TEST_F(CompactNetworkMonitorTest, GetPainterPathByData_WithFivePoints_GeneratesT
 
     // Act
     QPainterPath path;
-    m_tester->getPainterPathByData(&data, path, 1.0);
+    call_private_fun::CompactNetworkMonitorgetPainterPathByData(*m_tester, &data, path, 1.0);
 
     // Assert: 元素数 = 1 + 3*4 = 13，隐式 moveTo 落在原点
     EXPECT_EQ(path.elementCount(), 13);
@@ -278,15 +306,15 @@ TEST_F(CompactNetworkMonitorTest, ChangeTheme_AnyType_UpdatesPaletteColors)
 {
     // Arrange: changeTheme 无分支（themeType 被 Q_UNUSED），Light/Dark 结果一致
     // Act: 分别以亮色与暗色触发
-    m_tester->changeTheme(ThemeHelper::LightType);
-    const QColor frameAfterLight = m_tester->m_frameColor;
-    m_tester->changeTheme(ThemeHelper::DarkType);
+    call_private_fun::CompactNetworkMonitorchangeTheme(*m_tester, ThemeHelper::LightType);
+    const QColor frameAfterLight = access_private_field::CompactNetworkMonitorm_frameColor(*m_tester);
+    call_private_fun::CompactNetworkMonitorchangeTheme(*m_tester, ThemeHelper::DarkType);
 
     // Assert: 两次刷新后取色一致且来自调色板，m_frameColor alphaF ≈ 0.3
-    EXPECT_EQ(m_tester->m_frameColor, frameAfterLight);
-    EXPECT_NEAR(m_tester->m_frameColor.alphaF(), 0.3, 1e-3);
-    EXPECT_TRUE(m_tester->textColor.isValid());
-    EXPECT_TRUE(m_tester->summaryColor.isValid());
+    EXPECT_EQ(access_private_field::CompactNetworkMonitorm_frameColor(*m_tester), frameAfterLight);
+    EXPECT_NEAR(access_private_field::CompactNetworkMonitorm_frameColor(*m_tester).alphaF(), 0.3, 1e-3);
+    EXPECT_TRUE(access_private_field::CompactNetworkMonitortextColor(*m_tester).isValid());
+    EXPECT_TRUE(access_private_field::CompactNetworkMonitorsummaryColor(*m_tester).isValid());
 }
 
 // ───────────────────────── changeFont ─────────────────────────
@@ -297,13 +325,13 @@ TEST_F(CompactNetworkMonitorTest, ChangeFont_WithCustomFont_UpdatesContentAndSub
     font.setPointSizeF(9.0);
 
     // Act
-    m_tester->changeFont(font);
+    call_private_fun::CompactNetworkMonitorchangeFont(*m_tester, font);
 
     // Assert: content 字体 Medium 字重且 -1ptF
-    EXPECT_EQ(m_tester->m_contentFont.weight(), QFont::Medium);
-    EXPECT_DOUBLE_EQ(m_tester->m_contentFont.pointSizeF(), 8.0);
+    EXPECT_EQ(access_private_field::CompactNetworkMonitorm_contentFont(*m_tester).weight(), QFont::Medium);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactNetworkMonitorm_contentFont(*m_tester).pointSizeF(), 8.0);
     // Assert: subContent 字体 -1ptF
-    EXPECT_DOUBLE_EQ(m_tester->m_subContentFont.pointSizeF(), 8.0);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactNetworkMonitorm_subContentFont(*m_tester).pointSizeF(), 8.0);
 }
 
 // ───────────────────────── mouseReleaseEvent ─────────────────────────
@@ -315,7 +343,7 @@ TEST_F(CompactNetworkMonitorTest, MouseReleaseEvent_LeftButton_EmitsClickedSigna
                    Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
 
     // Act
-    m_tester->mouseReleaseEvent(&ev);
+    call_private_fun::CompactNetworkMonitormouseReleaseEvent(*m_tester, &ev);
 
     // Assert: 左键 -> 发射 clicked("MSG_NET")
     EXPECT_EQ(spy.count(), 1);
@@ -331,7 +359,7 @@ TEST_F(CompactNetworkMonitorTest, MouseReleaseEvent_RightButton_DoesNotEmitSigna
                    Qt::RightButton, Qt::RightButton, Qt::NoModifier);
 
     // Act: 右键释放
-    m_tester->mouseReleaseEvent(&ev);
+    call_private_fun::CompactNetworkMonitormouseReleaseEvent(*m_tester, &ev);
 
     // Assert: 非左键 -> 不发射
     EXPECT_EQ(spy.count(), 0);
@@ -339,7 +367,7 @@ TEST_F(CompactNetworkMonitorTest, MouseReleaseEvent_RightButton_DoesNotEmitSigna
     // Act: 随后左键释放，验证信号连接本身有效
     QMouseEvent leftEv(QEvent::MouseButtonRelease, QPointF(10, 10),
                        Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    m_tester->mouseReleaseEvent(&leftEv);
+    call_private_fun::CompactNetworkMonitormouseReleaseEvent(*m_tester, &leftEv);
 
     // Assert
     EXPECT_EQ(spy.count(), 1);
@@ -355,8 +383,8 @@ TEST_F(CompactNetworkMonitorTest, MouseMoveEvent_AnyMovement_IsIgnoredAndSilent)
                    Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
 
     // Act: 两次移动不应产生任何点击
-    m_tester->mouseMoveEvent(&ev);
-    m_tester->mouseMoveEvent(&ev);
+    call_private_fun::CompactNetworkMonitormouseMoveEvent(*m_tester, &ev);
+    call_private_fun::CompactNetworkMonitormouseMoveEvent(*m_tester, &ev);
 
     // Assert: 不崩溃且不产生任何点击信号
     EXPECT_EQ(spy.count(), 0);
@@ -364,7 +392,7 @@ TEST_F(CompactNetworkMonitorTest, MouseMoveEvent_AnyMovement_IsIgnoredAndSilent)
     // Act: 左键释放
     QMouseEvent relEv(QEvent::MouseButtonRelease, QPointF(5, 5),
                       Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    m_tester->mouseReleaseEvent(&relEv);
+    call_private_fun::CompactNetworkMonitormouseReleaseEvent(*m_tester, &relEv);
 
     // Assert: 点击事件管线未被移动事件破坏
     EXPECT_EQ(spy.count(), 1);

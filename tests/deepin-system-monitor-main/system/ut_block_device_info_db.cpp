@@ -104,12 +104,15 @@ protected:
  * @brief 默认构造：设备列表为空
  * 覆盖分支: BlockDeviceInfoDB 构造 → m_deviceList 空初始化
  */
-TEST_F(UT_BlockDeviceInfoDB, initTest)
+TEST_F(UT_BlockDeviceInfoDB, initTest_DefaultCtor_EmptyDeviceList)
 {
-    // Arrange: SetUp 已创建对象
-    // Act & Assert
-    EXPECT_TRUE(m_tester->deviceList().isEmpty());
-    EXPECT_EQ(m_tester->deviceList().size(), 0);
+    // Arrange: SetUp 已创建对象且未收录任何设备
+    ASSERT_NE(m_tester, nullptr);
+    // Act: 读取设备列表
+    QList<BlockDevice> list = m_tester->deviceList();
+    // Assert: 默认构造后设备列表为空
+    EXPECT_TRUE(list.isEmpty());
+    EXPECT_EQ(list.size(), 0);
 }
 
 /**
@@ -179,10 +182,11 @@ TEST_F(UT_BlockDeviceInfoDB, test_readDiskInfo_filters_ram_and_loop)
     stub.set((QFileOpenPtr)((bool(QFile::*)(QIODevice::OpenMode))ADDR(QFile, open)), stub_QFile_open);
     // Act
     m_tester->readDiskInfo();
-    // Assert: 仅 sda 被收录
+    // Assert: 仅 sda 被收录（ram/loop 在尺寸查询前已被过滤）
     QList<BlockDevice> list = m_tester->deviceList();
     ASSERT_EQ(list.size(), 1);
     EXPECT_EQ(list.at(0).deviceName(), QByteArray("sda"));
+    EXPECT_EQ(g_readSizeCalls, 1);   // 仅 sda 被询问尺寸，ram0/loop0 未进入查询
 }
 
 /**
@@ -202,10 +206,11 @@ TEST_F(UT_BlockDeviceInfoDB, test_readDiskInfo_updatesExisting)
     stub.set((QFileOpenPtr)((bool(QFile::*)(QIODevice::OpenMode))ADDR(QFile, open)), stub_QFile_open);
     // Act
     m_tester->readDiskInfo();
-    // Assert: 不重复追加
+    // Assert: 不重复追加；已存在设备走更新路径，不再询问尺寸
     QList<BlockDevice> list = m_tester->deviceList();
     ASSERT_EQ(list.size(), 1);
     EXPECT_EQ(list.at(0).deviceName(), QByteArray("sda"));
+    EXPECT_EQ(g_readSizeCalls, 0);   // index != -1 直接更新，readDeviceSize 未被调用
 }
 
 /**
@@ -230,14 +235,16 @@ TEST_F(UT_BlockDeviceInfoDB, test_readDiskInfo_removesMissingDevice)
     QList<BlockDevice> list = m_tester->deviceList();
     ASSERT_EQ(list.size(), 1);
     EXPECT_EQ(list.at(0).deviceName(), QByteArray("sda"));
+    EXPECT_EQ(g_readSizeCalls, 0);   // sda 已存在走更新路径，不询问尺寸
 }
 
 /**
- * @brief 已知缺陷证据：连续两台设备缺失时，removeAt(i) 边删边走会漏检第二台
- * 覆盖分支: readDiskInfo: [removeAt(i) 后 i++ 跳过下一个元素 → gone2 残留]
- * 注: 该用例锁定当前实际行为；缺陷已在 Mode 5 缺陷清单登记，修复后应改为断言 size==1。
+ * @brief 连续两台设备缺失时均被移除（回归 e0a4080e 修复的 removeAt 跳检缺陷）
+ * 覆盖分支: readDiskInfo: [removeAt(i) 后 --i 回退重新检查当前位置 → 连续缺失均删除]
+ * 历史注: 源码 e0a4080e 已修复移除循环索引回退；本用例原锁定缺陷行为（gone2 残留），
+ *         随源码修复改为断言正确行为：两台缺失设备均被移除，仅剩 sda。
  */
-TEST_F(UT_BlockDeviceInfoDB, test_readDiskInfo_twoMissingDevices_skipDefect)
+TEST_F(UT_BlockDeviceInfoDB, test_readDiskInfo_twoMissingDevices_bothRemoved)
 {
     Stub stub;
     // Arrange: sda 存在，gone1/gone2 均不在目录中
@@ -252,11 +259,11 @@ TEST_F(UT_BlockDeviceInfoDB, test_readDiskInfo_twoMissingDevices_skipDefect)
     stub.set((QFileOpenPtr)((bool(QFile::*)(QIODevice::OpenMode))ADDR(QFile, open)), stub_QFile_open);
     // Act
     m_tester->readDiskInfo();
-    // Assert（当前实际行为）: gone1 被移除，gone2 因跳过而残留
+    // Assert（e0a4080e 修复后）: 连续缺失的 gone1/gone2 均被移除，仅保留 sda
     QList<BlockDevice> list = m_tester->deviceList();
-    ASSERT_EQ(list.size(), 2);
+    ASSERT_EQ(list.size(), 1);
     EXPECT_EQ(list.at(0).deviceName(), QByteArray("sda"));
-    EXPECT_EQ(list.at(1).deviceName(), QByteArray("gone2"));
+    EXPECT_EQ(g_readSizeCalls, 0);   // sda 已存在走更新路径，不询问尺寸
 }
 
 /**
@@ -292,10 +299,11 @@ TEST_F(UT_BlockDeviceInfoDB, test_update_delegatesToReadDiskInfo)
     stub.set((QFileOpenPtr)((bool(QFile::*)(QIODevice::OpenMode))ADDR(QFile, open)), stub_QFile_open);
     // Act
     m_tester->update();
-    // Assert: update 的效果与 readDiskInfo 一致
+    // Assert: update 的效果与 readDiskInfo 一致，且只委托了一次
     QList<BlockDevice> list = m_tester->deviceList();
     ASSERT_EQ(list.size(), 1);
     EXPECT_EQ(list.at(0).deviceName(), QByteArray("sda"));
+    EXPECT_EQ(g_readSizeCalls, 1);
 }
 
 /**

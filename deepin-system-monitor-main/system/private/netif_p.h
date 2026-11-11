@@ -110,6 +110,7 @@ public:
         , addr4infolst {other.addr4infolst}
         , addr6infolst {other.addr6infolst}
         , iw_info {std::unique_ptr<iw_info_t>(new iw_info_t(*(other.iw_info)))}
+        , isWireless {other.isWireless}
         , rx_packets {other.rx_packets}
         , rx_bytes {other.rx_bytes}
         , rx_errors {other.rx_errors}

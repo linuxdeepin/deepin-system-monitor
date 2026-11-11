@@ -218,7 +218,8 @@ public:
         if (m_tester) {
             m_tester->hide();
             m_tester->deleteLater();
-            QCoreApplication::processEvents();
+            // deleteLater 需要显式派发 DeferredDelete 事件，否则析构不会执行
+            QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
             QCoreApplication::processEvents();
             m_tester = nullptr;
         }
@@ -229,19 +230,34 @@ protected:
     Stub m_stub;   // 生命周期覆盖整个测试（SetUp 提前挂桩，fixture 销毁时恢复）
 };
 
-TEST_F(UT_AccountsWidget, Ctor_CreatesModelAndList)
+TEST_F(UT_AccountsWidget, Ctor_DefaultState_ModelsAndListReady)
 {
+    // Arrange：SetUp 已完成构造
+    ASSERT_NE(m_tester, nullptr);
+
+    // Act：读取构造后的成员指针
+    auto *userModel = m_tester->m_userModel;
+    auto *itemModel = m_tester->m_userItemModel;
+    auto *listView = m_tester->m_userlistView;
+
     // Assert：构造创建账户模型、条目模型与用户列表视图
-    EXPECT_NE(m_tester->m_userModel, nullptr);
-    EXPECT_NE(m_tester->m_userItemModel, nullptr);
-    EXPECT_NE(m_tester->m_userlistView, nullptr);
+    EXPECT_NE(userModel, nullptr);
+    EXPECT_NE(itemModel, nullptr);
+    EXPECT_NE(listView, nullptr);
 }
 
-TEST_F(UT_AccountsWidget, Ctor_CreatesContextMenuWithFixedWidth)
+TEST_F(UT_AccountsWidget, Ctor_DefaultState_MenuAndFixedWidth)
 {
+    // Arrange：SetUp 已完成构造
+    ASSERT_NE(m_tester, nullptr);
+
+    // Act：读取构造后的宽度与菜单指针
+    const int minWidth = m_tester->minimumWidth();
+    auto *menu = m_tester->m_contextMenu;
+
     // Assert：列表固定宽度 250，右键菜单已创建
-    EXPECT_EQ(m_tester->minimumWidth(), 250);
-    EXPECT_NE(m_tester->m_contextMenu, nullptr);
+    EXPECT_EQ(minWidth, 250);
+    EXPECT_NE(menu, nullptr);
 }
 
 TEST_F(UT_AccountsWidget, InitConnection_MenuEditAction_Wired)
@@ -256,8 +272,14 @@ TEST_F(UT_AccountsWidget, InitConnection_MenuEditAction_Wired)
     // Act：触发菜单动作
     emit m_tester->m_contextMenu->actions().first()->trigger();
 
-    // Assert：连接生效，EditAccount 被调用
+    // Assert：连接生效，EditAccount 被调用且连接持续有效
     EXPECT_EQ(s_stubEditAccountCount, 1);
+
+    // Act：再次触发
+    emit m_tester->m_contextMenu->actions().first()->trigger();
+
+    // Assert：连接未被断开，计数递增
+    EXPECT_EQ(s_stubEditAccountCount, 2);
 }
 
 TEST_F(UT_AccountsWidget, InitConnection_ListClick_Wired)
@@ -331,7 +353,7 @@ TEST_F(UT_AccountsWidget, AddUser_CurrentUser_MovesToTop)
     EXPECT_EQ(m_tester->m_userItemModel->item(1)->text(), QString("bob"));
 }
 
-TEST_F(UT_AccountsWidget, RemoveUser_RemovesRowAndListEntry)
+TEST_F(UT_AccountsWidget, RemoveUser_ExistingUser_RowAndListEntryRemoved)
 {
     // Arrange
     User alice;
@@ -350,7 +372,7 @@ TEST_F(UT_AccountsWidget, RemoveUser_RemovesRowAndListEntry)
     EXPECT_TRUE(m_tester->m_userList.contains(&bob));
 }
 
-TEST_F(UT_AccountsWidget, AddInfo_AddsAllModelUsers)
+TEST_F(UT_AccountsWidget, AddInfo_NewUsers_AllAppendedToList)
 {
     // Arrange（B4 分支）：stub 模型返回 2 个用户
     User alice;
@@ -367,7 +389,7 @@ TEST_F(UT_AccountsWidget, AddInfo_AddsAllModelUsers)
     EXPECT_EQ(m_tester->m_userList.size(), 2);
 }
 
-TEST_F(UT_AccountsWidget, OnUpdateUserList_RemovesVanishedUsers)
+TEST_F(UT_AccountsWidget, OnUpdateUserList_VanishedUser_EntryRemoved)
 {
     // Arrange：列表先有 alice/bob，模型更新后只剩 bob
     User alice;
@@ -387,7 +409,7 @@ TEST_F(UT_AccountsWidget, OnUpdateUserList_RemovesVanishedUsers)
     EXPECT_TRUE(m_tester->m_userList.contains(&bob));
 }
 
-TEST_F(UT_AccountsWidget, OnUpdateUserList_AddsNewUsers)
+TEST_F(UT_AccountsWidget, OnUpdateUserList_NewUser_EntryAppended)
 {
     // Arrange：列表先有 alice，模型更新后出现 bob
     User alice;
@@ -450,6 +472,7 @@ TEST_F(UT_AccountsWidget, GetCurrentItemUserName_NoMatch_ReturnsEmpty)
 
     // Assert：返回空串（强异常安全：不崩溃、无错误数据）
     EXPECT_TRUE(name.isEmpty());
+    EXPECT_EQ(name, QString());
 }
 
 TEST_F(UT_AccountsWidget, GetUserToBeOperated_Found_SetsMember)
@@ -463,8 +486,9 @@ TEST_F(UT_AccountsWidget, GetUserToBeOperated_Found_SetsMember)
     // Act
     m_tester->getUserToBeOperated("Alice");
 
-    // Assert：成员被设置为匹配用户
+    // Assert：成员被设置为匹配用户且内容正确
     EXPECT_EQ(m_tester->m_userToBeOperated, &alice);
+    EXPECT_EQ(m_tester->m_userToBeOperated->name(), QString("alice-login"));
 }
 
 TEST_F(UT_AccountsWidget, GetUserToBeOperated_Missing_KeepsMember)
@@ -481,9 +505,10 @@ TEST_F(UT_AccountsWidget, GetUserToBeOperated_Missing_KeepsMember)
 
     // Assert：成员保持不变（强异常安全）
     EXPECT_EQ(m_tester->m_userToBeOperated, &alice);
+    EXPECT_EQ(m_tester->m_userToBeOperated->name(), QString("alice"));
 }
 
-TEST_F(UT_AccountsWidget, OnItemClicked_EmitsSignalCurrentChanged)
+TEST_F(UT_AccountsWidget, OnItemClicked_LeftClick_EmitsCurrentChanged)
 {
     // Arrange（B13 分支）
     User alice;
@@ -499,7 +524,7 @@ TEST_F(UT_AccountsWidget, OnItemClicked_EmitsSignalCurrentChanged)
     EXPECT_EQ(m_tester->m_userlistView->currentIndex().row(), 0);
 }
 
-TEST_F(UT_AccountsWidget, OnRightButtonClicked_PopsMenuAtGlobalPos)
+TEST_F(UT_AccountsWidget, OnRightButtonClicked_AnyIndex_PopsMenuAtPos)
 {
     // Arrange（B14 分支）
     typedef void (*fptr_popup)(QMenu *, const QPoint &, QAction *);
@@ -516,7 +541,7 @@ TEST_F(UT_AccountsWidget, OnRightButtonClicked_PopsMenuAtGlobalPos)
     EXPECT_EQ(s_stubMenuPopupPos, m_tester->mapToGlobal(local));
 }
 
-TEST_F(UT_AccountsWidget, OnEditAccountTriggered_CallsModelEditAccount)
+TEST_F(UT_AccountsWidget, OnEditAccountTriggered_MenuAction_ModelEditCalled)
 {
     // Arrange（B15 分支）
     typedef void (*fptr_edit)(AccountsInfoModel *);
@@ -529,9 +554,15 @@ TEST_F(UT_AccountsWidget, OnEditAccountTriggered_CallsModelEditAccount)
 
     // Assert：恰好调用一次
     EXPECT_EQ(s_stubEditAccountCount, 1);
+
+    // Act：再次触发
+    m_tester->onEditAccountTriggered();
+
+    // Assert：调用持续生效，累计两次
+    EXPECT_EQ(s_stubEditAccountCount, 2);
 }
 
-TEST_F(UT_AccountsWidget, OnConnectTriggered_ActivatesUserSession)
+TEST_F(UT_AccountsWidget, OnConnectTriggered_ValidUser_SessionActivated)
 {
     // Arrange（B16 分支）：先选中待操作用户
     User alice;
@@ -552,7 +583,7 @@ TEST_F(UT_AccountsWidget, OnConnectTriggered_ActivatesUserSession)
     EXPECT_EQ(s_stubActivateName, QString("alice-login"));
 }
 
-TEST_F(UT_AccountsWidget, OnDisconnectTriggered_LocksUserSession)
+TEST_F(UT_AccountsWidget, OnDisconnectTriggered_ValidUser_SessionLocked)
 {
     // Arrange（B17 分支）
     User alice;
@@ -627,8 +658,9 @@ TEST_F(UT_AccountsWidget, OnLogoutTriggered_Cancelled_DoesNotLogout)
     // Act
     m_tester->onLogoutTriggered();
 
-    // Assert：未登出（强异常安全）
+    // Assert：未登出（强异常安全），用户列表无副作用
     EXPECT_EQ(s_stubLogoutCount, 0);
+    EXPECT_EQ(m_tester->m_userList.size(), 1);
 }
 
 TEST_F(UT_AccountsWidget, PixmapToRound_NullPixmap_ReturnsNull)
@@ -639,8 +671,9 @@ TEST_F(UT_AccountsWidget, PixmapToRound_NullPixmap_ReturnsNull)
     // Act
     QPixmap result = m_tester->pixmapToRound(nullPixmap);
 
-    // Assert：空输入返回空输出
+    // Assert：空输入返回空输出，尺寸为 0x0
     EXPECT_TRUE(result.isNull());
+    EXPECT_EQ(result.size(), QSize(0, 0));
 }
 
 TEST_F(UT_AccountsWidget, PixmapToRound_ValidPixmap_KeepsSize)

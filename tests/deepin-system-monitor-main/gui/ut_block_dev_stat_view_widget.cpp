@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2026 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //Self
@@ -88,16 +88,20 @@ protected:
 };
 
 // 构造：onUpdateData 依据桩数据创建 2 个设备条目并完成布局
-TEST_F(UT_BlockStatViewWidget, initTest)
+TEST_F(UT_BlockStatViewWidget, Ctor_StubDevices_TwoItemsFirstActive)
 {
-    // Act: SetUp 已构造（deviceList 桩返回 2 台设备）
-    // Assert
+    // Arrange：SetUp 已构造（deviceList 桩返回 2 台设备）
     ASSERT_NE(m_tester, nullptr);
+
+    // Act: 读取构造后的条目状态
+    const auto &items = m_tester->m_listBlockItemWidget;
+
+    // Assert
     EXPECT_EQ(m_tester->m_listDevice.size(), 2);
-    EXPECT_EQ(m_tester->m_listBlockItemWidget.size(), 2);
+    EXPECT_EQ(items.size(), 2);
     EXPECT_EQ(m_tester->m_mapDeviceItemWidget.size(), 2);
-    EXPECT_EQ(m_tester->m_listBlockItemWidget[0]->isActiveItem(), true);
-    EXPECT_EQ(m_tester->m_listBlockItemWidget[1]->isActiveItem(), false);
+    EXPECT_EQ(items[0]->isActiveItem(), true);
+    EXPECT_EQ(items[1]->isActiveItem(), false);
 }
 
 // resizeEvent 应触发 updateWidgetGeometry（无设备时安全返回）
@@ -239,7 +243,7 @@ TEST_F(UT_BlockStatViewWidget, test_onUpdateData_01)
               QByteArray("ut-sm-disk-4"));
 }
 
-// onUpdateData：设备数量减少时旧条目被隐藏但保留（源码仅增不删）
+// onUpdateData：设备数量减少时多余条目被移除（源码 takeLast+delete）
 TEST_F(UT_BlockStatViewWidget, test_onUpdateData_02)
 {
     // Arrange
@@ -248,15 +252,16 @@ TEST_F(UT_BlockStatViewWidget, test_onUpdateData_02)
     // Act
     m_tester->onUpdateData();
 
-    // Assert: 设备列表收缩为 1；条目列表只增不删，多余条目转为隐藏
+    // Assert: 设备列表收缩为 1；源码在设备减少时移除并删除多余条目
     EXPECT_EQ(m_tester->m_listDevice.size(), 1);
-    EXPECT_EQ(m_tester->m_listBlockItemWidget.size(), 2);
+    EXPECT_EQ(m_tester->m_listBlockItemWidget.size(), 1);
     EXPECT_EQ(m_tester->m_listBlockItemWidget[0]->m_mode,
               BlockDevItemWidget::TitleStyle::TITLE_VERTICAL);
-    EXPECT_EQ(m_tester->m_listBlockItemWidget[1]->isHidden(), true);
+    EXPECT_EQ(m_tester->m_listBlockItemWidget[0]->m_blokeDeviceInfo.deviceName(),
+              QByteArray("ut-sm-disk-0"));
 }
 
-// onUpdateData：空设备列表时映射被清空，条目保留（updateWidgetGeometry 早退）
+// onUpdateData：空设备列表时映射被清空，多余条目全部移除
 TEST_F(UT_BlockStatViewWidget, test_onUpdateData_03)
 {
     // Arrange
@@ -265,10 +270,10 @@ TEST_F(UT_BlockStatViewWidget, test_onUpdateData_03)
     // Act
     m_tester->onUpdateData();
 
-    // Assert
+    // Assert: 设备列表为空；源码 takeLast+delete 移除全部条目，映射清空
     EXPECT_EQ(m_tester->m_listDevice.size(), 0);
     EXPECT_TRUE(m_tester->m_mapDeviceItemWidget.isEmpty());
-    EXPECT_EQ(m_tester->m_listBlockItemWidget.size(), 2);
+    EXPECT_EQ(m_tester->m_listBlockItemWidget.size(), 0);
 }
 
 // fontChanged 应传播到所有条目
@@ -283,6 +288,7 @@ TEST_F(UT_BlockStatViewWidget, test_fontChanged_01)
 
     // Assert
     ASSERT_EQ(m_tester->m_listBlockItemWidget.size(), 2);
+    EXPECT_EQ(m_tester->m_listBlockItemWidget[0]->m_font, font);
     for (int i = 0; i < m_tester->m_listBlockItemWidget.size(); ++i) {
         EXPECT_EQ(m_tester->m_listBlockItemWidget[i]->m_font, font) << i;
     }

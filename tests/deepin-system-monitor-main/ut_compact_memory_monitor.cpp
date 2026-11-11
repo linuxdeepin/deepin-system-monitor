@@ -32,6 +32,7 @@
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
+#include "addr_pri.h"
 
 //qt
 #include <DApplication>
@@ -46,6 +47,25 @@ DWIDGET_USE_NAMESPACE
 #include <DGuiApplicationHelper>
 DGUI_USE_NAMESPACE
 #endif
+
+
+// 私有成员/受保护函数经 addr_pri.h 访问（不修改生产头文件）
+ACCESS_PRIVATE_FIELD(CompactMemoryMonitor, QColor, memoryBackgroundColor)
+ACCESS_PRIVATE_FIELD(CompactMemoryMonitor, QColor, swapBackgroundColor)
+ACCESS_PRIVATE_FIELD(CompactMemoryMonitor, QFont, m_contentFont)
+ACCESS_PRIVATE_FIELD(CompactMemoryMonitor, QFont, m_subContentFont)
+ACCESS_PRIVATE_FIELD(CompactMemoryMonitor, QFont, m_memPercentFont)
+ACCESS_PRIVATE_FIELD(CompactMemoryMonitor, qreal, m_lastMemPercent)
+ACCESS_PRIVATE_FIELD(CompactMemoryMonitor, qreal, m_lastSwapPercent)
+ACCESS_PRIVATE_FIELD(CompactMemoryMonitor, QPropertyAnimation *, m_animation)
+ACCESS_PRIVATE_FUN(CompactMemoryMonitor, void(int), changeTheme)
+ACCESS_PRIVATE_FUN(CompactMemoryMonitor, void(const QFont &), changeFont)
+ACCESS_PRIVATE_FUN(CompactMemoryMonitor, void(void), animationFinshed)
+ACCESS_PRIVATE_FUN(CompactMemoryMonitor, void(void), onStatInfoUpdated)
+ACCESS_PRIVATE_FUN(CompactMemoryMonitor, void(void), onValueChanged)
+ACCESS_PRIVATE_FUN(CompactMemoryMonitor, qreal(void) const, progress)
+ACCESS_PRIVATE_FUN(CompactMemoryMonitor, void(QMouseEvent *), mouseReleaseEvent)
+ACCESS_PRIVATE_FUN(CompactMemoryMonitor, void(QMouseEvent *), mouseMoveEvent)
 
 /***************************************STUB begin*********************************************/
 
@@ -115,8 +135,8 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_Ctor_DefaultSetup_FixedSize
     // Assert: 固定宽为状态栏宽度、高为 150，动画时长 10ms，进度初值 0
     EXPECT_EQ(actualWidth, expectedWidth);
     EXPECT_EQ(m_tester->height(), expectedHeight);
-    EXPECT_EQ(m_tester->m_animation->duration(), 10);
-    EXPECT_DOUBLE_EQ(m_tester->progress(), 0.0);
+    EXPECT_EQ(access_private_field::CompactMemoryMonitorm_animation(*m_tester)->duration(), 10);
+    EXPECT_DOUBLE_EQ(call_private_fun::CompactMemoryMonitorprogress(*m_tester), 0.0);
 }
 
 TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_SetProgress_AnyValue_PropertyRoundTrip)
@@ -126,7 +146,7 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_SetProgress_AnyValue_Proper
     // Act: 通过 Qt 属性系统写入 progress
     m_tester->setProperty("progress", expected);
     // Assert: 属性读写回路一致
-    EXPECT_DOUBLE_EQ(m_tester->progress(), expected);
+    EXPECT_DOUBLE_EQ(call_private_fun::CompactMemoryMonitorprogress(*m_tester), expected);
     EXPECT_DOUBLE_EQ(m_tester->property("progress").toDouble(), expected);
 }
 
@@ -135,10 +155,10 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_ChangeTheme_LightType_Backg
     // Arrange: 预期亮色主题下内存/交换分区底色均为黑色
     const std::string expectedColor = "#000000";
     // Act: 亮色主题（int 形参，LightType=1）
-    m_tester->changeTheme(1);
+    call_private_fun::CompactMemoryMonitorchangeTheme(*m_tester, 1);
     // Assert: 亮色主题下内存/交换分区底色均为黑色
-    EXPECT_EQ(m_tester->memoryBackgroundColor.name().toStdString(), std::string("#000000"));
-    EXPECT_EQ(m_tester->swapBackgroundColor.name().toStdString(), std::string("#000000"));
+    EXPECT_EQ(access_private_field::CompactMemoryMonitormemoryBackgroundColor(*m_tester).name().toStdString(), std::string("#000000"));
+    EXPECT_EQ(access_private_field::CompactMemoryMonitorswapBackgroundColor(*m_tester).name().toStdString(), std::string("#000000"));
 }
 
 TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_ChangeTheme_DarkType_BackgroundColorsTurnWhite)
@@ -146,22 +166,22 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_ChangeTheme_DarkType_Backgr
     // Arrange: 预期暗色主题下内存/交换分区底色均为白色
     const std::string expectedColor = "#ffffff";
     // Act: 暗色主题（int 形参，DarkType=2）
-    m_tester->changeTheme(2);
+    call_private_fun::CompactMemoryMonitorchangeTheme(*m_tester, 2);
     // Assert: 暗色主题下内存/交换分区底色均为白色
-    EXPECT_EQ(m_tester->memoryBackgroundColor.name().toStdString(), expectedColor);
-    EXPECT_EQ(m_tester->swapBackgroundColor.name().toStdString(), expectedColor);
+    EXPECT_EQ(access_private_field::CompactMemoryMonitormemoryBackgroundColor(*m_tester).name().toStdString(), expectedColor);
+    EXPECT_EQ(access_private_field::CompactMemoryMonitorswapBackgroundColor(*m_tester).name().toStdString(), expectedColor);
 }
 
 TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_ChangeTheme_UnknownType_ThemeColorsUnchanged)
 {
     // Arrange: 先置亮色，记录当前底色
-    m_tester->changeTheme(1);
-    const QColor oldMemBg = m_tester->memoryBackgroundColor;
+    call_private_fun::CompactMemoryMonitorchangeTheme(*m_tester, 1);
+    const QColor oldMemBg = access_private_field::CompactMemoryMonitormemoryBackgroundColor(*m_tester);
     // Act: 未知主题（0 走 default 分支）
-    m_tester->changeTheme(0);
+    call_private_fun::CompactMemoryMonitorchangeTheme(*m_tester, 0);
     // Assert: 未知主题不改变底色
-    EXPECT_EQ(m_tester->memoryBackgroundColor, oldMemBg);
-    EXPECT_EQ(m_tester->memoryBackgroundColor.isValid(), true);
+    EXPECT_EQ(access_private_field::CompactMemoryMonitormemoryBackgroundColor(*m_tester), oldMemBg);
+    EXPECT_EQ(access_private_field::CompactMemoryMonitormemoryBackgroundColor(*m_tester).isValid(), true);
 }
 
 TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_ChangeFont_NormalFont_FontsAdjusted)
@@ -170,12 +190,12 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_ChangeFont_NormalFont_Fonts
     QFont font;
     font.setPointSizeF(10.0);
     // Act
-    m_tester->changeFont(font);
+    call_private_fun::CompactMemoryMonitorchangeFont(*m_tester, font);
     // Assert: 内容/次级内容字体缩 1pt 且内容字体 Medium，占比字体加粗
-    EXPECT_EQ(m_tester->m_contentFont.weight(), QFont::Medium);
-    EXPECT_NEAR(m_tester->m_contentFont.pointSizeF(), 9.0, 0.01);
-    EXPECT_NEAR(m_tester->m_subContentFont.pointSizeF(), 9.0, 0.01);
-    EXPECT_TRUE(m_tester->m_memPercentFont.bold());
+    EXPECT_EQ(access_private_field::CompactMemoryMonitorm_contentFont(*m_tester).weight(), QFont::Medium);
+    EXPECT_NEAR(access_private_field::CompactMemoryMonitorm_contentFont(*m_tester).pointSizeF(), 9.0, 0.01);
+    EXPECT_NEAR(access_private_field::CompactMemoryMonitorm_subContentFont(*m_tester).pointSizeF(), 9.0, 0.01);
+    EXPECT_TRUE(access_private_field::CompactMemoryMonitorm_memPercentFont(*m_tester).bold());
 }
 
 TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_AnimationFinshed_ValidMemInfo_LastPercentsComputed)
@@ -187,10 +207,10 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_AnimationFinshed_ValidMemIn
     stub.set(ADDR(core::system::MemInfo, swapTotal), stub_swapTotal);
     stub.set(ADDR(core::system::MemInfo, swapFree), stub_swapFree);
     // Act
-    m_tester->animationFinshed();
+    call_private_fun::CompactMemoryMonitoranimationFinshed(*m_tester);
     // Assert: 内存占用 75%，交换分区占用 50%
-    EXPECT_NEAR(m_tester->m_lastMemPercent, 0.75, 1e-6);
-    EXPECT_NEAR(m_tester->m_lastSwapPercent, 0.5, 1e-6);
+    EXPECT_NEAR(access_private_field::CompactMemoryMonitorm_lastMemPercent(*m_tester), 0.75, 1e-6);
+    EXPECT_NEAR(access_private_field::CompactMemoryMonitorm_lastSwapPercent(*m_tester), 0.5, 1e-6);
 }
 
 TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_OnStatInfoUpdated_StatUpdated_AnimationRunsToFinish)
@@ -202,12 +222,12 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_OnStatInfoUpdated_StatUpdat
     stub.set(ADDR(core::system::MemInfo, swapTotal), stub_swapTotal);
     stub.set(ADDR(core::system::MemInfo, swapFree), stub_swapFree);
     // Act
-    m_tester->onStatInfoUpdated();
+    call_private_fun::CompactMemoryMonitoronStatInfoUpdated(*m_tester);
     // Assert: 动画立即进入 Running，等待后自然结束并落盘最新占比
-    EXPECT_EQ(m_tester->m_animation->state(), QAbstractAnimation::Running);
+    EXPECT_EQ(access_private_field::CompactMemoryMonitorm_animation(*m_tester)->state(), QAbstractAnimation::Running);
     QTest::qWait(60);
-    EXPECT_EQ(m_tester->m_animation->state(), QAbstractAnimation::Stopped);
-    EXPECT_NEAR(m_tester->m_lastMemPercent, 0.75, 1e-6);
+    EXPECT_EQ(access_private_field::CompactMemoryMonitorm_animation(*m_tester)->state(), QAbstractAnimation::Stopped);
+    EXPECT_NEAR(access_private_field::CompactMemoryMonitorm_lastMemPercent(*m_tester), 0.75, 1e-6);
 }
 
 TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_OnValueChanged_ValueChanged_SchedulesRepaint)
@@ -219,7 +239,7 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_OnValueChanged_ValueChanged
     stub.set(ADDR(core::system::MemInfo, swapTotal), stub_swapTotal);
     stub.set(ADDR(core::system::MemInfo, swapFree), stub_swapFree);
     // Act
-    m_tester->onValueChanged();
+    call_private_fun::CompactMemoryMonitoronValueChanged(*m_tester);
     // Assert: update() 调度重绘，离屏渲染结果非空
     EXPECT_FALSE(m_tester->grab().isNull());
     EXPECT_EQ(m_tester->width(), common::getStatusBarMaxWidth());
@@ -263,7 +283,7 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_MouseReleaseEvent_LeftButto
                       Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton,
                       Qt::KeyboardModifier::NoModifier);
     // Act: 左键释放
-    m_tester->mouseReleaseEvent(&event);
+    call_private_fun::CompactMemoryMonitormouseReleaseEvent(*m_tester, &event);
     // Assert: 发射一次 clicked("MSG_MEM")，控件位置不受影响
     ASSERT_EQ(spy.count(), 1);
     EXPECT_EQ(spy.at(0).at(0).toString(), QString("MSG_MEM"));
@@ -279,7 +299,7 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_MouseReleaseEvent_RightButt
                       Qt::MouseButton::RightButton, Qt::MouseButton::RightButton,
                       Qt::KeyboardModifier::NoModifier);
     // Act: 右键释放
-    m_tester->mouseReleaseEvent(&event);
+    call_private_fun::CompactMemoryMonitormouseReleaseEvent(*m_tester, &event);
     // Assert: 非左键不发射信号
     EXPECT_EQ(spy.count(), 0);
     EXPECT_EQ(m_tester->height(), 150);
@@ -293,7 +313,7 @@ TEST_F(UT_CompactMemoryMonitor, CompactMemoryMonitor_MouseMoveEvent_AnyMove_Widg
                       Qt::MouseButton::NoButton, Qt::MouseButton::NoButton,
                       Qt::KeyboardModifier::NoModifier);
     // Act: 鼠标移动
-    m_tester->mouseMoveEvent(&event);
+    call_private_fun::CompactMemoryMonitormouseMoveEvent(*m_tester, &event);
     // Assert: 策略为屏蔽鼠标拖拽，控件位置不变
     EXPECT_EQ(m_tester->pos(), oldPos);
     EXPECT_EQ(m_tester->width(), common::getStatusBarMaxWidth());

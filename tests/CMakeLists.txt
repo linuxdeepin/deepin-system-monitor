@@ -659,6 +659,62 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_system_service_table_model.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_process_sort_filter_proxy_model.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_process_table_view.cpp)
+# --- APPENDED (V-8169 UT-sysmonitor-42 rewrite task, no existing lines changed) ----
+# The ten monitor/chart test TUs below are Qt6-compatible unit tests for the
+# deepin-system-monitor-main monitor widgets and chart helpers. They were
+# previously caught by the V-6431 wholesale exclusion above (the directory
+# globs also matched these rewritten files). Each file has been verified to
+# compile and pass against Qt 6.8 in this task before being re-included.
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_cpu_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_memory_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_compact_cpu_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_compact_memory_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_compact_network_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_compact_disk_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_network_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_smooth_curve_generator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_chart_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_toolbar.cpp)
+# --- end APPENDED block ------------------------------------------------------
+
+# --- APPENDED (V-T43 gui autotest re-include task, no existing lines changed) ----
+# 重纳入此前被 UT_LEGACY_EXCLUDE 排除的 gui 类测试 TU（逐类补齐后随本任务分支
+# 重新编入主测试目标 deepin-system-monitor-test）。
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_animation_stackedwidget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_xwin_kill_preview_background_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/base/ut_base_item_delegate.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/base/ut_base_detail_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_block_dev_item_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_mem_summary_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_block_dev_stat_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_netif_stat_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_xwin_kill_preview_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_block_dev_summary_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_accounts_widget.cpp)
+# --- end APPENDED block ------------------------------------------------------
+
+# --- APPENDED (V-8165 system module re-include task, no existing lines changed) ----
+# The ten system-module test TUs below were rewritten against the unified
+# stub-ext infrastructure in earlier rounds (net_info / wireless /
+# netif_info_db / block_device_info_db / device_db / netif_monitor /
+# system_monitor / netlink / nl_link / private netif_p) but were caught by
+# the V-6431 wholesale directory exclusion above and never compiled. The
+# tests build with -fno-access-control (line 20) so the private/protected
+# access they rely on is legal in this target. Each file is verified to
+# compile and pass against Qt 6.8 in this task before being re-included.
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_net_info.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_wireless.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_netif_info_db.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_block_device_info_db.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_device_db.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_netif_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_system_monitor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_netlink.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_nl_link.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/private/ut_netif_p.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
 add_executable(${PROJECT_NAME_TEST}

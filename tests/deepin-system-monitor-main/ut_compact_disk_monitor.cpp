@@ -14,6 +14,7 @@
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
+#include "addr_pri.h"
 
 //qt
 #include <QPainterPath>
@@ -21,6 +22,22 @@
 #include <QSignalSpy>
 
 using namespace core::system;
+
+
+// 私有成员/受保护函数经 addr_pri.h 访问（不修改生产头文件）
+ACCESS_PRIVATE_FIELD(CompactDiskMonitor, QList<qreal> *, readSpeeds)
+ACCESS_PRIVATE_FIELD(CompactDiskMonitor, QList<qreal> *, writeSpeeds)
+ACCESS_PRIVATE_FIELD(CompactDiskMonitor, qreal, m_readBps)
+ACCESS_PRIVATE_FIELD(CompactDiskMonitor, qreal, m_writeBps)
+ACCESS_PRIVATE_FIELD(CompactDiskMonitor, QPainterPath, readPath)
+ACCESS_PRIVATE_FIELD(CompactDiskMonitor, QPainterPath, writePath)
+ACCESS_PRIVATE_FIELD(CompactDiskMonitor, QFont, m_tagFont)
+ACCESS_PRIVATE_FIELD(CompactDiskMonitor, QFont, m_statFont)
+ACCESS_PRIVATE_FUN(CompactDiskMonitor, void(const QFont &), changeFont)
+using UtPathBuildFn = void(QList<double> *, QPainterPath &, qreal);
+ACCESS_PRIVATE_FUN(CompactDiskMonitor, UtPathBuildFn, getPainterPathByData)
+ACCESS_PRIVATE_FUN(CompactDiskMonitor, void(QMouseEvent *), mouseReleaseEvent)
+ACCESS_PRIVATE_FUN(CompactDiskMonitor, void(QMouseEvent *), mouseMoveEvent)
 
 /***************************************STUB begin*********************************************/
 namespace {
@@ -109,16 +126,16 @@ TEST_F(CompactDiskMonitorTest, Construction_DefaultInit_FixedSizeAndSpeedsListIn
     // Act: 读取构造后的固定尺寸与速率列表状态
     const int fixedWidth = m_tester->width();
     const int fixedHeight = m_tester->height();
-    const int rdSize = m_tester->readSpeeds->size();
-    const int wrSize = m_tester->writeSpeeds->size();
-    const double rdFirst = m_tester->readSpeeds->first();
-    const double wrFirst = m_tester->writeSpeeds->first();
+    const int rdSize = access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->size();
+    const int wrSize = access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->size();
+    const double rdFirst = access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->first();
+    const double wrFirst = access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->first();
     // Assert: 宽度 = 280，高度 = 160
     EXPECT_EQ(fixedWidth, 280);
     EXPECT_EQ(fixedHeight, 160);
     // Assert: 读写速率列表均初始化为 pointsNumber+1 个 0 值
-    EXPECT_NE(m_tester->readSpeeds, nullptr);
-    EXPECT_NE(m_tester->writeSpeeds, nullptr);
+    EXPECT_NE(access_private_field::CompactDiskMonitorreadSpeeds(*m_tester), nullptr);
+    EXPECT_NE(access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester), nullptr);
     EXPECT_EQ(rdSize, kPointsNumber + 1);
     EXPECT_EQ(wrSize, kPointsNumber + 1);
     EXPECT_DOUBLE_EQ(rdFirst, 0.0);
@@ -136,55 +153,55 @@ TEST_F(CompactDiskMonitorTest, UpdateStatus_WhenInvoked_ReadsDiskIoInfoAndAppend
     m_tester->updateStatus();
 
     // Assert: 私有状态被刷新为打桩值
-    EXPECT_DOUBLE_EQ(m_tester->m_readBps, 4096.0);
-    EXPECT_DOUBLE_EQ(m_tester->m_writeBps, 8192.0);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactDiskMonitorm_readBps(*m_tester), 4096.0);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactDiskMonitorm_writeBps(*m_tester), 8192.0);
     // Assert: 列表从初始 31 项 -> 追加 1 项(32) 超界 -> pop 1 项 = 31 项
-    EXPECT_EQ(m_tester->readSpeeds->size(), kPointsNumber + 1);
-    EXPECT_EQ(m_tester->writeSpeeds->size(), kPointsNumber + 1);
-    EXPECT_DOUBLE_EQ(m_tester->readSpeeds->last(), 4096.0);
-    EXPECT_DOUBLE_EQ(m_tester->writeSpeeds->last(), 8192.0);
+    EXPECT_EQ(access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->size(), kPointsNumber + 1);
+    EXPECT_EQ(access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->size(), kPointsNumber + 1);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->last(), 4096.0);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->last(), 8192.0);
 }
 
 TEST_F(CompactDiskMonitorTest, UpdateStatus_WhenListAtBoundary_PopsOldestEntry)
 {
     // Arrange: 清空列表后填满 pointsNumber+1 个可辨识旧值（31 项，处于阈值边界）
-    m_tester->readSpeeds->clear();
+    access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->clear();
     for (int i = 0; i <= kPointsNumber; ++i)
-        m_tester->readSpeeds->append(i * 2.0);
-    const double oldestExpectedAfterPop = m_tester->readSpeeds->at(1);
+        access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->append(i * 2.0);
+    const double oldestExpectedAfterPop = access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->at(1);
     s_readBps = 1024.0;
 
     // Act: 追加后变为 32 > pointsNumber+1，应 pop 掉最老一项
     m_tester->updateStatus();
 
     // Assert: 窗口长度维持 pointsNumber+1，且最老一项（值为 0）已被移除
-    EXPECT_EQ(m_tester->readSpeeds->size(), kPointsNumber + 1);
-    EXPECT_DOUBLE_EQ(m_tester->readSpeeds->first(), oldestExpectedAfterPop);
-    EXPECT_DOUBLE_EQ(m_tester->readSpeeds->last(), 1024.0);
+    EXPECT_EQ(access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->size(), kPointsNumber + 1);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->first(), oldestExpectedAfterPop);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->last(), 1024.0);
 }
 
 TEST_F(CompactDiskMonitorTest, UpdateStatus_WhenListBelowBoundary_KeepsAllEntries)
 {
     // Arrange: 列表长度(5)小于 pointsNumber+1，不触发 pop 分支
-    m_tester->readSpeeds->clear();
-    m_tester->readSpeeds->append(1.0);
-    m_tester->readSpeeds->append(2.0);
-    m_tester->readSpeeds->append(3.0);
-    m_tester->readSpeeds->append(4.0);
-    m_tester->readSpeeds->append(5.0);
-    m_tester->writeSpeeds->clear();
-    m_tester->writeSpeeds->append(1.0);
-    m_tester->writeSpeeds->append(2.0);
-    m_tester->writeSpeeds->append(3.0);
-    m_tester->writeSpeeds->append(4.0);
-    m_tester->writeSpeeds->append(5.0);
+    access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->clear();
+    access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->append(1.0);
+    access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->append(2.0);
+    access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->append(3.0);
+    access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->append(4.0);
+    access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->append(5.0);
+    access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->clear();
+    access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->append(1.0);
+    access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->append(2.0);
+    access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->append(3.0);
+    access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->append(4.0);
+    access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->append(5.0);
 
     // Act
     m_tester->updateStatus();
 
     // Assert: 全部保留，仅各自追加 1 项
-    EXPECT_EQ(m_tester->readSpeeds->size(), 6);
-    EXPECT_EQ(m_tester->writeSpeeds->size(), 6);
+    EXPECT_EQ(access_private_field::CompactDiskMonitorreadSpeeds(*m_tester)->size(), 6);
+    EXPECT_EQ(access_private_field::CompactDiskMonitorwriteSpeeds(*m_tester)->size(), 6);
 }
 
 TEST_F(CompactDiskMonitorTest, UpdateStatus_WhenInvoked_BuildsReadAndWritePaths)
@@ -197,8 +214,8 @@ TEST_F(CompactDiskMonitorTest, UpdateStatus_WhenInvoked_BuildsReadAndWritePaths)
     m_tester->updateStatus();
 
     // Assert: 路径由 31 个数据点生成：隐式 moveTo + 30 段 cubicTo（每段 3 元素）= 91
-    EXPECT_EQ(m_tester->readPath.elementCount(), 1 + 3 * kPointsNumber);
-    EXPECT_EQ(m_tester->writePath.elementCount(), 1 + 3 * kPointsNumber);
+    EXPECT_EQ(access_private_field::CompactDiskMonitorreadPath(*m_tester).elementCount(), 1 + 3 * kPointsNumber);
+    EXPECT_EQ(access_private_field::CompactDiskMonitorwritePath(*m_tester).elementCount(), 1 + 3 * kPointsNumber);
 }
 
 // ───────────────────────── getPainterPathByData ─────────────────────────
@@ -209,7 +226,7 @@ TEST_F(CompactDiskMonitorTest, GetPainterPathByData_WithEmptyList_ReturnsEmptyPa
 
     // Act
     QPainterPath path;
-    m_tester->getPainterPathByData(&emptyList, path, 30.0);
+    call_private_fun::CompactDiskMonitorgetPainterPathByData(*m_tester, &emptyList, path, 30.0);
 
     // Assert: 循环体不执行，路径为空
     EXPECT_TRUE(path.isEmpty());
@@ -223,7 +240,7 @@ TEST_F(CompactDiskMonitorTest, GetPainterPathByData_WithSinglePoint_ReturnsEmpty
 
     // Act
     QPainterPath path;
-    m_tester->getPainterPathByData(&single, path, 30.0);
+    call_private_fun::CompactDiskMonitorgetPainterPathByData(*m_tester, &single, path, 30.0);
 
     // Assert
     EXPECT_TRUE(path.isEmpty());
@@ -237,7 +254,7 @@ TEST_F(CompactDiskMonitorTest, GetPainterPathByData_WithThreePoints_GeneratesSev
 
     // Act
     QPainterPath path;
-    m_tester->getPainterPathByData(&data, path, 1.0);
+    call_private_fun::CompactDiskMonitorgetPainterPathByData(*m_tester, &data, path, 1.0);
 
     // Assert: 元素数 = 1 + 3*2 = 7，隐式 moveTo 落在原点
     EXPECT_EQ(path.elementCount(), 7);
@@ -252,13 +269,13 @@ TEST_F(CompactDiskMonitorTest, ChangeFont_WithCustomFont_UpdatesTagAndStatFonts)
     font.setPointSizeF(9.0);
 
     // Act
-    m_tester->changeFont(font);
+    call_private_fun::CompactDiskMonitorchangeFont(*m_tester, font);
 
     // Assert: tag 字体 -1ptF 且 Medium 字重
-    EXPECT_DOUBLE_EQ(m_tester->m_tagFont.pointSizeF(), 8.0);
-    EXPECT_EQ(m_tester->m_tagFont.weight(), QFont::Medium);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactDiskMonitorm_tagFont(*m_tester).pointSizeF(), 8.0);
+    EXPECT_EQ(access_private_field::CompactDiskMonitorm_tagFont(*m_tester).weight(), QFont::Medium);
     // Assert: stat 字体 -1ptF
-    EXPECT_DOUBLE_EQ(m_tester->m_statFont.pointSizeF(), 8.0);
+    EXPECT_DOUBLE_EQ(access_private_field::CompactDiskMonitorm_statFont(*m_tester).pointSizeF(), 8.0);
 }
 
 // ───────────────────────── mouseReleaseEvent ─────────────────────────
@@ -270,7 +287,7 @@ TEST_F(CompactDiskMonitorTest, MouseReleaseEvent_LeftButton_EmitsClickedSignal)
                    Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
 
     // Act
-    m_tester->mouseReleaseEvent(&ev);
+    call_private_fun::CompactDiskMonitormouseReleaseEvent(*m_tester, &ev);
 
     // Assert: 左键 -> 发射 clicked("MSG_DISK")
     EXPECT_EQ(spy.count(), 1);
@@ -286,7 +303,7 @@ TEST_F(CompactDiskMonitorTest, MouseReleaseEvent_RightButton_DoesNotEmitSignal)
                    Qt::RightButton, Qt::RightButton, Qt::NoModifier);
 
     // Act: 右键释放
-    m_tester->mouseReleaseEvent(&ev);
+    call_private_fun::CompactDiskMonitormouseReleaseEvent(*m_tester, &ev);
 
     // Assert: 非左键 -> 不发射
     EXPECT_EQ(spy.count(), 0);
@@ -294,7 +311,7 @@ TEST_F(CompactDiskMonitorTest, MouseReleaseEvent_RightButton_DoesNotEmitSignal)
     // Act: 随后左键释放，验证信号连接本身有效
     QMouseEvent leftEv(QEvent::MouseButtonRelease, QPointF(10, 10),
                        Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    m_tester->mouseReleaseEvent(&leftEv);
+    call_private_fun::CompactDiskMonitormouseReleaseEvent(*m_tester, &leftEv);
 
     // Assert
     EXPECT_EQ(spy.count(), 1);
@@ -310,8 +327,8 @@ TEST_F(CompactDiskMonitorTest, MouseMoveEvent_AnyMovement_IsIgnoredAndSilent)
                    Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
 
     // Act: 两次移动不应产生任何点击
-    m_tester->mouseMoveEvent(&ev);
-    m_tester->mouseMoveEvent(&ev);
+    call_private_fun::CompactDiskMonitormouseMoveEvent(*m_tester, &ev);
+    call_private_fun::CompactDiskMonitormouseMoveEvent(*m_tester, &ev);
 
     // Assert: 不崩溃且不产生任何点击信号
     EXPECT_EQ(spy.count(), 0);
@@ -319,7 +336,7 @@ TEST_F(CompactDiskMonitorTest, MouseMoveEvent_AnyMovement_IsIgnoredAndSilent)
     // Act: 左键释放
     QMouseEvent relEv(QEvent::MouseButtonRelease, QPointF(5, 5),
                       Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    m_tester->mouseReleaseEvent(&relEv);
+    call_private_fun::CompactDiskMonitormouseReleaseEvent(*m_tester, &relEv);
 
     // Assert: 点击事件管线未被移动事件破坏
     EXPECT_EQ(spy.count(), 1);

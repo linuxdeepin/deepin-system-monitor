@@ -52,8 +52,8 @@
  *  B9  mapUnitFiles：非模板单元 → DBus 取 Id/描述/状态/PID    — full 用例（bar.service）
  *  B10 resultReady 汇总发射                       — full/dbus_errors 用例
  * [readUnitDescriptionFromUnitFile 分支清单]
- *  fopen 失败 → 返回空；首行存在 → 预置 "Description=" 前缀取首行（疑似源码缺陷：未按行匹配 Description=，
- *  会对任意首行加前缀——用例按当前实现行为断言并在缺陷清单标红）；空文件 → 返回空
+ *  fopen 失败 → 返回空；逐行匹配 "Description=" 前缀行并原样返回（PR #748 修复后行为，无前缀叠加）；
+ *  无匹配行/空文件 → 返回空
  */
 
 namespace {
@@ -317,8 +317,8 @@ TEST_F(UT_ServiceManagerWorker, startJob_full_pipeline)
     EXPECT_EQ(foo.getSName(), "foo@");
     EXPECT_EQ(foo.getState(), "static");
     EXPECT_EQ(foo.getStartupType(), QString(kServiceNAStartup));
-    // 当前实现行为：对文件首行整体预置 "Description=" 前缀（疑似源码缺陷，已标红报告）
-    EXPECT_EQ(foo.getDescription(), QString("Description=Description=Foo Template"));
+    // 修复后行为（PR #748）：逐行匹配 "Description=" 前缀行并原样返回，无前缀叠加
+    EXPECT_EQ(foo.getDescription(), QString("Description=Foo Template"));
 
     const SystemServiceEntry &bar = list.at(2);
     EXPECT_EQ(bar.getId(), "bar.service");
@@ -462,7 +462,7 @@ TEST_P(UT_ServiceManagerWorker_ReadDesc, reads_first_line_with_prefix)
         // Act
         const QString desc = ServiceManagerWorker::readUnitDescriptionFromUnitFile(path);
 
-        // Assert（按当前实现行为：首行前预置 "Description="）
+        // Assert（修复后行为：返回首个 Description= 行原文，无前缀叠加）
         EXPECT_EQ(desc, cs.expected);
     } else {
         // Act：不存在的路径 → fopen 失败分支
@@ -474,9 +474,9 @@ TEST_P(UT_ServiceManagerWorker_ReadDesc, reads_first_line_with_prefix)
 }
 
 INSTANTIATE_TEST_SUITE_P(FileInputs, UT_ServiceManagerWorker_ReadDesc,
-                         ::testing::Values(ReadDescCase{"Description=Foo Template\n", "Description=Description=Foo Template"},
-                                           ReadDescCase{"[Unit]\nDescription=Foo\n", "Description=[Unit]"},
-                                           ReadDescCase{"\n", "Description="},
+                         ::testing::Values(ReadDescCase{"Description=Foo Template\n", "Description=Foo Template"},
+                                           ReadDescCase{"[Unit]\nDescription=Foo\n", "Description=Foo"},
+                                           ReadDescCase{"\n", QString()},
                                            ReadDescCase{QString(), QString()}));
 
 // readUnitDescriptionFromUnitFile：文件存在但为 0 字节 → fgets 立即 EOF → 警告并返回空

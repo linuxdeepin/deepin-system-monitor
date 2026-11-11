@@ -187,9 +187,8 @@ TEST_F(UT_SystemServiceEntry, copy_ctor_shared_then_detach_on_write)
     copy.setMainPID(1u);
     // 疑似源码缺陷（见 defects-summary.md DEF-002）：system_service_entry.h:70 成员为
     // QExplicitlySharedDataPointer，而 setter 直接 data->field = ... 未先 data.detach()。
-    // QExplicitlySharedDataPointer 与 QSharedDataPointer 不同，非 const 访问不自动分离，
-    // 导致写副本会同步污染源对象（所有拷贝共享同一数据块）。按“只标红不修源码”约定，
-    // 检测到该行为时 SKIP 记录；源码修复后本分支不再命中，恢复执行原始断言。
+    // DEF-002 已由 PR #747 修复（setter 先 data.detach()），本守护分支正常不再命中；
+    // 若未来回归（写副本污染源对象）则 SKIP 提示。
     if (src.getId() != f.id || src.getMainPID() != f.mainPID)
         GTEST_SKIP() << "source defect DEF-002: QExplicitlySharedDataPointer setter without detach() aliases all copies";
     // Assert：源保持不变，副本生效
@@ -250,8 +249,8 @@ TEST_F(UT_SystemServiceEntry, pimpl_shared_data_isolation)
     // Act
     a.setActiveState("deactivating");
 
-    // 疑似源码缺陷（见 defects-summary.md DEF-002）：写 a 会透过 QExplicitlySharedDataPointer
-    // 污染同源的 b/src。检测到时 SKIP 记录；源码修复后本分支不再命中，恢复执行原始断言。
+    // DEF-002 已由 PR #747 修复（setter 先 data.detach()），本守护分支正常不再命中；
+    // 若未来回归（写 a 污染同源 b/src）则 SKIP 提示。
     if (b.getActiveState() != f.activeState || src.getActiveState() != f.activeState)
         GTEST_SKIP() << "source defect DEF-002: QExplicitlySharedDataPointer setter without detach() aliases all copies";
 
