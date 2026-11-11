@@ -114,6 +114,7 @@ QIcon ProcessIcon::icon() const
 }
 
 struct icon_data_t *ProcessIcon::defaultIconData(const QString &procname) const {
+    Q_UNUSED(procname);
     // qCDebug(app) << "Creating default icon data for process:" << procname;
     auto *iconData = new struct icon_data_name_type();
     iconData->type = kIconDataNameType;
@@ -123,6 +124,7 @@ struct icon_data_t *ProcessIcon::defaultIconData(const QString &procname) const 
 }
 
 struct icon_data_t *ProcessIcon::terminalIconData(const QString &procname) const {
+    Q_UNUSED(procname);
     // qCDebug(app) << "Creating terminal icon data for process:" << procname;
     auto *iconData = new struct icon_data_name_type();
     iconData->type = kIconDataNameType;
