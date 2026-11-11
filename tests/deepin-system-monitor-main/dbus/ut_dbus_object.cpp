@@ -21,7 +21,7 @@
 // getInstance()              | low   | 1 | 1 | 两次调用同实例（覆盖创建+快路径）
 // registerOrNotify()         | mid   | 2 | 3 | 注册成功 / 已占用+通知带错误 / 已占用+通知无错误
 // unRegister()               | low   | 1 | 1 | unregisterService 被调用一次
-// handleWindow()             | mid   | 2 | 1 | 最小化窗口被还原（raise/activate 经真实 offscreen 窗口）
+// handleWindow()             | mid   | 2 | 2 | 最小化窗口被还原（raise/activate 经真实 offscreen 窗口）/ 空主窗口守卫分支不崩溃
 // ~DBusObject()              | low   | 1 | 1 | 堆实例析构覆盖（单例析构在 __gcov_dump 后不可测） |
 //
 // ============================== 最小清单 ==============================
@@ -47,12 +47,12 @@
 // unRegister():
 //   B4  unregisterService(DBUS_SERVER) 恰好一次   → UnRegister_CalledOnce_UnregistersService
 // handleWindow():
-//   B5  gApp->mainWindow() 非空 → setWindowState 清最小化 + raise + activateWindow → HandleWindow_MinimizedWindow_RestoresState
-//   B6  mw 为空的防御分支：源码直接解引用 mw，无空检查（疑似缺陷，见 defects.json），不可测崩溃路径
+//   B5  gApp->mainWindow() 非空且最小化 → setWindowState 清最小化 + raise + activateWindow → HandleWindow_MinimizedWindow_RestoresState
+//   B6  mw 为空 → 守卫分支直接返回，不崩溃 → HandleWindow_NullMainWindow_NoCrash
 //
-// 疑似源码缺陷记录（不改源码，只标红）：
-//   #D-DBusObject-01 handleWindow() 未判空 gApp->mainWindow()：主窗口销毁后收到 DBus
-//      激活请求会空指针解引用（dbus_object.cpp:73-75）
+// 缺陷排查结论（本轮未发现疑似源码缺陷）：
+//   handleWindow() 源码已对 gApp->mainWindow() 判空（dbus_object.cpp:65-66 if (mw)），
+//   空 mw 时安全返回，无空指针解引用风险（早前记录的 #D-DBusObject-01 系误报，已撤销）。
 
 #include "dbus/dbus_object.h"
 //self
@@ -192,6 +192,19 @@ TEST_F(UT_DBusObject, Dtor_HeapInstance_DestructsCleanly)
     // Assert: 与单例互不为同一对象，析构不崩溃
     EXPECT_NE(heapInstance, &DBusObject::getInstance());
     delete heapInstance;
+    SUCCEED();
+}
+
+// B6: 主窗口指针为空时安全返回（源码 if (mw) 守卫分支）
+TEST_F(UT_DBusObject, HandleWindow_NullMainWindow_NoCrash)
+{
+    // Arrange: 无主窗口（gApp->mainWindow() 为空）
+    gApp->setMainWindow(nullptr);
+
+    // Act: 触发 DBus 激活
+    DBusObject::getInstance().handleWindow();
+
+    // Assert: 不崩溃即通过
     SUCCEED();
 }
 
