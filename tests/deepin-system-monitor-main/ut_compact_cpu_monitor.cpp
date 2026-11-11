@@ -33,6 +33,7 @@
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
+#include "addr_pri.h"
 
 //qt
 #include <DApplication>
@@ -49,6 +50,20 @@ DGUI_USE_NAMESPACE
 #include <cmath>
 #include <limits>
 #include <unistd.h>
+
+
+// 私有成员/受保护函数经 addr_pri.h 访问（不修改生产头文件）
+ACCESS_PRIVATE_FIELD(CompactCpuMonitor, QList<QList<qreal>>, cpuPercents)
+ACCESS_PRIVATE_FIELD(CompactCpuMonitor, QList<QColor>, cpuColors)
+ACCESS_PRIVATE_FIELD(CompactCpuMonitor, int, pointsNumber)
+ACCESS_PRIVATE_FIELD(CompactCpuMonitor, int, numCPU)
+ACCESS_PRIVATE_FIELD(CompactCpuMonitor, QFont, m_cpuFont)
+ACCESS_PRIVATE_FIELD(CompactCpuMonitor, QFont, m_statFont)
+ACCESS_PRIVATE_FUN(CompactCpuMonitor, void(const QFont &), changeFont)
+ACCESS_PRIVATE_FUN(CompactCpuMonitor, void(void), onDetailInfoClicked)
+ACCESS_PRIVATE_FUN(CompactCpuMonitor, void(QResizeEvent *), resizeEvent)
+ACCESS_PRIVATE_FUN(CompactCpuMonitor, void(QMouseEvent *), mouseReleaseEvent)
+ACCESS_PRIVATE_FUN(CompactCpuMonitor, void(QMouseEvent *), mouseMoveEvent)
 
 /***************************************STUB begin*********************************************/
 
@@ -135,20 +150,20 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_Ctor_DefaultSetup_InitCurveRowsAn
     // Assert: 固定尺寸正确，曲线行数为 numCPU+1（最后一行存总占用率），明细按钮已创建
     EXPECT_EQ(actualWidth, expectedWidth);
     EXPECT_EQ(m_tester->height(), expectedHeight);
-    EXPECT_EQ(m_tester->pointsNumber, int(common::getStatusBarMaxWidth() / 10));
-    EXPECT_EQ(m_tester->cpuPercents.size(), m_tester->numCPU + 1);
+    EXPECT_EQ(access_private_field::CompactCpuMonitorpointsNumber(*m_tester), int(common::getStatusBarMaxWidth() / 10));
+    EXPECT_EQ(access_private_field::CompactCpuMonitorcpuPercents(*m_tester).size(), access_private_field::CompactCpuMonitornumCPU(*m_tester) + 1);
     EXPECT_NE(detailButton(), nullptr);
 }
 
 TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_Ctor_InitCurve_AllCurveRowsFilledWithZero)
 {
     // Arrange: 预期行数 numCPU+1、每行 pointsNumber 个点
-    const int expectedRows = m_tester->numCPU + 1;
-    const int expectedPoints = m_tester->pointsNumber;
+    const int expectedRows = access_private_field::CompactCpuMonitornumCPU(*m_tester) + 1;
+    const int expectedPoints = access_private_field::CompactCpuMonitorpointsNumber(*m_tester);
     // Act: fixture 已构造 CompactCpuMonitor，遍历初始曲线统计零值点
     int zeroCount = 0;
     int total = 0;
-    for (const auto &row : m_tester->cpuPercents) {
+    for (const auto &row : access_private_field::CompactCpuMonitorcpuPercents(*m_tester)) {
         for (qreal v : row) {
             ++total;
             if (qFuzzyIsNull(v)) {
@@ -164,12 +179,12 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_Ctor_InitCurve_AllCurveRowsFilled
 TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_Ctor_PalettePrepared_ColorsCoverAllCurveRows)
 {
     // Arrange: 预期配色组数覆盖 numCPU+1 条曲线
-    const int expectedRows = m_tester->numCPU + 1;
+    const int expectedRows = access_private_field::CompactCpuMonitornumCPU(*m_tester) + 1;
     // Act: fixture 已构造 CompactCpuMonitor，读取初始配色表
-    const int colorCount = m_tester->cpuColors.size();
+    const int colorCount = access_private_field::CompactCpuMonitorcpuColors(*m_tester).size();
     // Assert: 初始调色板为 16 组硬编码颜色且颜色均有效
     EXPECT_EQ(colorCount, 16);
-    EXPECT_EQ(m_tester->cpuColors.first().isValid(), true);
+    EXPECT_EQ(access_private_field::CompactCpuMonitorcpuColors(*m_tester).first().isValid(), true);
 }
 
 TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_UpdateStatus_ValidPercent_AppendsToTotalAndCoreRows)
@@ -181,23 +196,23 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_UpdateStatus_ValidPercent_Appends
     // Act
     m_tester->updateStatus();
     // Assert: 总 CPU 行末值为 0.42 且保持 pointsNumber 长度，首个核心行已追加 0.20
-    EXPECT_NEAR(m_tester->cpuPercents[m_tester->numCPU].last(), 0.42, 1e-6);
-    EXPECT_EQ(m_tester->cpuPercents[m_tester->numCPU].size(), m_tester->pointsNumber);
-    EXPECT_NEAR(m_tester->cpuPercents[0].last(), 0.20, 1e-6);
+    EXPECT_NEAR(access_private_field::CompactCpuMonitorcpuPercents(*m_tester)[access_private_field::CompactCpuMonitornumCPU(*m_tester)].last(), 0.42, 1e-6);
+    EXPECT_EQ(access_private_field::CompactCpuMonitorcpuPercents(*m_tester)[access_private_field::CompactCpuMonitornumCPU(*m_tester)].size(), access_private_field::CompactCpuMonitorpointsNumber(*m_tester));
+    EXPECT_NEAR(access_private_field::CompactCpuMonitorcpuPercents(*m_tester)[0].last(), 0.20, 1e-6);
 }
 
 TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_UpdateStatus_NanPercent_KeepsTotalCurveUnchanged)
 {
     // Arrange: 记录总曲线首值并打桩返回 NaN
-    const qreal firstValue = m_tester->cpuPercents[m_tester->numCPU].first();
+    const qreal firstValue = access_private_field::CompactCpuMonitorcpuPercents(*m_tester)[access_private_field::CompactCpuMonitornumCPU(*m_tester)].first();
     Stub stub;
     stub.set(ADDR(CPUInfoModel, cpuAllPercent), stub_cpuAllPercent_nan);
     stub.set(ADDR(CPUInfoModel, cpuPercentList), stub_cpuPercentList_normal);
     // Act
     m_tester->updateStatus();
     // Assert: NaN 数据被拒绝，总曲线长度不变、数据未被污染
-    EXPECT_EQ(m_tester->cpuPercents[m_tester->numCPU].size(), m_tester->pointsNumber);
-    EXPECT_DOUBLE_EQ(m_tester->cpuPercents[m_tester->numCPU].first(), firstValue);
+    EXPECT_EQ(access_private_field::CompactCpuMonitorcpuPercents(*m_tester)[access_private_field::CompactCpuMonitornumCPU(*m_tester)].size(), access_private_field::CompactCpuMonitorpointsNumber(*m_tester));
+    EXPECT_DOUBLE_EQ(access_private_field::CompactCpuMonitorcpuPercents(*m_tester)[access_private_field::CompactCpuMonitornumCPU(*m_tester)].first(), firstValue);
 }
 
 TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_UpdateStatus_CoreRemoved_OfflineCoreRowFilledWithZero)
@@ -209,9 +224,9 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_UpdateStatus_CoreRemoved_OfflineC
     // Act
     m_tester->updateStatus();
     // Assert: 曲线行数不变；下线核心行补 0；总曲线正常追加 0.42
-    EXPECT_EQ(m_tester->cpuPercents.size(), m_tester->numCPU + 1);
-    EXPECT_EQ(m_tester->cpuPercents[m_tester->numCPU - 1].last(), 0.0);
-    EXPECT_NEAR(m_tester->cpuPercents[m_tester->numCPU].last(), 0.42, 1e-6);
+    EXPECT_EQ(access_private_field::CompactCpuMonitorcpuPercents(*m_tester).size(), access_private_field::CompactCpuMonitornumCPU(*m_tester) + 1);
+    EXPECT_EQ(access_private_field::CompactCpuMonitorcpuPercents(*m_tester)[access_private_field::CompactCpuMonitornumCPU(*m_tester) - 1].last(), 0.0);
+    EXPECT_NEAR(access_private_field::CompactCpuMonitorcpuPercents(*m_tester)[access_private_field::CompactCpuMonitornumCPU(*m_tester)].last(), 0.42, 1e-6);
 }
 
 TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_UpdateStatus_CoreAdded_NewCoreRowAppended)
@@ -223,8 +238,8 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_UpdateStatus_CoreAdded_NewCoreRow
     // Act
     m_tester->updateStatus();
     // Assert: 新核心行被追加，行数 +1，总曲线仍正常更新
-    EXPECT_EQ(m_tester->cpuPercents.size(), m_tester->numCPU + 2);
-    EXPECT_NEAR(m_tester->cpuPercents[m_tester->numCPU].last(), 0.42, 1e-6);
+    EXPECT_EQ(access_private_field::CompactCpuMonitorcpuPercents(*m_tester).size(), access_private_field::CompactCpuMonitornumCPU(*m_tester) + 1);
+    EXPECT_NEAR(access_private_field::CompactCpuMonitorcpuPercents(*m_tester)[access_private_field::CompactCpuMonitornumCPU(*m_tester)].last(), 0.42, 1e-6);
 }
 
 TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_ChangeFont_NormalFont_FontsAdjustedAndButtonRelaid)
@@ -235,11 +250,11 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_ChangeFont_NormalFont_FontsAdjust
     BaseCommandLinkButton *btn = detailButton();
     ASSERT_NE(btn, nullptr);
     // Act
-    m_tester->changeFont(font);
+    call_private_fun::CompactCpuMonitorchangeFont(*m_tester, font);
     // Assert: CPU/统计字体均缩小 1pt 且 CPU 字体 Medium，明细按钮重排至右上角
-    EXPECT_EQ(m_tester->m_cpuFont.weight(), QFont::Medium);
-    EXPECT_NEAR(m_tester->m_cpuFont.pointSizeF(), 9.0, 0.01);
-    EXPECT_NEAR(m_tester->m_statFont.pointSizeF(), 9.0, 0.01);
+    EXPECT_EQ(access_private_field::CompactCpuMonitorm_cpuFont(*m_tester).weight(), QFont::Medium);
+    EXPECT_NEAR(access_private_field::CompactCpuMonitorm_cpuFont(*m_tester).pointSizeF(), 9.0, 0.01);
+    EXPECT_NEAR(access_private_field::CompactCpuMonitorm_statFont(*m_tester).pointSizeF(), 9.0, 0.01);
     EXPECT_EQ(btn->x(), m_tester->width() - btn->width() + 3);
     EXPECT_EQ(btn->y(), 3);
 }
@@ -264,7 +279,7 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_OnDetailInfoClicked_ButtonClicked
     QSignalSpy spy(m_tester, &CompactCpuMonitor::signalDetailInfoClicked);
     ASSERT_TRUE(spy.isValid());
     // Act: 触发明细点击
-    m_tester->onDetailInfoClicked();
+    call_private_fun::CompactCpuMonitoronDetailInfoClicked(*m_tester);
     // Assert: 信号发射一次，明细按钮同时隐藏
     EXPECT_EQ(spy.count(), 1);
     EXPECT_TRUE(detailButton()->isHidden());
@@ -275,7 +290,7 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_ResizeEvent_WidgetResized_LayoutS
     // Arrange
     QResizeEvent event(QSize(200, 200), QSize(100, 100));
     // Act
-    m_tester->resizeEvent(&event);
+    call_private_fun::CompactCpuMonitorresizeEvent(*m_tester, &event);
     // Assert: 控件固定宽度不变，且布局仍可正常渲染
     EXPECT_EQ(m_tester->width(), common::getStatusBarMaxWidth());
     EXPECT_FALSE(m_tester->grab().isNull());
@@ -304,7 +319,7 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_MouseReleaseEvent_LeftButton_Emit
                       Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton,
                       Qt::KeyboardModifier::NoModifier);
     // Act: 左键释放
-    m_tester->mouseReleaseEvent(&event);
+    call_private_fun::CompactCpuMonitormouseReleaseEvent(*m_tester, &event);
     // Assert: 发射一次 clicked("MSG_CPU")，控件位置不受影响
     ASSERT_EQ(spy.count(), 1);
     EXPECT_EQ(spy.at(0).at(0).toString(), QString("MSG_CPU"));
@@ -320,7 +335,7 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_MouseReleaseEvent_RightButton_Emi
                       Qt::MouseButton::RightButton, Qt::MouseButton::RightButton,
                       Qt::KeyboardModifier::NoModifier);
     // Act: 右键释放
-    m_tester->mouseReleaseEvent(&event);
+    call_private_fun::CompactCpuMonitormouseReleaseEvent(*m_tester, &event);
     // Assert: 非左键不发射信号
     EXPECT_EQ(spy.count(), 0);
     EXPECT_EQ(m_tester->height(), 160);
@@ -334,7 +349,7 @@ TEST_F(UT_CompactCpuMonitor, CompactCpuMonitor_MouseMoveEvent_AnyMove_WidgetStay
                       Qt::MouseButton::NoButton, Qt::MouseButton::NoButton,
                       Qt::KeyboardModifier::NoModifier);
     // Act: 鼠标移动
-    m_tester->mouseMoveEvent(&event);
+    call_private_fun::CompactCpuMonitormouseMoveEvent(*m_tester, &event);
     // Assert: 策略为屏蔽鼠标拖拽，控件位置不变
     EXPECT_EQ(m_tester->pos(), oldPos);
     EXPECT_EQ(m_tester->width(), common::getStatusBarMaxWidth());
