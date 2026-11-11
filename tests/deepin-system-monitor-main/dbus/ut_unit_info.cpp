@@ -366,19 +366,18 @@ TEST_F(UT_UnitInfo, GetterSetter_JobObjectPath_Roundtrip)
     EXPECT_EQ(m_tester->getJobObjectPath(), QStringLiteral("/org/freedesktop/systemd1/job/1234"));
 }
 
-// ─────────────────────────── registerMetaType（须在编组用例之前，验证从未注册到已注册） ───────────────────────────
+// ─────────────────────────── registerMetaType（自控注册状态，顺序无关） ───────────────────────────
 
 TEST_F(UT_UnitInfo, RegisterMetaType_TypesRegistered_MetaTypesValid)
 {
-    // Arrange: 注册前按名称查找（本套件此用例之前无任何注册动作，
-    // 期望此时仍为未注册状态；gtest 在同一进程内按文件顺序执行）
-    const int beforeUnitId = QMetaType::type("UnitInfo");
-
-    // Act: 注册 UnitInfo / UnitInfoList
+    // Act: 注册 UnitInfo / UnitInfoList（注册幂等，重复调用安全）
+    // 注：不假设注册前的"未注册"状态——编组操作符内的 qMetaTypeId<UnitInfo>()
+    // 会触发懒注册，同一进程内先执行的其他套件可能已注册，断言注册前状态
+    // 会引入套件执行顺序依赖（全量批跑失败、过滤批跑通过的根因）。
+    UnitInfo::registerMetaType();
     UnitInfo::registerMetaType();
 
-    // Assert: 两个元类型均可按名称查到
-    EXPECT_EQ(beforeUnitId, QMetaType::UnknownType);
+    // Assert: 两个元类型均可按名称查到（注册后的稳定后置条件）
     EXPECT_NE(QMetaType::type("UnitInfo"), QMetaType::UnknownType);
     EXPECT_NE(QMetaType::type("UnitInfoList"), QMetaType::UnknownType);
 }
