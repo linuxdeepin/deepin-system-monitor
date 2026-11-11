@@ -715,6 +715,23 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_netlink.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_nl_link.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/private/ut_netif_p.cpp)
+
+# --- APPENDED (V-8163 UT-sysmonitor-37 process re-include task, no existing lines changed) ----
+# 重纳入 process 模块 12 个测试 TU（V-6431 目录级排除曾把本目录全部排除；
+# 本任务逐类修复 Qt6 兼容后重新编入主测试目标）。
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_process.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_process_set.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_process_db.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_am_icon_manager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_process_icon.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_system_service_client.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_process_name.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_desktop_entry_cache_updater.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_linglong_controller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_desktop_entry_cache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_priority_controller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/process/ut_process_controller.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
 add_executable(${PROJECT_NAME_TEST}
