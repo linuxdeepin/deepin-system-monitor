@@ -386,6 +386,7 @@ set(HPP_SYSTEM
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/block_device_info_db.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/device_db.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/sys_info.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/dmi_info.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/udev.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/udev_device.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/netlink.h
@@ -414,6 +415,7 @@ set(CPP_SYSTEM
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/block_device.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/block_device_info_db.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/sys_info.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/dmi_info.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/udev.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/udev_device.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/netlink.cpp
@@ -537,24 +539,6 @@ set(LSCPU_INCLUDE
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/lscpu.h
 )
 
-
-set(DMIDECODE_HEADS
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmidecode.h
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmioem.h
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmiopt.h
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmioutput.h
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/types.h
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/util.h
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/version.h
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/vpdopt.h
-       )
-set(DMIDECODE
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmidecode.c
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmioem.c
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmiopt.c
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmioutput.c
-            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/util.c
-       )
 set(APP_HPP
     ${HPP_GLOBAL}
     ${HPP_COMMON}
@@ -566,7 +550,6 @@ set(APP_HPP
     ${HPP_SYSTEM}
     ${HPP_WM}
     ${LSCPU_INCLUDE}
-    ${DMIDECODE_HEADS}
 )
 
 set(APP_CPP
@@ -580,7 +563,6 @@ set(APP_CPP
     ${CPP_SYSTEM}
     ${CPP_WM}
     ${LSCPU}
-    ${DMIDECODE}
 )
 
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/translations/*.ts)
@@ -699,6 +681,15 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_netlink.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_nl_link.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/private/ut_netif_p.cpp)
+
+# --- APPENDED (remove-dmidecode refactor task, no existing lines changed) ----
+# DmiInfo（新 DMI 解析模块）单元测试，及适配 DMI 表注入后的 cpu_set 测试 TU。
+# 前者为新增文件；后者随 read_dmi_cache_info 改为直接解析 SMBIOS 表而更新
+# （不再依赖 dmidecode 子进程 stub），两者均针对 Qt6 编写并验证通过。
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_dmi_info.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_cpu_set.cpp)
+# --- end APPENDED block ------------------------------------------------------
 
 # --- APPENDED (V-8163 UT-sysmonitor-37 process re-include task, no existing lines changed) ----
 # 重纳入 process 模块 12 个测试 TU（V-6431 目录级排除曾把本目录全部排除；

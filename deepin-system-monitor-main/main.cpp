@@ -1,5 +1,5 @@
 // Copyright (C) 2011 ~ 2026 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -12,7 +12,7 @@
 #include "common/perf.h"
 #include "dbus/dbus_object.h"
 #include "dbus/dbusalarmnotify.h"
-#include "3rdparty/dmidecode/dmidecode.h"
+#include "system/dmi_info.h"
 #include "ddlog.h"
 
 #include <DApplication>
@@ -91,10 +91,9 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    //获取dmidecode中CPU频率信息
-    qCDebug(DDLog::app) << "Getting CPU info from dmidecode";
-    char *const cmd[] = { "dmidecode", "-t", "4" };
-    get_cpuinfo_from_dmi(3, cmd);
+    //获取 SMBIOS/DMI 表中的 CPU 频率信息（惰性加载，仅首次解析一次）
+    qCDebug(DDLog::app) << "Getting CPU info from DMI table";
+    DmiInfo::instance();
     PERF_PRINT_BEGIN("POINT-01", "");
 
     app.setAutoActivateWindows(true);

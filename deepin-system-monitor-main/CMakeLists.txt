@@ -367,6 +367,7 @@ set(HPP_SYSTEM
     system/block_device_info_db.h
     system/device_db.h
     system/sys_info.h
+    system/dmi_info.h
     system/udev.h
     system/udev_device.h
     system/netlink.h
@@ -394,6 +395,7 @@ set(CPP_SYSTEM
     system/block_device.cpp
     system/block_device_info_db.cpp
     system/sys_info.cpp
+    system/dmi_info.cpp
     system/udev.cpp
     system/udev_device.cpp
     system/netlink.cpp
@@ -514,23 +516,6 @@ set(LSCPU_INCLUDE
         3rdparty/include/xalloc.h
         3rdparty/lscpu.h
         )
-set(DMIDECODE_HEADS
-            3rdparty/dmidecode/dmidecode.h
-            3rdparty/dmidecode/dmioem.h
-            3rdparty/dmidecode/dmiopt.h
-            3rdparty/dmidecode/dmioutput.h
-            3rdparty/dmidecode/types.h
-            3rdparty/dmidecode/util.h
-            3rdparty/dmidecode/version.h
-            3rdparty/dmidecode/vpdopt.h
-       )
-set(DMIDECODE
-            3rdparty/dmidecode/dmidecode.c
-            3rdparty/dmidecode/dmioem.c
-            3rdparty/dmidecode/dmiopt.c
-            3rdparty/dmidecode/dmioutput.c
-            3rdparty/dmidecode/util.c
-       )
 
 set(APP_HPP
     ${CMAKE_HOME_DIRECTORY}/config.h
@@ -544,7 +529,6 @@ set(APP_HPP
     ${HPP_SYSTEM}
     ${HPP_WM}
     ${LSCPU_INCLUDE}
-    ${DMIDECODE_HEADS}
 )
 set(APP_CPP
     ${CPP_GLOBAL}
@@ -557,7 +541,6 @@ set(APP_CPP
     ${CPP_SYSTEM}
     ${CPP_WM}
     ${LSCPU}
-    ${DMIDECODE}
 )
 set(LIBS
     ${QT_NS}::Core
