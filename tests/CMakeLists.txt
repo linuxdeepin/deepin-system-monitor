@@ -779,6 +779,24 @@ list(APPEND UT_CPP
 # dbus 模块 Qt6 兼容测试 TU 重新纳入主测试目标（一笔一类，按类核实编译+运行全绿）。
 list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/dbus/ut_environment_file.cpp)
+# --- APPENDED (V-T45 model/main-root re-include task, no existing lines changed) ----
+# 重纳入本任务逐类改写后的测试 TU（Qt6 兼容 + stub 隔离 + 结构自检通过后逐个追加）。
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_user.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_accounts_info_model.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_cpu_info_model.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_cpu_list_model.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_cpu_stat_model.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_block_dev_stat.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_cpu_list_sort_filter_proxy_model.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/model/ut_netif_addr_model.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_netif_monitor_thread.cpp)
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/system/ut_device_id_cache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_settings.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_detailwidgetmanager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_mlogger.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_application.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
 add_executable(${PROJECT_NAME_TEST}

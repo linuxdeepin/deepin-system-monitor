@@ -22,6 +22,14 @@
 // 2. jumpDetailWidget: lockForRead -> emit sigJumpToDetailWidget(msgCode) -> unlock
 // 3. jumpProcessWidget: lockForRead -> emit sigJumpToProcessWidget(msgCode) -> unlock
 // 注: 私有构造通过 -fno-access-control 由 getInstance 内部创建
+//
+// 用例计数声明（min/actual 对账，test-code-gen.md §4）:
+// | 方法 | 级别 | 因子 | min | actual |
+// |-----|------|------|-----|--------|
+// |getInstance|mid|双检锁单例|1|1|
+// |jumpDetailWidget|mid|msgCode空×非空|2|2|
+// |jumpProcessWidget|mid|连续调用×参数透传|2|3|
+// 本 TU 共 6 个用例。
 
 class DetailWidgetManagerTest : public ::testing::Test
 {
@@ -46,7 +54,10 @@ protected:
 // ───────────────────────── getInstance ─────────────────────────
 TEST_F(DetailWidgetManagerTest, GetInstance_CalledRepeatedly_ReturnsSameInstance)
 {
-    // Arrange: SetUp 已获取单例
+    // Arrange: SetUp 已获取单例，记录引用地址
+    DetailWidgetManager *seeded = m_manager;
+    ASSERT_NE(seeded, nullptr);
+
     // Act: 再次获取
     DetailWidgetManager &second = DetailWidgetManager::getInstance();
 
@@ -130,4 +141,27 @@ TEST_F(DetailWidgetManagerTest, JumpToDifferentTargets_TwoSignalTypes_EmitsIndep
     EXPECT_EQ(processSpy.count(), 1);
     EXPECT_EQ(detailSpy.first().first().toString(), QString("MSG_DISK"));
     EXPECT_EQ(processSpy.first().first().toString(), QString("MSG_PROCESS"));
+}
+
+// ───────────────────────── 析构（局部实例）─────────────────────────
+TEST_F(DetailWidgetManagerTest, LocalInstance_CtorDtor_DoesNotDisturbSingleton)
+{
+    // Arrange: 记录单例指针
+    DetailWidgetManager &singleton = DetailWidgetManager::getInstance();
+    ASSERT_NE(&singleton, nullptr);
+
+    // Act: 构造局部实例并析构（ctor/dtor 均为轻量实现）
+    {
+        DetailWidgetManager local;
+        QSignalSpy localSpy(&local, &DetailWidgetManager::sigJumpToDetailWidget);
+        emit local.sigJumpToDetailWidget("MSG_LOCAL");
+        EXPECT_EQ(localSpy.count(), 1);
+    }
+
+    // Assert: 单例指针不变，路由仍正常
+    EXPECT_EQ(&DetailWidgetManager::getInstance(), &singleton);
+    QSignalSpy spy(&singleton, &DetailWidgetManager::sigJumpToProcessWidget);
+    singleton.jumpProcessWidget("MSG_AFTER");
+    EXPECT_EQ(spy.count(), 1);
+    EXPECT_EQ(spy.first().first().toString(), QString("MSG_AFTER"));
 }

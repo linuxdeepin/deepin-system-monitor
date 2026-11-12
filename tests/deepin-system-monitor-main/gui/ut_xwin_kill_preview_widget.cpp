@@ -162,17 +162,14 @@ public:
         static MainWindow wm;
         gApp->setMainWindow(&wm);
 
-        // 进程级一次性拦截监控线程启动事件：MainWindow 构造/显示会 postEvent
+        // 夹具级拦截监控线程启动事件：MainWindow 构造/显示会 postEvent
         // 启动 SystemMonitor/NetifMonitor 工作线程，线程与静态对象在进程退出
-        // 时析构竞态会段错误并丢失 gcda，测试不依赖真实监控数据
-        static bool s_appEventStubbed = false;
-        if (!s_appEventStubbed) {
-            auto *appEventStub = new Stub();
-            typedef bool (*appEventFptr)(Application *, QEvent *);
-            appEventFptr fptr_appEvent = (appEventFptr)&Application::event;
-            appEventStub->set(fptr_appEvent, stub_xwk_appEvent_swallow);
-            s_appEventStubbed = true;
-        }
+        // 时析构竞态会段错误并丢失 gcda，测试不依赖真实监控数据。
+        // 桩载体改为夹具成员：进程级泄漏式打桩会把 Application::event 永久改写，
+        // 导致后注册套件（如 ApplicationTest）无法再验证真实事件分发逻辑
+        typedef bool (*appEventFptr)(Application *, QEvent *);
+        appEventFptr fptr_appEvent = (appEventFptr)&Application::event;
+        m_appEventStub.set(fptr_appEvent, stub_xwk_appEvent_swallow);
 
         // 进程级一次性禁用键盘抓取（Stub 对象有意保留，打桩存续至进程结束，
         // 避免跨夹具累积的陈旧 keyboard_grabber 在 Qt releaseKeyboard 中段错误）
@@ -205,8 +202,16 @@ public:
             delete m_tester;
             m_tester = nullptr;
         }
+        // 丢弃已入队但未投递的监控启动事件：桩恢复后若残留事件被后续套件
+        // processEvents 投递，会真实启动监控线程并在进程退出时与静态对象
+        // 竞态（丢失 gcda）。removePostedEvents 不投递、直接出队，最安全
+        QCoreApplication::removePostedEvents(gApp, kMonitorStartEventType);
+        QCoreApplication::removePostedEvents(gApp, kNetifStartEventType);
         QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
     }
+
+protected:
+    Stub m_appEventStub;  // 夹具级桩载体：SetUp 打的桩在夹具结束自动还原
 
     // 触发过 close() 的用例调用：对象已被延迟删除，防止 TearDown 二次 delete
     void closeAndForget()

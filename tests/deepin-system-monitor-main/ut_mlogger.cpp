@@ -26,6 +26,15 @@
 // 3. appendRules: 规则逐条去重（contains 判定已存在则 removeAt）->
 //    tmplist 为空直接 return -> 否则空 m_rules 直接赋值 / 非空则 "\n" 追加
 // 4. rules(): 内联返回 m_rules
+//
+// 用例计数声明（min/actual 对账，test-code-gen.md §4）:
+// | 方法 | 级别 | 因子 | min | actual |
+// |-----|------|------|-----|--------|
+// |ctor|mid|QT_LOGGING_RULES设置×未设置|2|2|
+// |setRules|mid|分号分隔×空串|2|2|
+// |appendRules|mid|新增×重复×全重复×空输入|2|4|
+// |rules|low|getter透传|1|1|
+// 本 TU 共 9 个用例。
 
 class MLoggerTest : public ::testing::Test
 {
@@ -57,6 +66,8 @@ protected:
 TEST_F(MLoggerTest, Construction_WithoutEnvRules_ConsumesEnvironmentVariable)
 {
     // Arrange: SetUp 已保证 QT_LOGGING_RULES 未设置
+    ASSERT_FALSE(qEnvironmentVariableIsSet("QT_LOGGING_RULES"));
+
     // Act: 构造 MLogger（m_config 读取真实 DConfig 默认值）
     const bool envStillSet = qEnvironmentVariableIsSet("QT_LOGGING_RULES");
 

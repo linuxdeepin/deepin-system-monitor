@@ -10,6 +10,11 @@
 #include "stub.h"
 #include <gtest/gtest.h>
 
+// private member access: flush 用例需要拿到单例真实使用的 QSettings 文件路径
+#include "addr_pri.h"
+
+ACCESS_PRIVATE_FIELD(Settings, QSettings *, m_settings)
+
 //qt
 #include <QCoreApplication>
 #include <QSettings>
@@ -28,6 +33,15 @@
 // 4. getOption: beginGroup("settings") -> value(key, defaultValue) -> endGroup
 // 5. setOption: beginGroup("settings") -> setValue(key, value) -> endGroup
 // 注: Settings 为非 QObject 的普通单例，进程退出时随单例释放
+//
+// 用例计数声明（min/actual 对账，test-code-gen.md §4）:
+// | 方法 | 级别 | 因子 | min | actual |
+// |-----|------|------|-----|--------|
+// |instance|mid|单例唯一性|1|1|
+// |getOption|mid|key存在×默认值|2|3|
+// |setOption|mid|key覆盖×类型|2|4|
+// |flush|low|落盘|1|1|
+// 本 TU 共 7 个用例。
 
 class SettingsTest : public ::testing::Test
 {
@@ -70,7 +84,9 @@ QTemporaryDir SettingsTest::s_tmpDir;
 // ───────────────────────── instance ─────────────────────────
 TEST_F(SettingsTest, GetInstance_CalledRepeatedly_ReturnsSameInstance)
 {
-    // Arrange: SetUp 已触发单例创建
+    // Arrange: SetUp 已触发单例创建，此处取一次引用指针
+    Settings *seeded = Settings::instance();
+
     // Act
     Settings *first = Settings::instance();
     Settings *second = Settings::instance();
@@ -140,18 +156,23 @@ TEST_F(SettingsTest, SetOption_WithOverwrite_LastValueWins)
 // ───────────────────────── flush（持久化）─────────────────────────
 TEST_F(SettingsTest, Flush_AfterSetOption_PersistsToConfigFile)
 {
-    // Arrange
+    // Arrange: 持久化目标取自单例真实持有的 QSettings 文件路径。
+    // Settings 是进程级单例：全量运行时若其它套件先于本套件触发 instance()，
+    // 其文件路径冻结在创建时刻的 ConfigLocation 上，与本套件重定向后的
+    // XDG_CONFIG_HOME 无关，因此不能按路径规则重算，必须读 m_settings->fileName()。
     const QString key = "ut_settings_flush_key";
-    Settings::instance()->setOption(key, "flushed_value");
+    Settings *inst = Settings::instance();
+    ASSERT_NE(inst, nullptr);
+    QSettings *live = access_private_field::Settingsm_settings(*inst);
+    ASSERT_NE(live, nullptr);
+    const QString filepath = live->fileName();
+    ASSERT_FALSE(filepath.isEmpty());
+    inst->setOption(key, "flushed_value");
 
     // Act: 强制同步到磁盘
-    Settings::instance()->flush();
+    inst->flush();
 
-    // Assert: 以相同规则重新构造 QSettings，从磁盘读回
-    const QString filepath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
-                             + "/" + QCoreApplication::organizationName()
-                             + "/" + QCoreApplication::applicationName()
-                             + "/" + "config.conf";
+    // Assert: 以相同路径重新构造 QSettings，从磁盘读回
     QSettings persisted(filepath, QSettings::IniFormat);
     EXPECT_EQ(persisted.value("settings/" + key).toString(), QString("flushed_value"));
     EXPECT_TRUE(persisted.contains("settings/" + key));
@@ -169,4 +190,31 @@ TEST_F(SettingsTest, SetOption_WithPresetKey_DisplayModeRoundTrips)
     // Assert
     EXPECT_EQ(Settings::instance()->getOption(key).toInt(), 1);
     EXPECT_TRUE(Settings::instance()->getOption(key).isValid());
+}
+
+// ───────────────────────── 析构（局部实例）─────────────────────────
+TEST_F(SettingsTest, LocalInstance_Dtor_ReleasesQSettingsCleanly)
+{
+    // Arrange: 布尔前置 —— 经单例真实持有的 QSettings 确认该键尚不存在
+    Settings *inst = Settings::instance();
+    ASSERT_NE(inst, nullptr);
+    QSettings *live = access_private_field::Settingsm_settings(*inst);
+    ASSERT_NE(live, nullptr);
+    ASSERT_FALSE(live->contains("settings/ut_local_dtor_key"));
+
+    // Act: 作用域内构造、写入（写穿透局部实例自身 QSettings）并析构
+    {
+        Settings local;
+        local.setOption("settings/ut_local_dtor_key", "v");
+        EXPECT_EQ(local.getOption("settings/ut_local_dtor_key").toString(), QString("v"));
+    }
+    // 局部实例析构经 deleteLater 延迟释放 QSettings，冲刷延迟删除
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+
+    // Assert: 单例不受局部实例生命周期影响，功能仍正常
+    Settings::instance()->setOption("settings/ut_local_dtor_key", "v2");
+    EXPECT_EQ(Settings::instance()->getOption("settings/ut_local_dtor_key").toString(),
+              QString("v2"));
+    EXPECT_NE(Settings::instance()->getOption("settings/ut_local_dtor_key").toString(),
+              QString("v"));
 }

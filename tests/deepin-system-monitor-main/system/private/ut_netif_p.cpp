@@ -235,9 +235,9 @@ TEST_F(UT_NetifInfoPrivate, test_CopyCtor_DeepCopiesAllFields_002)
     EXPECT_DOUBLE_EQ(access_private_field::NetifInfoPrivaterecv_bps(copy), 1024.5);
     EXPECT_DOUBLE_EQ(access_private_field::NetifInfoPrivatesent_bps(copy), 2048.25);
     // Assert：无线扩展深拷贝内容
-    // 注：拷贝构造的初始化列表未包含 isWireless（其 in-class 初始化器不参与拷贝），
-    // 无线标志在拷贝后丢失 —— 疑似源码缺陷（见 Mode 5 缺陷清单），此处锁定现状
-    EXPECT_FALSE(access_private_field::NetifInfoPrivateisWireless(copy));
+    // 拷贝构造初始化列表包含 isWireless{other.isWireless}（netif_p.h），
+    // 源对象 populatePrivate 置 true，拷贝后应原值传递
+    EXPECT_TRUE(access_private_field::NetifInfoPrivateisWireless(copy));
     ASSERT_NE(access_private_field::NetifInfoPrivateiw_info(copy).get(), nullptr);
     EXPECT_EQ(access_private_field::NetifInfoPrivateiw_info(copy)->essid, QByteArray("ut-ssid"));
     EXPECT_EQ(access_private_field::NetifInfoPrivateiw_info(copy)->qual.qual, 70);
