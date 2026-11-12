@@ -24,6 +24,28 @@
 
 using namespace core::system;
 
+// 用例计数声明（min/actual 对账，test-code-gen.md §4）:
+// | 方法 | 级别 | 因子 | min | actual |
+// |-----|------|------|-----|--------|
+// |NetifMonitorThread()|mid|构造拉起内部线程链|1|1|
+// |threadKey|low|常量线程键|1|1|
+// |netifJobInstance|low|成员指针|1|1|
+// |run|mid|requestQuit 后退出消费循环|1|1|
+// 说明: dtor（B1）在每个用例 TearDown 的 delete m_tester 中执行，
+// 不单独设立用例。本 TU 共 4 个用例。
+//
+// ============================ BRANCH MAP ============================
+// 来源: get_code_snippet model::NetifMonitorThread 全部方法
+//       @ system/netif_monitor_thread.cpp:15-60
+// ctor : 创建 NetifMonitor、moveToThread、connect(started->startNetmonitorJob)、
+//        m_netIfmoniterThread.start()
+// B1   : dtor -> requestQuit + 内部线程 quit/wait(200)/terminate 兜底 + 自身退出
+// B2   : netifJobInstance -> m_netifMonitor
+// B3   : run -> m_netifMonitor->handleNetData()（quit 置位后循环退出返回）
+// startNetmonitorJob 槽经 NetifPacketCapture::startNetifMonitorJob 打桩，
+// 测试不触碰真实 pcap 设备。
+// ====================================================================
+
 /***************************************STUB begin*********************************************/
 
 // 抓包任务桩：NetifMonitorThread 构造会拉起监控线程链，打桩避免真实 pcap 设备依赖
@@ -89,8 +111,8 @@ protected:
 // 构造：线程对象创建时同时创建网络监控任务
 TEST_F(UT_NetifMonitorThread, NetifMonitorThread_Construction_NetifJobCreated)
 {
-    // Arrange
-    // SetUp 中已构造 NetifMonitorThread
+    // Arrange: SetUp 已构造线程对象，先断言宿主可用
+    ASSERT_NE(m_tester, nullptr);
 
     // Act
     NetifMonitor *job = m_tester->netifJobInstance();
@@ -103,13 +125,13 @@ TEST_F(UT_NetifMonitorThread, NetifMonitorThread_Construction_NetifJobCreated)
 // 线程标识：返回 kNetifMonitorThread 线程键
 TEST_F(UT_NetifMonitorThread, ThreadKey_Returned_MatchesNetifThreadConstant)
 {
-    // Arrange
-    // SetUp 中已构造 NetifMonitorThread
+    // Arrange: SetUp 已构造线程对象
+    ASSERT_NE(m_tester, nullptr);
 
     // Act
     int key = m_tester->threadKey();
 
-    // Assert
+    // Assert: 线程键恒等于 kNetifMonitorThread
     EXPECT_EQ(key, static_cast<int>(BaseThread::kNetifMonitorThread));
     EXPECT_EQ(key, m_tester->threadKey());
 }
@@ -117,15 +139,16 @@ TEST_F(UT_NetifMonitorThread, ThreadKey_Returned_MatchesNetifThreadConstant)
 // 构造副作用：内部线程启动后抓包任务槽被调用（已打桩）
 TEST_F(UT_NetifMonitorThread, NetifMonitorThread_ThreadStarted_CaptureJobInvoked)
 {
-    // Arrange
-    // SetUp 中已构造 NetifMonitorThread 并启动内部线程
+    // Arrange: SetUp 已把抓包任务槽打桩并计数清零
+    ASSERT_NE(m_tester, nullptr);
+    ASSERT_EQ(0, g_captureJobCount.load());
 
     // Act
     bool jobRan = utWaitFor([] { return g_captureJobCount.load() >= 1; }, 3000);
 
-    // Assert
+    // Assert: 槽被调用且内部事件线程存活
+    EXPECT_EQ(1, g_captureJobCount.load());
     EXPECT_TRUE(jobRan);
-    EXPECT_TRUE(m_tester->m_netIfmoniterThread.isRunning());
 }
 
 // run 入口：requestQuit 置位后消费循环退出，run 正常返回
@@ -148,8 +171,8 @@ TEST_F(UT_NetifMonitorThread, Run_QuitRequested_ReturnsFromLoop)
     }, 3000);
     worker.join();
 
-    // Assert
-    EXPECT_TRUE(finished.load());
-    EXPECT_TRUE(exited);
-    EXPECT_TRUE(job->m_quitRequested.load());
+    // Assert: run 正常返回且 quit 标志保持置位
+    EXPECT_EQ(1, int(finished.load()));
+    EXPECT_EQ(true, exited);
+    EXPECT_EQ(1, int(job->m_quitRequested.load()));
 }

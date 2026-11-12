@@ -23,6 +23,9 @@
 #include <QEvent>
 #include <QThread>
 
+//std
+#include <chrono>
+
 using namespace common::core;
 using namespace core::system;
 
@@ -41,6 +44,22 @@ static void stub_NetifMonitor_handleNetData(NetifMonitor *)
 }  // namespace
 /***************************************STUB end***********************************************/
 
+namespace {
+// 有界自旋等待：线程从 start() 到真正进入 Running 存在竞态窗口
+// （QThreadPrivate 在新线程内才置 running 标志），满载全量运行时窗口更大，
+// 以固定 msleep 断言 isRunning 会偶发失败。
+static bool waitThreadRunning(QThread *thread, int timeoutMs)
+{
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(timeoutMs);
+    while (std::chrono::steady_clock::now() < deadline) {
+        if (thread->isRunning())
+            return true;
+        QThread::msleep(10);
+    }
+    return thread->isRunning();
+}
+}  // namespace
+
 // 分支清单（源自 application.cpp / application.h）:
 // 1. ctor: 注册三个元类型 + ThreadManager::instance()->attach(SystemMonitorThread/NetifMonitorThread)
 // 2. setCurrentTaskState/getCurrentTaskState: m_currentTaskStat 存取（默认 kTaskFinished）
@@ -48,6 +67,18 @@ static void stub_NetifMonitor_handleNetData(NetifMonitor *)
 //           | type==kNetifStartEventType -> NetifMonitorThread::start | 其它走 DApplication::event
 // 4. MonitorStartEvent/NetifStartEvent: 携带自定义事件类型 + 析构
 // 5. setMainWindow/mainWindow: 内联存取（raiseWindow 需真实 MainWindow，超出单测范围）
+//
+// 用例计数声明（min/actual 对账，test-code-gen.md §4）:
+// | 方法 | 级别 | 因子 | min | actual |
+// |-----|------|------|-----|--------|
+// |ctor|mid|线程挂载×元类型注册|1|1|
+// |getCurrentTaskState|low|默认值|1|1|
+// |setCurrentTaskState|low|三态写入|1|1|
+// |event|mid|MonitorStart×NetifStart×未知类型|3|3|
+// |MonitorStartEvent|low|自定义类型|1|1|
+// |NetifStartEvent|low|自定义类型|1|1|
+// |setMainWindow/mainWindow|low|null往返|1|1|
+// 本 TU 共 9 个用例。
 
 class ApplicationTest : public ::testing::Test
 {
@@ -85,6 +116,8 @@ protected:
 TEST_F(ApplicationTest, Construction_DefaultInit_AttachesMonitorThreadsAndRegistersMetaTypes)
 {
     // Arrange: 入口 main 中已构造 Application
+    ASSERT_NE(QCoreApplication::instance(), nullptr);
+
     // Act: 从 ThreadManager 获取两个后台线程
     auto *sysThread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
     auto *netThread = ThreadManager::instance()->thread<NetifMonitorThread>(BaseThread::kNetifMonitorThread);
@@ -102,6 +135,8 @@ TEST_F(ApplicationTest, Construction_DefaultInit_AttachesMonitorThreadsAndRegist
 TEST_F(ApplicationTest, GetCurrentTaskState_InitialState_IsTaskFinished)
 {
     // Arrange: SetUp 已取出入口实例；本用例为套件内首个改写状态的用例
+    ASSERT_NE(m_app, nullptr);
+
     // Act
     const Application::TaskState state = m_app->getCurrentTaskState();
 
@@ -131,7 +166,9 @@ TEST_F(ApplicationTest, SetCurrentTaskState_WithEachState_ValueIsStored)
 // ───────────────────────── MonitorStartEvent ─────────────────────────
 TEST_F(ApplicationTest, MonitorStartEvent_Construction_CarriesCustomEventType)
 {
-    // Arrange: 无前置条件
+    // Arrange: 无前置条件（自定义事件类型常量已在头文件定义）
+    ASSERT_EQ(kMonitorStartEventType, static_cast<QEvent::Type>(QEvent::User + 1));
+
     // Act: 默认构造 MonitorStartEvent
     MonitorStartEvent event;
 
@@ -144,7 +181,9 @@ TEST_F(ApplicationTest, MonitorStartEvent_Construction_CarriesCustomEventType)
 // ───────────────────────── NetifStartEvent ─────────────────────────
 TEST_F(ApplicationTest, NetifStartEvent_Construction_CarriesCustomEventType)
 {
-    // Arrange: 无前置条件
+    // Arrange: 无前置条件（自定义事件类型常量已在头文件定义）
+    ASSERT_EQ(kNetifStartEventType, static_cast<QEvent::Type>(QEvent::User + 2));
+
     // Act: 默认构造 NetifStartEvent
     NetifStartEvent event;
 
@@ -163,12 +202,11 @@ TEST_F(ApplicationTest, Event_MonitorStartEventType_StartsSystemMonitorThread)
     // Act: 同步分发到 Application::event（线程启动，监控作业已打桩为空）
     QCoreApplication::sendEvent(m_app, &event);
 
-    // Assert: 系统监视线程已被启动
+    // Assert: 系统监视线程已被启动（有界等待进入 Running，容忍调度竞态）
     auto *sysThread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
     EXPECT_NE(sysThread, nullptr);
-    EXPECT_TRUE(sysThread->isRunning());
-    // 预留时间让线程进入事件循环处理已打桩的监控作业
-    QThread::msleep(200);
+    const bool running = waitThreadRunning(sysThread, 3000);
+    EXPECT_TRUE(running);
     EXPECT_TRUE(sysThread->isRunning());
 }
 
@@ -180,10 +218,21 @@ TEST_F(ApplicationTest, Event_NetifStartEventType_StartsNetifMonitorThread)
     // Act: 同步分发到 Application::event（run 为一次性执行，作业已打桩为空）
     QCoreApplication::sendEvent(m_app, &event);
 
-    // Assert: 网卡监视线程已被启动（isRunning 或已自然结束）
+    // Assert: 网卡监视线程已被启动（有界等待进入 Running；run 为一次性执行，
+    // 已打桩为空的任务可能令线程极快结束，isFinished 同样算启动成功）
     auto *netThread = ThreadManager::instance()->thread<NetifMonitorThread>(BaseThread::kNetifMonitorThread);
     EXPECT_NE(netThread, nullptr);
-    EXPECT_TRUE(netThread->isRunning() || netThread->isFinished());
+    const auto started = [&] {
+        const auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(3000);
+        while (std::chrono::steady_clock::now() < deadline) {
+            if (netThread->isRunning() || netThread->isFinished())
+                return true;
+            QThread::msleep(10);
+        }
+        return netThread->isRunning() || netThread->isFinished();
+    }();
+    EXPECT_TRUE(started);
+    EXPECT_EQ(netThread, ThreadManager::instance()->thread<NetifMonitorThread>(BaseThread::kNetifMonitorThread));
 }
 
 TEST_F(ApplicationTest, Event_UnknownCustomType_DoesNotDisturbSubsequentDispatch)
@@ -196,12 +245,11 @@ TEST_F(ApplicationTest, Event_UnknownCustomType_DoesNotDisturbSubsequentDispatch
     MonitorStartEvent startEvent;
     QCoreApplication::sendEvent(m_app, &startEvent);
 
-    // Assert: 未知事件未干扰事件管线，后续启动事件仍正常生效
+    // Assert: 未知事件未干扰事件管线，后续启动事件仍正常生效（有界等待）
     auto *sysThread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
     EXPECT_NE(sysThread, nullptr);
-    EXPECT_TRUE(sysThread->isRunning());
-    // 预留时间让线程进入事件循环
-    QThread::msleep(100);
+    const bool running = waitThreadRunning(sysThread, 3000);
+    EXPECT_TRUE(running);
     EXPECT_TRUE(sysThread->isRunning());
 }
 
@@ -209,6 +257,8 @@ TEST_F(ApplicationTest, Event_UnknownCustomType_DoesNotDisturbSubsequentDispatch
 TEST_F(ApplicationTest, SetMainWindow_WithNullPointer_MainWindowReturnsNull)
 {
     // Arrange: 内联存取接口，空指针不涉及窗口析构风险
+    ASSERT_NE(m_app, nullptr);
+
     // Act
     m_app->setMainWindow(nullptr);
     MainWindow *win = m_app->mainWindow();

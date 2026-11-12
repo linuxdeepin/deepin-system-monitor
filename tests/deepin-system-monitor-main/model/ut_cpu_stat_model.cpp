@@ -1,316 +1,363 @@
-// Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//self
+// Rewritten unit tests for model::CPUStatModel
+// (deepin-system-monitor-main/model/cpu_stat_model.cpp) against
+// upstream/master @ 00005c4e.
+//
+// The legacy half of this file carried the suite's review failure (numbered
+// shell cases, no AAA markers, QModelIndex::isValid function stubbing that
+// cannot work in Qt6); that half is removed. The injection-driven tail
+// survives with branch-mapped names and thickened assertions.
+//
+// Rows are driven through private-member injection (addr_pri.h): stat and
+// usage SampleFrames are appended to the model's sample databases, so the
+// suite is hermetic without function stubbing and without /proc access.
+//
+// 用例计数声明（min/actual 对账，test-code-gen.md §4）:
+// | 方法 | 级别 | 因子 | min | actual |
+// |-----|------|------|-----|--------|
+// |CPUStatModel()|low|默认空样本库|1|1|
+// |rowCount|mid|空库×等量样本×计数不一致×增长|2|4|
+// |columnCount|low|常量列数|1|1|
+// |data|high|索引无效×行越界×12列×角色×default列|3|6|
+// 本 TU 共 12 个用例。
+//
+// ============================ BRANCH MAP ============================
+// 来源: get_code_snippet model::CPUStatModel 全部方法
+//       @ model/cpu_stat_model.cpp:12-107
+// ctor : m_statSampleDB(new CPUStatSample(period)),
+//        m_usageSampleDB(new CPUUsageSample(period))
+// B1   : rowCount -> stat.count()==usage.count() ? usage.count() : 0
+// B2   : columnCount -> kStatPropMax (常量 12)
+// B3   : data !index.isValid() || 样本库为空 -> {}
+// B4   : data row<0 || row>=usage.count() -> {}
+// B5   : data stat/usage 样本指针为空 -> {}
+// B6   : data Display/Accessible + 12 列 switch
+//        (kStatUserTime..kStatGuestNice 读 stat->stat->*,
+//         kStatTotalUsage/kStatIdleUsage 读 usage->stat->*)
+// B7   : data Display/Accessible + default 列 -> {}
+// B8   : data 其它角色 -> {}（switch 外直接 return {}）
+// 用例映射:
+//   Construction_DefaultState_SampleDBsEmpty          -> ctor + B1(0) + B2
+//   RowCount_EqualSampleCounts_ReturnsUsageCount      -> B1 (1/1)
+//   RowCount_AfterSecondSample_GrowsToTwo             -> B1 (2/2)
+//   RowCount_SampleCountMismatch_ReturnsZero          -> B1 (2/1)
+//   ColumnCount_Always_ReturnsKStatPropMax            -> B2
+//   Data_InvalidIndex_ReturnsInvalidVariant           -> B3
+//   Data_RowOutOfBounds_ReturnsInvalidVariant         -> B4
+//   Data_NegativeRow_ReturnsInvalidVariant            -> B4 (row<0)
+//   Data_DisplayRoleAllColumns_ReturnsSampleValues    -> B6 (12 列)
+//   Data_AccessibleTextRole_SharesDisplayBranch       -> B6
+//   Data_UnknownRole_ReturnsInvalidVariant            -> B8
+//   Data_DefaultColumnSwitchBranch_ReturnsInvalid     -> B7
+// ====================================================================
+
+#include <gtest/gtest.h>
+
+#include <QModelIndex>
+#include <QVariant>
+
 #include "model/cpu_stat_model.h"
 #include "common/sample.h"
 #include "common/time_period.h"
 #include "addr_pri.h"
-//gtest
-#include "stub.h"
-#include <gtest/gtest.h>
-//Qt
-#include <QModelIndex>
-#include <QVariant>
 
 using namespace common::core;
 using namespace common::time;
 
-// ACCESS_PRIVATE_FIELD 注入：直接操作 CPUStatModel 的私有 unique_ptr 成员，
-// 用于向 statSampleDB / usageSampleDB 注入真实 SampleFrame，避免现有测试因
-// sample(row) 返回 nullptr 而无法命中 data() switch 分支。
-ACCESS_PRIVATE_FIELD(CPUStatModel, std::unique_ptr<Sample<cpu_stat_t>>, m_statSampleDB)
-ACCESS_PRIVATE_FIELD(CPUStatModel, std::unique_ptr<Sample<cpu_usage_t>>, m_usageSampleDB)
+using StatSampleDB = std::unique_ptr<Sample<cpu_stat_t>>;
+using UsageSampleDB = std::unique_ptr<Sample<cpu_usage_t>>;
 
-static QString m_Sresult;
-/***************************************STUB begin*********************************************/
-bool stub_cpustatdata_isValid(){
-    m_Sresult = "index is valid";
-    return true;
-}
+ACCESS_PRIVATE_FIELD(CPUStatModel, StatSampleDB, m_statSampleDB)
+ACCESS_PRIVATE_FIELD(CPUStatModel, UsageSampleDB, m_usageSampleDB)
 
-int stub_cpustatdata_row(){
+namespace {
 
-    return 0;
-}
-
-int stub_cpustatdata_column1()
-{
-    m_Sresult = "index column kStatTotalRead";
-    return CPUStatModel::kStatUserTime;
-}
-
-int stub_cpustatdata_column2()
-{
-    m_Sresult = "index column kPropCPUUsage";
-    return CPUStatModel::kStatNiceTime;
-}
-
-int stub_cpustatdata_count(){
-    return 1;
-}
-
-/***************************************STUB end**********************************************/
-class UT_CPUStatModel: public ::testing::Test
-{
-public:
-    UT_CPUStatModel() : m_tester(nullptr) {}
-
-public:
-    virtual void SetUp()
-    {
-        TimePeriod time {};
-        m_tester = new CPUStatModel(time);
-    }
-
-    virtual void TearDown()
-    {
-        if(m_tester){
-            delete m_tester;
-            m_tester = nullptr;
-        }
-    }
-
-protected:
-    CPUStatModel *m_tester;
-};
-
-TEST_F(UT_CPUStatModel, initTest)
-{
-
-}
-
-TEST_F(UT_CPUStatModel, test_rowCount_001)
-{
-    m_tester->rowCount();
-
-}
-
-TEST_F(UT_CPUStatModel, test_columnCount_001)
-{
-    int expect = m_tester->columnCount();
-    EXPECT_EQ(expect,CPUStatModel::kStatPropMax);
-}
-
-TEST_F(UT_CPUStatModel, test_data_001)
-{
-    QModelIndex *index = new QModelIndex;
-    int role = Qt::DisplayRole;
-
-    m_tester->data(*index,role);
-
-    delete index;
-
-}
-
-TEST_F(UT_CPUStatModel, test_data_002)
-{
-    QModelIndex *index = new QModelIndex;
-    int role = Qt::DisplayRole;
-
-    Stub b1;
-    b1.set(ADDR(QModelIndex,isValid),stub_cpustatdata_isValid);
-
-    m_tester->data(*index,role);
-    delete index;
-
-}
-
-TEST_F(UT_CPUStatModel, test_data_003)
-{
-    QModelIndex *index = new QModelIndex;
-    int role = Qt::DisplayRole;
-
-    Stub b1;
-    b1.set(ADDR(QModelIndex,isValid),stub_cpustatdata_isValid);
-    Stub b2;
-    b2.set(ADDR(QModelIndex,row),stub_cpustatdata_row);
-    Stub b3;
-    b3.set(ADDR(Sample<cpu_usage_t>,count),stub_cpustatdata_count);
-
-    m_tester->data(*index,role);
-    delete index;
-
-}
-
-
-
-TEST_F(UT_CPUStatModel, test_data_004)
-{
-    QModelIndex *index = new QModelIndex;
-    int role = Qt::DisplayRole;
-
-    Stub b1;
-    b1.set(ADDR(QModelIndex,isValid),stub_cpustatdata_isValid);
-    Stub b2;
-    b2.set(ADDR(QModelIndex,row),stub_cpustatdata_row);
-    Stub b3;
-    b3.set(ADDR(Sample<cpu_usage_t>,count),stub_cpustatdata_count);
-
-    m_tester->data(*index,role);
-    delete index;
-
-}
-
-// 扩展测试：测试所有列枚举值
-TEST_F(UT_CPUStatModel, test_columnEnums)
-{
-    // 测试 kStatPropMax 值
-    EXPECT_EQ(CPUStatModel::kStatPropMax, 12);
-
-    // 测试各枚举值存在
-    EXPECT_EQ(CPUStatModel::kStatUserTime, 0);
-    EXPECT_EQ(CPUStatModel::kStatNiceTime, 1);
-    EXPECT_EQ(CPUStatModel::kStatSystemTime, 2);
-    EXPECT_EQ(CPUStatModel::kStatIdleTime, 3);
-    EXPECT_EQ(CPUStatModel::kStatIOWaitTime, 4);
-    EXPECT_EQ(CPUStatModel::kStatHardIRQ, 5);
-    EXPECT_EQ(CPUStatModel::kStatSoftIRQ, 6);
-    EXPECT_EQ(CPUStatModel::kStatStealTime, 7);
-    EXPECT_EQ(CPUStatModel::kStatGuestTime, 8);
-    EXPECT_EQ(CPUStatModel::kStatGuestNice, 9);
-    EXPECT_EQ(CPUStatModel::kStatTotalUsage, 10);
-    EXPECT_EQ(CPUStatModel::kStatIdleUsage, 11);
-}
-
-TEST_F(UT_CPUStatModel, test_data_invalidIndex)
-{
-    // 测试无效索引
-    QModelIndex invalidIndex;
-    EXPECT_FALSE(invalidIndex.isValid());
-
-    // 用无效索引调用 data
-    QVariant result = m_tester->data(invalidIndex, Qt::DisplayRole);
-    EXPECT_FALSE(result.isValid());
-}
-
-TEST_F(UT_CPUStatModel, test_data_outOfBounds)
-{
-    // 测试超出范围的行索引
-    QModelIndex outOfBoundsIndex = m_tester->index(1000, 0);
-    QVariant result = m_tester->data(outOfBoundsIndex, Qt::DisplayRole);
-    EXPECT_FALSE(result.isValid());
-}
-
-TEST_F(UT_CPUStatModel, test_data_negativeRow)
-{
-    // 测试负数行索引
-    QModelIndex negativeIndex = m_tester->index(-1, 0);
-    QVariant result = m_tester->data(negativeIndex, Qt::DisplayRole);
-    EXPECT_FALSE(result.isValid());
-}
-
-TEST_F(UT_CPUStatModel, test_data_AccessibleTextRole)
-{
-    // 测试 AccessibleTextRole
-    QModelIndex index = m_tester->index(0, CPUStatModel::kStatUserTime);
-    if (index.isValid() || m_tester->rowCount() > 0) {
-        QVariant result = m_tester->data(index, Qt::AccessibleTextRole);
-        // 即使结果无效，也覆盖了代码路径
-    }
-}
-
-TEST_F(UT_CPUStatModel, test_rowCount_noData)
-{
-    // 在没有数据的情况下测试 rowCount
-    TimePeriod time {};
-    CPUStatModel model(time);
-    // 如果 statSampleDB 和 usageSampleDB 都为空或计数不同，返回 0
-    int rows = model.rowCount();
-    EXPECT_GE(rows, 0);
-}
-
-// ========== 新增：注入真实 Sample，覆盖 data() switch 全部分支 ==========
-
-// 辅助：向 m_tester 注入一帧 stat/usage 样本
-static void injectSample(CPUStatModel *m, const cpu_stat_t &stVal, const cpu_usage_t &usVal)
+// Append one stat/usage sample frame pair to the model's sample databases.
+void injectSample(CPUStatModel *model, const cpu_stat_t &statVal, const cpu_usage_t &usageVal)
 {
     timeval tv {1, 0};
-    auto &statDB = access_private_field::CPUStatModelm_statSampleDB(*m);
-    auto &usageDB = access_private_field::CPUStatModelm_usageSampleDB(*m);
-    statDB->addSample(new SampleFrame<cpu_stat_t>(tv, CPUStat(std::make_shared<cpu_stat_t>(stVal))));
-    usageDB->addSample(new SampleFrame<cpu_usage_t>(tv, CPUUsage(std::make_shared<cpu_usage_t>(usVal))));
+    auto &statDB = access_private_field::CPUStatModelm_statSampleDB(*model);
+    auto &usageDB = access_private_field::CPUStatModelm_usageSampleDB(*model);
+    statDB->addSample(new SampleFrame<cpu_stat_t>(tv, CPUStat(std::make_shared<cpu_stat_t>(statVal))));
+    usageDB->addSample(new SampleFrame<cpu_usage_t>(tv, CPUUsage(std::make_shared<cpu_usage_t>(usageVal))));
 }
 
-TEST_F(UT_CPUStatModel, test_data_allStatColumns_DisplayRole)
+class UT_CPUStatModel : public ::testing::Test
 {
+protected:
+    void SetUp() override
+    {
+        // Arrange: every case starts from a fresh model with empty sample DBs
+        m_model.reset(new CPUStatModel(TimePeriod(), nullptr));
+    }
+
+    void TearDown() override
+    {
+        m_model.reset();
+    }
+
+    QScopedPointer<CPUStatModel> m_model;
+};
+
+// ---------------------------------------------------------------------------
+// ctor + B1 + B2: a fresh model has zero rows and the constant column count.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, Construction_DefaultState_SampleDBsEmpty)
+{
+    // Arrange: SetUp built the model with empty sample databases
+    ASSERT_NE(m_model, nullptr);
+
+    // Act
+    const int rows = m_model->rowCount();
+    const int cols = m_model->columnCount();
+
+    // Assert
+    EXPECT_EQ(0, rows);
+    EXPECT_EQ(CPUStatModel::kStatPropMax, cols);
+}
+
+// ---------------------------------------------------------------------------
+// B1 (equal counts): rowCount returns the usage sample count.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, RowCount_EqualSampleCounts_ReturnsUsageCount)
+{
+    // Arrange
+    cpu_stat_t st {};
+    cpu_usage_t us {};
+    injectSample(m_model.data(), st, us);
+
+    // Act
+    const int rows = m_model->rowCount();
+
+    // Assert: one stat frame + one usage frame -> single model row
+    EXPECT_EQ(1, rows);
+    EXPECT_EQ(1, m_model->rowCount());
+}
+
+// ---------------------------------------------------------------------------
+// B1 (equal counts): the row count follows the sample growth and the
+// ring-buffer window keeps stat/usage counts equal when full.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, RowCount_AfterSecondSample_GrowsToTwo)
+{
+    // Arrange
+    cpu_stat_t st {};
+    cpu_usage_t us {};
+    injectSample(m_model.data(), st, us);
+    ASSERT_EQ(1, m_model->rowCount());
+
+    // Act: fill the default two-frame window
+    injectSample(m_model.data(), st, us);
+    const int rowsAfterTwo = m_model->rowCount();
+
+    // Assert: both sample stores report the same count
+    EXPECT_EQ(2, rowsAfterTwo);
+    EXPECT_EQ(2, int(access_private_field::CPUStatModelm_usageSampleDB(*m_model)->count()));
+
+    // Act: a third frame evicts the oldest (window stays at two frames)
+    injectSample(m_model.data(), st, us);
+    const int rowsAfterThree = m_model->rowCount();
+
+    // Assert: counts stay equal, so the model row count is unchanged
+    EXPECT_EQ(2, rowsAfterThree);
+    EXPECT_EQ(2, int(access_private_field::CPUStatModelm_statSampleDB(*m_model)->count()));
+}
+
+// ---------------------------------------------------------------------------
+// B1 (mismatched counts): stat/usage imbalance collapses rowCount to zero.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, RowCount_SampleCountMismatch_ReturnsZero)
+{
+    // Arrange: append a stat frame but no matching usage frame
+    cpu_stat_t st {};
+    timeval tv {1, 0};
+    auto &statDB = access_private_field::CPUStatModelm_statSampleDB(*m_model);
+    statDB->addSample(new SampleFrame<cpu_stat_t>(tv, CPUStat(std::make_shared<cpu_stat_t>(st))));
+    ASSERT_EQ(1, int(access_private_field::CPUStatModelm_statSampleDB(*m_model)->count()));
+    ASSERT_EQ(0, int(access_private_field::CPUStatModelm_usageSampleDB(*m_model)->count()));
+
+    // Act
+    const int rows = m_model->rowCount();
+
+    // Assert: the guard demands equal stat/usage counts
+    EXPECT_EQ(0, rows);
+    EXPECT_EQ(0, m_model->rowCount());
+}
+
+// ---------------------------------------------------------------------------
+// B2: columnCount is the constant kStatPropMax regardless of content.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, ColumnCount_Always_ReturnsKStatPropMax)
+{
+    // Arrange
+    cpu_stat_t st {};
+    cpu_usage_t us {};
+    injectSample(m_model.data(), st, us);
+
+    // Act
+    const int cols = m_model->columnCount();
+
+    // Assert: 12 stat/usage columns enumerated in the header
+    EXPECT_EQ(CPUStatModel::kStatPropMax, cols);
+    EXPECT_EQ(12, cols);
+}
+
+// ---------------------------------------------------------------------------
+// B3: an invalid index short-circuits before the sample lookups.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, Data_InvalidIndex_ReturnsInvalidVariant)
+{
+    // Arrange
+    cpu_stat_t st {};
+    cpu_usage_t us {};
+    injectSample(m_model.data(), st, us);
+    const QModelIndex invalid;
+
+    // Act
+    const QVariant value = m_model->data(invalid, Qt::DisplayRole);
+
+    // Assert
+    EXPECT_FALSE(value.isValid());
+    EXPECT_EQ(QVariant(), value);
+}
+
+// ---------------------------------------------------------------------------
+// B4 (row >= usage count): an out-of-bounds row is rejected.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, Data_RowOutOfBounds_ReturnsInvalidVariant)
+{
+    // Arrange
+    cpu_stat_t st {};
+    cpu_usage_t us {};
+    injectSample(m_model.data(), st, us);
+    const QModelIndex tooFar = m_model->index(1000, CPUStatModel::kStatUserTime);
+
+    // Act
+    const QVariant value = m_model->data(tooFar, Qt::DisplayRole);
+
+    // Assert
+    EXPECT_FALSE(value.isValid());
+    EXPECT_EQ(QVariant(), value);
+}
+
+// ---------------------------------------------------------------------------
+// B4 (row < 0): a negative row is rejected the same way.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, Data_NegativeRow_ReturnsInvalidVariant)
+{
+    // Arrange
+    cpu_stat_t st {};
+    cpu_usage_t us {};
+    injectSample(m_model.data(), st, us);
+
+    // Act: createIndex bypasses QAbstractItemModel's own index validation
+    const QModelIndex negative = m_model->createIndex(-1, CPUStatModel::kStatUserTime);
+    const QVariant value = m_model->data(negative, Qt::DisplayRole);
+
+    // Assert
+    EXPECT_FALSE(value.isValid());
+    EXPECT_EQ(QVariant(), value);
+}
+
+// ---------------------------------------------------------------------------
+// B6: every one of the 12 columns maps to its sample field under DisplayRole.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, Data_DisplayRoleAllColumns_ReturnsSampleValues)
+{
+    // Arrange: distinctive field values prove the column-to-field mapping
     cpu_stat_t st {};
     st.user = 11; st.nice = 12; st.sys = 13; st.idle = 14; st.iowait = 15;
     st.hardirq = 16; st.softirq = 17; st.steal = 18; st.guest = 19; st.guest_nice = 20;
     cpu_usage_t us {};
     us.total = 100; us.idle = 30;
-    injectSample(m_tester, st, us);
+    injectSample(m_model.data(), st, us);
+    ASSERT_EQ(1, m_model->rowCount());
 
-    ASSERT_EQ(m_tester->rowCount(), 1);
     struct Col { int col; qulonglong expect; };
-    Col cols[] = {
+    const Col cols[] = {
         {CPUStatModel::kStatUserTime, 11},   {CPUStatModel::kStatNiceTime, 12},
         {CPUStatModel::kStatSystemTime, 13}, {CPUStatModel::kStatIdleTime, 14},
         {CPUStatModel::kStatIOWaitTime, 15}, {CPUStatModel::kStatHardIRQ, 16},
         {CPUStatModel::kStatSoftIRQ, 17},    {CPUStatModel::kStatStealTime, 18},
         {CPUStatModel::kStatGuestTime, 19},  {CPUStatModel::kStatGuestNice, 20},
-        {CPUStatModel::kStatTotalUsage, 100},{CPUStatModel::kStatIdleUsage, 30},
+        {CPUStatModel::kStatTotalUsage, 100},{CPUStatModel::kStatIdleUsage, 30}
     };
-    for (auto &c : cols) {
-        QModelIndex idx = m_tester->index(0, c.col);
-        QVariant v = m_tester->data(idx, Qt::DisplayRole);
-        EXPECT_TRUE(v.isValid()) << "col=" << c.col;
-        EXPECT_EQ(v.toULongLong(), c.expect) << "col=" << c.col;
+
+    // Act: read every column under DisplayRole into a lookup table
+    QMap<int, QVariant> rendered;
+    for (const auto &c : cols)
+        rendered.insert(c.col, m_model->data(m_model->index(0, c.col), Qt::DisplayRole));
+
+    // Assert: each column resolves through its switch case
+    for (const auto &c : cols) {
+        EXPECT_TRUE(rendered.value(c.col).isValid()) << "col=" << c.col;
+        EXPECT_EQ(c.expect, rendered.value(c.col).toULongLong()) << "col=" << c.col;
     }
+    EXPECT_EQ(12, rendered.count());
 }
 
-TEST_F(UT_CPUStatModel, test_data_allStatColumns_AccessibleTextRole)
+// ---------------------------------------------------------------------------
+// B6: AccessibleTextRole shares the display switch.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, Data_AccessibleTextRole_SharesDisplayBranch)
 {
-    // AccessibleTextRole 与 DisplayRole 走同一 switch 分支，确保覆盖
+    // Arrange
     cpu_stat_t st {};
-    st.user = 7; st.nice = 8; st.sys = 9;
+    st.user = 7;
     cpu_usage_t us {};
     us.total = 50; us.idle = 10;
-    injectSample(m_tester, st, us);
+    injectSample(m_model.data(), st, us);
+    const QModelIndex idx = m_model->index(0, CPUStatModel::kStatUserTime);
 
-    QModelIndex idx = m_tester->index(0, CPUStatModel::kStatUserTime);
-    QVariant v = m_tester->data(idx, Qt::AccessibleTextRole);
-    EXPECT_EQ(v.toULongLong(), 7ull);
+    // Act
+    const QVariant accessible = m_model->data(idx, Qt::AccessibleTextRole);
+    const QVariant display = m_model->data(idx, Qt::DisplayRole);
+
+    // Assert: identical value across the two roles
+    EXPECT_EQ(display.toULongLong(), accessible.toULongLong());
+    EXPECT_EQ(7ull, accessible.toULongLong());
 }
 
-TEST_F(UT_CPUStatModel, test_data_otherRolesReturnInvalid)
+// ---------------------------------------------------------------------------
+// B8: roles outside the display pair return an invalid variant.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, Data_UnknownRole_ReturnsInvalidVariant)
 {
-    // 非显示/Accessible 角色，data() 应直接返回空 QVariant
+    // Arrange
     cpu_stat_t st {};
     cpu_usage_t us {};
-    injectSample(m_tester, st, us);
+    injectSample(m_model.data(), st, us);
+    const QModelIndex idx = m_model->index(0, CPUStatModel::kStatUserTime);
 
-    QModelIndex idx = m_tester->index(0, CPUStatModel::kStatUserTime);
-    QVariant v = m_tester->data(idx, Qt::TextAlignmentRole);
-    EXPECT_FALSE(v.isValid());
-    v = m_tester->data(idx, Qt::FontRole);
-    EXPECT_FALSE(v.isValid());
+    // Act
+    const QVariant alignment = m_model->data(idx, Qt::TextAlignmentRole);
+    const QVariant font = m_model->data(idx, Qt::FontRole);
+
+    // Assert: the switch is display-only, everything else falls to {}
+    EXPECT_FALSE(alignment.isValid());
+    EXPECT_EQ(QVariant(), font);
 }
 
-TEST_F(UT_CPUStatModel, test_data_defaultColumnSwitchBranch)
+// ---------------------------------------------------------------------------
+// B7: a column at kStatPropMax falls through the display switch.
+// ---------------------------------------------------------------------------
+TEST_F(UT_CPUStatModel, Data_DefaultColumnSwitchBranch_ReturnsInvalid)
 {
-    // 列号落在 switch 的 default 分支（kStatPropMax 本身）
+    // Arrange
     cpu_stat_t st {};
     cpu_usage_t us {};
-    injectSample(m_tester, st, us);
+    injectSample(m_model.data(), st, us);
+    const QModelIndex defaultCol = m_model->createIndex(0, CPUStatModel::kStatPropMax);
 
-    QModelIndex idx = m_tester->createIndex(0, CPUStatModel::kStatPropMax);
-    QVariant v = m_tester->data(idx, Qt::DisplayRole);
-    EXPECT_FALSE(v.isValid());
+    // Act
+    const QVariant value = m_model->data(defaultCol, Qt::DisplayRole);
+
+    // Assert
+    EXPECT_FALSE(value.isValid());
+    EXPECT_EQ(QVariant(), value);
 }
 
-TEST_F(UT_CPUStatModel, test_rowCount_countMismatchReturnsZero)
-{
-    // stat/usage 样本数不一致 → rowCount 返回 0
-    cpu_stat_t st {};
-    cpu_usage_t us {};
-    auto &statDB = access_private_field::CPUStatModelm_statSampleDB(*m_tester);
-    timeval tv {1, 0};
-    statDB->addSample(new SampleFrame<cpu_stat_t>(tv, CPUStat(std::make_shared<cpu_stat_t>(st))));
-    // usageDB 仍为空
-    EXPECT_EQ(m_tester->rowCount(), 0);
-}
-
-
+} // namespace
