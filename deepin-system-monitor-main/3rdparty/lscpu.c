@@ -35,8 +35,6 @@
 #include <sys/stat.h>
 #include <sys/personality.h>
 
-#include <libsmartcols.h>
-
 #include "closestream.h"
 #include "optutils.h"
 

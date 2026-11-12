@@ -82,7 +82,6 @@ include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main)
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui)
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty)
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/include)
-include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src)
 
 set(HPP_GLOBAL
     ${CMAKE_HOME_DIRECTORY}/config.h
@@ -443,20 +442,7 @@ set(CPP_WM
 )
 
 set(LSCPU
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/calculate.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/cell.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/column.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/grouping.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/init.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/iter.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/line.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/print-api.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/print.c
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/lscpu.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/symbols.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/table.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/version.c
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/walk.c
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/lscpu-arm.c
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/lscpu-cpu.c
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/lscpu-cputype.c
@@ -476,8 +462,6 @@ set(LSCPU
 )
 
 set(LSCPU_INCLUDE
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/libsmartcols.h
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src/smartcolsP.h
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/include/all-io.h
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/include/encode.h
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/include/minix.h
@@ -848,7 +832,6 @@ target_include_directories(${PROJECT_NAME_TEST}
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/include
-        ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src
         )
 
 target_link_libraries(${PROJECT_NAME_TEST}
