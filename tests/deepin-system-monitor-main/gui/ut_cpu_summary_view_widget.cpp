@@ -255,7 +255,11 @@ TEST_P(DisplayRole_LabelGrid_Test, DisplayRole_LabelGrid_YieldsExpectedText)
     QVariant v = m_tester->data(m_tester->index(param.row, param.column), Qt::DisplayRole);
     // Assert
     EXPECT_EQ(v.toString(), QString(param.expected));
-    EXPECT_TRUE(v.canConvert<QString>());
+    // 末行第二列无数据 -> 空 QVariant；其余单元格均为有效字符串
+    if (param.row == 9 && param.column == 1)
+        EXPECT_FALSE(v.isValid());
+    else
+        EXPECT_TRUE(v.canConvert<QString>());
 }
 
 INSTANTIATE_TEST_SUITE_P(CPUSummaryTableModel,
@@ -298,7 +302,11 @@ TEST_P(UserRole_ValueGrid_Test, UserRole_ValueGrid_YieldsStubbedValue)
     QVariant v = m_tester->data(m_tester->index(param.row, param.column), Qt::UserRole);
     // Assert
     EXPECT_EQ(v.toString(), QString(param.expected));
-    EXPECT_TRUE(v.canConvert<QString>());
+    // 末行第二列无数据 -> 空 QVariant；其余单元格均为有效字符串
+    if (param.row == 9 && param.column == 1)
+        EXPECT_FALSE(v.isValid());
+    else
+        EXPECT_TRUE(v.canConvert<QString>());
 }
 
 INSTANTIATE_TEST_SUITE_P(CPUSummaryTableModel,

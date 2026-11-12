@@ -799,6 +799,27 @@ list(APPEND UT_CPP
     ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/ut_application.cpp)
 # --- end APPENDED block ------------------------------------------------------
 
+# --- APPENDED (V-8171 UT-sysmonitor-44 gui re-include task, no existing lines changed) ----
+# gui 模块其余 15 个测试 TU 逐类重纳入主测试目标（本任务逐类核实编译+运行全绿后
+# 一笔一类提交；本块随对应类的提交逐文件追加）。
+list(APPEND UT_CPP
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/dialog/ut_error_dialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_netif_summary_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_netif_item_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_mem_stat_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_cpu_summary_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_user_list_view.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_service_name_sub_input_dialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/base/ut_base_header_view.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_monitor_compact_view.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_monitor_expand_view.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_netif_detail_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_mem_detail_view_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_onlineicon.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_system_service_page_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deepin-system-monitor-main/gui/ut_block_dev_detail_view_widget.cpp)
+# --- end APPENDED block ------------------------------------------------------
+
 add_executable(${PROJECT_NAME_TEST}
     ${UT_CPP}
     ${APP_HPP}

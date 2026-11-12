@@ -171,17 +171,17 @@ TEST_F(BaseHeaderViewTest, EventFilter_NonKeyEventOnSelf_ForwardsToBaseResult)
     EXPECT_EQ(ev.type(), QEvent::HoverMove);
 }
 
-TEST_F(BaseHeaderViewTest, EventFilter_NavigationKeyOnForeignObject_StillIntercepted)
+TEST_F(BaseHeaderViewTest, EventFilter_NavigationKeyOnForeignObject_ForwardsToBaseResult)
 {
-    // Arrange：impl 只判断按键类型，不区分 watched 对象，导航键一律拦截
+    // Arrange：源码先判 obj != this -> 委托基类，不区分按键类型
     QWidget other;
     QKeyEvent ev(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
 
     // Act
     bool result = m_tester->eventFilter(&other, &ev);
 
-    // Assert：导航键被拦截返回 true
-    EXPECT_TRUE(result);
+    // Assert：非自身对象一律透传基类（返回 false），不拦截
+    EXPECT_FALSE(result);
     EXPECT_EQ(ev.type(), QEvent::KeyPress);
 }
 

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //Self
@@ -75,10 +75,14 @@ protected:
     NetifDetailViewWidget *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_NetifDetailViewWidget, Ctor_DefaultState_TwoSubViewsAssembled)
 {
-    // 构造函数：网络概览 + 网络详情两块子视图装配，标题翻译
+    // Arrange：默认构造（SetUp 完成）
+
+    // Act：构造已完成（SetUp 完成）
     ASSERT_NE(m_tester, nullptr);
+
+    // Assert：网络概览 + 网络详情两块子视图装配，标题翻译
     EXPECT_NE(m_tester->m_netifstatWIdget, nullptr);
     EXPECT_NE(m_tester->m_netifsummaryWidget, nullptr);
     EXPECT_EQ(m_tester->m_netifstatWIdget->parent(), m_tester);
@@ -89,20 +93,26 @@ TEST_F(UT_NetifDetailViewWidget, initTest)
 // 分支说明(updateData): 转发 onModelUpdate -> 按当前数据源刷新统计/详情子视图
 TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
 {
-    // 空数据源：子视图保持初始状态
+    // Arrange：空数据源（SetUp 完成 clearInfoDB）
+
+    // Act：数据刷新转发
     m_tester->updateData();
 
+    // Assert：子视图保持初始状态
     EXPECT_FALSE(m_tester->m_netifstatWIdget->m_initStatus);
     EXPECT_TRUE(m_tester->m_netifstatWIdget->m_mapItemView.isEmpty());
+    EXPECT_EQ(m_tester->m_netifstatWIdget->m_mapItemView.size(), 0);
 }
 
 TEST_F(UT_NetifDetailViewWidget, test_updateData_02_withData)
 {
-    // 有数据源：统计子视图按 MAC 创建条目
+    // Arrange：注入含单网卡 "aa" 的数据源
     injectInfoDB(stub_infoDB_one());
 
+    // Act：数据刷新转发
     m_tester->updateData();
 
+    // Assert：统计子视图按 MAC 创建条目
     EXPECT_TRUE(m_tester->m_netifstatWIdget->m_initStatus);
     EXPECT_EQ(m_tester->m_netifstatWIdget->m_mapItemView.size(), 1);
     EXPECT_TRUE(m_tester->m_netifstatWIdget->m_mapItemView.contains("aa"));
@@ -114,20 +124,19 @@ TEST_F(UT_NetifDetailViewWidget, test_updateData_02_withData)
 // 分支说明(detailFontChanged): 基类标题字体 + 统计/详情子视图字体同步
 TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
 {
-    // 先注入数据并创建条目，便于验证字体转发
+    // Arrange：注入数据并创建条目，目标字体
     injectInfoDB(stub_infoDB_one());
     m_tester->updateData();
     ASSERT_EQ(m_tester->m_netifstatWIdget->m_mapItemView.size(), 1);
-
     QFont font;
     font.setBold(true);
     font.setPointSize(15);
+
+    // Act：字体变化转发
     m_tester->detailFontChanged(font);
 
-    // 统计子视图：字体转发到条目（fontChanged 不改自身字体）
+    // Assert：统计子视图条目字体已转发；详情子视图委托字体已同步；表格高度固定 260
     EXPECT_EQ(m_tester->m_netifstatWIdget->m_mapItemView.value("aa")->font(), font);
-    // 详情子视图委托字体已同步
     EXPECT_EQ(m_tester->m_netifsummaryWidget->m_netInfoDetailItemDelegate->m_font, font);
-    // 表格高度固定 260
     EXPECT_EQ(m_tester->m_netifsummaryWidget->minimumHeight(), 260);
 }
