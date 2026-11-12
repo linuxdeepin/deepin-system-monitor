@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -29,14 +29,34 @@ void stub_Common_startDetached(void* obj, qint64*)
 {
     return;
 }
+
+static int g_startDetachedCallCount = 0;
+void stub_Common_startDetached_counted(void* obj, qint64*)
+{
+    g_startDetachedCallCount++;
+    return;
+}
 /***************************************STUB end**********************************************/
 
 TEST(UT_Common, test_displayShortcutHlepDialog_01)
 {
+    resetShortcutCooldown();
     QRect rect;
     Stub stub;
     stub.set((bool(QProcess::*)(qint64*))ADDR(QProcess, startDetached), stub_Common_startDetached);
     displayShortcutHelpDialog(rect);
+}
+
+TEST(UT_Common, test_displayShortcutHelpDialog_02_reentrancy)
+{
+    resetShortcutCooldown();
+    QRect rect;
+    Stub stub;
+    g_startDetachedCallCount = 0;
+    stub.set((bool(QProcess::*)(qint64*))ADDR(QProcess, startDetached), stub_Common_startDetached_counted);
+    displayShortcutHelpDialog(rect);
+    displayShortcutHelpDialog(rect);
+    EXPECT_EQ(g_startDetachedCallCount, 1);
 }
 
 TEST(UT_Common, test_getStatusBarMaxWidth_01)

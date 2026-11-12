@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -186,6 +186,7 @@ inline struct timeval &operator+=(struct timeval &lhs, const struct timeval &rhs
 
 int getStatusBarMaxWidth();
 void displayShortcutHelpDialog(const QRect &rect);
+void resetShortcutCooldown();
 void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
                      int loadingAngle, int rotationAngle, QColor foregroundColor,
                      double foregroundOpacity, QColor backgroundColor, double backgroundOpacity,
