@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -132,6 +132,11 @@ void Process::readProcessVariableInfo()
     readIO();
     readSockInodes();
 
+    // re-read cmdline so that a process whose cmdline was empty on the
+    // first scan (e.g. still starting up) gets its full command line on
+    // subsequent updates; this lets normalizeProcessName restore the
+    // complete process name instead of the kernel-truncated 15-char comm
+    readCmdline();
     d->proc_name.refreashProcessName(this);
     d->uptime = SysInfo::instance()->uptime();
 
@@ -389,6 +394,9 @@ bool Process::readCmdline()
     }
 
     cmd.data()[nb] = '\0';
+
+    // clear previous cmdline so this function is safe to call repeatedly
+    d->cmdline.clear();
 
     begin = cur = cmd.data();
     end = cmd.data() + nb;
