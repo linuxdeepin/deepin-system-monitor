@@ -532,10 +532,6 @@ set(DMIDECODE
             3rdparty/dmidecode/util.c
        )
 
-set(DMIDECODE_HEADS
-            3rdparty/displayjack/wayland_client.h
-       )
-
 set(APP_HPP
     ${CMAKE_HOME_DIRECTORY}/config.h
     ${HPP_GLOBAL}

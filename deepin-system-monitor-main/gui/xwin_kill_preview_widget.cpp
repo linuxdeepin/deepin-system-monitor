@@ -12,9 +12,8 @@
 #include "ui_common.h"
 #include "common/common.h"
 #include "ddlog.h"
-#ifdef USE_DEEPIN_WAYLAND
-#    include "3rdparty/displayjack/wayland_client.h"
-#endif
+#include <cstdint>
+#include <cstring>
 
 #include <QDebug>
 #include <QMouseEvent>
@@ -38,6 +37,27 @@ using namespace common::init;
 using namespace DDLog;
 
 #ifdef USE_DEEPIN_WAYLAND
+// dlopen 加载 libdtkwmjack.so 时使用的窗口状态结构体
+// 内联自原 3rdparty/displayjack/wayland_client.h，字段布局须与该库导出接口的 ABI 保持一致
+typedef struct Dtk_Window_State
+{
+    int32_t pid;
+    int32_t windowId;
+    char resourceName[256];
+    struct Geometry
+    {
+        int32_t x;
+        int32_t y;
+        int32_t width;
+        int32_t height;
+    } geometry;
+    bool isMinimized;
+    bool isFullScreen;
+    bool isActive;
+    int32_t splitable;
+    char uuid[256];
+} WindowState;
+
 typedef int (*InitDtkWmDisplayPtr)();
 typedef void (*DestoryDtkWmDisplayPtr)();
 typedef int (*GetAllWindowStatesListPtr)(WindowState **states);
