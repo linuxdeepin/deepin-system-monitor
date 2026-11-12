@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,7 +6,6 @@
 #define CPUSET_H
 
 #include "cpu.h"
-#include "3rdparty/dmidecode/dmidecode.h"
 #include <QList>
 #include <QSharedDataPointer>
 
@@ -76,7 +75,7 @@ public:
 private:
     void read_stats();
     /**
-     * @brief read_dmidecode 通过dmidecod读取CPU的cache信息
+     * @brief read_dmi_cache_info 从 SMBIOS/DMI 表读取 CPU 的 cache 信息
      */
     void read_dmi_cache_info();
     /**

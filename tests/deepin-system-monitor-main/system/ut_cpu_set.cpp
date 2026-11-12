@@ -38,7 +38,7 @@
 // - read_stats(:458-577) fopen失败→保持默认 / 有效行→stat+usage+percpu / 畸形行→跳过无效项
 // - read_overall_info(:579-652) 块解析→setIndex/setVendorId/setCpuFreq/setCoreId/setModelName/setCacheSize / 空输出→无条目
 // - read_lscpu(:654-969) 真实 liblscpu(仅冒烟) / 二次调用幂等 / 拓扑键
-// - read_dmi_cache_info(:782-908) specialComType==0 早退 / ==1 走dmidecode解析 / <=-1 且非特殊机型早退 / 守卫一次性
+// - read_dmi_cache_info(:782-908) specialComType==0 早退 / ==1 走 DMI 表解析 / <=-1 且非特殊机型早退 / 守卫一次性
 // - read_cache_from_lscpu_cmd(:910-934) 守卫已置位→跳过 / lscpu缓存行解析 / 空输出
 // - update(:573-582) 首次→Current迁移Last / 二次→delta回退1 / percpu入库
 // - read_cpu_freq_range_by_cpu7(:159-194) sysfs缺失→(0,0) / 有序非负区间（主机不变式）
@@ -50,7 +50,7 @@
 // 2. 边界值（§2）：零值、阈值、越界索引已覆盖
 // 3. 每个用例 AAA 三段注释齐全
 // 4. 断言强度 ≥2 且无空洞断言
-// 5. 外部依赖（/proc /sys、子进程、dmidecode）全部打桩
+// 5. 外部依赖（/proc /sys、子进程、DMI 表）全部打桩
 // 6. 特殊机型读缓存守卫（static 一次性锁存）按套件分片隔离
 // 7. 命名 Feature_Scenario_ExpectedResult 三段式
 // 8. 同质组使用 TEST_P 参数化（频率/缓存获取器）
@@ -59,6 +59,7 @@
 
 #include "system/cpu_set.h"
 #include "system/cpu.h"
+#include "system/dmi_info.h"
 #include "system/private/cpu_set_p.h"
 #include "common/common.h"
 #include "stub.h"
@@ -125,6 +126,78 @@ static FILE *stub_fopen_null(const char *path, const char *mode)
     Q_UNUSED(mode);
     return nullptr;
 }
+
+// ==================== SMBIOS 表构造辅助（DMI 套件共享） ====================
+namespace {
+
+// 按 SMBIOS 规范拼接单个结构：头部（type/length/handle）+ 字符串区 + 列表终止 NUL
+// 注：每个字符串自带 NUL 结尾，字符串列表以一个额外的 NUL 结束（无字符串时为双 NUL）
+struct DmiStructBuilder {
+    QByteArray data;
+    bool m_hasStrings = false;
+
+    void addHeader(uchar type, uchar len, quint16 handle)
+    {
+        data += char(type);
+        data += char(len);
+        data += char(handle & 0xFF);
+        data += char(handle >> 8);
+        while (data.size() < len)
+            data += char(0);
+    }
+
+    void setByte(int offset, uchar value) { data[offset] = char(value); }
+
+    void setWord(int offset, quint16 value)
+    {
+        data[offset] = char(value & 0xFF);
+        data[offset + 1] = char((value >> 8) & 0xFF);
+    }
+
+    void setDWord(int offset, quint32 value)
+    {
+        data[offset] = char(value & 0xFF);
+        data[offset + 1] = char((value >> 8) & 0xFF);
+        data[offset + 2] = char((value >> 16) & 0xFF);
+        data[offset + 3] = char((value >> 24) & 0xFF);
+    }
+
+    void addString(const char *s)
+    {
+        data += s;
+        data += char(0);
+        m_hasStrings = true;
+    }
+
+    void finish()
+    {
+        if (!m_hasStrings)
+            data += char(0);  // 无字符串：空字符串的终止 NUL
+        data += char(0);      // 字符串列表终止 NUL
+    }
+};
+
+// 将表写入临时 sysfs 目录并触发 DmiInfo 重新加载；表为空时使用空目录（模拟无权限）
+static void reloadDmiInfoForTest(const QByteArray &table)
+{
+    QTemporaryDir dir;
+    if (!table.isEmpty()) {
+        QDir().mkpath(dir.path() + "/firmware/dmi/tables");
+        QFile f(dir.path() + "/firmware/dmi/tables/DMI");
+        EXPECT_TRUE(f.open(QIODevice::WriteOnly));
+        EXPECT_EQ(f.write(table), qint64(table.size()));
+        f.close();
+    }
+    DmiInfo::reloadForTest(dir.path());
+}
+
+// 恢复真实 sysfs 环境（无权限时字段为空，与普通用户运行时一致）
+static void restoreDmiInfoForTest()
+{
+    DmiInfo::reloadForTest(QStringLiteral("/sys"));
+}
+
+} // namespace
 
 // ==================== 主套件：注入式获取器与拷贝语义 ====================
 class UT_CPUSet : public ::testing::Test
@@ -552,16 +625,17 @@ TEST_F(UT_CPUSet, Copy_AfterCopyConstructor_SharesUnderlyingData)
     EXPECT_EQ(copy.getUsageTotalDelta(), m_tester->getUsageTotalDelta());
 }
 
-TEST_F(UT_CPUSet, Copy_EmptyModelNameFlagNotCopied_FallsBackEnglishLookup)
+TEST_F(UT_CPUSet, Copy_EmptyModelNameFlagCopied_VendorFollowsFlag)
 {
     // Arrange
     m_tester->mIsEmptyModelName = true;
     m_tester->d->m_info.insert("厂商 ID", "英特尔");
     // Act
     CPUSet copy(*m_tester);
-    // Assert: 拷贝构造未迁移 mIsEmptyModelName 标志（现状行为记录）
-    EXPECT_EQ(copy.mIsEmptyModelName, false);
-    EXPECT_EQ(copy.vendor().toStdString(), std::string(""));
+    // Assert: 拷贝构造迁移 mIsEmptyModelName 标志（cpu_set.cpp:376），
+    // vendor() 按标志读取中文键；记录现状行为
+    EXPECT_EQ(copy.mIsEmptyModelName, true);
+    EXPECT_EQ(copy.vendor().toStdString(), std::string("\xE8\x8B\xB1\xE7\x89\xB9\xE5\xB0\x94"));
 }
 
 TEST_F(UT_CPUSet, OperatorAssign_FromOther_CopiesSharedData)
@@ -868,8 +942,9 @@ TEST_F(UT_CPUSetCacheCmd, ReadCacheFromLscpuCmd_EmptyStdout_NoCacheKeys)
     EXPECT_EQ(g_qprocStartCapture.size(), 1);
 }
 
-// ==================== 特殊机型 dmidecode 缓存解析套件 ====================
+// ==================== 特殊机型 DMI 表缓存解析套件 ====================
 // 注意：read_dmi_cache_info 的守卫是一次性锁存（static），按套件分片隔离
+// DMI 数据通过临时 sysfs 目录注入 DmiInfo，不再依赖 dmidecode 子进程
 class UT_CPUSetDmiSpecial : public ::testing::Test
 {
 public:
@@ -889,6 +964,7 @@ public:
         specialComType = m_origType;
         g_qprocStartCapture.clear();
         g_qprocStdout.clear();
+        restoreDmiInfoForTest();
     }
 
     CPUSet *m_tester = nullptr;
@@ -898,18 +974,48 @@ public:
 
 TEST_F(UT_CPUSetDmiSpecial, ReadDmiCacheInfo_SpecialType_ParsesCacheBlocks)
 {
-    // Arrange: 特殊机型标记为 1，canned dmidecode 缓存输出
-    specialComType = 1;
-    g_qprocStdout =
-        "Handle 0x0700, DMI type 7, 19 bytes.\nCache Information\n\n"
-        "\tSocket Designation: L1 Cache\n\tConfiguration: Enabled, Not Socketed, Level 1\n"
-        "\tMaximum Size: 2048 KB\n\n"
-        "\tSocket Designation: L2 Cache\n\tConfiguration: Enabled, Not Socketed, Level 2\n"
-        "\tMaximum Size: 16384 KB\n\n"
-        "\tSocket Designation: L3 Cache\n\tMaximum Size: 16 MB\n\n";
-    stub.set((void (QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))
-             ADDR(QProcess, start), stub_qproc_start);
-    stub.set((QByteArray (QProcess::*)())ADDR(QProcess, readAllStandardOutput), stub_qproc_read_stdout);
+    // Arrange: 特殊机型标记为 1，注入含 L1/L2/L3 缓存结构的 SMBIOS 表
+    // L1: 16 位格式 2048 KB；L2: 32 位格式 16384 KB；L3: 32 位格式 16384 KB（16 MB）
+    QByteArray table;
+    {
+        DmiStructBuilder sys;
+        sys.addHeader(1, 0x1B, 0x0001);
+        sys.setByte(0x04, 1);
+        sys.setByte(0x05, 2);
+        sys.addString("TestVendor");
+        sys.addString("KLVV-PC-TEST");
+        sys.finish();
+        table += sys.data;
+    }
+    {
+        DmiStructBuilder l1;
+        l1.addHeader(7, 0x0F, 0x0007);
+        l1.setByte(0x04, 1);
+        l1.setWord(0x07, 2048);
+        l1.setWord(0x09, 2048);
+        l1.addString("L1 Cache");
+        l1.finish();
+        table += l1.data;
+    }
+    {
+        DmiStructBuilder l2;
+        l2.addHeader(7, 0x1B, 0x0008);
+        l2.setByte(0x04, 1);
+        l2.setDWord(0x13, 16384);
+        l2.addString("L2 Cache");
+        l2.finish();
+        table += l2.data;
+    }
+    {
+        DmiStructBuilder l3;
+        l3.addHeader(7, 0x1B, 0x0009);
+        l3.setByte(0x04, 1);
+        l3.setDWord(0x13, 16384);
+        l3.addString("L3 Cache");
+        l3.finish();
+        table += l3.data;
+    }
+    reloadDmiInfoForTest(table);
     // Act
     m_tester->read_dmi_cache_info();
     // Assert: KiB 折算 MiB 后写入信息表
@@ -917,7 +1023,7 @@ TEST_F(UT_CPUSetDmiSpecial, ReadDmiCacheInfo_SpecialType_ParsesCacheBlocks)
     EXPECT_EQ(m_tester->d->m_info.value("L1i cache").toStdString(), std::string("1 MiB"));
     EXPECT_EQ(m_tester->d->m_info.value("L2 cache").toStdString(), std::string("16 MiB"));
     EXPECT_EQ(m_tester->d->m_info.value("L3 cache").toStdString(), std::string("16 MiB"));
-    EXPECT_EQ(g_qprocStartCapture.size(), 1);
+    EXPECT_EQ(g_qprocStartCapture.size(), 0);
 }
 
 TEST_F(UT_CPUSetDmiSpecial, ReadDmiCacheInfo_GuardLatched_SecondCallSkipsParse)
@@ -1005,6 +1111,7 @@ public:
         specialComType = m_origType;
         g_qprocStartCapture.clear();
         g_qprocStdout.clear();
+        restoreDmiInfoForTest();
     }
 
     CPUSet *m_tester = nullptr;
@@ -1014,17 +1121,36 @@ public:
 
 TEST_F(UT_CPUSetDmiUnknown, ReadDmiCacheInfo_UnknownTypeNoSpecialBoard_EarlyReturn)
 {
-    // Arrange: 两次探测（产品名、完整输出）均为非特殊机型
-    g_qprocStdout = "Generic Board\n";
+    // Arrange: 产品名与 OEM String 4 均非特殊机型关键字
+    QByteArray table;
+    {
+        DmiStructBuilder sys;
+        sys.addHeader(1, 0x1B, 0x0001);
+        sys.setByte(0x04, 1);
+        sys.setByte(0x05, 2);
+        sys.addString("TestVendor");
+        sys.addString("Generic Board");
+        sys.finish();
+        table += sys.data;
+    }
+    {
+        DmiStructBuilder oem;
+        oem.addHeader(11, 0x05, 0x000B);
+        oem.setByte(0x04, 4);
+        oem.addString("str1");
+        oem.addString("str2");
+        oem.addString("str3");
+        oem.addString("NothingSpecial-XYZ");
+        oem.finish();
+        table += oem.data;
+    }
+    reloadDmiInfoForTest(table);
     stub.set((void (QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))
              ADDR(QProcess, start), stub_qproc_start);
-    stub.set((QByteArray (QProcess::*)())ADDR(QProcess, readAllStandardOutput), stub_qproc_read_stdout);
     // Act
     m_tester->read_dmi_cache_info();
-    // Assert: 守卫未锁存时探测两次后早退；已锁存（同进程前序套件）则直接早退，
-    // 官方 run-ut.sh 按套件分片运行时 capture 恒为 2
-    const int starts = g_qprocStartCapture.size();
-    EXPECT_TRUE(starts == 2 || starts == 0);
+    // Assert: 新实现不再调用 dmidecode 子进程，直接读表后早退
+    EXPECT_EQ(g_qprocStartCapture.size(), 0);
     EXPECT_EQ(m_tester->l1dCache().toStdString(), std::string("-"));
     EXPECT_EQ(m_tester->l2Cache().toStdString(), std::string("-"));
 }
