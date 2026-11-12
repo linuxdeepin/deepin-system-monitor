@@ -71,7 +71,6 @@ include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libsmartcols/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
 #include_directories(${DFrameworkDBus_INCLUDE_DIRS})  # chinalife
 
@@ -422,20 +421,7 @@ set(CPP_WM
 )
 
 set(LSCPU
-        3rdparty/libsmartcols/src/calculate.c
-        3rdparty/libsmartcols/src/cell.c
-        3rdparty/libsmartcols/src/column.c
-        3rdparty/libsmartcols/src/grouping.c
-        3rdparty/libsmartcols/src/init.c
-        3rdparty/libsmartcols/src/iter.c
-        3rdparty/libsmartcols/src/line.c
-        3rdparty/libsmartcols/src/print-api.c
-        3rdparty/libsmartcols/src/print.c
         3rdparty/lscpu.c
-        3rdparty/libsmartcols/src/symbols.c
-        3rdparty/libsmartcols/src/table.c
-        3rdparty/libsmartcols/src/version.c
-        3rdparty/libsmartcols/src/walk.c
         3rdparty/lscpu-arm.c
         3rdparty/lscpu-cpu.c
         3rdparty/lscpu-cputype.c
@@ -454,8 +440,6 @@ set(LSCPU
         3rdparty/fileutils.c
 )
 set(LSCPU_INCLUDE
-        3rdparty/libsmartcols/src/libsmartcols.h
-        3rdparty/libsmartcols/src/smartcolsP.h
         3rdparty/include/all-io.h
         3rdparty/include/encode.h
         3rdparty/include/minix.h

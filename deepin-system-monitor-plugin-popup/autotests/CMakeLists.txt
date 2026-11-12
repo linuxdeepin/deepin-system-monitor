@@ -35,7 +35,6 @@ include_directories(
 include_directories(
     ${MAIN_APP_DIR}/3rdparty
     ${MAIN_APP_DIR}/3rdparty/include
-    ${MAIN_APP_DIR}/3rdparty/libsmartcols/src
     /usr/include/dde-dock
 )
 
