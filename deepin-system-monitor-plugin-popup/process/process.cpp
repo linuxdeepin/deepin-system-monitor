@@ -291,21 +291,29 @@ bool Process::readCmdline()
 
     cmd.data()[nb] = '\0';
 
+    // Parse into a local list and assign at the end: readProcessVariableInfo()
+    // re-reads the whole info every refresh, so appending into d->cmdline would
+    // grow it on every cycle. A failed open/read keeps the previous arguments;
+    // a read that succeeds without any byte (zombie or mid-exec) stores an
+    // empty list and is replaced on the next refresh.
+    QByteArrayList cmds;
     begin = cur = cmd.data();
     end = cmd.data() + nb;
     while (cur < end) {
         // cmdline may sperarted by null character
         if (*cur == '\0') {
             QByteArray buf(begin);
-            d->cmdline << buf;
+            cmds << buf;
             begin = cur + 1;
         }
         ++cur;
     }
     if (begin < end) {
         QByteArray buf(begin);
-        d->cmdline << buf;
+        cmds << buf;
     }
+
+    d->cmdline = cmds;
 
     return ok;
 }

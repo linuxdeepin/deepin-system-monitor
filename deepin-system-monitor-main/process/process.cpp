@@ -132,6 +132,19 @@ void Process::readProcessVariableInfo()
     readIO();
     readSockInodes();
 
+    // The kernel truncates comm to 15 characters, the full name can only be
+    // recovered from cmdline, which used to be read once when the process was
+    // first seen. If that read hit an empty cmdline (first scan overlapping
+    // exec) the truncated name would stick until the process is gone. Retry
+    // here so the next refresh can recover it.
+    //
+    // Kernel threads never have a cmdline, and they are exactly kthreadd
+    // (pid 2) plus its children (ppid 2) in /proc. Skip them so the read-once
+    // optimization still holds for those; a user process with an empty argv
+    // keeps retrying.
+    if (d->pid != 2 && d->ppid != 2 && !hasCmdlineArgument())
+        readCmdline();
+
     d->proc_name.refreashProcessName(this);
     d->uptime = SysInfo::instance()->uptime();
 
@@ -390,23 +403,44 @@ bool Process::readCmdline()
 
     cmd.data()[nb] = '\0';
 
+    // Parse into a local list and assign at the end: this function is called
+    // again to retry an empty cmdline, so appending into d->cmdline would grow
+    // it on every call. A failed open/read keeps the previous arguments; a
+    // read that succeeds without any byte (zombie or mid-exec) stores an empty
+    // list, which the retry in readProcessVariableInfo() can replace later.
+    QByteArrayList cmds;
     begin = cur = cmd.data();
     end = cmd.data() + nb;
     while (cur < end) {
         // cmdline may sperarted by null character
         if (*cur == '\0') {
             QByteArray buf(begin);
-            d->cmdline << buf;
+            cmds << buf;
             begin = cur + 1;
         }
         ++cur;
     }
     if (begin < end) {
         QByteArray buf(begin);
-        d->cmdline << buf;
+        cmds << buf;
     }
 
+    d->cmdline = cmds;
+
     return ok;
+}
+
+// A process started with an empty argv has a single '\0' in /proc/[pid]/cmdline,
+// which is parsed into [""]. QByteArrayList::isEmpty() is false in that case,
+// so check the arguments themselves instead.
+bool Process::hasCmdlineArgument() const
+{
+    for (const QByteArray &arg : d->cmdline) {
+        if (!arg.isEmpty())
+            return true;
+    }
+
+    return false;
 }
 
 // read /proc/[pid]/environ

@@ -497,6 +497,37 @@ TEST_F(UT_Process, test_readCmdline_002)
     EXPECT_TRUE(m_Sresult == "fopen failed");
 }
 
+TEST_F(UT_Process, test_readCmdline_repeatable)
+{
+    // readProcessVariableInfo() may re-read cmdline to recover a truncated
+    // process name, the list must not accumulate on every call.
+    m_tester->d->pid = getpid();
+    m_tester->d->cmdline.clear();
+
+    m_tester->readCmdline();
+    const int firstSize = m_tester->cmdline().size();
+    ASSERT_GT(firstSize, 0);
+
+    m_tester->readCmdline();
+    EXPECT_EQ(m_tester->cmdline().size(), firstSize);
+}
+
+TEST_F(UT_Process, test_hasCmdlineArgument)
+{
+    // no argument at all, e.g. kernel threads
+    m_tester->d->cmdline.clear();
+    EXPECT_FALSE(m_tester->hasCmdlineArgument());
+
+    // process started with an empty argv: '/proc/[pid]/cmdline' holds a single
+    // '\0', parsed into [""], and QByteArrayList::isEmpty() is false here
+    m_tester->d->cmdline << QByteArray("");
+    EXPECT_FALSE(m_tester->hasCmdlineArgument());
+
+    m_tester->d->cmdline.clear();
+    m_tester->d->cmdline << QByteArray("/usr/libexec/dde-file-manager-extractor");
+    EXPECT_TRUE(m_tester->hasCmdlineArgument());
+}
+
 TEST_F(UT_Process, test_readEnviron_001)
 {
     Stub b1;
