@@ -91,6 +91,26 @@ TEST_F(UT_ProcessName, test_normalizeProcessName_002)
     QString expect = m_tester->normalizeProcessName(source,cmdline);
 }
 
+TEST_F(UT_ProcessName, test_normalizeProcessName_emptyArg)
+{
+    // Empty argv: cmdline is parsed into [""], nothing matches the truncated
+    // comm, so the truncated kernel name is kept as-is.
+    QString source = "dde-file-manage";
+    QByteArrayList cmdline {};
+    cmdline << QByteArray("");
+    EXPECT_EQ(m_tester->normalizeProcessName(source, cmdline), source);
+}
+
+TEST_F(UT_ProcessName, test_normalizeProcessName_truncatedName)
+{
+    // The full name is recovered from the basename of the first cmdline arg.
+    QString source = "dde-file-manage";
+    QByteArrayList cmdline {};
+    cmdline << QByteArray("/usr/libexec/dde-file-manager-extractor");
+    EXPECT_EQ(m_tester->normalizeProcessName(source, cmdline),
+              QString("dde-file-manager-extractor"));
+}
+
 TEST_F(UT_ProcessName, test_getDisplayName_001)
 {
     Process *proc = new Process;

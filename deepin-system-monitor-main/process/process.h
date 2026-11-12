@@ -130,6 +130,11 @@ private:
      */
     bool readCmdline();
     /**
+     * @brief Whether cmdline holds any non-empty argument
+     * @return true: at least one non-empty argument; false: no arguments at all
+     */
+    bool hasCmdlineArgument() const;
+    /**
      * @brief Read /proc/[pid]/environ
      */
     void readEnviron();
