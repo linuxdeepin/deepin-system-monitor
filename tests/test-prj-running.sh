@@ -135,8 +135,12 @@ for entry in "${MODULE_UTS[@]}"; do
     ASAN_OPTIONS=detect_leaks=0 timeout -k 5 300 "${m_bin}" --gtest_output="xml:${m_xml}" >/dev/null 2>&1
     m_rc=$?
     if grep -q '<testsuite' "${m_xml}" 2>/dev/null; then
-        m_total=$(grep -oE '<testsuites[^>]* tests="[0-9]+"' "${m_xml}" | grep -oE '[0-9]+' | head -1)
-        m_fail=$(grep -oE '<testsuites[^>]* failures="[0-9]+"' "${m_xml}" | grep -oE '[0-9]+' | head -1)
+        # 只取根节点 <testsuites ...> 开标签,再单独提取各属性数字;
+        # 旧写法一次 grep 含 tests+failures 两个数字再 head -1,
+        # 会把 tests 计数误当作 failures 导致全量误报失败
+        m_root=$(grep -m1 -oE '<testsuites[^>]*>' "${m_xml}")
+        m_total=$(echo "${m_root}" | grep -oE ' tests="[0-9]+"' | grep -oE '[0-9]+')
+        m_fail=$(echo "${m_root}" | grep -oE ' failures="[0-9]+"' | grep -oE '[0-9]+')
         echo ">>> module UT ${m_name}: ${m_total} tests, ${m_fail} failures (rc=${m_rc})"
         if [ "${m_fail:-0}" -ne 0 ]; then
             test_exit_code=1

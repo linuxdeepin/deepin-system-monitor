@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -37,7 +37,9 @@ NetifMonitor::~NetifMonitor()
 {
     // qCDebug(app) << "NetifMonitor destructor";
     // async request monitor job quit
-    m_netifCapture->requestQuit();
+    // QPointer 在抓包对象被 deferred delete 释放后自动置空，避免 UAF
+    if (m_netifCapture)
+        m_netifCapture->requestQuit();
     // monitor thread quit
     m_packetMonitorThread.quit();
     m_packetMonitorThread.wait();

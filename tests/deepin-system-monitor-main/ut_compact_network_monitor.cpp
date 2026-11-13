@@ -1,5 +1,5 @@
 // Copyright (C) 2019-2026 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2025 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2025 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -74,7 +74,12 @@ static SystemMonitor *stub_SystemMonitor_instance()
 
 static DeviceDB *stub_DeviceDB_instance()
 {
-    return nullptr;  // netInfo() 已打桩，不会解引用 this
+    // 注意：不能返回 nullptr。DeviceDB 是多态类（有虚析构），UT 构建开启
+    // UBSan 后，对 nullptr 调用成员函数会先做 vptr 动态类型检查（读 [this+0]）
+    // 直接 SEGV，根本走不到已打桩的 netInfo()。这里返回一个真实的静态
+    // DeviceDB 作为类型锚点，其成员 netInfo()/diskIoInfo() 均已打桩。
+    static DeviceDB dbInstance;
+    return &dbInstance;
 }
 
 static NetInfo *stub_DeviceDB_netInfo(DeviceDB *)

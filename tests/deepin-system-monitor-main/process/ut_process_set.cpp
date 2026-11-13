@@ -899,6 +899,10 @@ TEST_F(UT_ProcessSet, ScanProcess_ReclassifyOnSecondScan_InsertsIntoSimpleSet)
     b4.set(ADDR(WMWindowList, isDesktopEntryApp), stub_bool_false);
     Stub bIcon;
     bIcon.set(ADDR(ProcessIcon, refreashProcessIcon), stub_refreashProcessIcon_noop);
+    Stub bAM; // 环境隔离：本机 AM 守护进程会把测试进程识别为应用实例子进程，
+              // groupProcessesByAMInstance 会经共享 d 指针覆写 apptype，须隔离
+    bAM.set(ADDR(AMIconManager, isAMAvailable), stub_isAMAvailable_fixed);
+    g_stubAmAvailable = false;
     g_stubAppType = static_cast<int>(kFilterCurrentUser);
     g_stubIsGuiWin = true;
 
@@ -930,6 +934,10 @@ TEST_F(UT_ProcessSet, ScanProcess_BashParent_GuiAncestorKeepsAppType)
     b5.set(ADDR(Process, cmdlineString), stub_cmdlineString_bash);
     Stub bIcon;
     bIcon.set(ADDR(ProcessIcon, refreashProcessIcon), stub_refreashProcessIcon_noop);
+    Stub bAM; // 环境隔离：本机 AM 守护进程会把测试进程识别为应用实例子进程，
+              // groupProcessesByAMInstance 会经共享 d 指针覆写 apptype，须隔离
+    bAM.set(ADDR(AMIconManager, isAMAvailable), stub_isAMAvailable_fixed);
+    g_stubAmAvailable = false;
 
     // Act
     m_tester->scanProcess();
@@ -1429,6 +1437,10 @@ TEST_F(UT_ProcessSet, ScanProcess_ReevaluatedCurrentUserWindow_ReinsertedIntoSim
     b4.set(ADDR(WMWindowList, isDesktopEntryApp), stub_bool_false);
     Stub bIcon;
     bIcon.set(ADDR(ProcessIcon, refreashProcessIcon), stub_refreashProcessIcon_noop);
+    Stub bAM; // 环境隔离：本机 AM 守护进程会把测试进程识别为应用实例子进程，
+              // groupProcessesByAMInstance 会经共享 d 指针覆写 apptype，须隔离
+    bAM.set(ADDR(AMIconManager, isAMAvailable), stub_isAMAvailable_fixed);
+    g_stubAmAvailable = false;
 
     // Act：两轮扫描
     m_tester->scanProcess();

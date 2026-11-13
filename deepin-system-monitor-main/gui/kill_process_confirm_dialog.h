@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -28,7 +28,8 @@ public:
      * @brief result Get standard button enum result
      * @return Standard button enum result
      */
-    inline int result() const { return m_result; }
+    // noinline: 单测需要打桩该函数控制确认框结果；内联会让桩落在无人调用的副本上
+    __attribute__((noinline)) int result() const { return m_result; }
     /**
      * @brief setResult Set standard button enum result
      * @param r Standard button enum result

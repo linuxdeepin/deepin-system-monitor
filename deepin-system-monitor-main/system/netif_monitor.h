@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -14,6 +14,7 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QThread>
+#include <QPointer>
 
 using namespace common::core;
 
@@ -83,7 +84,9 @@ public:
     QMap<ino_t, SockIOStat> m_sockIOStatMap     {};
 
 private:
-    NetifPacketCapture *m_netifCapture;
+    // QPointer 跟踪生命周期：抓包对象由所在线程收尾时的 deferred delete
+    // 释放，裸指针在 NetifMonitor 析构时可能悬空（UAF）
+    QPointer<NetifPacketCapture> m_netifCapture;
     // packet monitor thread object
     QThread m_packetMonitorThread;
 
