@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -30,12 +30,13 @@ template<typename T, typename O>
 class CacheIterator
 {
 public:
-    bool hasNext()
+    // noinline: 单测通过函数打桩隔离 libnl 缓存迭代；内联会让桩落在无人调用的副本上
+    __attribute__((noinline)) bool hasNext()
     {
         return d->m_next != nullptr;
     }
 
-    std::unique_ptr<T> next()
+    __attribute__((noinline)) std::unique_ptr<T> next()
     {
         std::unique_ptr<T> tPtr;
 
@@ -72,7 +73,7 @@ private:
         }
     }
 
-    void advance()
+    __attribute__((noinline)) void advance()
     {
         if (d->m_next)
             d->m_next = nl_cache_get_next(d->m_next);

@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // 测试目标：core::process::ProcessController（pkexec kill 信号控制器）。
-// QProcess 启动经 stub 拦截，exit() 经 stub 转为异常，测试不启动真实 pkexec/kill。
+// QProcess 启动经 stub 拦截，测试不启动真实 pkexec/kill。
+// exit() 为 noreturn，不可桩化（no-op→控制流未定义死循环；抛异常→unwinder 展开失败），
+// execute() 的命令缺失分支有意不覆盖（见 execute 小节注释）。
 
 //self
 #include "process/process_controller.h"
@@ -182,34 +184,10 @@ TEST_F(UT_ProcessController, Execute_CommandsExist_StartsPkexecKill)
     EXPECT_EQ(params.at(2), QStringLiteral("4321"));
 }
 
-TEST_F(UT_ProcessController, Execute_PkexecMissing_EmitsEnoentWithoutFinished)
-{
-    // Arrange: exists 一律 false（pkexec 与 kill 两次检查均未命中）；
-    // exit() 桩化为 no-op（stub 桩体不能抛异常穿越，故验证“退出码上报 + 不发 finished”）。
-    stub.set_lamda(static_cast<bool (*)(const QString &)>(&QFile::exists),
-                      [](const QString &) -> bool {
-        __DBG_STUB_INVOKE__
-        return false;
-    });
-    stub.set_lamda((void (*)(int)) & exit, [](int) -> void {
-        __DBG_STUB_INVOKE__
-    });
-    QString program;
-    QStringList params;
-    hookProcessStart(stub, &program, &params);
-    ProcessController controller(4321, 15);
-    QSignalSpy resultSpy(&controller, &ProcessController::resultReady);
-    QSignalSpy finishSpy(&controller, &ProcessController::finished);
-    // Act: 执行（exit() 被 no-op，流程走完两次检查）
-    controller.execute();
-    // Assert: 两次检查各上报一次 ENOENT，finished 不发出
-    ASSERT_EQ(resultSpy.count(), 2);
-    EXPECT_EQ(resultSpy.at(0).first().toInt(), ENOENT);
-    EXPECT_EQ(resultSpy.at(1).first().toInt(), ENOENT);
-    EXPECT_EQ(finishSpy.count(), 0);
-    EXPECT_TRUE(program.endsWith(QStringLiteral("pkexec")));
-    EXPECT_EQ(params.at(1), QStringLiteral("-15"));
-}
+// 注：execute() 的 pkexec/kill 缺失分支未建单测：该分支调用 exit(noreturn)，
+// 桩化 no-op 会导致控制流未定义（实测死循环，run5 曾刷出 32GB 日志）；
+// 桩化抛异常则 unwinder 在 noreturn 调用帧展开失败（terminate）。
+// 仅子进程隔离可测，成本高于收益，故有意不覆盖。
 
 // ---------------- V-8163 覆盖率收口补充用例 ----------------
 

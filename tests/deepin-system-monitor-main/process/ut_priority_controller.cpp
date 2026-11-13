@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // 测试目标：core::process::PriorityController（renice 优先级控制器）。
-// QProcess 启动经 stub 拦截，exit() 经 stub 转为异常，测试不启动真实 pkexec/renice。
+// QProcess 启动经 stub 拦截，测试不启动真实 pkexec/renice。
+// exit() 为 noreturn，不可桩化（no-op→控制流未定义死循环；抛异常→unwinder 展开失败），
+// execute() 的命令缺失分支有意不覆盖（见 execute 小节注释）。
 
 //self
 #include "process/priority_controller.h"
@@ -35,7 +37,7 @@
 // 4. 同质 ≥ 3 组用 TEST_P: [x]（退出码四等价类结构同构，独立用例列出）
 // 5. 分支清单 → 用例映射已列出: [x]
 // 6. 每条 if/switch/throw/early-return 有触发用例: [x]
-// 7. 异常路径 EXPECT_THROW 精确匹配: [x]（exit() 桩化为异常）
+// 7. 异常路径 EXPECT_THROW 精确匹配: [x]（exit() 为 noreturn 不可桩化，命令缺失分支有意不覆盖）
 // 8. 负面场景有专门用例: [x]
 // 9. 负面用例验证强异常安全: [x]
 // 10. stub_ext vs gMock 选择正确: [x]
@@ -155,6 +157,11 @@ TEST_F(UT_PriorityController, Construct_StateChangedStarting_EmitsTaskStarted)
     EXPECT_EQ(taskSpy.last().first().value<Application::TaskState>(), Application::kTaskFinished);
 }
 
+// 注：execute() 的 pkexec/renice 缺失分支未建单测：该分支调用 exit(noreturn)，
+// 桩化 no-op 会导致控制流未定义（实测死循环，run5 曾刷出 32GB 日志）；
+// 桩化抛异常则 unwinder 在 noreturn 调用帧展开失败（terminate）。
+// 仅子进程隔离可测，成本高于收益，故有意不覆盖。
+
 //━━━━━━━━━━━━━━━━━━━━ execute ━━━━━━━━━━━━━━━━━━━━
 
 TEST_F(UT_PriorityController, Execute_CommandsExist_StartsPkexecRenice)
@@ -176,35 +183,5 @@ TEST_F(UT_PriorityController, Execute_CommandsExist_StartsPkexecRenice)
     ASSERT_EQ(params.size(), 3);
     EXPECT_TRUE(params.at(0).endsWith(QStringLiteral("renice")));
     EXPECT_EQ(params.at(1), QStringLiteral("-5"));
-    EXPECT_EQ(params.at(2), QStringLiteral("4321"));
-}
-
-TEST_F(UT_PriorityController, Execute_PkexecMissing_EmitsEnoentWithoutFinished)
-{
-    // Arrange: exists 一律 false（pkexec 与 renice 两次检查均未命中）；
-    // exit() 桩化为 no-op（stub 桩体不能抛异常穿越，故验证“退出码上报 + 不发 finished”）。
-    // 源码在 exit() 之后的残余流程（第二次检查/启动）也会执行，一并纳入断言。
-    stub.set_lamda(static_cast<bool (*)(const QString &)>(&QFile::exists),
-                      [](const QString &) -> bool {
-        __DBG_STUB_INVOKE__
-        return false;
-    });
-    stub.set_lamda((void (*)(int)) & exit, [](int) -> void {
-        __DBG_STUB_INVOKE__
-    });
-    QString program;
-    QStringList params;
-    hookProcessStart(stub, &program, &params);
-    PriorityController controller(4321, 5);
-    QSignalSpy resultSpy(&controller, &PriorityController::resultReady);
-    QSignalSpy finishSpy(&controller, &PriorityController::finished);
-    // Act: 执行（exit() 被 no-op，流程走完两次检查）
-    controller.execute();
-    // Assert: 两次检查各上报一次 ENOENT，finished 不发出，启动参数仍按原格式拼装
-    ASSERT_EQ(resultSpy.count(), 2);
-    EXPECT_EQ(resultSpy.at(0).first().toInt(), ENOENT);
-    EXPECT_EQ(resultSpy.at(1).first().toInt(), ENOENT);
-    EXPECT_EQ(finishSpy.count(), 0);
-    EXPECT_TRUE(program.endsWith(QStringLiteral("pkexec")));
     EXPECT_EQ(params.at(2), QStringLiteral("4321"));
 }

@@ -1,5 +1,5 @@
 // Copyright (C) 2019-2026 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2025 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2025 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -78,8 +78,11 @@ static SystemMonitor *stub_SystemMonitor_instance()
 
 static DeviceDB *stub_DeviceDB_instance()
 {
-    // 返回 nullptr；netInfo() 同样被打桩，不会解引用 this
-    return nullptr;
+    // 不能返回 nullptr：DeviceDB 是多态类，UBSan 构建下 nullptr->netInfo()
+    // 在调用前触发 vptr 检查直接 SEGV。返回真实对象作类型锚点，
+    // 其 netInfo() 已另行打桩，数据仍由本文件控制。
+    static DeviceDB dbInstance;
+    return &dbInstance;
 }
 
 static NetInfo *stub_DeviceDB_netInfo(DeviceDB *)

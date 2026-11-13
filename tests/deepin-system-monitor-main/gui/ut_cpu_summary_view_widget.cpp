@@ -150,6 +150,15 @@ static void stub_QPainter_drawLine(QPainter *, int x1, int y1, int x2, int y2)
     g_drawnLines.append({x1, y1, x2, y2});
 }
 
+// drawLine(int×4) 在 Qt 头文件中为内联转发，实际外联落点是 drawLines(const QLine*, int)，
+// 桩必须打在落点函数上才能命中调用点
+static void stub_QPainter_drawLines(QPainter *, const QLine *lines, int lineCount)
+{
+    for (int i = 0; i < lineCount; ++i) {
+        g_drawnLines.append({lines[i].x1(), lines[i].y1(), lines[i].x2(), lines[i].y2()});
+    }
+}
+
 // QPainter::drawRoundedRect(const QRectF&,qreal,qreal) 采集（QRect 版本内联转发到此）
 static QVector<QVector<int>> g_roundRects;
 static void stub_QPainter_drawRoundedRect(QPainter *, const QRectF &, qreal rx, qreal ry, Qt::SizeMode)
@@ -576,6 +585,8 @@ TEST_F(UT_CPUDetailSummaryTable, PaintEvent_PaintTriggered_DrawsSeparatorRounded
     g_roundRects.clear();
     m_stub.set(static_cast<void (QPainter::*)(int, int, int, int)>(&QPainter::drawLine),
                stub_QPainter_drawLine);
+    m_stub.set(static_cast<void (QPainter::*)(const QLine *, int)>(&QPainter::drawLines),
+               stub_QPainter_drawLines);
     m_stub.set(static_cast<void (QPainter::*)(const QRectF &, qreal, qreal, Qt::SizeMode)>(&QPainter::drawRoundedRect),
                stub_QPainter_drawRoundedRect);
     QPaintEvent ev(m_tester->rect());
