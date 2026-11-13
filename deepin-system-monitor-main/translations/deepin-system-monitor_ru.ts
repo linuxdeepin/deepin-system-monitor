@@ -1392,7 +1392,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="165"/>
         <source>(Modifiable)</source>
-        <translation>(Изменяемый)</translation>
+        <translation>(Изменяемо)</translation>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="278"/>
