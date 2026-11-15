@@ -33,6 +33,15 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
     }
 
     DDesktopEntry dde(fileInfo.filePath());
+
+    // Filter out NoDisplay/Hidden entries — they should not appear in app list
+    auto noDisplay = dde.stringValue("NoDisplay").toLower();
+    auto hidden = dde.stringValue("Hidden").toLower();
+    if (noDisplay == "true" || hidden == "true") {
+        qCDebug(app) << "Skipping NoDisplay/Hidden entry:" << fileInfo.filePath();
+        return {};
+    }
+
     DesktopEntry entry(new struct desktop_entry_t());
 
     // display name
