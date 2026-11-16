@@ -22,6 +22,7 @@ Build-Depends:
  libnl-route-3-dev, 
  libudev-dev, 
  libgsettings-qt-dev, 
+ libglib2.0-dev, 
  dde-dock-dev, 
  libgtest-dev, 
  libgmock-dev, 
