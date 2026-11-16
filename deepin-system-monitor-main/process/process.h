@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -129,6 +129,11 @@ private:
      * @return true: success; false: failure
      */
     bool readCmdline();
+    /**
+     * @brief Whether cmdline holds any non-empty argument
+     * @return true: at least one non-empty argument; false: no arguments at all
+     */
+    bool hasCmdlineArgument() const;
     /**
      * @brief Read /proc/[pid]/environ
      */
