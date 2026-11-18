@@ -123,6 +123,11 @@ void SystemMonitorService::setSystemProtectionStatus(bool status)
         // 监测设置变更，DBus信号
         emit alarmItemChanged(AlarmStatusOptionName, QDBusVariant(mProtectionStatus));
         qCInfo(app) << "System protection status changed to:" << status;
+        if (mProtectionStatus) {
+            mMoniterTimer.start();
+        } else {
+            mMoniterTimer.stop();
+        }
     }
 }
 
