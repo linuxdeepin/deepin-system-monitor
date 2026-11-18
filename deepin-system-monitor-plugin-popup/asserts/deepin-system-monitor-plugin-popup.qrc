@@ -4,15 +4,15 @@
         <file>icons/deepin/builtin/dark/me_normal_dark.svg</file>
         <file>icons/deepin/builtin/light/me_highlight.svg</file>
         <file>icons/deepin/builtin/light/me_normal.svg</file>
-        <file>icons/deepin/builtin/light/icon_network.png</file>
-        <file>icons/deepin/builtin/light/icon_memory.png</file>
+        <file>icons/deepin/builtin/light/icon_network.svg</file>
+        <file>icons/deepin/builtin/light/icon_memory.svg</file>
         <file>icons/deepin/builtin/light/icon_list.png</file>
-        <file>icons/deepin/builtin/light/icon_disk.png</file>
-        <file>icons/deepin/builtin/light/icon_cpu.png</file>
-        <file>icons/deepin/builtin/dark/icon_network.png</file>
-        <file>icons/deepin/builtin/dark/icon_cpu.png</file>
-        <file>icons/deepin/builtin/dark/icon_disk.png</file>
+        <file>icons/deepin/builtin/light/icon_disk.svg</file>
+        <file>icons/deepin/builtin/light/icon_cpu.svg</file>
+        <file>icons/deepin/builtin/dark/icon_network.svg</file>
+        <file>icons/deepin/builtin/dark/icon_cpu.svg</file>
+        <file>icons/deepin/builtin/dark/icon_disk.svg</file>
         <file>icons/deepin/builtin/dark/icon_list.png</file>
-        <file>icons/deepin/builtin/dark/icon_memory.png</file>
+        <file>icons/deepin/builtin/dark/icon_memory.svg</file>
     </qresource>
 </RCC>

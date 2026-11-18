@@ -115,13 +115,13 @@ void CpuWidget::changeTheme(DApplicationHelper::ColorType themeType)
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_cpu.png"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_cpu.svg"));
         break;
     case DApplicationHelper::DarkType:
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_cpu.png"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_cpu.svg"));
         break;
     default:
         break;
@@ -174,12 +174,14 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     int widthTitle = fmTitleContent.width(cpuTitle);
     int heightTitle = fmTitleContent.descent() + fmTitleContent.ascent();
     QRect cpuTitleRect(titleRect.x(), titleRect.y(), widthTitle, heightTitle);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, cpuTitle);
-
     //图标
     int iconSize = 20;
-    QRect iconRect(titleRect.x() + (titleRect.width() - widthTitle) / 2 - iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2, iconSize, iconSize);
+    int iconGap = 4;
+    int totalWidth = iconSize + iconGap + widthTitle;
+    QRect iconRect(titleRect.x() + (titleRect.width() - totalWidth) / 2, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.), iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
+    QRect cpuTextRect(iconRect.right() + iconGap, titleRect.y(), widthTitle, titleRect.height());
+    painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignVCenter, cpuTitle);
 
     //cpu使用率长宽
     painter.setFont(m_contentFont);
