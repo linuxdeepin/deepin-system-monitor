@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #ifndef NET_INFO_H
-#define DISKIO_INFO_H
+#define NET_INFO_H
 
 #include <QSharedPointer>
 
@@ -73,4 +73,4 @@ private:
 } // namespace system
 } // namespace core
 
-#endif // DISKIO_INFO_H
+#endif // NET_INFO_H
