@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -161,7 +161,7 @@ const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const 
 {
     QIcon fallbackIcon = QIcon::fromTheme(fallbackIconName);
     QIcon icon = QIcon::fromTheme(iconName, fallbackIcon);
-    int pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : int(size * ratio);
+    int pixmapSize = int(size * ratio);
     if (!icon.isNull()) {
         QPixmap pixmap = icon.pixmap(pixmapSize);
         pixmap.setDevicePixelRatio(ratio);
