@@ -43,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_settings = Settings::instance();
     setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
     setMaximumSize(QApplication::desktop()->size());
+    m_shortcutDebounceTimer = new QTimer(this);
+    m_shortcutDebounceTimer->setSingleShot(true);
     connect(this, &MainWindow::loadingStatusChanged, this, &MainWindow::onLoadStatusChanged);
 #ifdef DTKCORE_CLASS_DConfigFile
     //需要查询是否支持特殊机型静音恢复，例如hw机型
@@ -290,7 +292,11 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             return true;
         } else if ((kev->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) && kev->key() == Qt::Key_Question) {
             // CTRL + SHIFT + ? pressed
+            if (m_shortcutDebounceTimer->isActive()) {
+                return true;
+            }
             common::displayShortcutHelpDialog(this->geometry());
+            m_shortcutDebounceTimer->start(1000);
             return true;
         }
     }
