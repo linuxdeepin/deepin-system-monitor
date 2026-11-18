@@ -274,6 +274,27 @@ void ProcessSet::scanProcess()
         m_prePid = m_curPid;
     }
 
+    // Re-check kFilterCurrentUser processes when PID list is unchanged.
+    // Linglong processes may initially be classified as kFilterCurrentUser
+    // because their X11 window has not yet appeared; once the window shows up,
+    // the m_prePid == m_curPid gate prevents re-evaluation, so they never get
+    // promoted to kFilterApps and never appear in the application list.
+    for (const pid_t &pid : m_prePid) {
+        if (m_pidMyApps.contains(pid))
+            continue;
+
+        Process proc = m_simpleSet.value(pid);
+        if (proc.appType() != kFilterCurrentUser)
+            continue;
+
+        if (wmwindowList->isGuiApp(pid)) {
+            qCInfo(app) << "Re-check: process" << pid << "now has GUI window, reclassifying as app";
+            proc.setAppType(kFilterApps);
+            m_simpleSet.insert(pid, proc);
+            m_pidMyApps << pid;
+        }
+    }
+
     // const QVariant &vindex = m_settings->getOption(kSettingKeyProcessTabIndex, kFilterApps);
     // int index = vindex.toInt();
 
