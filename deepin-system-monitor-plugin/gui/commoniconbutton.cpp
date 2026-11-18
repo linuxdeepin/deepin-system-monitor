@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "commoniconbutton.h"
@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QTimer>
+#include <QCoreApplication>
 
 #include <DGuiApplicationHelper>
 
@@ -165,10 +166,16 @@ void CommonIconButton::paintEvent(QPaintEvent *e)
         painter.translate(-(this->width() / 2), -(this->height() / 2));
     }
 
+    const qreal ratio = devicePixelRatioF();
+    QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size() : size() * ratio;
     if (m_hover && !m_hoverIcon.isNull()) {
-        m_hoverIcon.paint(&painter, rect());
+        QPixmap pixmap = m_hoverIcon.pixmap(pixmapSize);
+        pixmap.setDevicePixelRatio(ratio);
+        painter.drawPixmap(rect(), pixmap);
     } else if (!m_icon.isNull()) {
-        m_icon.paint(&painter, rect());
+        QPixmap pixmap = m_icon.pixmap(pixmapSize);
+        pixmap.setDevicePixelRatio(ratio);
+        painter.drawPixmap(rect(), pixmap);
     }
 }
 
