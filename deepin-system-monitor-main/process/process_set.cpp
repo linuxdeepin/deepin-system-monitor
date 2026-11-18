@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -104,11 +104,25 @@ void ProcessSet::scanProcess()
         for (const pid_t &pid : m_prePid) {
             if(!m_curPid.contains(pid)){
                 m_prePid.removeAt(pid);  //remove disappear process pid
+                QString removedPrefix;
+                if(m_pidMyApps.contains(pid) && m_simpleSet.contains(pid))
+                    removedPrefix = m_simpleSet[pid].environ().value("WINEPREFIX");
                 if(m_simpleSet.contains(pid))
                     m_simpleSet.remove(pid);
                 //for each pid,only one process reflected.So "removeOne()"func replied.
                 if(m_pidMyApps.contains(pid))
                     m_pidMyApps.removeOne(pid);
+                // When a deduped Wine PID exits, promote a surviving sibling
+                if(!removedPrefix.isEmpty()) {
+                    for(const pid_t &curpid : m_curPid) {
+                        if(m_simpleSet.contains(curpid) &&
+                                m_simpleSet[curpid].environ().value("WINEPREFIX") == removedPrefix &&
+                                !m_pidMyApps.contains(curpid)) {
+                            m_pidMyApps << curpid;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -120,7 +134,19 @@ void ProcessSet::scanProcess()
                      m_simpleSet.insert(proc.pid(), proc);
 
                 if (proc.appType() == kFilterApps && !wmwindowList->isTrayApp(proc.pid())) {
-                     m_pidMyApps << proc.pid();
+                     bool wineDup = false;
+                     QString curPrefix = proc.environ().value("WINEPREFIX");
+                     if (!curPrefix.isEmpty()) {
+                         for (const pid_t &apppid : m_pidMyApps) {
+                             if (m_simpleSet.contains(apppid) &&
+                                     m_simpleSet[apppid].environ().value("WINEPREFIX") == curPrefix) {
+                                 wineDup = true;
+                                 break;
+                             }
+                         }
+                     }
+                     if (!wineDup)
+                         m_pidMyApps << proc.pid();
                 }
             }
         }
