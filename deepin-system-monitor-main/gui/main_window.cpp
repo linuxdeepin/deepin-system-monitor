@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     m_settings = Settings::instance();
     setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
-    setMaximumSize(QApplication::desktop()->size());
+    setMaximumSize(QApplication::desktop()->availableGeometry().size());
     connect(this, &MainWindow::loadingStatusChanged, this, &MainWindow::onLoadStatusChanged);
 #ifdef DTKCORE_CLASS_DConfigFile
     //需要查询是否支持特殊机型静音恢复，例如hw机型
