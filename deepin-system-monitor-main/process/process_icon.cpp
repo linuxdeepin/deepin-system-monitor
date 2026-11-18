@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -24,6 +24,8 @@ using namespace core::wm;
 
 namespace core {
 namespace process {
+
+const char *kDefaultExecutableIconName = "application-x-executable";
 
 enum icon_data_type_t {
     kIconDataNameType,
@@ -86,8 +88,10 @@ QIcon ProcessIcon::icon() const
     if (m_data) {
         if (m_data->type == kIconDataNameType) {
             auto *iconData = reinterpret_cast<struct icon_data_name_type *>(m_data.get());
-            if (iconData)
-                icon = QIcon::fromTheme(iconData->icon_name);
+            if (iconData) {
+                icon = QIcon::fromTheme(iconData->icon_name,
+                                        QIcon::fromTheme(kDefaultExecutableIconName));
+            }
         } else if (m_data->type == kIconDataPixmapType) {
             auto *iconData = reinterpret_cast<struct icon_data_pix_map_type *>(m_data.get());
             if (iconData) {
@@ -103,7 +107,7 @@ struct icon_data_t *ProcessIcon::defaultIconData(const QString &procname) const 
     auto *iconData = new struct icon_data_name_type();
     iconData->type = kIconDataNameType;
     iconData->proc_name = "[::default::]";
-    iconData->icon_name = "application-x-executable";
+    iconData->icon_name = kDefaultExecutableIconName;
     return iconData;
 }
 
