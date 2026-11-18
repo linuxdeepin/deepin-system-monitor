@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,7 +10,9 @@
 // #include "settings.h"
 
 #include <QDebug>
+#include <QFileInfo>
 
+#include <cctype>
 #include <errno.h>
 
 #define PROC_PATH "/proc"
@@ -19,6 +21,70 @@ using namespace common::error;
 
 namespace core {
 namespace process {
+
+// ============================================================================
+// Wine process aggregation helpers
+//
+// Wine creates multiple Linux processes for a single Windows application.
+// Several of these processes may each hold an X11 window, causing each to be
+// marked as kFilterApps and appear as a separate row in the "Applications"
+// view — even though they represent the same application.  The helpers below
+// identify wine processes and compute a grouping key so that scanProcess() can
+// keep only one entry visible and merge the resource usage of the rest.
+// ============================================================================
+
+// Check whether a process is a wine process.
+//
+// A process is considered a wine process when its command-line starts with a
+// Windows drive-letter path (e.g. "c:\\path\\app.exe") or its environment
+// contains the WINEPREFIX variable.
+static bool isWineProcess(const Process &proc)
+{
+    const QByteArrayList &cmdline = proc.cmdline();
+    if (cmdline.size() > 0 && cmdline[0].length() > 3
+        && std::isalpha(static_cast<unsigned char>(cmdline[0].at(0)))
+        && cmdline[0].at(1) == ':'
+        && (cmdline[0].at(2) == '/' || cmdline[0].at(2) == '\\')) {
+        return true;
+    }
+    if (proc.environ().contains("WINEPREFIX")) {
+        return true;
+    }
+    return false;
+}
+
+// Compute a grouping key that identifies a wine application.
+//
+// The key is built from the .exe file name (extracted from the command-line
+// when it is a Windows path, or from the normalised process name otherwise)
+// combined with the WINEPREFIX environment variable when available, so that
+// two different wine applications sharing the same .exe name but using
+// different wine prefixes are not mistakenly merged.
+static QString wineAppKey(const Process &proc)
+{
+    const QByteArrayList &cmdline = proc.cmdline();
+    QString exeName;
+    if (cmdline.size() > 0 && cmdline[0].length() > 3
+        && std::isalpha(static_cast<unsigned char>(cmdline[0].at(0)))
+        && cmdline[0].at(1) == ':'
+        && (cmdline[0].at(2) == '/' || cmdline[0].at(2) == '\\')) {
+        // Convert Windows back-slash separators to forward slashes so that
+        // QFileInfo::fileName() works correctly on Linux.
+        QString winPath = QString::fromLocal8Bit(cmdline[0]);
+        winPath.replace('\\', '/');
+        exeName = QFileInfo(winPath).fileName();
+    } else {
+        exeName = proc.name();
+    }
+
+    if (exeName.isEmpty())
+        return {};
+
+    QString winePrefix = proc.environ().value("WINEPREFIX");
+    if (!winePrefix.isEmpty())
+        return winePrefix + QLatin1Char('/') + exeName;
+    return exeName;
+}
 
 ProcessSet::ProcessSet()
     : m_set {}
@@ -183,6 +249,134 @@ void ProcessSet::scanProcess()
 
                 m_set[pid].setAppType(kFilterCurrentUser);
                 wmwindowList->removeDesktopEntryApp(pid);
+            }
+        }
+    }
+
+    // ===== Wine application aggregation =====
+    //
+    // Wine runs a single Windows application through multiple Linux processes.
+    // When more than one of those processes owns an X11 window they are each
+    // classified as kFilterApps and appear as duplicate rows in the
+    // "Applications" view.  This block groups wine processes that belong to
+    // the same application, keeps a single representative visible and merges
+    // the CPU / network-IO of the hidden processes into it so that the user
+    // sees one entry whose resource usage reflects the whole application.
+    {
+        // Group every wine process still flagged as an application by key.
+        QMap<QString, QList<pid_t>> wineAppGroups;
+        for (const pid_t &pid : m_pidMyApps) {
+            if (m_set[pid].appType() != kFilterApps)
+                continue;
+            if (!isWineProcess(m_set[pid]))
+                continue;
+            QString key = wineAppKey(m_set[pid]);
+            if (key.isEmpty())
+                continue;
+            wineAppGroups[key].append(pid);
+        }
+
+        // Walk the parent chain to decide whether *pid* is a descendant of
+        // *ancestorPid* using the child→parent map built earlier in the scan.
+        auto isDescendant = [&](pid_t pid, pid_t ancestorPid) -> bool {
+            pid_t cur = pid;
+            while (m_pidCtoPMapping.contains(cur)) {
+                cur = m_pidCtoPMapping[cur];
+                if (cur == ancestorPid)
+                    return true;
+            }
+            return false;
+        };
+
+        for (auto it = wineAppGroups.begin(); it != wineAppGroups.end(); ++it) {
+            QList<pid_t> &group = it.value();
+            if (group.size() <= 1)
+                continue;
+
+            // Choose the representative process: prefer one that owns a GUI
+            // window, otherwise the one with the highest CPU usage.
+            pid_t mainPid = group[0];
+            for (int i = 1; i < group.size(); ++i) {
+                pid_t pid = group[i];
+                bool mainGui = wmwindowList->isGuiApp(mainPid);
+                bool pidGui  = wmwindowList->isGuiApp(pid);
+                if (pidGui && !mainGui) {
+                    mainPid = pid;
+                } else if (pidGui == mainGui
+                           && m_set[pid].cpu() > m_set[mainPid].cpu()) {
+                    mainPid = pid;
+                }
+            }
+
+            // The representative's CPU / net-IO were already filled with its
+            // own sub-tree by mergeSubProcCpu / mergeSubProcNetIO above.
+            // Capture that baseline once: when a demoted process is an
+            // *ancestor* of the representative, its merged value already
+            // contains the representative's sub-tree, so adding it verbatim
+            // would double-count the representative's CPU / net-IO.
+            // Subtracting the baseline yields only the ancestor's exclusive
+            // contribution (its own usage plus any branches that are not
+            // under the representative), which is exactly what must be folded
+            // into the representative.
+            qreal mainBaseCpu  = m_set[mainPid].cpu();
+            qreal mainBaseRecv = m_set[mainPid].recvBps();
+            qreal mainBaseSent = m_set[mainPid].sentBps();
+
+            // Demote every non-representative process.
+            for (pid_t pid : group) {
+                if (pid == mainPid)
+                    continue;
+
+                // If the process is a descendant of any other member of the
+                // group its CPU / net-IO has already been merged into that
+                // ancestor (either by mergeSubProcCpu / mergeSubProcNetIO or
+                // by the manual merge below), so we only need to hide it.
+                // Otherwise it is an independent (sibling) process, or an
+                // ancestor of the representative, whose resource usage must
+                // be folded into the representative.
+                bool descendantOfGroup = false;
+                for (pid_t otherPid : group) {
+                    if (otherPid != pid && isDescendant(pid, otherPid)) {
+                        descendantOfGroup = true;
+                        break;
+                    }
+                }
+
+                if (!descendantOfGroup) {
+                    // When *pid* is an ancestor of the representative its
+                    // merged value already contains the representative's
+                    // sub-tree; add only the exclusive part to avoid
+                    // double-counting the representative's CPU / net-IO.
+                    // Otherwise the two sub-trees are disjoint and the full
+                    // value is added.
+                    bool pidIsAncestorOfMain = isDescendant(mainPid, pid);
+
+                    qreal addCpu  = m_set[pid].cpu();
+                    qreal addRecv = m_set[pid].recvBps();
+                    qreal addSent = m_set[pid].sentBps();
+                    if (pidIsAncestorOfMain) {
+                        addCpu  = qMax(qreal(0), addCpu  - mainBaseCpu);
+                        addRecv = qMax(qreal(0), addRecv - mainBaseRecv);
+                        addSent = qMax(qreal(0), addSent - mainBaseSent);
+                    }
+
+                    m_set[mainPid].setCpu(m_set[mainPid].cpu() + addCpu);
+                    m_set[mainPid].setNetIoBps(
+                        m_set[mainPid].recvBps() + addRecv,
+                        m_set[mainPid].sentBps() + addSent);
+                }
+
+                // NOTE: memory is intentionally not aggregated here.  The
+                // Process API exposes no memory setter, and the existing
+                // merge logic (mergeSubProcCpu / mergeSubProcNetIO) likewise
+                // never merges memory for any application, so the
+                // representative's memory column reflects only its own
+                // process — consistent with the rest of the model.
+
+                // Hide the duplicate from the "Applications" view.  The
+                // process remains visible in the "All processes" /
+                // "My processes" views.
+                m_set[pid].setAppType(kFilterCurrentUser);
             }
         }
     }
