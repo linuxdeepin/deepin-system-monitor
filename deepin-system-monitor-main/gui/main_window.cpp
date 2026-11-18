@@ -32,7 +32,7 @@ using namespace core::process;
 using namespace common::init;
 using namespace DDLog;
 const int WINDOW_MIN_HEIGHT = 760;
-const int WINDOW_MIN_WIDTH = 1080;
+const int WINDOW_MIN_WIDTH = 1024;
 
 const QString SERVICE_NAME = "com.deepin.SystemMonitorMain";
 const QString SERVICE_PATH = "/com/deepin/SystemMonitorMain";
