@@ -29,10 +29,11 @@
 #include <arpa/inet.h>
 #include "common/hash.h"
 
-#define PROC_PATH_SOCK_TCP  "/proc/net/tcp"
-#define PROC_PATH_SOCK_TCP6 "/proc/net/tcp6"
-#define PROC_PATH_SOCK_UDP  "/proc/net/udp"
-#define PROC_PATH_SOCK_UDP6 "/proc/net/udp6"
+#include <linux/netlink.h>
+#include <linux/sock_diag.h>
+#include <linux/inet_diag.h>
+#include <sys/socket.h>
+#include <string.h>
 
 using namespace common::alloc;
 using namespace common::core;
@@ -79,130 +80,187 @@ SysInfo *SysInfo::instance()
 bool SysInfo::readSockStat(SockStatMap &statMap)
 {
     bool ok {true};
+    statMap.clear();
 
-    auto parseSocks = [](int family, int proto, const char *proc, SockStatMap & statMap) -> bool {
-        bool ok {true};
-        FILE *fp {};
-        const size_t BLEN = 4096;
-        QByteArray buffer {BLEN, 0};
-        int nr {};
-        ino_t ino {};
-        char s_addr[128] {}, d_addr[128] {};
-        uint64_t hash {};
-        QByteArray fmtbuf {};
-        uint64_t cchash[2] {};
-        QString patternA {}, patternB {};
-
-        errno = 0;
-        if (!(fp = fopen(proc, "r")))
-        {
-            return !ok;
+    auto queryDiag = [](int family, int proto, SockStatMap & statMap) -> bool {
+        int nl_fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, NETLINK_SOCK_DIAG);
+        if (nl_fd < 0) {
+            return false;
         }
 
-        while (fgets(buffer.data(), BLEN, fp))
-        {
-            auto stat = QSharedPointer<struct sock_stat_t>::create();
+        struct inet_diag_req_v2 req;
+        memset(&req, 0, sizeof(req));
+        req.sdiag_family = family;
+        req.sdiag_protocol = proto;
+        // All socket states for both TCP and UDP: 0xFFF == (1 << 12) - 1
+        req.idiag_states = 0xFFF;
+        req.idiag_ext = 0;
 
-            //*****************************************************************
-            nr = sscanf(buffer.data(), "%*s %64[0-9A-Fa-f]:%x %64[0-9A-Fa-f]:%x %*x %*s %*s %*s %u %*u %ld",
-                        s_addr,
-                        &stat->s_port,
-                        d_addr,
-                        &stat->d_port,
-                        &stat->uid,
-                        &ino);
+        struct sockaddr_nl nladdr;
+        memset(&nladdr, 0, sizeof(nladdr));
+        nladdr.nl_family = AF_NETLINK;
 
-            // ignore first line
-            if (nr == 0)
-                continue;
+        struct nlmsghdr nlh;
+        memset(&nlh, 0, sizeof(nlh));
+        nlh.nlmsg_len = NLMSG_LENGTH(sizeof(req));
+        nlh.nlmsg_type = SOCK_DIAG_BY_FAMILY;
+        nlh.nlmsg_flags = NLM_F_REQUEST | NLM_F_DUMP;
 
-            // socket still in waiting state
-            if (ino == 0) {
-                continue;
+        struct iovec iov[2];
+        iov[0].iov_base = &nlh;
+        iov[0].iov_len = sizeof(nlh);
+        iov[1].iov_base = &req;
+        iov[1].iov_len = sizeof(req);
+
+        struct msghdr msg;
+        memset(&msg, 0, sizeof(msg));
+        msg.msg_name = &nladdr;
+        msg.msg_namelen = sizeof(nladdr);
+        msg.msg_iov = iov;
+        msg.msg_iovlen = 2;
+
+        if (sendmsg(nl_fd, &msg, 0) < 0) {
+            close(nl_fd);
+            return false;
+        }
+
+        const int BUFLEN = 65536;
+        QByteArray buf(BUFLEN, '\0');
+
+        bool ret {true};
+        while (true) {
+            struct sockaddr_nl nladdr2;
+            memset(&nladdr2, 0, sizeof(nladdr2));
+
+            struct iovec iov2;
+            iov2.iov_base = buf.data();
+            iov2.iov_len = BUFLEN;
+
+            struct msghdr msg2;
+            memset(&msg2, 0, sizeof(msg2));
+            msg2.msg_name = &nladdr2;
+            msg2.msg_namelen = sizeof(nladdr2);
+            msg2.msg_iov = &iov2;
+            msg2.msg_iovlen = 1;
+
+            ssize_t len = recvmsg(nl_fd, &msg2, 0);
+            if (len < 0) {
+                if (errno == EINTR) {
+                    continue;
+                }
+                ret = false;
+                break;
+            }
+            if (len == 0) {
+                break;
             }
 
-            stat->ino = ino;
-            stat->sa_family = family;
-            stat->proto = proto;
+            struct nlmsghdr *nlhdr = (struct nlmsghdr *)buf.data();
+            bool done = false;
 
-            // saddr & daddr
-            if (family == AF_INET6) {
-                sscanf(s_addr, "%08x%08x%08x%08x",
-                       &stat->s_addr.in6.s6_addr32[0],
-                       &stat->s_addr.in6.s6_addr32[1],
-                       &stat->s_addr.in6.s6_addr32[2],
-                       &stat->s_addr.in6.s6_addr32[3]);
-                sscanf(d_addr, "%08x%08x%08x%08x",
-                       &stat->d_addr.in6.s6_addr32[0],
-                       &stat->d_addr.in6.s6_addr32[1],
-                       &stat->d_addr.in6.s6_addr32[2],
-                       &stat->d_addr.in6.s6_addr32[3]);
-                // convert ipv4 mapped ipv6 address to ipv4
-                if (stat->s_addr.in6.s6_addr32[0] == 0x0 &&
-                        stat->s_addr.in6.s6_addr32[1] == 0x0 &&
-                        stat->s_addr.in6.s6_addr32[2] == 0xffff0000) {
-                    stat->sa_family = AF_INET;
-                    stat->s_addr.in4.s_addr = stat->s_addr.in6.s6_addr32[3];
-                    stat->d_addr.in4.s_addr = stat->d_addr.in6.s6_addr32[3];
+            while (NLMSG_OK(nlhdr, (size_t)len)) {
+                if (nlhdr->nlmsg_type == NLMSG_DONE) {
+                    done = true;
+                    break;
                 }
-            } else {
-                sscanf(s_addr, "%x", &stat->s_addr.in4.s_addr);
-                sscanf(d_addr, "%x", &stat->d_addr.in4.s_addr);
-            }
-
-            if (stat->sa_family == AF_INET) {
-                char saddr_str[INET_ADDRSTRLEN + 1] {}, daddr_str[INET_ADDRSTRLEN + 1] {};
-                inet_ntop(AF_INET, &stat->s_addr.in4, saddr_str, INET_ADDRSTRLEN);
-                inet_ntop(AF_INET, &stat->d_addr.in4, daddr_str, INET_ADDRSTRLEN);
-
-                patternA = QString("%1:%2-%3:%4").arg(saddr_str).arg(stat->s_port).arg(daddr_str).arg(stat->d_port);
-                if (proto == IPPROTO_TCP) {
-                    patternB = QString("%1:%2-%3:%4").arg(daddr_str).arg(stat->d_port).arg(saddr_str).arg(stat->s_port);
+                if (nlhdr->nlmsg_type == NLMSG_ERROR) {
+                    ret = false;
+                    done = true;
+                    break;
+                }
+                if (nlhdr->nlmsg_type != SOCK_DIAG_BY_FAMILY) {
+                    nlhdr = NLMSG_NEXT(nlhdr, len);
+                    continue;
                 }
 
-            } else if (stat->sa_family == AF_INET6) {
-                char saddr6_str[INET6_ADDRSTRLEN + 1] {}, daddr6_str[INET6_ADDRSTRLEN + 1] {};
-                inet_ntop(AF_INET6, &stat->s_addr.in6, saddr6_str, INET6_ADDRSTRLEN);
-                inet_ntop(AF_INET6, &stat->d_addr.in6, daddr6_str, INET6_ADDRSTRLEN);
-
-                patternA = QString("%1:%2-%3:%4").arg(saddr6_str).arg(stat->s_port).arg(daddr6_str).arg(stat->d_port);
-                if (proto == IPPROTO_TCP) {
-                    patternB = QString("%1:%2-%3:%4").arg(daddr6_str).arg(stat->d_port).arg(saddr6_str).arg(stat->s_port);
+                struct inet_diag_msg *diag = (struct inet_diag_msg *)NLMSG_DATA(nlhdr);
+                if (diag->idiag_inode == 0) {
+                    nlhdr = NLMSG_NEXT(nlhdr, len);
+                    continue;
                 }
 
-            } else {
-                // unexpected here
-            }
+                auto stat = QSharedPointer<struct sock_stat_t>::create();
+                stat->ino = diag->idiag_inode;
+                stat->sa_family = family;
+                stat->proto = proto;
+                stat->s_port = ntohs(diag->id.idiag_sport);
+                stat->d_port = ntohs(diag->id.idiag_dport);
+                stat->uid = diag->idiag_uid;
 
-            fmtbuf = patternA.toLocal8Bit();
-            util::common::hash(fmtbuf.constData(), fmtbuf.length(), util::common::global_seed, cchash);
-            hash = cchash[0];
-            statMap.insert(hash, stat);
+                if (family == AF_INET) {
+                    stat->s_addr.in4.s_addr = diag->id.idiag_src[0];
+                    stat->d_addr.in4.s_addr = diag->id.idiag_dst[0];
+                } else if (family == AF_INET6) {
+                    memcpy(stat->s_addr.in6.s6_addr32, diag->id.idiag_src, 16);
+                    memcpy(stat->d_addr.in6.s6_addr32, diag->id.idiag_dst, 16);
 
-            // if it's TCP, we need add reverse mapping due to its bidirectional piping feature,
-            // otherwise we wont be able to get the inode
-            if (proto == IPPROTO_TCP) {
-                fmtbuf = patternB.toLocal8Bit();
+                    // convert ipv4 mapped ipv6 address to ipv4
+                    if (stat->s_addr.in6.s6_addr32[0] == 0x0 &&
+                            stat->s_addr.in6.s6_addr32[1] == 0x0 &&
+                            stat->s_addr.in6.s6_addr32[2] == 0xffff0000) {
+                        stat->sa_family = AF_INET;
+                        stat->s_addr.in4.s_addr = stat->s_addr.in6.s6_addr32[3];
+                        stat->d_addr.in4.s_addr = stat->d_addr.in6.s6_addr32[3];
+                    }
+                } else {
+                    // Unknown address family, skip this entry
+                    nlhdr = NLMSG_NEXT(nlhdr, len);
+                    continue;
+                }
+
+                QString patternA {}, patternB {};
+                QByteArray fmtbuf {};
+                uint64_t cchash[2] {};
+                uint64_t hash {};
+
+                if (stat->sa_family == AF_INET) {
+                    char saddr_str[INET_ADDRSTRLEN + 1] {}, daddr_str[INET_ADDRSTRLEN + 1] {};
+                    inet_ntop(AF_INET, &stat->s_addr.in4, saddr_str, INET_ADDRSTRLEN);
+                    inet_ntop(AF_INET, &stat->d_addr.in4, daddr_str, INET_ADDRSTRLEN);
+
+                    patternA = QString("%1:%2-%3:%4").arg(saddr_str).arg(stat->s_port).arg(daddr_str).arg(stat->d_port);
+                    if (proto == IPPROTO_TCP) {
+                        patternB = QString("%1:%2-%3:%4").arg(daddr_str).arg(stat->d_port).arg(saddr_str).arg(stat->s_port);
+                    }
+                } else if (stat->sa_family == AF_INET6) {
+                    char saddr6_str[INET6_ADDRSTRLEN + 1] {}, daddr6_str[INET6_ADDRSTRLEN + 1] {};
+                    inet_ntop(AF_INET6, &stat->s_addr.in6, saddr6_str, INET6_ADDRSTRLEN);
+                    inet_ntop(AF_INET6, &stat->d_addr.in6, daddr6_str, INET6_ADDRSTRLEN);
+
+                    patternA = QString("%1:%2-%3:%4").arg(saddr6_str).arg(stat->s_port).arg(daddr6_str).arg(stat->d_port);
+                    if (proto == IPPROTO_TCP) {
+                        patternB = QString("%1:%2-%3:%4").arg(daddr6_str).arg(stat->d_port).arg(saddr6_str).arg(stat->s_port);
+                    }
+                }
+
+                fmtbuf = patternA.toLocal8Bit();
                 util::common::hash(fmtbuf.constData(), fmtbuf.length(), util::common::global_seed, cchash);
                 hash = cchash[0];
                 statMap.insert(hash, stat);
+
+                if (proto == IPPROTO_TCP) {
+                    fmtbuf = patternB.toLocal8Bit();
+                    util::common::hash(fmtbuf.constData(), fmtbuf.length(), util::common::global_seed, cchash);
+                    hash = cchash[0];
+                    statMap.insert(hash, stat);
+                }
+
+                nlhdr = NLMSG_NEXT(nlhdr, len);
+            }
+
+            if (done) {
+                break;
             }
         }
-        if (ferror(fp))
-        {
-            ok = !ok;
-        }
-        fclose(fp);
 
-        return ok;
+        close(nl_fd);
+        return ret;
     };
 
-    statMap.clear();
-
-    ok = parseSocks(AF_INET, IPPROTO_TCP, PROC_PATH_SOCK_TCP, statMap);
-    ok = parseSocks(AF_INET, IPPROTO_UDP, PROC_PATH_SOCK_UDP, statMap) && ok;
-    ok = parseSocks(AF_INET6, IPPROTO_TCP, PROC_PATH_SOCK_TCP6, statMap) && ok;
-    ok = parseSocks(AF_INET6, IPPROTO_UDP, PROC_PATH_SOCK_UDP6, statMap) && ok;
+    ok = queryDiag(AF_INET, IPPROTO_TCP, statMap);
+    ok = queryDiag(AF_INET, IPPROTO_UDP, statMap) && ok;
+    ok = queryDiag(AF_INET6, IPPROTO_TCP, statMap) && ok;
+    ok = queryDiag(AF_INET6, IPPROTO_UDP, statMap) && ok;
 
     return ok;
 }
