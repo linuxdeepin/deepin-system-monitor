@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,10 +8,32 @@
 #include <QFile>
 #include <QSharedData>
 #include <QTextStream>
+#include <cmath>
+#include <limits>
 #include "system/sys_info.h"
 #include "common/common.h"
 namespace core {
 namespace system {
+
+namespace {
+
+// 采样间隔可能极小（亚秒采样），扇区数乘以扇区大小再除以间隔后可能超出
+// quint64 表示范围。换算统一在 double 域完成：既避免整数乘加回绕，
+// 也避免超范围的浮点转整型（未定义行为），超出上限时饱和。
+quint64 safeRate(double sectors, double interval)
+{
+    if (!(interval > 0.0) || !std::isfinite(interval))
+        return 0;
+
+    const double rate = sectors * SECTOR_SIZE / interval;
+    if (!(rate > 0.0))
+        return 0;
+    if (rate >= static_cast<double>(std::numeric_limits<quint64>::max()))
+        return std::numeric_limits<quint64>::max();
+    return static_cast<quint64>(rate);
+}
+
+} // namespace
 
 BlockDevice::BlockDevice()
     : d(new BlockDevicePrivate())
@@ -132,6 +154,14 @@ quint64 BlockDevice::readDeviceSize(const QString &deviceName)
 
 void BlockDevice::calcDiskIoStates(const QStringList &diskInfo)
 {
+    // /proc/diskstats 至少需要 17 个字段才能取到 discard 扇区数。
+    // 字段不足说明采样无效，速率清零，避免继续展示上一轮的旧值。
+    if (diskInfo.size() <= 16) {
+        d->read_speed = 0;
+        d->wirte_speed = 0;
+        return;
+    }
+
     quint64 curr_read_sector =  diskInfo[5].toULongLong();
     quint64 curr_write_sector = diskInfo[9].toULongLong();
     quint64 curr_discard_sector = diskInfo[16].toULongLong();
@@ -144,16 +174,13 @@ void BlockDevice::calcDiskIoStates(const QStringList &diskInfo)
     auto wdiff = (curr_write_sector > d->blk_wrtn) ? (curr_write_sector - d->blk_wrtn) : 0;
     // discarded increment between interval
     auto ddiff = (curr_discard_sector > d->discard_sector) ? (curr_discard_sector - d->discard_sector) : 0;
-    // calculate actual size
-    auto rsize = rdiff * SECTOR_SIZE;
-    auto wsize = (wdiff + ddiff) * SECTOR_SIZE;
     //  auto interval = (m_time_sec > d->_time_Sec) ? (m_time_sec - d->_time_Sec) : 1;
     auto ltime = prev_time.tv_sec + prev_time.tv_usec * 1. / 1000000;
     auto rtime = cur_time.tv_sec + cur_time.tv_usec * 1. / 1000000;
     auto interval = (rtime > ltime) ? (rtime - ltime) : 1.0;
 
-    d->read_speed = static_cast<quint64>(rsize / interval);
-    d->wirte_speed = static_cast<quint64>(wsize / interval);
+    d->read_speed = safeRate(static_cast<double>(rdiff), interval);
+    d->wirte_speed = safeRate(static_cast<double>(wdiff) + static_cast<double>(ddiff), interval);
 }
 
 } // namespace system
