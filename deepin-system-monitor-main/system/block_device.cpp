@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QSharedData>
 #include <QTextStream>
+#include <limits>
 #include "system/sys_info.h"
 #include "common/common.h"
 namespace core {
@@ -152,8 +153,14 @@ void BlockDevice::calcDiskIoStates(const QStringList &diskInfo)
     auto rtime = cur_time.tv_sec + cur_time.tv_usec * 1. / 1000000;
     auto interval = (rtime > ltime) ? (rtime - ltime) : 1.0;
 
-    d->read_speed = static_cast<quint64>(rsize / interval);
-    d->wirte_speed = static_cast<quint64>(wsize / interval);
+    auto raw_read = rsize / interval;
+    auto raw_write = wsize / interval;
+    d->read_speed = raw_read >= static_cast<double>(std::numeric_limits<quint64>::max())
+        ? std::numeric_limits<quint64>::max()
+        : static_cast<quint64>(raw_read);
+    d->wirte_speed = raw_write >= static_cast<double>(std::numeric_limits<quint64>::max())
+        ? std::numeric_limits<quint64>::max()
+        : static_cast<quint64>(raw_write);
 }
 
 } // namespace system
