@@ -28,7 +28,7 @@
 //   B2: maxdata.toLongLong() > 0 → 进入正数最大值更新分支 [AddData1_FirstPositiveData_UpdatesMax]
 //   B3: maxdata != m_maxData1 → 更新 m_maxData1 并同步 m_maxData [AddData1_FirstPositiveData_UpdatesMax]
 //   B4: m_speedAxis 且 viewType != NET_CHART → formatUnit_memory_disk 标题 [AddData1_SpeedAxisMemChart_UpdatesAxisTitle]
-//   B5: m_speedAxis 且 viewType == NET_CHART → formatUnit_net 标题 [SetSpeedAxis_NetChart_UsesNetUnitTitle]
+//   B5: m_speedAxis 且 viewType == NET_CHART → formatUnit_memory_disk 字节口径标题 [SetSpeedAxis_NetChart_UsesNetUnitTitle]
 //   B6: maxdata == 0（else 分支）且 m_speedAxis → 零值标题回退 [AddData1_ZeroData_SpeedAxisMemChart_ShowsZeroTitle]
 
 // 分支清单（来源：chart_view_widget.cpp ChartViewWidget::addData2）
@@ -324,7 +324,7 @@ TEST_F(UT_ChartViewWidget, SetSpeedAxis_MemChart_UsesMemoryUnitTitle)
 
 TEST_F(UT_ChartViewWidget, SetSpeedAxis_NetChart_UsesNetUnitTitle)
 {
-    // Arrange: 网络视图走 formatUnit_net 分支
+    // Arrange: 网络视图轴标题与磁盘/内存一致，走字节口径分支
     delete m_tester;
     m_tester = new ChartViewWidget(ChartViewWidget::ChartViewTypes::NET_CHART, nullptr);
 
