@@ -71,10 +71,10 @@ bool DataDealSingleton::readNetInfo(QString &netReceive, QString &netTotalReceiv
 {
     internalMutex.lockForRead();
     NetInfo *netInfo = core::system::DeviceDB::instance()->netInfo();
-    netReceive = formatUnit_net(netInfo->recvBps() * 8, B, 1, true);
-    netSend = formatUnit_net(netInfo->sentBps() * 8, B, 1, true);
-    netTotalReceive = formatUnit_net(netInfo->totalRecvBytes() * 8, B, 1);
-    totalSend = formatUnit_net(netInfo->totalSentBytes() * 8, B, 1);
+    netReceive = formatUnit_memory_disk(netInfo->recvBps(), B, 1, true);
+    netSend = formatUnit_memory_disk(netInfo->sentBps(), B, 1, true);
+    netTotalReceive = formatUnit_memory_disk(netInfo->totalRecvBytes(), B, 1);
+    totalSend = formatUnit_memory_disk(netInfo->totalSentBytes(), B, 1);
     internalMutex.unlock();
 
     return true;
