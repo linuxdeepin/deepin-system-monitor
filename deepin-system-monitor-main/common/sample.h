@@ -313,7 +313,7 @@ public:
     inline void addSample(SampleFrame<T> *frame)
     {
         if (frame) {
-            if (m_samples.size() >= m_maxSamples)
+            if (m_maxSamples > 0 && m_samples.size() >= m_maxSamples)
                 m_samples.pop_front();
 
             std::shared_ptr<SampleFrame<T>> framePtr;

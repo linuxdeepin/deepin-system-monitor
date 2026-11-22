@@ -22,6 +22,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <sched.h>
+#include <cstdint>
 
 #define PROC_PATH_STAT "/proc/stat"
 #define PROC_PATH_CPUINFO "/proc/cpuinfo"
@@ -255,17 +256,26 @@ QString CPUSet::virtualization() const
 
 QString CPUSet::curFreq() const
 {
-    return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
+    double freq = d->m_info.value("CPU MHz").toDouble();
+    if (freq < 0 || freq > UINT32_MAX)
+        return {};
+    return common::format::formatHz(static_cast<quint32>(freq), common::format::MHz);
 }
 
 QString CPUSet::minFreq() const
 {
-    return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
+    double freq = d->m_info.value("CPU min MHz").toDouble();
+    if (freq < 0 || freq > UINT32_MAX)
+        return {};
+    return common::format::formatHz(static_cast<quint32>(freq), common::format::MHz);
 }
 
 QString CPUSet::maxFreq() const
 {
-    return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
+    double freq = d->m_info.value("CPU max MHz").toDouble();
+    if (freq < 0 || freq > UINT32_MAX)
+        return {};
+    return common::format::formatHz(static_cast<quint32>(freq), common::format::MHz);
 }
 
 QString CPUSet::l1dCache() const

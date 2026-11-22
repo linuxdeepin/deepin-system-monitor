@@ -41,6 +41,10 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
     payload->ts = pkt_hdr->ts;
     const u_char *hdr = packet;
     // parse hdr&packet
+    // truncated packets: check caplen before accessing headers
+    if (pkt_hdr->caplen < sizeof(struct ether_header)) {
+        return false;
+    }
     auto *eth_hdr = reinterpret_cast<const struct ether_header *>(packet);
     auto type = ntohs(eth_hdr->ether_type);
     auto eth_hdr_len = sizeof(struct ether_header);
@@ -48,6 +52,9 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
     ulong ip_hdr_len {};
 
     if (type == ETHERTYPE_IP) {
+        if (pkt_hdr->caplen < eth_hdr_len + sizeof(struct ip)) {
+            return false;
+        }
         auto *ip_hdr = reinterpret_cast<const struct ip *>(packet + eth_hdr_len);
         // ip header length
         ip_hdr_len = ulong((ip_hdr->ip_hl & 0x0f) * 4);
@@ -57,7 +64,7 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
         proto = ip_hdr->ip_p;
 
         // truncated packets
-        if (pkt_hdr->caplen <= eth_hdr_len + ip_hdr_len) {
+        if (pkt_hdr->caplen < eth_hdr_len + ip_hdr_len) {
             return false;
         }
 
@@ -67,6 +74,9 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
         payload->d_addr.in4 = ip_hdr->ip_dst;
 
     } else if (type == ETHERTYPE_IPV6) {
+        if (pkt_hdr->caplen < eth_hdr_len + sizeof(struct ip6_hdr)) {
+            return false;
+        }
         auto *ip6_hdr = reinterpret_cast<const struct ip6_hdr *>(packet + eth_hdr_len);
 
         // next header field in ip6 header

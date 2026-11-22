@@ -84,6 +84,8 @@ inline void NLAddr::local()
     const QList<QByteArray> &arrayBuffer = buffer.split('/');
     if (arrayBuffer.size() == 2) {
         int n = arrayBuffer.last().toInt();
+        if (n <= 0 || n > 32)
+            return;
         char mask[32];
         unsigned int addr = LMOVE(0xffffffff, 32 - n);
         sprintf(mask, "%u.%u.%u.%u", RMOVE(addr, 24), RMOVE(addr, 16) & 0xff, RMOVE(addr, 8) & 0xff, addr & 0xff);

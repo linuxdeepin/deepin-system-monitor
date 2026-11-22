@@ -318,7 +318,7 @@ QString format::formatHz(quint32 freq, format::HzUnit base, int prec)
     int u = base;
     qreal v = freq;
 
-    while (v > 1000. && u <= ZHz) {
+    while (v > 1000. && u < ZHz) {
         v /= 1000;
         u++;
     }
@@ -334,7 +334,7 @@ QString format::formatUnit_memory_disk(QVariant size, format::SizeUnit base, int
         return {};
     qreal v = size.toReal();
 
-    while (v > 1024. && u <= EB) {
+    while (v > 1024. && u < EB) {
         v /= 1024;
         u++;
     }
@@ -353,7 +353,7 @@ QString format::formatUnit_net(QVariant size, format::SizeUnit base, int prec, b
         return {};
     qreal v = size.toReal();
 
-    while (v > 1024. && u <= EB) {
+    while (v > 1024. && u < EB) {
         v /= 1024;
         u++;
     }

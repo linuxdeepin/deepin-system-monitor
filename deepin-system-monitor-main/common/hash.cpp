@@ -19,6 +19,7 @@
 #    include <sys/syscall.h>
 #endif
 #include <endian.h>
+#include <cstring>
 
 namespace util {
 namespace common {
@@ -49,12 +50,16 @@ inline uint64_t rotl64(uint64_t x, int8_t r)
 
 FORCE_INLINE uint32_t getblock32(const uint32_t *p, int i)
 {
-    return p[i];
+    uint32_t val;
+    memcpy(&val, p + i, sizeof(val));
+    return val;
 }
 
 FORCE_INLINE uint64_t getblock64(const uint64_t *p, int i)
 {
-    return p[i];
+    uint64_t val;
+    memcpy(&val, p + i, sizeof(val));
+    return val;
 }
 
 //-----------------------------------------------------------------------------

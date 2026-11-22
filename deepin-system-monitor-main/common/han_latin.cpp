@@ -56,6 +56,11 @@ QString convHanToLatin(const QString &words)
 
     UnicodeString ubuf = UnicodeString::fromUTF8(StringPiece(words.toStdString()));
     // from hanzi to latin
+    if (!tr || U_FAILURE(ec)) {
+        qCDebug(app) << parseError(words, ec, pe);
+        result = words;
+        return result;
+    }
     tr->transliterate(ubuf);
 
     if (U_FAILURE(ec)) {
@@ -67,6 +72,11 @@ QString convHanToLatin(const QString &words)
         unique_ptr<Transliterator> tr2(Transliterator::createInstance(
                 TRANSLITERATION_LATIN_ASCII, UTransDirection::UTRANS_FORWARD, pe, ec));
         // from latin to ascii (pinyin)
+        if (!tr2 || U_FAILURE(ec)) {
+            qCDebug(app) << parseError(words, ec, pe);
+            result = words;
+            return result;
+        }
         tr2->transliterate(ubuf);
 
         if (U_FAILURE(ec)) {
