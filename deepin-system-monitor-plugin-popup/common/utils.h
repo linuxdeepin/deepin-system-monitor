@@ -1,5 +1,5 @@
 // Copyright (C) 2018 ~ 2025 Deepin Technology Co., Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -43,7 +43,9 @@ inline QString formatUnit(QVariant size, SizeUnit base = B, int prec = 1, bool i
     if (!size.canConvert(QMetaType::Double)) return {};
     qreal v = size.toReal();
 
-    while (v > 1024. && u <= EB) {
+    // 索引上界为 EB 本身，循环条件用 u < EB，避免 v 极大时 u 自增到 7 后越界访问
+    // UnitSuffix[7]/UnitSuffixExt[7]（数组大小为 7，有效索引 0-6）。
+    while (v > 1024. && u < EB) {
         v /= 1024;
         u++;
     }
