@@ -1,11 +1,12 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "netif_packet_parser.h"
 
 #include <netinet/in.h>
+#include <cstring>
 #include <net/ethernet.h>
 #include <netinet/if_ether.h>
 #include <netinet/ip.h>
@@ -41,20 +42,31 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
     payload->ts = pkt_hdr->ts;
     const u_char *hdr = packet;
     // parse hdr&packet
-    auto *eth_hdr = reinterpret_cast<const struct ether_header *>(packet);
-    auto type = ntohs(eth_hdr->ether_type);
+
+    // validate ethernet header before access
+    if (pkt_hdr->caplen < sizeof(struct ether_header)) {
+        return false;
+    }
+    struct ether_header eth_hdr;
+    memcpy(&eth_hdr, packet, sizeof(struct ether_header));
+    auto type = ntohs(eth_hdr.ether_type);
     auto eth_hdr_len = sizeof(struct ether_header);
     uint proto {};
     ulong ip_hdr_len {};
 
     if (type == ETHERTYPE_IP) {
-        auto *ip_hdr = reinterpret_cast<const struct ip *>(packet + eth_hdr_len);
+        // validate IP header before access
+        if (pkt_hdr->caplen < eth_hdr_len + sizeof(struct ip)) {
+            return false;
+        }
+        struct ip ip_hdr;
+        memcpy(&ip_hdr, packet + eth_hdr_len, sizeof(struct ip));
         // ip header length
-        ip_hdr_len = ulong((ip_hdr->ip_hl & 0x0f) * 4);
+        ip_hdr_len = ulong((ip_hdr.ip_hl & 0x0f) * 4);
         // ip payload
         hdr = packet + eth_hdr_len + ip_hdr_len;
         // protocol
-        proto = ip_hdr->ip_p;
+        proto = ip_hdr.ip_p;
 
         // truncated packets
         if (pkt_hdr->caplen <= eth_hdr_len + ip_hdr_len) {
@@ -63,14 +75,19 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
 
         payload->sa_family = AF_INET;
         payload->proto = proto;
-        payload->s_addr.in4 = ip_hdr->ip_src;
-        payload->d_addr.in4 = ip_hdr->ip_dst;
+        payload->s_addr.in4 = ip_hdr.ip_src;
+        payload->d_addr.in4 = ip_hdr.ip_dst;
 
     } else if (type == ETHERTYPE_IPV6) {
-        auto *ip6_hdr = reinterpret_cast<const struct ip6_hdr *>(packet + eth_hdr_len);
+        // validate IPv6 header before access
+        if (pkt_hdr->caplen < eth_hdr_len + sizeof(struct ip6_hdr)) {
+            return false;
+        }
+        struct ip6_hdr ip6_hdr;
+        memcpy(&ip6_hdr, packet + eth_hdr_len, sizeof(struct ip6_hdr));
 
         // next header field in ip6 header
-        uint8_t nhtype = ip6_hdr->ip6_nxt;
+        uint8_t nhtype = ip6_hdr.ip6_nxt;
         // find upper-layer protocol header (the last extension header)
         hdr = packet + eth_hdr_len + sizeof(struct ip6_hdr);
         bool stop {false};
@@ -78,9 +95,13 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
             switch (nhtype) {
             case  IP6_NEXT_HEADER_HBH: {
                 // Hop-by-Hop Options Header
-                auto *hbh = reinterpret_cast<const struct ip6_hbh *>(hdr);
-                hdr = hdr + hbh->ip6h_len * 8 + 8;
-                nhtype = hbh->ip6h_nxt;
+                if (hdr + sizeof(struct ip6_hbh) > packet + pkt_hdr->caplen) {
+                    return false;
+                }
+                struct ip6_hbh hbh;
+                memcpy(&hbh, hdr, sizeof(struct ip6_hbh));
+                hdr = hdr + hbh.ip6h_len * 8 + 8;
+                nhtype = hbh.ip6h_nxt;
                 break;
             }
             case IP6_NEXT_HEADER_TCP: { // UPPER-LAYER protocol header
@@ -101,16 +122,24 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
             }
             case IP6_NEXT_HEADER_ROUTING: {
                 // Routing Header
-                auto *rh = reinterpret_cast<const struct ip6_rthdr *>(hdr);
-                hdr = hdr + rh->ip6r_len * 8 + 8;
-                nhtype = rh->ip6r_nxt;
+                if (hdr + sizeof(struct ip6_rthdr) > packet + pkt_hdr->caplen) {
+                    return false;
+                }
+                struct ip6_rthdr rh;
+                memcpy(&rh, hdr, sizeof(struct ip6_rthdr));
+                hdr = hdr + rh.ip6r_len * 8 + 8;
+                nhtype = rh.ip6r_nxt;
                 break;
             }
             case IP6_NEXT_HEADER_FRAGMENT: {
                 // Fragment Header
-                auto *fh = reinterpret_cast<const struct ip6_frag *>(hdr);
+                if (hdr + sizeof(struct ip6_frag) > packet + pkt_hdr->caplen) {
+                    return false;
+                }
+                struct ip6_frag fh;
+                memcpy(&fh, hdr, sizeof(struct ip6_frag));
                 hdr = hdr + sizeof(struct ip6_frag);
-                nhtype = fh->ip6f_nxt;
+                nhtype = fh.ip6f_nxt;
                 break;
             }
             case IP6_NEXT_HEADER_RRSVP: {
@@ -135,9 +164,13 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
             }
             case IP6_NEXT_HEADER_DESOPT: {
                 // Destination Options Header
-                auto *dh = reinterpret_cast<const struct ip6_dest *>(hdr);
-                hdr = hdr + dh->ip6d_len * 8 + 8;
-                nhtype = dh->ip6d_nxt;
+                if (hdr + sizeof(struct ip6_dest) > packet + pkt_hdr->caplen) {
+                    return false;
+                }
+                struct ip6_dest dh;
+                memcpy(&dh, hdr, sizeof(struct ip6_dest));
+                hdr = hdr + dh.ip6d_len * 8 + 8;
+                nhtype = dh.ip6d_nxt;
                 break;
             }
             default:
@@ -148,8 +181,8 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
 
         payload->sa_family = AF_INET6;
         payload->proto = proto;
-        payload->s_addr.in6 = ip6_hdr->ip6_src;
-        payload->d_addr.in6 = ip6_hdr->ip6_dst;
+        payload->s_addr.in6 = ip6_hdr.ip6_src;
+        payload->d_addr.in6 = ip6_hdr.ip6_dst;
 
     } else {
         // ignore non ip4 & ip6 packets
@@ -157,19 +190,29 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
     }
 
     if (proto == IPPROTO_TCP) {
-        auto *tcp_hdr = reinterpret_cast<const struct tcphdr *>(hdr);
-        auto tcp_hdr_len = ulong(((tcp_hdr->th_off & 0xf0) >> 4) * 4);
+        // validate TCP header before access
+        if (pkt_hdr->caplen < ulong(hdr - packet) + sizeof(struct tcphdr)) {
+            return false;
+        }
+        struct tcphdr tcp_hdr;
+        memcpy(&tcp_hdr, hdr, sizeof(struct tcphdr));
+        auto tcp_hdr_len = ulong(((tcp_hdr.th_off & 0xf0) >> 4) * 4);
         // no payload data
         if (pkt_hdr->caplen <= eth_hdr_len + ip_hdr_len + tcp_hdr_len) {
             return false;
         }
         payload->payload = pkt_hdr->caplen - eth_hdr_len - ip_hdr_len - tcp_hdr_len;
-        payload->s_port = ntohs(tcp_hdr->th_sport);
-        payload->d_port = ntohs(tcp_hdr->th_dport);
+        payload->s_port = ntohs(tcp_hdr.th_sport);
+        payload->d_port = ntohs(tcp_hdr.th_dport);
 
     } else if (proto == IPPROTO_UDP) {
-        auto *udp_hdr = reinterpret_cast<const struct udphdr *>(hdr);
-        auto udp_len = ulong(ntohs(udp_hdr->uh_ulen));
+        // validate UDP header before access
+        if (pkt_hdr->caplen < ulong(hdr - packet) + sizeof(struct udphdr)) {
+            return false;
+        }
+        struct udphdr udp_hdr;
+        memcpy(&udp_hdr, hdr, sizeof(struct udphdr));
+        auto udp_len = ulong(ntohs(udp_hdr.uh_ulen));
         auto udp_hdr_len = sizeof(struct udphdr);
         ulong ulen {};
         if (udp_len == 0) {
@@ -187,8 +230,8 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
             return false;
         }
         payload->payload = pkt_hdr->caplen - eth_hdr_len - ip_hdr_len - ulen;
-        payload->s_port = ntohs(udp_hdr->uh_sport);
-        payload->d_port = ntohs(udp_hdr->uh_dport);
+        payload->s_port = ntohs(udp_hdr.uh_sport);
+        payload->d_port = ntohs(udp_hdr.uh_dport);
 
     } else {
         // unexpected case, unknown proto type
