@@ -386,7 +386,7 @@ QString CPUSet::maxFreq() const
 {
     //获取最大CPU频率数值，单位MHz
     qreal MaxFreq = mIsEmptyModelName ? d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble() : d->m_info.value("CPU max MHz").toDouble();
-    return common::format::formatHz(static_cast<uint>(MaxFreq), common::format::MHz);
+    return common::format::formatHz(MaxFreq, common::format::MHz);
 }
 
 QString CPUSet::l1dCache() const
