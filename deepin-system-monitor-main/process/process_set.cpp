@@ -103,7 +103,7 @@ void ProcessSet::scanProcess()
     if(m_prePid != m_curPid) {
         for (const pid_t &pid : m_prePid) {
             if(!m_curPid.contains(pid)){
-                m_prePid.removeAt(pid);  //remove disappear process pid
+                m_prePid.removeOne(pid);  //remove disappear process pid
                 if(m_simpleSet.contains(pid))
                     m_simpleSet.remove(pid);
                 //for each pid,only one process reflected.So "removeOne()"func replied.
@@ -146,6 +146,16 @@ void ProcessSet::scanProcess()
         }
     }
 
+    // Rebuild the my-apps list every round based on the freshly recomputed appType
+    // (readProcessVariableInfo now refreshes appType), so that processes initially
+    // misclassified (e.g. desktop entry cache not yet loaded on first sight) are
+    // corrected instead of being stuck with their first-seen classification.
+    m_pidMyApps.clear();
+    for (auto it = m_set.constBegin(); it != m_set.constEnd(); ++it) {
+        if (it.value().appType() == kFilterApps && !wmwindowList->isTrayApp(it.key()))
+            m_pidMyApps << it.key();
+    }
+
     std::function<bool(pid_t ppid)> anyRootIsGuiProc;
     // find if any ancestor processes is gui application
     anyRootIsGuiProc = [&](pid_t ppid) -> bool {
@@ -173,6 +183,12 @@ void ProcessSet::scanProcess()
             // only if no ancestor process is gui app we keep this process
             if (m_pidCtoPMapping.contains(pid) &&
                     anyRootIsGuiProc(m_pidCtoPMapping[pid])) {
+
+                // Standalone desktop applications (identified via .desktop entry)
+                // should not be downgraded even if an ancestor is a GUI app.
+                if (wmwindowList->isDesktopEntryApp(pid)) {
+                    continue;
+                }
 
                 // when we start app with deepin-terminal, we should skip setting apptype as CurrentUser
                 const Process parentProc = getProcessById(m_pidCtoPMapping[pid]);

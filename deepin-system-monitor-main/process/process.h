@@ -117,6 +117,7 @@ public:
     void readProcessInfo();
     void readProcessSimpleInfo();
     void readProcessVariableInfo();
+    void refreshAppType();
 
 private:
     /**
