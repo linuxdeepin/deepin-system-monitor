@@ -102,14 +102,14 @@ void MemoryWidget::changeTheme(DApplicationHelper::ColorType themeType)
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_memory.png"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_memory.svg"));
         break;
     case DApplicationHelper::DarkType:
         numberColor.setRgb(192, 198, 212);
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_memory.png"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_memory.svg"));
         break;
     default:
         break;
@@ -153,12 +153,14 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     int widthTitleTxt = fmTitle.width(strMemory);
     int heightTitleTxt = fmTitle.descent() + fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, strMemory);
-
     //图标
     int iconSize = 20;
-    QRect iconRect(titleRect.x() + (titleRect.width() - widthTitleTxt) / 2 - iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2, iconSize, iconSize);
+    int iconGap = 4;
+    int totalWidth = iconSize + iconGap + widthTitleTxt;
+    QRect iconRect(titleRect.x() + (titleRect.width() - totalWidth) / 2, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.), iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
+    QRect memTextRect(iconRect.right() + iconGap, titleRect.y(), widthTitleTxt, titleRect.height());
+    painter.drawText(memTextRect, Qt::AlignLeft | Qt::AlignVCenter, strMemory);
 
     int sectionSize = 6;
     QString memoryTitleUnit = QString("%1 / %2")

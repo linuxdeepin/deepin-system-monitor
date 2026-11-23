@@ -164,13 +164,13 @@ void NetWidget::changeTheme(DApplicationHelper::ColorType themeType)
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_network.png"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_network.svg"));
         break;
     case DApplicationHelper::DarkType:
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_network.png"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_network.svg"));
         break;
     default:
         break;
@@ -214,12 +214,14 @@ void NetWidget::paintEvent(QPaintEvent *e)
     int widthTitleTxt = fmTitle.width(tr("Network"));
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, tr("Network"));
-
     //图标
     int iconSize = 20;
-    QRect iconRect(titleRect.x()+(titleRect.width()-widthTitleTxt)/2-iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
+    int iconGap = 4;
+    int totalWidth = iconSize + iconGap + widthTitleTxt;
+    QRect iconRect(titleRect.x() + (titleRect.width() - totalWidth) / 2, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.), iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
+    QRect netTextRect(iconRect.right() + iconGap, titleRect.y(), widthTitleTxt, titleRect.height());
+    painter.drawText(netTextRect, Qt::AlignLeft | Qt::AlignVCenter, tr("Network"));
 
     //分隔符
     painter.setFont(m_contentFont);
