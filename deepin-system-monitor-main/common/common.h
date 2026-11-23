@@ -140,7 +140,9 @@ enum HzUnit {
     ZHz   // 10 ^ 21
 };
 const char *const HzUnitSuffix[] = { "KHz", "MHz", "GHz", "THz", "PHz", "EHz", "ZHz" };
-QString formatHz(quint32 freq, HzUnit base = KHz, int prec = 2);
+// 形参用 qreal 而非 quint32：调用方多来自 QString::toDouble()，实数域转换到
+// 整型在负数/NaN/超范围时为未定义行为，改为由本函数统一校验后输出。
+QString formatHz(qreal freq, HzUnit base = KHz, int prec = 2);
 
 }   // namespace format
 

@@ -107,3 +107,45 @@ TEST(UT_Common, test_global_init_01)
 {
     global_init();
 }
+
+TEST(UT_Common, test_formatHz_normal)
+{
+    // 2400MHz 进位显示为 2.40GHz
+    EXPECT_EQ(QString("2.40GHz"), format::formatHz(2400.0, format::MHz));
+    // 恰好 1000 不触发进位（条件为 > 1000）
+    EXPECT_EQ(QString("1000.00MHz"), format::formatHz(1000.0, format::MHz));
+    // 2400000MHz 连进两级到 THz
+    EXPECT_EQ(QString("2.40THz"), format::formatHz(2400000.0, format::MHz));
+}
+
+TEST(UT_Common, test_formatHz_negative)
+{
+    // 负频率无实际意义，必须显示 0 且不得触发浮点转整型的未定义行为
+    EXPECT_EQ(QString("0.00MHz"), format::formatHz(-1200.0, format::MHz));
+}
+
+TEST(UT_Common, test_formatHz_nonFinite)
+{
+    // NaN 与正负无穷均按 0 处理
+    const qreal nan = qQNaN();
+    const qreal inf = qInf();
+    EXPECT_EQ(QString("0.00MHz"), format::formatHz(nan, format::MHz));
+    EXPECT_EQ(QString("0.00MHz"), format::formatHz(inf, format::MHz));
+    EXPECT_EQ(QString("0.00MHz"), format::formatHz(-inf, format::MHz));
+}
+
+TEST(UT_Common, test_formatHz_overflowSaturate)
+{
+    // 超出 quint32 上限的值饱和处理，单位索引不得越过 HzUnitSuffix 边界。
+    // quint32 上限 4294967295KHz 换算后约 4.29PHz。
+    const qreal huge = 1e30;
+    const QString result = format::formatHz(huge, format::MHz);
+    EXPECT_FALSE(result.isEmpty());
+    // 单位后缀必须是数组内的合法项，不能是越界读到的内容
+    bool suffixValid = false;
+    for (const char *suffix : format::HzUnitSuffix) {
+        if (result.endsWith(QString::fromLatin1(suffix)))
+            suffixValid = true;
+    }
+    EXPECT_TRUE(suffixValid);
+}

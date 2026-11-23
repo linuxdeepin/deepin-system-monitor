@@ -14,6 +14,9 @@
 #include <QDesktopServices>
 #include <QApplication>
 
+#include <cmath>
+#include <limits>
+
 namespace common {
 
 void displayShortcutHelpDialog(const QRect &rect)
@@ -313,12 +316,21 @@ void global_init()
 }
 } // namespace init
 
-QString format::formatHz(quint32 freq, format::HzUnit base, int prec)
+QString format::formatHz(qreal freq, format::HzUnit base, int prec)
 {
+    // 非有限值（NaN/Inf）与负数无法映射到实际频率，统一按 0 显示，
+    // 避免此前的 double -> quint32 隐式转换落入未定义行为。
+    if (!qIsFinite(freq) || freq < 0.)
+        freq = 0.;
+    // 超出 quint32 可表示的最大频率时饱和，保证单位换算的循环必然收敛。
+    if (freq > static_cast<qreal>(std::numeric_limits<quint32>::max()))
+        freq = static_cast<qreal>(std::numeric_limits<quint32>::max());
+
     int u = base;
     qreal v = freq;
 
-    while (v > 1000. && u <= ZHz) {
+    // 索引上界为 ZHz 本身，循环条件用 u < ZHz 防止 u 自增后越界访问 HzUnitSuffix。
+    while (v > 1000. && u < ZHz) {
         v /= 1000;
         u++;
     }
