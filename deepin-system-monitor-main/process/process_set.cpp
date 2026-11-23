@@ -164,10 +164,6 @@ void ProcessSet::scanProcess()
         mergeSubProcNetIO(pid, recvBps, sendBps);
         m_set[pid].setNetIoBps(recvBps, sendBps);
 
-        qreal ptotalCpu = 0.;
-        mergeSubProcCpu(pid, ptotalCpu);
-        m_set[pid].setCpu(ptotalCpu);
-
         if (!wmwindowList->isGuiApp(pid))
         {
             // only if no ancestor process is gui app we keep this process
