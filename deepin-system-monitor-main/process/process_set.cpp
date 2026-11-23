@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -163,10 +163,6 @@ void ProcessSet::scanProcess()
         qreal sendBps = 0;
         mergeSubProcNetIO(pid, recvBps, sendBps);
         m_set[pid].setNetIoBps(recvBps, sendBps);
-
-        qreal ptotalCpu = 0.;
-        mergeSubProcCpu(pid, ptotalCpu);
-        m_set[pid].setCpu(ptotalCpu);
 
         if (!wmwindowList->isGuiApp(pid))
         {
