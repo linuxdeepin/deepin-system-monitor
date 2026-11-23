@@ -1,5 +1,5 @@
 // Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -60,7 +60,7 @@ private:
     QFont m_contentUnitFont;
     QFont m_subContentFont;
 
-    QIcon m_icon {};
+    QString m_iconPath;
 
 //    qreal m_recvBps {};
 //    qreal m_sentBps {};

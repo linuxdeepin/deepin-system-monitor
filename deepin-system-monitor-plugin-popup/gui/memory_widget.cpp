@@ -1,5 +1,5 @@
 // Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "ddlog.h"
@@ -23,6 +23,7 @@
 #include <QPaintEvent>
 #include <QFontMetrics>
 #include <QProcess>
+#include <QSvgRenderer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -102,14 +103,14 @@ void MemoryWidget::changeTheme(DApplicationHelper::ColorType themeType)
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_memory.png"));
+        m_iconPath = QString(":/icons/deepin/builtin/light/icon_memory_light.svg");
         break;
     case DApplicationHelper::DarkType:
         numberColor.setRgb(192, 198, 212);
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
-        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_memory.png"));
+        m_iconPath = QString(":/icons/deepin/builtin/dark/icon_memory_light.svg");
         break;
     default:
         break;
@@ -157,8 +158,16 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
 
     //图标
     int iconSize = 20;
-    QRect iconRect(titleRect.x() + (titleRect.width() - widthTitleTxt) / 2 - iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2, iconSize, iconSize);
-    m_icon.paint(&painter, iconRect);
+    QRect iconRect(titleRect.x() + (titleRect.width() - widthTitleTxt) / 2 - iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.), iconSize, iconSize);
+    qreal ratio = devicePixelRatioF();
+    QPixmap pm(iconSize * ratio, iconSize * ratio);
+    pm.fill(Qt::transparent);
+    QSvgRenderer renderer(m_iconPath);
+    QPainter svgPainter(&pm);
+    renderer.render(&svgPainter);
+    svgPainter.end();
+    pm.setDevicePixelRatio(ratio);
+    painter.drawPixmap(iconRect, pm);
 
     int sectionSize = 6;
     QString memoryTitleUnit = QString("%1 / %2")
