@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -330,13 +330,13 @@ void Process::readEnviron()
         return;
     }
 
-    while ((nb = read(fd, buf, sz))) {
+    while ((nb = read(fd, buf, sz)) > 0) {
         buf[nb] = '\0';
         sbuf.append(buf, int(nb));
     }
     close(fd);
 
-    if (nb == 0 && errno != 0) {
+    if (nb < 0 || (nb == 0 && errno != 0)) {
         print_errno(errno, QString("read %1 failed").arg(path));
         return;
     }
