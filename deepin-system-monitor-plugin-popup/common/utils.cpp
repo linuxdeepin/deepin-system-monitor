@@ -177,16 +177,31 @@ QString getQrcPath(QString imageName)
 
 QDir getFlatpakAppPath(QString flatpakAppid)
 {
-    QProcess whichProcess;
     QString exec = "flatpak";
+
     QStringList params;
     params << "info";
     params << flatpakAppid;
+
+    // set the LANGUAGE env so that the output is fixed to be English,
+    // or below code may break in other locales like pt_BR.
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert("LANGUAGE", "en_US");
+
+    QProcess whichProcess;
+    whichProcess.setProcessEnvironment(env);
     whichProcess.start(exec, params);
     whichProcess.waitForFinished();
     QString output(whichProcess.readAllStandardOutput());
 
-    return QDir(output.split("Location:")[1].split("\n")[0].simplified());
+    const QStringList locParts = output.split("Location:");
+    if (locParts.size() < 2)
+        return {};
+    const QStringList lineParts = locParts[1].split("\n");
+    if (lineParts.isEmpty())
+        return {};
+
+    return QDir(lineParts[0].simplified());
 }
 
 QString getFlatpakAppIcon(QString flatpakAppid)
@@ -208,7 +223,13 @@ QString getFlatpakAppIcon(QString flatpakAppid)
     whichProcess.waitForFinished();
     QString output(whichProcess.readAllStandardOutput());
 
-    const QString dirPath = output.split("Location:")[1].split("\n")[0].simplified();
+    const QStringList locParts = output.split("Location:");
+    if (locParts.size() < 2)
+        return {};
+    const QStringList lineParts = locParts[1].split("\n");
+    if (lineParts.isEmpty())
+        return {};
+    const QString dirPath = lineParts[0].simplified();
 
     QDir flatpakDir = QDir(dirPath);
     if (!flatpakDir.cd("export"))
@@ -224,7 +245,13 @@ QString getFlatpakAppIcon(QString flatpakAppid)
     if (!flatpakDir.cd("apps"))
         return {};
 
-    const QString appID = flatpakAppid.split("app/")[1].split("/")[0];
+    const QStringList appParts = flatpakAppid.split("app/");
+    if (appParts.size() < 2)
+        return {};
+    const QStringList slashParts = appParts[1].split("/");
+    if (slashParts.isEmpty())
+        return {};
+    const QString appID = slashParts[0];
     return flatpakDir.filePath(QString("%1.svg").arg(appID));
 }
 
