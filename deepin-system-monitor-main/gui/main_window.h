@@ -9,6 +9,7 @@
 #include <DMainWindow>
 #include <DShadowLine>
 #include <DStackedWidget>
+#include <QTimer>
 #include "dbus/dbusforsystemomonitorpluginservce.h"
 
 DWIDGET_USE_NAMESPACE
@@ -130,6 +131,7 @@ private:
     bool m_initLoad = false;
     DShadowLine *m_tbShadow  = nullptr;
     QWidget *m_focusedWidget = nullptr;
+    QTimer *m_shortcutDebounceTimer = nullptr;
 
     DBusForSystemoMonitorPluginServce *m_pDbusService;
 };
