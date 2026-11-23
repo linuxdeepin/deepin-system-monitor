@@ -86,8 +86,14 @@ QIcon ProcessIcon::icon() const
     if (m_data) {
         if (m_data->type == kIconDataNameType) {
             auto *iconData = reinterpret_cast<struct icon_data_name_type *>(m_data.get());
-            if (iconData)
-                icon = QIcon::fromTheme(iconData->icon_name);
+            if (iconData) {
+                if (iconData->icon_name.startsWith('/'))
+                    icon = QIcon(iconData->icon_name);
+                else
+                    icon = QIcon::fromTheme(iconData->icon_name);
+                if (icon.isNull())
+                    icon = QIcon::fromTheme("application-x-executable");
+            } // ::if(iconData)
         } else if (m_data->type == kIconDataPixmapType) {
             auto *iconData = reinterpret_cast<struct icon_data_pix_map_type *>(m_data.get());
             if (iconData) {
