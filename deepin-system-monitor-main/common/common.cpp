@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,11 +13,28 @@
 #include <QtDBus>
 #include <QDesktopServices>
 #include <QApplication>
+#include <QElapsedTimer>
 
 namespace common {
 
+// Cooldown timer to prevent re-entrancy of displayShortcutHelpDialog.
+static QElapsedTimer s_lastShortcutLaunch;
+
+void resetShortcutCooldown()
+{
+    s_lastShortcutLaunch.invalidate();
+}
+
 void displayShortcutHelpDialog(const QRect &rect)
 {
+    // Prevent re-entrancy: skip if shortcut viewer was launched recently.
+    // Uses an in-app cooldown timer instead of a blocking pgrep call to
+    // avoid blocking the UI thread on repeated Ctrl+Shift+? presses.
+    if (s_lastShortcutLaunch.isValid() && !s_lastShortcutLaunch.hasExpired(3000)) {
+        return;
+    }
+    s_lastShortcutLaunch.start();
+
     QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
 
     QJsonObject shortcutObj;
