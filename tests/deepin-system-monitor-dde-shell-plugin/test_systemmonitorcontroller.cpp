@@ -18,10 +18,11 @@
 // | 属性读取 | high | Q_PROPERTY 元对象 | 2 | 2 |
 // | refreshSystemStats | high | 更新/保留/信号 | 5 | 5 |
 // | 定时器 | medium | 2s 周期刷新 | 2 | 2 |
+// | setSamplingPaused | high | 挂起/恢复/立即刷新 | 2 | 2 |
 // | openSystemMonitor | high | DBus/回退/invokable | 3 | 3 |
 //
 // 10 项检查清单（test-code-gen.md）：
-// 1 public 方法覆盖：4 个属性读取 + openSystemMonitor（Q_INVOKABLE）全覆盖；
+// 1 public 方法覆盖：6 个属性读取 + openSystemMonitor/setSamplingPaused（Q_INVOKABLE）全覆盖；
 // 2 等价类：探测成功值/失败值（-1 保留旧值）、DBus 有效/无效；
 // 3 边界值：属性默认值 0/"0 KB/s"、prober 失败 -1；
 // 4 分支清单→用例映射：见下方【分支清单】；
@@ -103,6 +104,8 @@ protected:
                            if (upload)
                                *upload = s_up;
                        });
+        stub.set_lamda(&SystemMonitorProber::hasActiveNetwork,
+                       [](SystemMonitorProber *) { return s_networkConnected; });
     }
 
     // 打桩 DBus：sessionBus 返回空连接（隔离真实总线），isValid 可控，
@@ -137,6 +140,7 @@ protected:
     inline static int s_mem = 0;
     inline static QString s_down;
     inline static QString s_up;
+    inline static bool s_networkConnected = true;
     inline static int s_openSystemMonitorCalls = 0;
     inline static QStringList s_detachedPrograms;
     inline static QStringList s_asyncMethods;
@@ -186,16 +190,20 @@ TEST_F(SystemMonitorControllerTest, Properties_MetaObject_ExposeAllValues)
     const QVariant mem = controller->property("memoryUsage");
     const QVariant down = controller->property("downloadSpeedText");
     const QVariant up = controller->property("uploadSpeedText");
-    // Assert: 四个属性均来自 prober
+    const QVariant valid = controller->property("dataValid");
+    const QVariant connected = controller->property("networkConnected");
+    // Assert: 属性均来自 prober（采集有效、网络连接态由打桩决定）
     EXPECT_EQ(cpu.toInt(), 42);
     EXPECT_EQ(mem.toInt(), 88);
     EXPECT_EQ(down.toString(), QStringLiteral("9 KB/s"));
     EXPECT_EQ(up.toString(), QStringLiteral("3 KB/s"));
+    EXPECT_TRUE(valid.toBool());
+    EXPECT_EQ(connected.toBool(), s_networkConnected);
 }
 
 TEST_F(SystemMonitorControllerTest, Properties_MetaObject_NotifySignalRegistered)
 {
-    // Arrange: 四个属性均应挂接 systemStatsChanged 通知信号
+    // Arrange: 六个属性均应挂接 systemStatsChanged 通知信号
     stubProber(1, 2, QStringLiteral("0 KB/s"), QStringLiteral("0 KB/s"));
     controller = makeController();
     const QMetaObject *mo = controller->metaObject();
@@ -203,16 +211,17 @@ TEST_F(SystemMonitorControllerTest, Properties_MetaObject_NotifySignalRegistered
     // Act: 逐属性检查 notify 信号挂接
     ASSERT_GE(idx, 0);
     int attached = 0;
-    for (const char *prop : { "cpuUsage", "memoryUsage", "downloadSpeedText", "uploadSpeedText" }) {
+    for (const char *prop : { "cpuUsage", "memoryUsage", "downloadSpeedText", "uploadSpeedText",
+                              "dataValid", "networkConnected" }) {
         const QMetaProperty mp = mo->property(mo->indexOfProperty(prop));
         ASSERT_TRUE(mp.isValid());
         if (mp.hasNotifySignal() && mp.notifySignal().methodIndex() == idx) {
             ++attached;
         }
     }
-    // Assert: 信号存在且四个属性全部挂接同一通知信号
+    // Assert: 信号存在且六个属性全部挂接同一通知信号
     EXPECT_GT(idx, -1);
-    EXPECT_EQ(attached, 4);
+    EXPECT_EQ(attached, 6);
 }
 
 // ---- refreshSystemStats ----
@@ -310,6 +319,44 @@ TEST_F(SystemMonitorControllerTest, RefreshSystemStats_RepeatedCalls_StateSelfRe
     // Assert: 更新为新值（状态自恢复）
     EXPECT_EQ(controller->cpuUsage(), 90);
     EXPECT_EQ(controller->memoryUsage(), 95);
+}
+
+// ---- 按需可见采样 ----
+
+TEST_F(SystemMonitorControllerTest, SetSamplingPaused_True_StopsTimerAndIsIdempotent)
+{
+    // Arrange: 初始定时器运行中
+    stubProber(37, 55, QStringLiteral("1.2 MB/s"), QStringLiteral("33 KB/s"));
+    controller = makeController();
+    QTimer *timer = controller->findChild<QTimer *>();
+    ASSERT_NE(timer, nullptr);
+    ASSERT_TRUE(timer->isActive());
+    // Act: 挂起采样
+    controller->setSamplingPaused(true);
+    // Assert: 定时器停止
+    EXPECT_FALSE(timer->isActive());
+    // Act: 重复挂起（幂等）
+    controller->setSamplingPaused(true);
+    // Assert: 仍保持停止
+    EXPECT_FALSE(timer->isActive());
+}
+
+TEST_F(SystemMonitorControllerTest, SetSamplingPaused_False_RefreshesImmediatelyAndRestarts)
+{
+    // Arrange: 挂起期间 prober 值已变化
+    stubProber(37, 55, QStringLiteral("1.2 MB/s"), QStringLiteral("33 KB/s"));
+    controller = makeController();
+    controller->setSamplingPaused(true);
+    s_cpu = 66;
+    QSignalSpy spy(controller.get(), &SystemMonitorController::systemStatsChanged);
+    QTimer *timer = controller->findChild<QTimer *>();
+    ASSERT_NE(timer, nullptr);
+    // Act: 恢复可见
+    controller->setSamplingPaused(false);
+    // Assert: 立即刷新首帧并恢复周期采样
+    EXPECT_TRUE(timer->isActive());
+    EXPECT_EQ(spy.count(), 1);
+    EXPECT_EQ(controller->cpuUsage(), 66);
 }
 
 // ---- 定时刷新 ----
