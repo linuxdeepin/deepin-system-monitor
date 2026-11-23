@@ -29,13 +29,18 @@ void stub_Common_startDetached(void* obj, qint64*)
 {
     return;
 }
+
+void stub_Common_start(void* obj, const QString&, const QStringList&, QIODevice::OpenMode)
+{
+    return;
+}
 /***************************************STUB end**********************************************/
 
 TEST(UT_Common, test_displayShortcutHlepDialog_01)
 {
     QRect rect;
     Stub stub;
-    stub.set((bool(QProcess::*)(qint64*))ADDR(QProcess, startDetached), stub_Common_startDetached);
+    stub.set((void(QProcess::*)(const QString&, const QStringList&, QIODevice::OpenMode))ADDR(QProcess, start), stub_Common_start);
     displayShortcutHelpDialog(rect);
 }
 

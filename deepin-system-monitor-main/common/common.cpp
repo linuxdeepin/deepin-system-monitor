@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -122,8 +122,11 @@ void displayShortcutHelpDialog(const QRect &rect)
 
     QJsonDocument doc(shortcutObj);
 
-    // fork new shortcut display process
-    QProcess shortcutViewProcess;
+    // reuse static process to avoid duplicate viewer instances
+    static QProcess shortcutViewProcess;
+    if (shortcutViewProcess.state() != QProcess::NotRunning) {
+        return;
+    }
     QStringList shortcutString;
     // shortcut help json formatted text param
     QString param1 = "-j=" + QString(doc.toJson().data());
@@ -131,8 +134,8 @@ void displayShortcutHelpDialog(const QRect &rect)
     QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
     shortcutString << param1 << param2;
 
-    // detach this process
-    shortcutViewProcess.startDetached("deepin-shortcut-viewer", shortcutString);
+    // start shortcut viewer process (non-detached to track lifecycle)
+    shortcutViewProcess.start("deepin-shortcut-viewer", shortcutString);
 }
 
 int getStatusBarMaxWidth()
