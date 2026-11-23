@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -84,8 +84,12 @@ inline void NLAddr::local()
     const QList<QByteArray> &arrayBuffer = buffer.split('/');
     if (arrayBuffer.size() == 2) {
         int n = arrayBuffer.last().toInt();
+        if (n < 0 || n > 32) {
+            netAddr = arrayBuffer.first();
+            return;
+        }
         char mask[32];
-        unsigned int addr = LMOVE(0xffffffff, 32 - n);
+        unsigned int addr = (n == 0) ? 0 : LMOVE(0xffffffff, 32 - n);
         sprintf(mask, "%u.%u.%u.%u", RMOVE(addr, 24), RMOVE(addr, 16) & 0xff, RMOVE(addr, 8) & 0xff, addr & 0xff);
         netAddr = arrayBuffer.first();
         netMask = QByteArray(mask);
