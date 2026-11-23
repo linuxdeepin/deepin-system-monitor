@@ -9,6 +9,7 @@
 #include <QQuickView>
 #include <QQmlContext>
 #include <QQmlEngine>
+#include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QCoreApplication>
@@ -172,6 +173,8 @@ QWindow *SystemMonitorPlugin::cardWindow() const
     view->rootContext()->setContextProperty(QStringLiteral("systemMonitorController"), m_controller.data());
     view->setSource(QUrl(QStringLiteral("qrc:/systemmonitor/SystemMonitorCard.qml")));
     if (view->status() == QQuickView::Error) {
+        // 卡片 QML 加载失败会导致 dock 静默回退邮件卡片，这里必须留下可追查的日志
+        qWarning() << "system-monitor: load card qml failed:" << view->errors();
         delete view;
         return nullptr;
     }

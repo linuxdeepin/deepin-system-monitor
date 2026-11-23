@@ -30,12 +30,12 @@
         <translation>%1%</translation>
     </message>
     <message>
-        <source>%1 ↓</source>
-        <translation>%1 ↓</translation>
+        <source>Disconnected</source>
+        <translation>མཐུད་མེད།</translation>
     </message>
     <message>
-        <source>%1 ↑</source>
-        <translation>%1 ↑</translation>
+        <source>Network</source>
+        <translation>དྲ་བ།</translation>
     </message>
 </context>
 </TS>

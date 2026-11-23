@@ -30,12 +30,12 @@
         <translation>%1%</translation>
     </message>
     <message>
-        <source>%1 ↓</source>
-        <translation>%1 ↓</translation>
+        <source>Disconnected</source>
+        <translation>ئۇلانمىغان</translation>
     </message>
     <message>
-        <source>%1 ↑</source>
-        <translation>%1 ↑</translation>
+        <source>Network</source>
+        <translation>تور</translation>
     </message>
 </context>
 </TS>

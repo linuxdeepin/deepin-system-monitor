@@ -19,6 +19,7 @@ public:
     int cpuUsagePercent();
     int memoryUsagePercent();
     void networkSpeed(QString *download, QString *upload);
+    bool hasActiveNetwork();
 
 private:
     bool readCpuTimes(quint64 *totalTime, quint64 *idleTime);

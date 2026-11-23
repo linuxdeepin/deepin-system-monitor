@@ -74,6 +74,7 @@
 #include <QJsonArray>
 #include <QLabel>
 #include <QPointer>
+#include <QQmlContext>
 #include <QQuickView>
 #include <QQuickItem>
 
@@ -156,6 +157,61 @@ public:
 };
 
 } // namespace
+
+// FakeMonitorController：与 SystemMonitorController 同名属性的编程桩，
+// 以同名 context property 注入真实卡片 QML，确定性驱动纯 QML 逻辑（滞回/图标尺寸）
+class FakeMonitorController : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(bool dataValid READ dataValid WRITE setDataValid NOTIFY dataValidChanged)
+    Q_PROPERTY(int cpuUsage READ cpuUsage WRITE setCpuUsage NOTIFY cpuUsageChanged)
+    Q_PROPERTY(int memoryUsage READ memoryUsage WRITE setMemoryUsage NOTIFY memoryUsageChanged)
+    Q_PROPERTY(QString uploadSpeedText MEMBER m_uploadSpeedText NOTIFY uploadSpeedTextChanged)
+    Q_PROPERTY(QString downloadSpeedText MEMBER m_downloadSpeedText NOTIFY downloadSpeedTextChanged)
+    Q_PROPERTY(bool networkConnected MEMBER m_networkConnected NOTIFY networkConnectedChanged)
+
+public:
+    explicit FakeMonitorController(QObject *parent = nullptr)
+        : QObject(parent) {}
+
+    // 显式读写器（变更时才发 NOTIFY，供测试直接驱动 QML 绑定重算）
+    bool dataValid() const { return m_dataValid; }
+    void setDataValid(bool v) { if (v == m_dataValid) return; m_dataValid = v; emit dataValidChanged(); }
+    int cpuUsage() const { return m_cpuUsage; }
+    void setCpuUsage(int v) { if (v == m_cpuUsage) return; m_cpuUsage = v; emit cpuUsageChanged(); }
+    int memoryUsage() const { return m_memoryUsage; }
+    void setMemoryUsage(int v) { if (v == m_memoryUsage) return; m_memoryUsage = v; emit memoryUsageChanged(); }
+
+    // QML 侧调用的两个控制器方法（可见性采样暂停/打开主窗口）
+    Q_INVOKABLE void setSamplingPaused(bool paused) { Q_UNUSED(paused) }
+    Q_INVOKABLE void openSystemMonitor() {}
+
+signals:
+    void dataValidChanged();
+    void cpuUsageChanged();
+    void memoryUsageChanged();
+    void uploadSpeedTextChanged();
+    void downloadSpeedTextChanged();
+    void networkConnectedChanged();
+
+private:
+    bool m_dataValid = false;
+    int m_cpuUsage = 0;
+    int m_memoryUsage = 0;
+    QString m_uploadSpeedText;
+    QString m_downloadSpeedText;
+    bool m_networkConnected = true;
+};
+
+// 以指定控制器加载真实卡片 QML（与 SystemMonitorPlugin::cardWindow 同源同 URL）
+static std::unique_ptr<QQuickView> loadCardWithController(QObject *controller)
+{
+    std::unique_ptr<QQuickView> view(new QQuickView);
+    view->setResizeMode(QQuickView::SizeRootObjectToView);
+    view->rootContext()->setContextProperty(QStringLiteral("systemMonitorController"), controller);
+    view->setSource(QUrl(QStringLiteral("qrc:/systemmonitor/SystemMonitorCard.qml")));
+    return view;
+}
 
 class SystemMonitorPluginTest : public ::testing::Test
 {
@@ -438,8 +494,10 @@ TEST_F(SystemMonitorPluginTest, CardWindow_Init_LoadsQmlCard)
     ASSERT_NE(view, nullptr);
     EXPECT_EQ(view->status(), QQuickView::Ready);
     EXPECT_NE(view->rootObject(), nullptr);
-    // 根对象暴露 readonly 属性 expanded（QML 内部状态）
-    EXPECT_TRUE(view->rootObject()->property("expanded").isValid());
+    // 根对象暴露 readonly 属性 compact（QML 内部紧凑/展开态切换）
+    EXPECT_TRUE(view->rootObject()->property("compact").isValid());
+    // 根对象暴露 readonly 属性 overallState（三色负载最高级别，驱动图标变色）
+    EXPECT_TRUE(view->rootObject()->property("overallState").isValid());
 }
 
 TEST_F(SystemMonitorPluginTest, CardWindow_SecondCall_ReturnsSameInstance)
@@ -455,6 +513,82 @@ TEST_F(SystemMonitorPluginTest, CardWindow_SecondCall_ReturnsSameInstance)
     ASSERT_NE(first, nullptr);
     EXPECT_EQ(first, second);
     EXPECT_EQ(first, third);
+}
+
+// ---- QML 卡片逻辑（真实 QML + Fake 控制器）----
+
+// 分支清单：
+//   抢显进入：mem >= 85 且 mem > cpu（84/85 临界）
+//   滞回保持：mem >= 80 且 cpu < mem + 5（79/80 与 mem+4/mem+5 临界）
+//   数据失效：dataValid=false 立即交还
+TEST_F(SystemMonitorPluginTest, CardWindow_Qml_CompactPreferMemory_Hysteresis)
+{
+    // Arrange: 真实 QML + 可编程控制器（cpu/mem 可控）
+    FakeMonitorController fake;
+    auto view = loadCardWithController(&fake);
+    ASSERT_EQ(view->status(), QQuickView::Ready);
+    QQuickItem *root = view->rootObject();
+    ASSERT_NE(root, nullptr);
+    const auto preferMemory = [root]() {
+        return root->property("compactPreferMemory").toBool();
+    };
+
+    // Act/Assert: 初始未抢显（mem 50 < 85）
+    fake.setDataValid(true);
+    fake.setCpuUsage(30);
+    fake.setMemoryUsage(50);
+    EXPECT_FALSE(preferMemory());
+
+    // 进入临界：mem 84 不抢显，85 抢显
+    fake.setMemoryUsage(84);
+    EXPECT_FALSE(preferMemory());
+    fake.setMemoryUsage(85);
+    EXPECT_TRUE(preferMemory());
+
+    // 滞回保持：回落至 82（≥80）仍保持抢显；跌破 80 交还
+    fake.setMemoryUsage(82);
+    EXPECT_TRUE(preferMemory());
+    fake.setMemoryUsage(79);
+    EXPECT_FALSE(preferMemory());
+
+    // CPU 反超临界：mem 86 抢显后，cpu 升至 mem+4 仍保持，mem+5 交还
+    fake.setMemoryUsage(86);
+    EXPECT_TRUE(preferMemory());
+    fake.setCpuUsage(90);
+    EXPECT_TRUE(preferMemory());
+    fake.setCpuUsage(91);
+    EXPECT_FALSE(preferMemory());
+
+    // 内存重新反超（95 > 91）恢复抢显
+    fake.setMemoryUsage(95);
+    EXPECT_TRUE(preferMemory());
+
+    // 数据失效立即交还
+    fake.setDataValid(false);
+    EXPECT_FALSE(preferMemory());
+}
+
+// 图标尺寸跟随任务栏高度：round(h*0.8) 夹取在 [24, 32]（与邮箱卡片同公式）
+TEST_F(SystemMonitorPluginTest, CardWindow_Qml_IconSize_ClampedToTaskbarRange)
+{
+    // Arrange
+    FakeMonitorController fake;
+    auto view = loadCardWithController(&fake);
+    ASSERT_EQ(view->status(), QQuickView::Ready);
+    QQuickItem *root = view->rootObject();
+    ASSERT_NE(root, nullptr);
+
+    // Act/Assert: 高度→图标尺寸映射，两端夹取生效
+    root->setHeight(25);   // round 20 → 下限 24（紧凑态实测 25 高）
+    EXPECT_EQ(root->property("iconSize").toInt(), 24);
+    root->setHeight(30);   // round 24 → 24
+    EXPECT_EQ(root->property("iconSize").toInt(), 24);
+    root->setHeight(40);   // round 32 → 32
+    EXPECT_EQ(root->property("iconSize").toInt(), 32);
+    root->setHeight(45);   // round 36 → 上限 32
+    EXPECT_EQ(root->property("iconSize").toInt(), 32);
+    root->setHeight(64);   // round 51 → 32
+    EXPECT_EQ(root->property("iconSize").toInt(), 32);
 }
 
 // ---- 生命周期 ----
@@ -488,3 +622,5 @@ TEST_F(SystemMonitorPluginTest, RefreshIcon_TrayKey_NoCrash)
     EXPECT_EQ(plugin->itemWidget(QStringLiteral("system-monitor")), before);
     EXPECT_NE(before, nullptr);
 }
+
+#include "test_systemmonitorplugin.moc"

@@ -82,6 +82,12 @@ void SystemMonitorProber::networkSpeed(QString *download, QString *upload)
     *upload = formatTransferRate(transmitDelta / elapsedSeconds);
 }
 
+bool SystemMonitorProber::hasActiveNetwork()
+{
+    // 无活跃网卡（Up + Running 的物理接口）时视为断网，供卡片置灰降级展示
+    return !preferredNetworkInterfaces().isEmpty();
+}
+
 bool SystemMonitorProber::readCpuTimes(quint64 *totalTime, quint64 *idleTime)
 {
     if (!totalTime || !idleTime)
@@ -240,6 +246,9 @@ QString SystemMonitorProber::formatTransferRate(double bytesPerSecond)
         return QStringLiteral("%1 B/s").arg(qRound(bytesPerSecond));
     if (bytesPerSecond < 1024 * 1024)
         return QStringLiteral("%1 KB/s").arg(qRound(bytesPerSecond / 1024));
-    return QStringLiteral("%1 MB/s").arg(bytesPerSecond / (1024 * 1024), 0, 'f', 1);
+    const double mb = 1024.0 * 1024.0;
+    if (bytesPerSecond < mb * 1024.0)
+        return QStringLiteral("%1 MB/s").arg(bytesPerSecond / mb, 0, 'f', 1);
+    return QStringLiteral("%1 GB/s").arg(bytesPerSecond / (mb * 1024.0), 0, 'f', 2);
 }
 
