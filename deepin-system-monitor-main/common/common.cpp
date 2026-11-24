@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,6 +13,9 @@
 #include <QtDBus>
 #include <QDesktopServices>
 #include <QApplication>
+
+#include <cmath>
+#include <limits>
 
 namespace common {
 
@@ -313,12 +316,17 @@ void global_init()
 }
 } // namespace init
 
-QString format::formatHz(quint32 freq, format::HzUnit base, int prec)
+QString format::formatHz(qreal freq, format::HzUnit base, int prec)
 {
+    if (!qIsFinite(freq) || freq < 0.)
+        freq = 0.;
+    if (freq > static_cast<qreal>(std::numeric_limits<quint32>::max()))
+        freq = static_cast<qreal>(std::numeric_limits<quint32>::max());
+
     int u = base;
     qreal v = freq;
 
-    while (v > 1000. && u <= ZHz) {
+    while (v > 1000. && u < ZHz) {
         v /= 1000;
         u++;
     }
