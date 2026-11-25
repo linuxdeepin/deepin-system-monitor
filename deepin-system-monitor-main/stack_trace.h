@@ -6,17 +6,12 @@
 #ifndef STACK_TRACE_H
 #define STACK_TRACE_H
 
-#include <memory>
-#include <vector>
-#include <fstream>
-#include <locale>
-#include <iomanip>
-
 #include <execinfo.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
+#include <fcntl.h>
 
 #include <QStandardPaths>
 
@@ -27,15 +22,9 @@ namespace util {
 #define MAX_BACKTRACE_FRAMES 128
 #define BUF_LEN 256
 
-// Custom deleter for free system call
-struct Free {
-    void operator()(char **p)
-    {
-        free(p);
-    }
-};
-// unique_ptr type define for backtrace symbols return data structure
-using BacktraceSymbols = std::unique_ptr<char *, Free>;
+// Precomputed values for async-signal-safe access in signal handler
+static char g_cachePath[BUF_LEN] = {0};
+static bool g_isOldVersion = false;
 
 /**
  * @brief Print stack trace when specified signal caught
@@ -43,41 +32,41 @@ using BacktraceSymbols = std::unique_ptr<char *, Free>;
  */
 static inline void printStacktrace(int signum)
 {
-    // timestamp buffer
-    char ts[BUF_LEN] {};
-    // current timestamp
-    std::time_t tm = std::time(nullptr);
-    // format current local time as standard iso format string
-    auto tslen = std::strftime(ts, BUF_LEN, "%FT%T", std::localtime(&tm));
-    ts[tslen] = 0;
-    // log filename buffer
-    char logstr[BUF_LEN] {};
-    // format log filename
-    auto len = snprintf(logstr, BUF_LEN, "deepin-system-monitor.%s.crash", ts);
-    logstr[len] = 0;
+    // Build timestamp using async-signal-safe functions only
+    char ts[BUF_LEN] = {};
+    time_t tm = time(nullptr);
+    struct tm tm_result;
+    gmtime_r(&tm, &tm_result);
+    snprintf(ts, BUF_LEN, "%04d-%02d-%02dT%02d:%02d:%02d",
+             tm_result.tm_year + 1900, tm_result.tm_mon + 1, tm_result.tm_mday,
+             tm_result.tm_hour, tm_result.tm_min, tm_result.tm_sec);
 
-    // open log output stream
-    auto cachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    if (!cachePath.endsWith("/")) cachePath.append("/");
-    std::string logN {cachePath.toStdString()};
-    logN.append(logstr);
-    std::ofstream log(logN, std::ios::out);
+    // Build log file path from precomputed cache path
+    char logPath[BUF_LEN * 2] = {};
+    snprintf(logPath, sizeof(logPath), "%sdeepin-system-monitor.%s.crash",
+             g_cachePath, ts);
 
-    // get backtrace symbols list
-    //    std::vector<void *> stack(MAX_BACKTRACE_FRAMES);
-    //    auto size = backtrace(stack.data(), int(stack.size()));
-    //    BacktraceSymbols symbols(backtrace_symbols(stack.data(), size));
+    // Open log file using async-signal-safe open()
+    int fd = open(logPath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+    // Get backtrace and write directly to fd (async-signal-safe, no malloc)
     void *stack[MAX_BACKTRACE_FRAMES];
-    auto size = backtrace(stack, MAX_BACKTRACE_FRAMES);
-    BacktraceSymbols symbols(backtrace_symbols(stack, size));
+    int size = backtrace(stack, MAX_BACKTRACE_FRAMES);
 
-    // print all symbols as formatted text to output log stream
-    if (symbols && size > 0) {
-        log << "Stack trace:" << std::endl;
-
-        for (int i = 0; i < size; i++) {
-            log << '\t' << "#" << std::left << std::setw(4) << i << symbols.get()[i] << std::endl;
+    if (size > 0) {
+        if (fd >= 0) {
+            // best-effort write; in signal handler context we cannot safely retry on partial write
+            const char header[] = "Stack trace:\n";
+            ssize_t wr = write(fd, header, sizeof(header) - 1);
+            (void)wr;
+            backtrace_symbols_fd(stack, size, fd);
         }
+        // Also write to stderr for console visibility
+        backtrace_symbols_fd(stack, size, STDERR_FILENO);
+    }
+
+    if (fd >= 0) {
+        close(fd);
     }
 
     // reset signal handler to default
@@ -86,21 +75,17 @@ static inline void printStacktrace(int signum)
     act.sa_flags = 0;
     act.sa_handler = SIG_DFL;
     sigaction(signum, &act, nullptr);
-    // raise origin signal
-    raise(signum);
-
-    bool isOldVersion = common::systemInfo().isOldVersion();
     pid_t pid = fork();
     if (pid == 0) {
         // 先睡眠 1 秒，等待旧应用退出。注意睡眠时间不足则会启动失败
-        struct timespec time;
-        time.tv_sec = 1;
-        time.tv_nsec = 0;
-        nanosleep(&time, nullptr);
+        struct timespec ts;
+        ts.tv_sec = 1;
+        ts.tv_nsec = 0;
+        nanosleep(&ts, nullptr);
 
         // 通过命令行调用 D-Bus 重新启动系统监视器
         // 使用 execlp 而非 Qt D-Bus API，避免 fork 后复用父进程总线连接导致死锁
-        if (isOldVersion) {
+        if (g_isOldVersion) {
             // 旧系统：请求 com.deepin.SessionManager 启动应用
             execlp("/usr/bin/dbus-send", "dbus-send",
                    "--session",
@@ -125,6 +110,9 @@ static inline void printStacktrace(int signum)
         }
         _exit(1);
     }
+
+    // raise origin signal after fork to ensure restart code is reachable
+    raise(signum);
 }
 
 /**
@@ -132,6 +120,14 @@ static inline void printStacktrace(int signum)
  */
 void installCrashHandler()
 {
+    // Precompute cache path for async-signal-safe access in signal handler
+    auto cachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    if (!cachePath.endsWith("/")) cachePath.append("/");
+    snprintf(g_cachePath, BUF_LEN, "%s", cachePath.toStdString().c_str());
+
+    // Precompute version info for async-signal-safe access in signal handler
+    g_isOldVersion = common::systemInfo().isOldVersion();
+
     // action to take when signal get caught
     struct sigaction act {
     };
