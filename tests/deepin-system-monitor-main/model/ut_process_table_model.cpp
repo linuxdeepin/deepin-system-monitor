@@ -42,7 +42,7 @@
 // B4d : Display/AccessibleText, CPU                       -> "%1%"
 // B4e : Display/AccessibleText, User                      -> userName()
 // B4f : Display/AccessibleText, Mem/ShareMem/VTRMem       -> formatUnit_memory_disk(proc.value, KB)
-// B4g : Display/AccessibleText, Upload/Download           -> formatUnit_net(8*proc.value, B, 1, true)
+// B4g : Display/AccessibleText, Upload/Download           -> formatUnit_memory_disk(proc.value, B, 1, true)
 // B4h : Display/AccessibleText, DiskRead/DiskWrite        -> formatUnit_memory_disk(proc.value, B, 1, true)
 // B4i : Display/AccessibleText, PID                       -> QString::number(pid)
 // B4j : Display/AccessibleText, Nice                      -> QString::number(priority)
@@ -344,9 +344,9 @@ INSTANTIATE_TEST_SUITE_P(DisplayColumnMatrix, ProcessTableModelDisplayParamTest,
         DisplayCase{ProcessTableModel::kProcessVTRMemoryColumn,
                     common::format::formatUnit_memory_disk(QVariant::fromValue<qulonglong>(8192), common::format::KB)},
         DisplayCase{ProcessTableModel::kProcessUploadColumn,
-                    common::format::formatUnit_net(QVariant::fromValue<qreal>(8 * 200.0), common::format::B, 1, true)},
+                    common::format::formatUnit_memory_disk(QVariant::fromValue<qreal>(200.0), common::format::B, 1, true)},
         DisplayCase{ProcessTableModel::kProcessDownloadColumn,
-                    common::format::formatUnit_net(QVariant::fromValue<qreal>(8 * 100.0), common::format::B, 1, true)},
+                    common::format::formatUnit_memory_disk(QVariant::fromValue<qreal>(100.0), common::format::B, 1, true)},
         DisplayCase{ProcessTableModel::kProcessDiskReadColumn,
                     common::format::formatUnit_memory_disk(QVariant::fromValue<qreal>(1024.0), common::format::B, 1, true)},
         DisplayCase{ProcessTableModel::kProcessDiskWriteColumn,
