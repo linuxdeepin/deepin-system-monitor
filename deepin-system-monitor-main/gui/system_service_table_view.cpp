@@ -741,7 +741,8 @@ void SystemServiceTableView::initConnections()
                     m_stopServiceAction->setEnabled(true);
                     m_restartServiceAction->setEnabled(true);
                 } else {
-                    m_startServiceAction->setEnabled(true);
+                    auto canStart = m_model->getCanStart(sourceIndex);
+                    m_startServiceAction->setEnabled(canStart && !isUnitNoOp(state));
                     m_stopServiceAction->setEnabled(false);
                     m_restartServiceAction->setEnabled(false);
                 }
@@ -827,8 +828,7 @@ void SystemServiceTableView::initConnections()
     // show error dialog when error occurred
     connect(mgr, &ServiceManager::errorOccurred, this, [ = ](const ErrorContext & ec) {
         if (ec) {
-            if (ec.getErrorMessage() != "Permission denied")
-                ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
     });
     // change loading state & hide tip label & show spinner before updating service list
