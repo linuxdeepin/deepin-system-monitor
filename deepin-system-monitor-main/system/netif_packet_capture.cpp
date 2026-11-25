@@ -33,6 +33,7 @@
 #define SOCKSTAT_REFRESH_INTERVAL 2   // socket stat refresh interval (2 seconds)
 #define IFADDRS_HASH_CACHE_REFRESH_INTERVAL 10   // socket ifaddrs cache refresh interval (10 seconds)
 #define DEVICE_CHANGE_JUDGEMENT_TIME 5000   //判断网卡是否变更时间间隔
+#define SOCKIOSTAT_CLEANUP_INTERVAL 30   // stale sock io stat cleanup interval (30 seconds)
 
 using namespace std;
 using namespace DDLog;
@@ -462,6 +463,14 @@ void NetifPacketCapture::dispatchPackets()
             qCDebug(app) << "Refreshing interface address cache";
             refreshIfAddrsHashCache();
             last_ifaddrs_refresh = now;
+        }
+
+        // periodically clean up stale sock io stat entries whose sockets have
+        // been closed, preventing unbounded growth of m_sockIOStatMap now that
+        // getSockIOStatByInode no longer removes entries on read
+        if (!m_lastSockIOCleanup || (now - m_lastSockIOCleanup) >= SOCKIOSTAT_CLEANUP_INTERVAL) {
+            m_netifMonitor->cleanupStaleSockIOStats(m_sockStats);
+            m_lastSockIOCleanup = now;
         }
 
         // start packet dispatching
