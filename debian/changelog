@@ -1,3 +1,187 @@
+deepin-system-monitor (6.5.50) unstable; urgency=medium
+
+  * chore: Update version to 6.5.50
+  * feat(dock): implement system monitor card per fashion-mode PRD
+  * [skip CI] Translate deepin-system-monitor.ts in ru
+  * [skip CI] Translate deepin-system-monitor.ts in pt
+  * [skip CI] Translate policy.ts in pt
+  * refactor: remove dmidecode 3rdparty lib, add lightweight DmiInfo parser
+  * chore: add Swedish translation for system-server policy
+  * test: fix all unit test failures to reach full pass
+  * refactor: remove displayjack header by inlining the struct
+  * refactor: remove vendored libsmartcols sources
+  * test(gui): resolve review findings for 15 gui misc view unit tests
+  * fix: resolve wm module null-deref and UAF defects
+  * test: 补全 model/main 剩余 14 个源文件的单元测试（UT-sysmonitor-45）
+  * test: add null-mainwindow guard case for DBusObject::handleWindow
+  * test: add normalizeUnitPath and DBusObject dtor cases to close function gaps
+  * test: make dbus meta-type cases order-independent
+  * test: re-include UT_EnvironmentFile into Qt6 test target
+  * test: re-include UT_DBusObject and align test file naming
+  * test: re-include UT_DBusAlarmNotify and fix wrong-arity showAlarmNotify cases
+  * test: re-include UT_UnitFileInfo and fix suite-order-dependent meta-type case
+  * test: re-include UT_Systemd1ServiceInterface into Qt6 test target
+  * test: re-include UT_Systemd1UnitInterface into Qt6 test target
+  * test: re-include UT_UnitInfo into Qt6 test target
+  * fix: resolve 5 clang-tidy static defects in process module
+  * test: strengthen assertions flagged by Mode 6 review
+  * test: extend UT_ProcessController with branch-closing cases
+  * test: align UT_ProcessName with current process_name.cpp semantics
+  * test: extend UT_SystemServiceClient with branch-closing cases
+  * test: extend UT_ProcessIcon with branch-closing cases
+  * test: extend UT_AMIconManager with branch-closing cases
+  * test: extend UT_ProcessSet with branch-closing cases for process_set.cpp
+  * test: extend UT_Process with branch-closing cases for process.cpp
+  * test: re-include process module UT TUs in main test target
+  * fix: remove dead member m_font from BlockStatViewWidget
+  * fix: add missing isWireless init in copy ctor
+  * test: rewrite NetifInfoPrivate tests with private field accessors
+  * test: correct stale defect pin in BlockDeviceInfoDB removal regression
+  * test: hermeticize Netlink cache-iterator cases with stubbed nl_connect
+  * test: re-include system module test TUs excluded by Qt6 legacy filter
+  * test: fix stub return values to match isSearchContentEmpty semantics
+  * test: align service UT expectations with merged defect fixes
+  * test: re-include monitor chart/gui UT TUs excluded by Qt6 legacy filter
+  * test: retrofit gui UTs with addr_pri private access and add 2 toolbar cases
+  * test: retrofit monitor chart UTs with addr_pri private access
+  * test: cover background-list branches of XWinKillPreviewWidget and fix AccountsWidget dtor teardown
+  * test: re-include and harden UT_AccountsWidget gui test TU (11/11)
+  * test: re-include and harden UT_BlockDevSummaryViewWidget gui test TU (10/11)
+  * test: re-include and harden UT_XWinKillPreviewWidget gui test TU (9/11)
+  * test: re-include and harden UT_NetifStatViewWidget gui test TU (8/11)
+  * test: re-include and harden UT_BlockStatViewWidget gui test TU (7/11)
+  * test: re-include and harden UT_MemSummaryViewWidget gui test TU (6/11)
+  * test: re-include and harden UT_BlockDevItemWidget gui test TU (5/11)
+  * test: re-include UT_BaseDetailViewWidget gui test TU (4/11)
+  * test: re-include UT_BaseItemDelegate gui test TU (3/11)
+  * test: re-include UT_XWinKillPreviewBackgroundWidget gui test TU (2/11)
+  * test: re-include UT_AnimationStackedWidget gui test TU (1/11)
+  * fix: correct Description prefix duplication in unit file parsing
+  * fix: add detach() to SystemServiceEntry setters
+  * test: re-include model/view test TUs excluded by Qt6 legacy filter
+  * fix: fix 5 model defects in table models
+  * test: reorganize autotests into tests/ and run all module UTs
+  * fix: remove unreachable dead code in getProcessInfoBatch
+  * fix: remove redundant ListSessions call in updateUserOnlineStatus
+  * fix: add warning log for silent DBus interface failure
+  * fix: add NOTIFY to geometry property and remove signal parameter
+  * fix: add null check and parse DBus replies properly
+  * fix: add setObjectName for process mode buttons for AT-SPI accessibility
+  * fix: correct role/column mismatch and add div-by-zero guard in CPU usage
+  * fix: guard against division by zero in cpupc
+  * fix: resolve 4 defects in system module code
+  * fix: guard null DStyle pointer in base GUI components
+  * fix: fix wireless signal strength display distortion
+  * fix: fix crashes and data inconsistency in disk/memory detail views
+  * fix: use exact line matching in appendRules dedup
+  * fix: resolve three monitor display defects
+  * chore: bump SPDX year of main_window.cpp for license check
+  * fix: use PMF connect for backgroundTaskStateChanged signal
+  * fix: filter event type and add null check in popup event handler
+  * fix: normalize backslash path for process name
+  * fix: resolve process module code defects
+  * fix: resolve teardown hang from uncleared threads and DConfig
+  * fix: correct DBus array type id and operator= field copy in unit_file_info
+  * fix: correct self-comparison in ErrorContext operator==
+  * fix: preserve cross-scan process baseline and fix const query
+  * fix: correct dead else branch in addData2
+  * fix: trim trailing NUL in process comm string conversion
+  * fix: add null check for m_refreshTimer in stopRotate
+  * fix: connect SessionRemoved signal to correct slot
+  * fix: guard null mainWindow in service table view
+  * fix: fix missing Tray prefix when desktop displayName is empty
+  * fix: copy cpusageTotal array in CPUSetPrivate copy ctor
+  * fix: correct block device percent calc, removal loop and add write lock
+  * fix: sync mIsEmptyModelName in CPUSet copy and assignment
+  * test: add unit tests for dde-shell system monitor plugin
+  * fix: remove dead code getProcIdExe function
+  * fix: correct inverted return value of Toolbar::isSearchContentEmpty
+  * fix: add else branch to setProcessButtonChecked
+  * fix: guard getIcon against null or invalid pid
+  * fix: guard empty list in setSystemMonitorTipsText to prevent crash
+  * chore: install dde-shell dock plugin in main package
+  * chore: add i18n translation files for dde-shell plugin
+  * feat: add dde-shell system monitor plugin with V3 dock support
+  * fix: correct system module defects in uptime/mask/wireless/cache
+  * test: 重写 system_monitor/system_monitor_thread 单元测试
+  * test: 重写 wireless/nl_link/nl_addr/device_id_cache 单元测试
+  * test: 重写 mem/sys_info 单元测试覆盖 37 个用例
+  * test: 引入 stub-ext 测试桩基础设施与共享测试助手
+  * test: 新增 GuiAppsCache 单测
+  * test: 新增 TrayAppsCache 单测
+  * test: 重写 SystemServiceClient 单测覆盖连接/批量信息/启动流程
+  * test: 重写 process 模块既有单测并增强结构合规
+  * test(dbus): 补全 dbus 模块 6 个文件 GTest 单元测试
+  * test: rewrite and extend GTest suites for 7 gui classes in deepin-system-monitor-main
+  * test: 补充分支覆盖用例并修正测试可达性
+  * test: 重写 process 模块 7 个测试类 114 例
+  * test: 补全/重写设备管理器 gui 8 文件单元测试72例
+  * test(popup): 新增 DeviceDB 与 Utils 单元测试 42 用例
+  * test(popup): 新增 CPUSet 与 DataDealSingleton 单元测试 40 用例
+  * test(popup): 补充 desktop 行解析无等号分支用例数据
+  * test(popup): 新增 DBus 接口单元测试并扩展 mock 服务
+  * test(popup): 新增 SystemMonitorDBusAdaptor 单元测试
+  * test(popup): 新增 MLogger 与 Application 单元测试
+  * fix: resolve priority overwrite and signal typo
+  * test: 新增 Process/ProcessDB GTest 单元测试覆盖
+  * test(gui): 补充 MemSummaryViewWidget 越界行/列索引分支用例
+  * test(gui): 补充 BlockDevSummaryViewWidget 越界列索引分支用例
+  * test(gui): 重写 MemDetailViewWidget 单元测试8例
+  * test(gui): 重写 MemStatViewWidget 单元测试11例
+  * test(gui): 重写 MemSummaryViewWidget/DeailTableModel 单元测试13例
+  * test(gui): 重写 BlockStatViewWidget 单元测试19例
+  * test(gui): 重写 BlockDevItemWidget 单元测试16例
+  * test(gui): 重写 BlockDevSummaryViewWidget/DeailTableModelBlock 单元测试18例
+  * test: 重写 ChartViewWidget/ProcessAttributeDialog/SystemProtectionSetting 单元测试
+  * test: 重写 ProcessSortFilterProxyModel 单元测试
+  * test: 重写 SystemServiceTableModel 单元测试
+  * test: 重写 ProcessTableModel 单元测试
+  * test: 新增 daemon 守护进程六模块 GTest 单元测试（覆盖率闭环）
+  * test: add autotests for deepin-system-monitor batch 2 (4/4 classes)
+  * test: add autotests for deepin-system-monitor batch 1 (3/3 classes)
+  * test: 重写 process/process_set 单元测试并完成覆盖率闭环
+  * test(tests): add GTest suites for common module (8 files, 168 cases)
+  * test(tests): remove legacy Qt5-only common tests, exclude stale TUs under Qt6
+  * test: DBusInterface 单元测试（单例/init/showOrHide 5 用例）
+  * test: MLogger 单元测试（环境规则/DConfig 合并/追加去重 12 用例）
+  * test: QuickPanelWidget 单元测试（布局/描述/背景主题 10 用例）
+  * test: CommonIconButton 单元测试（图标状态机/激活色/旋转 28 用例）
+  * test: SystemMonitorTipsWidget 单元测试（构造/文本分级/信号 13 用例）
+  * test: MonitorPluginButtonWidget 单元测试（构造/鼠标/绘制分支 17 用例）
+  * test: MonitorPlugin 单元测试（init/代理注册/速率换算/进程打桩 48 用例）
+  * test: 搭建插件 GUI 模块单元测试框架（plugin-ut-build 独立目标）
+  * test: add autotests for deepin-system-monitor batch 4 (10/10 classes)
+  * test: add autotests for deepin-system-monitor batch 3 (10/10 classes)
+  * test: add autotests for deepin-system-monitor batch 2 (10/10 classes)
+  * test: add autotests for deepin-system-monitor batch 1 (10/10 classes)
+  * fix: guard null parent and OOB in popup widgets
+  * chore: fix SPDX headers and REUSE compliance for CI license check
+  * test: 补全 CpuWidget 鼠标双击用例（覆盖率闭环）
+  * test: 新增 popup 插件四组件 GTest 单元测试（Memory/Cpu/Process/ProcessTableView）
+  * chore: add LICENSES/MIT.txt for REUSE compliance
+  * test: 重写 gui/base 六个类的单元测试
+  * test: 统一单测 stub 基础设施到 stub-ext 唯一定义
+  * test: add popup autotests for deepin-system-monitor batch 1 (4/4 classes)
+  * fix: correct property names in getDisplayScreen
+  * test: strengthen service branch coverage to 79 cases
+  * fix: complete CPUInfo copy constructor missing fields
+  * test: rewrite dbus module 4 test suites 99 cases
+  * test(popup): 为 popup 插件 GUI 新增 GTest 单元测试
+  * test: rewrite unit tests for CPU/Memory monitor widgets
+  * test(wm): strengthen WMInfo/WMWindowList coverage-driven cases
+  * test(wm): add WMWindowTree unit tests
+  * test(wm): rewrite WMWindowList unit tests
+  * test(wm): rewrite WMInfo unit tests
+  * test(wm): rewrite WMAtom unit tests
+  * test(wm): rewrite WMConnection unit tests with full xcb stub world
+  * test: add model unit tests for CPUInfoModel and AccountsInfoModel
+  * test: 监控线程启动事件改为进程级一次性拦截
+  * test: 测试入口跳过退出析构链并显式导出 gcov 数据
+  * test: 重写并补强 GUI 三模块单元测试
+  * test: rewrite GTest suites for process/system-service table views
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Wed, 25 Nov 2026 13:11:28 +0800
+
 deepin-system-monitor (6.5.49) unstable; urgency=medium
 
   * docs: add Portuguese (pt_BR) help manual
