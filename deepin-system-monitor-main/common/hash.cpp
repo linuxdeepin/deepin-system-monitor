@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -19,6 +19,7 @@
 #    include <sys/syscall.h>
 #endif
 #include <endian.h>
+#include <cstring>
 
 namespace util {
 namespace common {
@@ -47,14 +48,20 @@ inline uint64_t rotl64(uint64_t x, int8_t r)
 // Block read - if your platform needs to do endian-swapping or can only
 // handle aligned reads, do the conversion here
 
-FORCE_INLINE uint32_t getblock32(const uint32_t *p, int i)
+// 通过 memcpy 读取块，避免把输入指针强转成 uint32_t */uint64_t * 后在
+// 未对齐地址上解引用（未定义行为，UBSan alignment 会报错）
+FORCE_INLINE uint32_t getblock32(const uint8_t *p, int offset)
 {
-    return p[i];
+    uint32_t block;
+    memcpy(&block, p + offset, sizeof(block));
+    return block;
 }
 
-FORCE_INLINE uint64_t getblock64(const uint64_t *p, int i)
+FORCE_INLINE uint64_t getblock64(const uint8_t *p, int offset)
 {
-    return p[i];
+    uint64_t block;
+    memcpy(&block, p + offset, sizeof(block));
+    return block;
 }
 
 //-----------------------------------------------------------------------------
@@ -99,10 +106,10 @@ void hash_x86_32(const void *key, int len, uint32_t seed, uint32_t *out)
     //----------
     // body
 
-    const uint32_t *blocks = reinterpret_cast<const uint32_t *>(data + nblocks * 4);
+    const uint8_t *blocks = data + nblocks * 4;
 
     for (int i = -nblocks; i; i++) {
-        uint32_t k1 = getblock32(blocks, i);
+        uint32_t k1 = getblock32(blocks, i * 4);
 
         k1 *= c1;
         k1 = ROTL32(k1, 15);
@@ -165,13 +172,13 @@ void hash_x86_128(const void *key, const int len, uint32_t seed, uint64_t out[2]
     //----------
     // body
 
-    const uint32_t *blocks = reinterpret_cast<const uint32_t *>(data + nblocks * 16);
+    const uint8_t *blocks = data + nblocks * 16;
 
     for (int i = -nblocks; i; i++) {
-        uint32_t k1 = getblock32(blocks, i * 4 + 0);
-        uint32_t k2 = getblock32(blocks, i * 4 + 1);
-        uint32_t k3 = getblock32(blocks, i * 4 + 2);
-        uint32_t k4 = getblock32(blocks, i * 4 + 3);
+        uint32_t k1 = getblock32(blocks, i * 16 + 0);
+        uint32_t k2 = getblock32(blocks, i * 16 + 4);
+        uint32_t k3 = getblock32(blocks, i * 16 + 8);
+        uint32_t k4 = getblock32(blocks, i * 16 + 12);
 
         k1 *= c1;
         k1 = ROTL32(k1, 15);
@@ -330,11 +337,11 @@ void hash_x64_128(const void *key, const int len, uint32_t seed, uint64_t out[2]
     //----------
     // body
 
-    const uint64_t *blocks = reinterpret_cast<const uint64_t *>(data);
+    const uint8_t *blocks = data;
 
     for (int i = 0; i < nblocks; i++) {
-        uint64_t k1 = getblock64(blocks, i * 2 + 0);
-        uint64_t k2 = getblock64(blocks, i * 2 + 1);
+        uint64_t k1 = getblock64(blocks, i * 16 + 0);
+        uint64_t k2 = getblock64(blocks, i * 16 + 8);
 
         k1 *= c1;
         k1 = ROTL64(k1, 31);

@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -312,14 +312,22 @@ public:
 
     inline void addSample(SampleFrame<T> *frame)
     {
-        if (frame) {
-            if (m_samples.size() >= m_maxSamples)
-                m_samples.pop_front();
+        if (!frame)
+            return;
 
-            std::shared_ptr<SampleFrame<T>> framePtr;
-            framePtr.reset(frame);
-            m_samples.push_back(framePtr);
+        // 零时间间隔时 ticks() 返回 0，采样容量为 0，此时不保留任何采样；
+        // 直接释放传入的帧，避免对空 QList 调用 pop_front()
+        if (m_maxSamples == 0) {
+            delete frame;
+            return;
         }
+
+        if (m_samples.size() >= m_maxSamples)
+            m_samples.pop_front();
+
+        std::shared_ptr<SampleFrame<T>> framePtr;
+        framePtr.reset(frame);
+        m_samples.push_back(framePtr);
     }
 
     inline const TimePeriod &timePeriod() const
