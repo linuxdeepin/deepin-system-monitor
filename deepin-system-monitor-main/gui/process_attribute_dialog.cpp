@@ -253,9 +253,9 @@ void ProcessAttributeDialog::resizeItemWidget()
     m_procStartLabel->setFixedSize(m_procStartLabel->fontMetrics().horizontalAdvance(m_procStartLabel->text()), m_procStartLabel->fontMetrics().height());
 #endif
 
-    int procNametextH = qMin(120, int(m_procNameText->document()->size().height()));
-    m_procNameText->setFixedSize(qMin(kPreferedTextWidth, m_procNameText->fontMetrics().size(Qt::TextSingleLine, m_procNameText->toPlainText()).width()), procNametextH);
-    m_procStartText->setFixedSize(qMin(kPreferedTextWidth, m_procStartText->fontMetrics().size(Qt::TextSingleLine, m_procStartText->toPlainText()).width()), m_procStartLabel->fontMetrics().height());
+    int textHeight = qMin(120, int(m_procNameText->document()->size().height()));
+    m_procNameText->setFixedSize(qMin(kPreferedTextWidth, m_procNameText->fontMetrics().size(Qt::TextSingleLine, m_procNameText->toPlainText()).width()), textHeight);
+    m_procStartText->setFixedSize(qMin(kPreferedTextWidth, m_procStartText->fontMetrics().size(Qt::TextSingleLine, m_procStartText->toPlainText()).width()), textHeight);
 
     m_cmdh = m_frame->height() - (kAppIconSize + m_appNameLabel->height() + m_margin * 4) - m_procNameText->height() - m_procStartText->height();
     if (m_cmdh > m_procCmdText->document()->size().height()) {
