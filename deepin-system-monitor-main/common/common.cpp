@@ -15,6 +15,8 @@
 #include <QDesktopServices>
 #include <QApplication>
 
+#include <limits>
+
 using namespace DDLog;
 
 namespace common {
@@ -336,13 +338,18 @@ void global_init()
 }
 } // namespace init
 
-QString format::formatHz(quint32 freq, format::HzUnit base, int prec)
+QString format::formatHz(qreal freq, format::HzUnit base, int prec)
 {
     // qCDebug(app) << "formatHz with freq:" << freq << "base:" << base << "prec:" << prec;
+    if (!qIsFinite(freq) || freq < 0.)
+        freq = 0.;
+    if (freq > static_cast<qreal>(std::numeric_limits<quint32>::max()))
+        freq = static_cast<qreal>(std::numeric_limits<quint32>::max());
+
     int u = base;
     qreal v = freq;
 
-    while (v > 1000. && u <= ZHz) {
+    while (v > 1000. && u < ZHz) {
         v /= 1000;
         u++;
     }
@@ -361,7 +368,7 @@ QString format::formatUnit_memory_disk(QVariant size, format::SizeUnit base, int
     }
     qreal v = size.toReal();
 
-    while (v > 1024. && u <= EB) {
+    while (v > 1024. && u < EB) {
         v /= 1024;
         u++;
     }
@@ -386,7 +393,7 @@ QString format::formatUnit_net(QVariant size, format::SizeUnit base, int prec, b
     }
     qreal v = size.toReal();
 
-    while (v > 1024. && u <= EB) {
+    while (v > 1024. && u < EB) {
         v /= 1024;
         u++;
     }

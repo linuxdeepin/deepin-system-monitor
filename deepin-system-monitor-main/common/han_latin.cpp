@@ -55,6 +55,9 @@ QString convHanToLatin(const QString &words)
     UParseError pe {};
     unique_ptr<Transliterator> tr(Transliterator::createInstance(
             TRANSLITERATION_HAN_LATIN, UTransDirection::UTRANS_FORWARD, pe, ec));
+    if (!tr) {
+        return words;
+    }
 
     UnicodeString ubuf = UnicodeString::fromUTF8(StringPiece(words.toStdString()));
     // from hanzi to latin
@@ -69,6 +72,9 @@ QString convHanToLatin(const QString &words)
         pe = {};
         unique_ptr<Transliterator> tr2(Transliterator::createInstance(
                 TRANSLITERATION_LATIN_ASCII, UTransDirection::UTRANS_FORWARD, pe, ec));
+        if (!tr2) {
+            return words;
+        }
         // from latin to ascii (pinyin)
         tr2->transliterate(ubuf);
 

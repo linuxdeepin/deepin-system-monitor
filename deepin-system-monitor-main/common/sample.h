@@ -307,6 +307,11 @@ public:
     inline void addSample(SampleFrame<T> *frame)
     {
         if (frame) {
+            if (m_maxSamples == 0) {
+                delete frame;
+                return;
+            }
+
             if (m_samples.size() >= m_maxSamples)
                 m_samples.pop_front();
 
