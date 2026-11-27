@@ -339,13 +339,13 @@ void Process::readEnviron()
         return;
     }
 
-    while ((nb = read(fd, buf, sz))) {
+    while ((nb = read(fd, buf, sz)) > 0) {
         buf[nb] = '\0';
         sbuf.append(buf, int(nb));
     }
     close(fd);
 
-    if (nb == 0 && errno != 0) {
+    if (nb < 0 || (nb == 0 && errno != 0)) {
         qCWarning(app) << "Failed to read" << path << ":" << strerror(errno);
         return;
     }
